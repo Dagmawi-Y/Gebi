@@ -1,0 +1,6 @@
+export default {
+  APP_PRIMARY: '#0047CC',
+  BODY_BACKGROUND_LIGHT:"#EEF1F2",
+  FADED_BLACK_1:"#042C5C",
+  GREY_1:"#808080"
+};
