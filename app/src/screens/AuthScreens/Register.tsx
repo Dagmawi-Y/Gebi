@@ -1,39 +1,25 @@
-import {
-  View,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-  ActivityIndicator,
-  Image,
-  Animated,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import {View, StyleSheet, TextInput, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Input, Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PhoneInput from 'react-native-phone-number-input';
 import {Dimensions} from 'react-native';
-// import PhoneCodeInput from './PhoneCodeInput';
 import colors from '../../config/colors';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Button from '../../components/misc/Button';
 import auth from '@react-native-firebase/auth';
-import {color} from '@rneui/base';
-import CustomTextInput from '../../components/Input/CustomTextInput';
+import LoadingOTP from '../../components/loading/LoadingOTP';
 
-export default function RegisterPhone({navigation}: any) {
+
+
+
+export default function RegisterPhone() {
   const [phoneNumber, setphoneNumber] = useState();
   const [loading, setLoading] = useState(false);
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-  const [error, setError] = useState('');
 
   // OTP Section
-  // If null, no SMS has been sent
   const [confirm, setConfirm] = useState(null);
-
   const [code, setCode] = useState('');
 
   // Handle the button press
@@ -49,7 +35,7 @@ export default function RegisterPhone({navigation}: any) {
     }
   }
 
-  async function confirmCode() {
+  const confirmCode = async () => {
     setLoading(true);
     try {
       await confirm.confirm(code);
@@ -58,28 +44,9 @@ export default function RegisterPhone({navigation}: any) {
       console.log('Invalid code.');
       setLoading(false);
     }
-  }
-
-  const handleCodeChange = value => {
-    setCode(value);
   };
+
   // END OTP Section
-
-  const onAuthStateChanged = user => {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  };
-
-  const anonymousLogin = () => {
-    auth()
-      .signInAnonymously()
-      .then(() => {
-        console.log(user);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
 
   useEffect(() => {
     SystemNavigationBar.setNavigationColor(colors.light);
@@ -89,9 +56,8 @@ export default function RegisterPhone({navigation}: any) {
 
   return (
     <SafeAreaView style={[styles.container]}>
-  
       {loading ? (
-        <ActivityIndicator animating={true} />
+        <LoadingOTP />
       ) : (
         <KeyboardAwareScrollView
           enableOnAndroid
@@ -214,7 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     marginHorizontal: 15,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     // alignItems: 'center'
   },
   buttonContainer: {
