@@ -16,13 +16,6 @@ import {useEffect} from 'react';
 
 // import routes from './routes';
 
-const loadLanguage = async () => {
-  return AsyncStorage.getItem('lang');
-};
-const setLanguage = async lan => {
-  return AsyncStorage.setItem('lang', lan);
-};
-
 const logout = () => {
   auth()
     .signOut()
@@ -39,6 +32,16 @@ const AppNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
+        name="Inventory"
+        component={InventoryScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <MaterialIcon name="warehouse" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
         children={() => <SalesScreen lang={lang} />}
         name="Sales"
         options={{
@@ -48,6 +51,15 @@ const AppNavigator = () => {
           ),
         }}
       />
+
+      <Tab.Screen
+        name="NewSale"
+        component={SalesScreen}
+        options={({navigation}) => ({
+          tabBarButton: () => <NewSaleButton onPress={logout} />,
+        })}
+      />
+
       <Tab.Screen
         name="Expenses"
         component={ExpensesScreen}
@@ -55,23 +67,6 @@ const AppNavigator = () => {
           headerShown: false,
           tabBarIcon: ({color, size}) => (
             <MaterialIcon name="trending-up" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="NewSale"
-        component={SalesScreen}
-        options={({navigation}) => ({
-          tabBarButton: () => <NewSaleButton onPress={logout}/>,
-        })}
-      />
-      <Tab.Screen
-        name="Inventory"
-        component={InventoryScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcon name="warehouse" color={color} size={size} />
           ),
         }}
       />

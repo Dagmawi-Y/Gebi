@@ -10,6 +10,7 @@ export default {
   danger: '#ff5252',
   faded_dark: '#042C5C',
   grey: '#5E5B5B',
+  faded_grey: '#5e5b5bbd',
   green: '#13B805',
   red: 'red',
 };

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, ActivityIndicator} from 'react-native';
+import {Text, View, ActivityIndicator, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Button from '../../components/misc/Button';
 
@@ -48,6 +48,21 @@ const LoginScreen = ({navigation}) => {
         <></>
       ) : (
         <>
+          <View
+            style={{
+              marginHorizontal: 'auto',
+              width: '100%',
+              marginBottom: 50,
+              maxHeight: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+            }}>
+            <Image
+              style={{resizeMode: 'center'}}
+              source={require('../../assets/logo-blue.png')}
+            />
+          </View>
           <Text
             style={{
               fontSize: 25,
@@ -55,7 +70,7 @@ const LoginScreen = ({navigation}) => {
               textAlign: 'center',
               paddingVertical: 30,
             }}>
-            You are not registered.
+            You are not Logged in.
           </Text>
           <View
             style={{
@@ -63,7 +78,7 @@ const LoginScreen = ({navigation}) => {
               justifyContent: 'space-evenly',
             }}>
             <Button
-              title={'Register'}
+              title={'Login with phone number'}
               btnStyle={'normal'}
               onPress={() => navigation.navigate('Register')}
             />
