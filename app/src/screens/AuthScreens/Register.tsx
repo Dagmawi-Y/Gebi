@@ -1,32 +1,38 @@
-import {View, StyleSheet, TextInput, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Input, Text} from '@rneui/themed';
+import {View, StyleSheet, TextInput, Image} from 'react-native';
+import {Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import PhoneInput from 'react-native-phone-number-input';
 import {Dimensions} from 'react-native';
 import colors from '../../config/colors';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import Button from '../../components/misc/Button';
-import auth from '@react-native-firebase/auth';
-import LoadingOTP from '../../components/loading/LoadingOTP';
-
-
-
+import LoadingOTP from '../../components/lotties/LoadingOTP';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function RegisterPhone() {
-  const [phoneNumber, setphoneNumber] = useState();
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // OTP Section
-  const [confirm, setConfirm] = useState(null);
+  const [confirm, setConfirm] =
+    useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const [code, setCode] = useState('');
 
   // Handle the button press
-  async function signInWithPhoneNumber(phoneNumber) {
+  async function signInWithPhoneNumber(n) {
     try {
+      if (n.length > 9 || n.length < 9 || !n.startsWith('9')) {
+        setError('Invalid phone number');
+        return;
+      }
       setLoading(true);
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      console.log(n);
+      const confirmation = await auth().signInWithPhoneNumber('+251' + n);
       setConfirm(confirmation);
       setLoading(false);
     } catch (error) {
@@ -38,7 +44,7 @@ export default function RegisterPhone() {
   const confirmCode = async () => {
     setLoading(true);
     try {
-      await confirm.confirm(code);
+      await confirm?.confirm(code);
       setLoading(false);
     } catch (error) {
       console.log('Invalid code.');
@@ -46,6 +52,7 @@ export default function RegisterPhone() {
     }
   };
 
+  const checkPhone = (val: String) => {};
   // END OTP Section
 
   useEffect(() => {
@@ -63,7 +70,7 @@ export default function RegisterPhone() {
           enableOnAndroid
           contentContainerStyle={{
             paddingVertical: 10,
-            justifyContent: 'space-between',
+            justifyContent: 'space-evenly',
             display: 'flex',
             flexGrow: 1,
           }}>
@@ -80,28 +87,80 @@ export default function RegisterPhone() {
               </View>
               <View style={{marginBottom: dimensions.height * 0.1}}>
                 <Text
-                  style={{fontSize: 16, marginBottom: 5, fontWeight: 'bold'}}>
+                  style={{fontSize: 25, marginBottom: 5, fontWeight: 'bold'}}>
                   የስልክዎን ቁጥር ያስገቡ
                 </Text>
-                <PhoneInput
-                  defaultValue={phoneNumber}
-                  defaultCode="ET"
-                  layout="first"
-                  containerStyle={{width: '100%'}}
-                  disableArrowIcon
-                  countryPickerProps={{}}
-                  placeholder="ስልክ ቂጥር"
-                  onChangeFormattedText={(text: any) => {
-                    setphoneNumber(text);
-                  }}
-                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    padding: 0,
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={require('../../assets/ethiopianflag.png')}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginHorizontal: 10,
+                      borderRadius: 50,
+                    }}
+                  />
+                  <Text
+                    style={{fontSize: 28, marginLeft: 5, fontWeight: 'bold'}}>
+                    +251
+                  </Text>
+                  <TextInput
+                    style={[styles.phoneInput, {flexGrow: 1, marginRight: 0}]}
+                    onChangeText={val => {
+                      setError('');
+                      setphoneNumber(val);
+                    }}
+                    value={phoneNumber}
+                    placeholder="ስልክ ቁጥር ያስግቡ"
+                    keyboardType="numeric"
+                    placeholderTextColor={colors.faded_grey}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: 'red',
+                    marginVertical: 15,
+                    paddingHorizontal: 10,
+                  }}>
+                  {error}
+                </Text>
               </View>
               <View>
-                <Button
-                  btnStyle={'outlined'}
-                  title={'ቀጥል'}
+                <TouchableOpacity
                   onPress={() => signInWithPhoneNumber(phoneNumber)}
-                />
+                  activeOpacity={0.7}
+                  style={{
+                    width: '100%',
+                    height: 70,
+                    justifyContent: 'center',
+                    borderRadius: 30,
+                    backgroundColor: colors.primary,
+                    paddingHorizontal: 30,
+                  }}>
+                  <View
+                    style={{
+                      justifyContent: 'space-between',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 25,
+                        color: colors.white,
+                      }}>
+                      ቀጥል
+                    </Text>
+                    <Icon name={'arrow-right'} color={'white'} size={35} />
+                  </View>
+                </TouchableOpacity>
               </View>
             </>
           ) : (
@@ -147,22 +206,33 @@ export default function RegisterPhone() {
                   ''
                 )}
               </Text>
-              <TextInput
-                style={styles.confirmInput}
-                onChangeText={(code: any) => setCode(code)}
-                value={code}
-                placeholder="ምሳሌ፡ 123456"
-                placeholderTextColor={colors.faded_grey}
-                keyboardType="numeric"
-              />
-              <View style={{flex: 0.2, justifyContent: 'space-around'}}>
+              <View
+                style={{
+                  // flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                }}>
+                <TextInput
+                  style={styles.confirmInput}
+                  onChangeText={(code: any) => setCode(code)}
+                  value={code}
+                  placeholder={'ምሳሌ፡ 123456'}
+                  placeholderTextColor={colors.faded_grey}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View
+                style={{
+                  flex: 0.2,
+                  marginTop: 20,
+                  justifyContent: 'space-around',
+                }}>
                 <Button
-                  btnStyle={'normal'}
-                  title={'አረጋግጥ'}
+                  btnStyle={'outlined'}
+                  title={'ድጋሜ ኮድ ላክ'}
                   onPress={() => confirmCode()}
                 />
                 <Button
-                  btnStyle={'outlined'}
+                  btnStyle={'normal'}
                   title={'አረጋግጥ'}
                   onPress={() => confirmCode()}
                 />
@@ -216,6 +286,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 20,
     marginBottom: 20,
+    flexGrow: 1,
+  },
+  phoneInput: {
+    height: 60,
+    margin: 12,
+
+    color: colors.black,
+    padding: 5,
+    fontSize: 28,
   },
 });
 

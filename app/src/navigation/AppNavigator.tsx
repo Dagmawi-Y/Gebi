@@ -25,9 +25,15 @@ const logout = () => {
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('');
 
-  useEffect(() => {}, []);
+  const clearLang = async () => {
+    console.log(await AsyncStorage.removeItem('lang'));
+  };
+
+  useEffect(() => {
+    clearLang();
+  }, []);
 
   return (
     <Tab.Navigator>

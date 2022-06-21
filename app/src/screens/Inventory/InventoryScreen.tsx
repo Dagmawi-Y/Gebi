@@ -10,25 +10,58 @@ import {
 import React, {useEffect, useState} from 'react';
 import colors from '../../config/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Button, ListItem, SpeedDial, Text} from '@rneui/themed';
+import {Button, SpeedDial, Text} from '@rneui/themed';
+import firestore from '@react-native-firebase/firestore';
 
-import Modal from 'react-native-modal';
+// import Modal from 'react-native-modal';
 import TopBar from '../../components/TopBar/TopBar';
+import Loading from '../../components/lotties/Loading';
+import EmptyBox from '../../components/lotties/EmptyBox';
+import InvetoryListItem from './InventoryListItem';
+import AddNew from './AddNew';
 
-// import AddNew from './AddNew';
 export default function Items({navigation}: any) {
+  const [data, setData]: Array<any> = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getInventory = async () => {
+    setLoading(true);
+    try {
+      let subscriber = firestore()
+        .collection('inventory')
+        .onSnapshot(querySnapshot => {
+          let result: Array<Object> = [];
+          querySnapshot.forEach(documentSnapshot => {
+            result.push({
+              id: documentSnapshot.id,
+              doc: documentSnapshot.data(),
+            });
+          });
+          setData(result);
+        });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   // let dimensions = Dimensions.get('window');
   // const [isModalVisible, setModalVisible] = useState(false);
-  // const toggleModal = () => {
-  //   setModalVisible(!isModalVisible);
-  // };
+  const toggleModal = () => {
+    // setModalVisible(!isModalVisible);
+  };
+
+  useEffect(() => {
+    getInventory();
+  }, []);
 
   return (
     <>
+      {/* <Modal isVisible={true} avoidKeyboard>
+          <AddNew toggleModal={toggleModal} />
+        </Modal> */}
       <SafeAreaView style={styles.container}>
-        {/* <Modal isVisible={isModalVisible} avoidKeyboard> */}
-        {/* <AddNew toggleModal={toggleModal} /> */}
-        {/* </Modal> */}
         <TopBar
           title={'የእቃ ክፍል'}
           income={''}
@@ -67,64 +100,28 @@ export default function Items({navigation}: any) {
               </Text>
             </TouchableOpacity>
           </View>
-          <ScrollView>
-            {[
-              'ሳቶፓን',
-              'ሳቶ ፍሌክሲ',
-              'ኤም ስላብ መካከለኛ',
-              'የኤም ንጣፍ ትንሽ',
-              'ኤም ስላብ መካከለኛ ',
-              'እንደገና የማስተካከል ስራ',
-              'ሌሎች',
-            ].map(e => {
-              return (
-                <TouchableOpacity
-                  style={{marginVertical: 5}}
-                  key={e}
-                  onPress={
-                    () => {}
-                    // navigation.navigate(SCREENS.ItemDetails)
-                  }>
-                  <ListItem bottomDivider containerStyle={{borderRadius: 5}}>
-                    <View
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: 100,
-                        backgroundColor: 'grey',
-                      }}></View>
-                    <ListItem.Content>
-                      <ListItem.Title style={{fontWeight: 'bold'}}>
-                        {e}
-                      </ListItem.Title>
-                      <ListItem.Subtitle
-                        style={{fontSize: 16, color: colors.grey}}>
-                        {'300 ብር / አንዱን'}
-                      </ListItem.Subtitle>
-                    </ListItem.Content>
-                    <View style={{alignItems: 'center'}}>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text
-                          style={{
-                            fontWeight: '900',
-                            fontSize: 16,
-                          }}>
-                          7
-                        </Text>
-                      </View>
-                      <Text
-                        style={{
-                          fontWeight: 'bold',
-                          color: colors.faded_dark,
-                        }}>
-                        በእጅ ያለ
-                      </Text>
-                    </View>
-                  </ListItem>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+          {loading ? (
+            <Loading size={40} />
+          ) : (
+            <View>
+              {data ? (
+                <ScrollView style={{marginBottom: 248}}>
+                  {data.map((item, i) => {
+                    return (
+                      <InvetoryListItem
+                        key={i}
+                        title={item.doc.item_name}
+                        unitPrice={item.doc.unit_price}
+                        amount={item.doc.amount}
+                      />
+                    );
+                  })}
+                </ScrollView>
+              ) : (
+                <EmptyBox message={'Inventory Empty'} />
+              )}
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </>

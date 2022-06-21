@@ -8,9 +8,13 @@ import AuthNavigator from './navigation/AuthNavigator';
 
 import auth from '@react-native-firebase/auth';
 
+import LanguageSelector from './screens/LanguageSelector/LanguageSelector';
+
 const App = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+
+  
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
@@ -26,9 +30,11 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <LanguageSelector />
+      {/* <NavigationContainer>
+
         {!user ? <AuthNavigator /> : <AppNavigator />}
-      </NavigationContainer>
+      </NavigationContainer> */}
     </SafeAreaProvider>
   );
 };

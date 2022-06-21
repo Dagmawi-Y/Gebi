@@ -78,12 +78,12 @@ const LoginScreen = ({navigation}) => {
               justifyContent: 'space-evenly',
             }}>
             <Button
-              title={'Login with phone number'}
+              title={'Register'}
               btnStyle={'normal'}
               onPress={() => navigation.navigate('Register')}
             />
             <Button
-              title={'Continue Anyway'}
+              title={'Free Trial'}
               btnStyle={'outlined'}
               onPress={AnonymousLogin}
             />
