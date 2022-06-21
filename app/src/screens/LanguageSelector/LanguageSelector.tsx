@@ -4,7 +4,7 @@ import {
   StyleSheet,
   StatusBar,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
   Text,
 } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
@@ -46,16 +46,18 @@ const LanguageSelector = ({navigation}: any) => {
             width: '100%',
             marginVertical: 25,
           }}>
-          <TouchableHighlight
+          <TouchableOpacity
+            activeOpacity={0.5}
             style={[styles.button, styles.shadowProp]}
             onPress={() => languageClicked('am')}>
             <Text style={styles.buttonText}>አማርኛ</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
             style={styles.button}
             onPress={() => languageClicked('en')}>
             <Text style={styles.buttonText}>English</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
