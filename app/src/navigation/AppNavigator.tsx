@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
 
 import SalesScreen from '../screens/sales/SalesScreen';
 import ExpensesScreen from '../screens/Expenses/Expenses';
@@ -10,11 +12,7 @@ import NewSaleButton from './NewSaleButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import auth from '@react-native-firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect} from 'react';
-
-// import routes from './routes';
+import routes from './routes';
 
 const logout = () => {
   auth()
@@ -24,21 +22,18 @@ const logout = () => {
 
 const Tab = createBottomTabNavigator();
 
-const AppNavigator = () => {
-  const [lang, setLang] = useState('');
+const AppNavigator = ({currentLanguage}) => {
+  const [lang, setLang] = useState(currentLanguage);
 
-  const clearLang = async () => {
-    console.log(await AsyncStorage.removeItem('lang'));
-  };
 
   useEffect(() => {
-    clearLang();
+    // clearLang();
   }, []);
 
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Inventory"
+        name={routes.inventory}
         component={InventoryScreen}
         options={{
           headerShown: false,
@@ -48,8 +43,8 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        children={() => <SalesScreen lang={lang} />}
-        name="Sales"
+        component={SalesScreen}
+        name={routes.sales}
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
@@ -59,7 +54,7 @@ const AppNavigator = () => {
       />
 
       <Tab.Screen
-        name="NewSale"
+        name={routes.newSale}
         component={SalesScreen}
         options={({navigation}) => ({
           tabBarButton: () => <NewSaleButton onPress={logout} />,
@@ -67,7 +62,7 @@ const AppNavigator = () => {
       />
 
       <Tab.Screen
-        name="Expenses"
+        name={routes.expenses}
         component={ExpensesScreen}
         options={{
           headerShown: false,
@@ -77,7 +72,7 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Plan"
+        name={routes.plan}
         component={PlanerScreen}
         options={{
           headerShown: false,

@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +8,6 @@ import {
   Button,
   Text,
 } from 'react-native';
-import React from 'react';
 import colors from '../../config/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import StatCard from '../../components/statCards/StatCard';
@@ -15,11 +15,33 @@ import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 
 import ListItem from '../../components/lists/ListItem';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import items from './items';
 import TopBar from '../../components/TopBar/TopBar';
 
-export default function SalesScreen({navigation, size, lang}: any) {
+export default function SalesScreen({navigation, size, currentLanguage}) {
+  const [lang, setLang] = useState('');
+  const clearLang = async () => {
+    try {
+      await AsyncStorage.removeItem('lang');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getLanguage = async () => {
+    try {
+      await AsyncStorage.getItem('lang').then(lan => {
+        setLang(lan!.toString());
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getLanguage();
+  }, []);
   return (
     <SafeAreaView>
       <TopBar
@@ -33,8 +55,8 @@ export default function SalesScreen({navigation, size, lang}: any) {
 
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Sales</Text>
-        <Text style={styles.title}>{lang?lang:"noLang"}</Text>
-        <TouchableOpacity style={styles.buttonwithIcon}>
+        <Text style={styles.title}>{lang ? lang : 'noLang'}</Text>
+        <TouchableOpacity style={styles.buttonwithIcon} onPress={clearLang}>
           <Image source={require('./calculator.png')}></Image>
           <Text
             style={{

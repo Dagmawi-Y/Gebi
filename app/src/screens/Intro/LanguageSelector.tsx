@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,19 +12,23 @@ import {StackActions} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import colors from '../../config/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import routes from '../../navigation/routes';
 
-const LanguageSelector = ({navigation}: any) => {
+const LanguageSelector = ({navigation}) => {
   SystemNavigationBar.lightNavigationBar(false);
 
+  const [curlang, setCurlang] = useState('');
+
   const setLang = async (ln: string) => {
-    console.log(await AsyncStorage.setItem('lang', ln.toString()));
+    await AsyncStorage.setItem('lang', ln.toString());
+    setCurlang(ln.toString());
   };
 
   useEffect(() => {}, []);
   const languageClicked = (ln: String) => {
     setLang(ln.toString());
     console.log('Languge selected');
-    // navigation.dispatch(StackActions.replace(SCREENS.Intro));
+    navigation.navigate(routes.intro)
   };
   return (
     <SafeAreaView style={[styles.container]}>
@@ -35,11 +39,17 @@ const LanguageSelector = ({navigation}: any) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Image source={require('../../assets/logo-white-notext.png')} />
+        <Image
+          resizeMethod="resize"
+          style={{maxWidth: 100, height: 100}}
+          source={require('../../assets/logo-white-notext.png')}
+        />
         <Text style={styles.logoTextStyle}>ገቢ</Text>
       </View>
       <View style={{flex: 2, alignItems: 'center'}}>
-        <Text style={{color: 'white'}}>ለመጀመር ቋንቋ ይምረጡ</Text>
+        <Text style={{color: 'white', fontSize: 25, marginBottom: 20}}>
+          ለመጀመር ቋንቋ ይምረጡ {curlang}
+        </Text>
         <View
           style={{
             flex: 1,
