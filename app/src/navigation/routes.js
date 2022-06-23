@@ -6,4 +6,8 @@ export default Object.freeze({
   newSale: 'NewSale',
   expenses: 'Expenses',
   plan: 'Plan',
+  introNav: 'IntroductionNavigator',
+  appNav: 'MainAppNavigator',
+  itemDetails: 'ItemDetails',
+  inventoryNav: 'inventoryNav',
 });

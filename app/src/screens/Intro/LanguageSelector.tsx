@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,28 +8,31 @@ import {
   Text,
 } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
-import {StackActions} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import colors from '../../config/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import routes from '../../navigation/routes';
+import {StateContext} from '../../global/context';
 
 const LanguageSelector = ({navigation}) => {
   SystemNavigationBar.lightNavigationBar(false);
+  const {introDone, curlang, setCurlang} = useContext(StateContext);
 
-  const [curlang, setCurlang] = useState('');
+  const languageClicked = async (ln: String) => {
+    try {
+      await AsyncStorage.setItem('lang', ln.toString()).catch(err => {
+        console.log(err);
+      });
 
-  const setLang = async (ln: string) => {
-    await AsyncStorage.setItem('lang', ln.toString());
-    setCurlang(ln.toString());
+      setCurlang(ln);
+      introDone
+        ? navigation.replace(routes.appNav, {screen: routes.inventory})
+        : navigation.navigate(routes.intro);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  useEffect(() => {}, []);
-  const languageClicked = (ln: String) => {
-    setLang(ln.toString());
-    console.log('Languge selected');
-    navigation.navigate(routes.intro)
-  };
   return (
     <SafeAreaView style={[styles.container]}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
@@ -48,7 +51,7 @@ const LanguageSelector = ({navigation}) => {
       </View>
       <View style={{flex: 2, alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 25, marginBottom: 20}}>
-          ለመጀመር ቋንቋ ይምረጡ {curlang}
+          ለመጀመር ቋንቋ ይምረጡ {curlang}/{!introDone ? 'False' : 'True'}
         </Text>
         <View
           style={{

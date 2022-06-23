@@ -1,5 +1,5 @@
 import {StackActions} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, Text, Image, StyleSheet, StatusBar} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -7,6 +7,8 @@ import SystemNavigationBar from 'react-native-system-navigation-bar';
 import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
+import {StateContext} from '../../global/context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const slides = [
   {
@@ -33,8 +35,12 @@ const slides = [
 ];
 
 export default function Intro({navigation}: any) {
-  const _onDone = () => {
-    navigation.navigate('appNav', {screen: routes.inventory});
+  const {setIntroDone} = useContext(StateContext);
+
+  const _onDone = async () => {
+    await AsyncStorage.setItem('introDone', 'true');
+    setIntroDone(Boolean(true));
+    navigation.replace(routes.appNav, {screen: routes.inventory});
   };
   function _renderItem({item}: any) {
     return (

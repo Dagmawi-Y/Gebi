@@ -2,7 +2,8 @@ import {View, StyleSheet, Text} from 'react-native';
 import React from 'react';
 import colors from '../../config/colors';
 
-const ListItem = ({title, unitPrice, amount}) => {
+const ListItem = ({title, unitPrice, quantity}) => {
+
   return (
     <View style={styles.listItem}>
       <View style={styles.listLeft}>
@@ -17,7 +18,7 @@ const ListItem = ({title, unitPrice, amount}) => {
       <View style={styles.listRight}>
         <View style={styles.listPriceContainer}>
           <Text style={[styles.listTextbold, {color: colors.black}]}>
-            {amount}
+            {quantity}
           </Text>
         </View>
         <View>

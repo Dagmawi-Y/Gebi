@@ -1,12 +1,17 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import  MaterialCommunityIcons  from "react-native-vector-icons/MaterialCommunityIcons";
+import React, {useContext} from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {StateContext} from '../global/context';
 
-import colors from "../config/colors";
+import colors from '../config/colors';
 
-function NewListingButton({ onPress }) {
+function NewListingButton() {
+  const {addNewModalVisible, setAdNewModalVisible} = useContext(StateContext);
+
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => setAdNewModalVisible(true)}>
       <View style={styles.container}>
         <MaterialCommunityIcons
           name="plus-circle"
@@ -20,14 +25,14 @@ function NewListingButton({ onPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: colors.primary,
     borderColor: colors.white,
     borderRadius: 40,
     borderWidth: 10,
-    bottom: 20,
+    bottom: 25,
     height: 80,
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 80,
   },
 });

@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 
 import SalesScreen from '../screens/sales/SalesScreen';
 import ExpensesScreen from '../screens/Expenses/Expenses';
-import InventoryScreen from '../screens/Inventory/InventoryScreen';
+import IntroNavigator from '../navigation/InventoryNavigator';
 import PlanerScreen from '../screens/Planner/PlannerScreen';
 import NewSaleButton from './NewSaleButton';
 
@@ -22,19 +21,12 @@ const logout = () => {
 
 const Tab = createBottomTabNavigator();
 
-const AppNavigator = ({currentLanguage}) => {
-  const [lang, setLang] = useState(currentLanguage);
-
-
-  useEffect(() => {
-    // clearLang();
-  }, []);
-
+const AppNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name={routes.inventory}
-        component={InventoryScreen}
+        name={routes.inventoryNav}
+        component={IntroNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
@@ -57,7 +49,7 @@ const AppNavigator = ({currentLanguage}) => {
         name={routes.newSale}
         component={SalesScreen}
         options={({navigation}) => ({
-          tabBarButton: () => <NewSaleButton onPress={logout} />,
+          tabBarButton: () => <NewSaleButton />,
         })}
       />
 

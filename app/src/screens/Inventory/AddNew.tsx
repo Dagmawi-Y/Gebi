@@ -1,137 +1,463 @@
-import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
-import {Button, Image, Input, Text} from '@rneui/themed';
+import React, {useState, useContext} from 'react';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Modal,
+  ScrollView,
+  TouchableOpacity,
+  Pressable,
+  KeyboardAvoidingView,
+} from 'react-native';
+import {Text} from '@rneui/themed';
+import firestore from '@react-native-firebase/firestore';
+import LottieView from 'lottie-react-native';
+import SelectDropdown from 'react-native-select-dropdown';
+import Icon from 'react-native-vector-icons/AntDesign';
+
+import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
-// import DatePickerCustom from '../global/DatePicker';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-interface Props {
-  toggleModal: Function;
-}
-const AddNew = ({toggleModal}: Props) => {
-  const [date, setDate] = useState<any>(null);
-  const [image, setImage] = useState<null | string>(null);
+
+const AddNew = () => {
+  const {user} = useContext(StateContext);
+  const {addNewModalVisible, setAdNewModalVisible} = useContext(StateContext);
+
+  const [successAnimation, setSuccessAnimation] = useState(false);
+  const [failedAnimation, setFailedAnimation] = useState(false);
+  const [writtingData, setWrittingData] = useState(false);
+
+  const [errorMessage, setErrorNessage] = useState('');
+
+  const [supplierName, setSupplierName] = useState('');
+  const [itemName, setItemName] = useState('');
+  const [quantity, setAmount] = useState('');
+  const [unit, setUnit] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [unitPrice, setUnitPrice] = useState('');
+
+  const quantifiers = ['pieces', 'Kilo-gram', 'Litres'];
+
+  const reset = () => {
+    setSuccessAnimation(false);
+    setFailedAnimation(false);
+    setWrittingData(false);
+  };
+
+  const checkEmpty = () => {
+    if (!supplierName) return true;
+    if (!itemName) return true;
+    if (!quantity) return true;
+    if (!unit) return true;
+    // if (!photo) return true;
+    if (!unitPrice) return true;
+    return false;
+  };
+  const raiseError = msg => {
+    setErrorNessage(msg);
+    setFailedAnimation(true);
+  };
+
+  const addNewInventory = async () => {
+    if (checkEmpty()) return raiseError('Empty Fields are not allowed');
+    setWrittingData(true);
+
+    try {
+      await firestore()
+        .collection('users')
+        .doc(user.uid)
+        .collection('inventory')
+        .add({
+          item_name: itemName,
+          photo: 'photourl',
+          stock: {
+            supplier_name: supplierName,
+            quantity: quantity,
+            date: new Date().toLocaleDateString(),
+            unit: unit,
+            unit_price: unitPrice,
+          },
+        });
+      // .then(res => {
+      //   let itemId = res['_documentPath']['_parts'][1];
+      //   firestore()
+      //     .collection('inventory')
+      //     .doc(itemId)
+      //     .collection('stock')
+      //     .add({
+      //       quantity: quantity,
+      //       date: new Date(),
+      //       unit: unit,
+      //       unit_price: unitPrice,
+      //     });
+      // });
+      setWrittingData(false);
+      setSuccessAnimation(true);
+      setTimeout(() => {
+        setSuccessAnimation(false);
+        setAdNewModalVisible(false);
+      }, 500);
+      setTimeout(() => {
+        setAdNewModalVisible(false);
+      }, 600);
+    } catch (error) {
+      setWrittingData(false);
+      raiseError(`Something went wrong.\nTry again.`);
+      console.log(error);
+    }
+  };
+
   return (
-    <View style={{flex: 1, padding: 5}}>
-      <View
-        style={{
-          //   height: '70%',
-          backgroundColor: colors.BODY_BACKGROUND_LIGHT,
-          borderRadius: 10,
-          padding: 10,
+    <KeyboardAvoidingView style={{flex: 1}}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={addNewModalVisible}
+        onRequestClose={() => {
+          console.log('Closed');
         }}>
-        <Text
-          style={{
-            fontSize: 20,
-            marginBottom: 5,
-            fontWeight: 'bold',
-            alignSelf: 'center',
-          }}>
-          {'እቃ ማስገቢያ ፎርም'}
-        </Text>
-        {/* <DatePickerCustom
-          label="ቀን"
-          value={date}
-          setValue={setDate}
-          containerStyle={{height: 85, marginBottom: 0}}
-        /> */}
-        <Input
-          label={`አከፋፋይ ስም`}
-          containerStyle={{height: 85}}
-          labelStyle={{marginBottom: 2}}
-          shake={() => {
-            console.log('The hell dis');
-          }}
-        />
-        <Input
-          label={`የእቃ ስም`}
-          containerStyle={{height: 85}}
-          labelStyle={{marginBottom: 2}}
-          shake={() => {
-            console.log('The hell dis');
-          }}
-        />
+        {writtingData ? (
+          <View
+            style={{
+              position: 'absolute',
+              zIndex: 12,
+              flex: 1,
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#00000060',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                height: 100,
+                borderRadius: 20,
+                aspectRatio: 1,
+                backgroundColor: '#fff',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <LottieView
+                style={{
+                  height: 200,
+                  backgroundColor: '#fff',
+                }}
+                source={require('../../assets/loading.json')}
+                autoPlay
+                loop={true}
+              />
+            </View>
+          </View>
+        ) : successAnimation ? (
+          <View
+            style={{
+              position: 'absolute',
+              zIndex: 12,
+              flex: 1,
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#00000060',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                height: 100,
+                borderRadius: 20,
+                aspectRatio: 1,
+                backgroundColor: '#fff',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <LottieView
+                style={{
+                  height: 80,
+                  backgroundColor: '#fff',
+                }}
+                source={require('../../assets/success.json')}
+                speed={1.3}
+                autoPlay
+                loop={false}
+              />
+            </View>
+          </View>
+        ) : failedAnimation ? (
+          <Pressable
+            onPress={() => {
+              setFailedAnimation(false);
+              setWrittingData(false);
+              setSuccessAnimation(false);
+            }}
+            style={{
+              position: 'absolute',
+              zIndex: 12,
+              flex: 1,
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#00000060',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                height: 250,
+                borderRadius: 20,
+                aspectRatio: 1,
+                backgroundColor: '#fff',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <LottieView
+                style={{
+                  height: 80,
+                  backgroundColor: '#fff',
+                }}
+                source={require('../../assets/failed.json')}
+                speed={1.3}
+                autoPlay
+                loop={false}
+              />
+              <Text
+                style={{
+                  fontSize: 20,
+                  textAlign: 'center',
+                }}>
+                {errorMessage}
+              </Text>
+              <Icon
+                name="refresh"
+                size={50}
+                color={colors.primary}
+                style={{alignSelf: 'center', marginTop: 40}}
+                onPress={addNewInventory}
+              />
+            </View>
+          </Pressable>
+        ) : null}
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            padding: 10,
+            flex: 1,
+            backgroundColor: '#00000060',
           }}>
-          <Input
-            label={`ብዛት`}
-            containerStyle={{height: 85, flex: 1}}
-            labelStyle={{marginBottom: 2}}
-            keyboardType="numeric"
-            shake={() => {
-              console.log('The hell dis');
-            }}
-          />
-          <Input
-            label={`መለኪያ`}
-            containerStyle={{height: 85, flex: 1}}
-            labelStyle={{marginBottom: 2}}
-            shake={() => {
-              console.log('The hell dis');
-            }}
-          />
-          <Input
-            label={`ያንዱ ዋጋ`}
-            containerStyle={{height: 85, flex: 1}}
-            labelStyle={{marginBottom: 2}}
-            keyboardType="numeric"
-            shake={() => {
-              console.log('The hell dis');
-            }}
-          />
+          <ScrollView>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: '#fff',
+                marginBottom: 20,
+                borderRadius: 20,
+                padding: 20,
+              }}>
+              <TouchableOpacity onPress={() => setAdNewModalVisible(false)}>
+                <Icon
+                  name="close"
+                  size={25}
+                  color={colors.black}
+                  style={{alignSelf: 'flex-end'}}
+                />
+              </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 30,
+                  color: colors.primary,
+                  textAlign: 'center',
+                  marginVertical: 20,
+                }}>
+                የእቃ መመዝቢያ ፎርም
+              </Text>
+              <Text
+                style={{
+                  color: colors.black,
+                  fontSize: 20,
+                  marginBottom: 5,
+                }}>
+                የአከፋፋይ ስም
+              </Text>
+              <TextInput
+                style={[styles.Input]}
+                onChangeText={val => {
+                  setSupplierName(val);
+                }}
+                value={supplierName}
+                keyboardType="default"
+                placeholderTextColor={colors.faded_grey}
+              />
+              <Text
+                style={{
+                  color: colors.black,
+                  fontSize: 20,
+                  marginBottom: 5,
+                }}>
+                የእቃ ስም
+              </Text>
+              <TextInput
+                style={[styles.Input]}
+                onChangeText={val => {
+                  setItemName(val);
+                }}
+                value={itemName}
+                keyboardType="default"
+                placeholderTextColor={colors.faded_grey}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                }}>
+                <View
+                  style={{
+                    flex: 1,
+                    marginHorizontal: 5,
+                  }}>
+                  <Text
+                    style={{
+                      color: colors.black,
+                      fontSize: 20,
+                      marginBottom: 5,
+                    }}>
+                    ብዛት
+                  </Text>
+                  <TextInput
+                    style={[styles.Input]}
+                    onChangeText={val => {
+                      setAmount(val.replace(/[^0-9]/g, ''));
+                    }}
+                    value={quantity}
+                    keyboardType="numeric"
+                    placeholderTextColor={colors.faded_grey}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flex: 1,
+                    marginHorizontal: 5,
+                  }}>
+                  <Text
+                    style={{
+                      color: colors.black,
+                      fontSize: 20,
+                      marginBottom: 5,
+                    }}>
+                    የአንዱ ዋጋ
+                  </Text>
+                  <TextInput
+                    style={[styles.Input]}
+                    onChangeText={val => {
+                      setUnitPrice(val.replace(/[^0-9]/g, ''));
+                    }}
+                    value={unitPrice}
+                    keyboardType="numeric"
+                    placeholderTextColor={colors.faded_grey}
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  marginHorizontal: 5,
+                }}>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 20,
+                    marginBottom: 5,
+                  }}>
+                  መለኪያ
+                </Text>
+                <SelectDropdown
+                  data={quantifiers}
+                  renderDropdownIcon={() => (
+                    <View>
+                      <Icon name="caretdown" size={20} color={colors.black} />
+                    </View>
+                  )}
+                  buttonStyle={styles.dropDown}
+                  onSelect={selectedItem => {
+                    setUnit(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item;
+                  }}
+                />
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={addNewInventory}
+                style={{
+                  width: '100%',
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  backgroundColor: colors.primary,
+                }}>
+                <Text style={{color: colors.white, fontSize: 25}}>ጨምር</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
-        {image != null ? (
-          <Image
-            source={{uri: image ?? ''}}
-            style={{width: 100, height: 100}}
-          />
-        ) : null}
-        {/* <Button
-          title={'የእቃ ፎቶ ማያያዣ'}
-          containerStyle={{
-            width: '100%',
-            marginVertical: 15,
-            borderRadius: 10,
-          }}
-          buttonStyle={{
-            paddingVertical: 10,
-            backgroundColor: 'black',
-          }}
-          // titleStyle={{fontWeight: 'bold', color: 'black'}}
-          onPress={async () => {
-            const result = await launchImageLibrary({
-              mediaType: 'photo',
-            });
-            if (result.didCancel) {
-              return console.warn('Canceled');
-            }
-            if (result.errorMessage) {
-              return console.warn(result.errorMessage);
-            }
-            const source = result.assets![0].uri;
-            setImage(source);
-          }}
-        /> */}
-      </View>
-      <Button
-        title={'ጨምር'}
-        containerStyle={{
-          width: '100%',
-          marginVertical: 15,
-          borderRadius: 10,
-        }}
-        buttonStyle={{
-          paddingVertical: 10,
-        }}
-        // titleStyle={{fontWeight: 'bold', color: 'black'}}
-        onPress={() => toggleModal()}
-      />
-    </View>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 };
 
 export default AddNew;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    display: 'flex',
+  },
+  contentContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    flex: 1,
+  },
+  boardContainer: {
+    marginHorizontal: 5,
+    marginVertical: 20,
+    backgroundColor: 'white',
+    height: 80,
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+  },
+  boardCol: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonwithIcon: {
+    backgroundColor: colors.lightBlue,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: 5,
+    width: '25%',
+    padding: 10,
+    gap: 2,
+  },
+  Input: {
+    color: colors.black,
+    height: 50,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  dropDown: {
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    marginBottom: 20,
+    backgroundColor: colors.white,
+  },
+  boardTopTitle: {fontSize: 22, fontWeight: '900'},
+  boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
+});
