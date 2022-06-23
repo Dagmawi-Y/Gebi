@@ -1,4 +1,6 @@
+import {useContext} from 'react';
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   Text,
@@ -6,6 +8,7 @@ import {
   Image,
   View,
   TouchableHighlight,
+  Pressable,
 } from 'react-native';
 import React, {useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -15,10 +18,35 @@ import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import firestore from '@react-native-firebase/firestore';
+import {StateContext} from '../../global/context';
 
 const ItemDetails = ({route, navigation}) => {
-  const {data} = route.params;
+  const {data, itemId} = route.params;
+  const {user} = useContext(StateContext);
 
+  const deleteItem = async () => {
+    Alert.alert(`Are you sure,you want to delete`, `${data.item_name}?`, [
+      {
+        text: 'Yes',
+        onPress: async () => {
+          await firestore()
+            .collection('users')
+            .doc(user.uid)
+            .collection('inventory')
+            .doc(itemId)
+            .delete();
+          navigation.pop();
+        },
+        style: 'default',
+      },
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+    ]);
+  };
   return (
     <SafeAreaView style={[styles.container]}>
       {/* Header */}
@@ -39,6 +67,16 @@ const ItemDetails = ({route, navigation}) => {
             </TouchableOpacity>
             <Text style={{color: 'white', fontSize: 25, flex: 8}}>የዕቃ መረጃ</Text>
           </View>
+          <Pressable
+            onPress={() => deleteItem()}
+            style={{
+              alignSelf: 'flex-end',
+              marginHorizontal: 20,
+              alignItems: 'center',
+            }}>
+            <Icon name="delete" size={25} color={colors.white} />
+            <Text style={{color: colors.white}}>Delete</Text>
+          </Pressable>
         </View>
       </View>
       {/* End Header */}

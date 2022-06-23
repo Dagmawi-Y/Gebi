@@ -172,8 +172,10 @@ export default function Items({navigation}) {
                           activeOpacity={0.5}
                           key={item.id}
                           onPress={() => {
-                            navigation.navigate(routes.itemDetails, {
+                            const id = item.id;
+                            navigation.push(routes.itemDetails, {
                               data: item.doc,
+                              itemId:id
                             });
                           }}>
                           <InvetoryListItem
