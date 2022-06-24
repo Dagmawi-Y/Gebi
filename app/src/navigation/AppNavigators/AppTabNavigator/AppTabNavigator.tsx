@@ -2,15 +2,15 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
 
-import SalesScreen from '../screens/sales/SalesScreen';
-import ExpensesScreen from '../screens/Expenses/Expenses';
-import PlanerScreen from '../screens/Planner/PlannerScreen';
-import NewSaleButton from './components/NewSaleButton';
+import SalesScreen from '../../../screens/sales/SalesScreen';
+import ExpensesScreen from '../../../screens/Expenses/Expenses';
+import PlanerScreen from '../../../screens/Planner/PlannerScreen';
+import NewSaleButton from '../../../components/misc/NewSaleButton';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import routes from './routes';
+import routes from './../../routes';
 import InventoryNavigator from './InventoryNavigator';
 
 const logout = () => {
@@ -77,5 +77,4 @@ const AppTabNavigator = () => {
   );
 };
 
-// export default AppDrawerNavigator;
 export default AppTabNavigator;

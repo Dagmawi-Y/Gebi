@@ -1,12 +1,11 @@
 import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import {StateContext} from '../global/context';
+import {StateContext} from '../../global/context';
 
 import AppDrawerNavigator from './AppDrawerNavigator';
-import IntroNavigator from './IntroNavigator';
-import routes from './routes';
+import routes from './../routes';
+import IntroNavigator from '../IntroNavigators/IntroNavigator';
 
 const Stack = createStackNavigator();
 

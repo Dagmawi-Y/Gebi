@@ -1,31 +1,17 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
 
 import {StatusBar} from 'react-native';
-import {StateContext} from '../global/context';
-import routes from './routes';
-import InventoryScreen from '../screens/Inventory/InventoryScreen';
-import ItemDetails from '../screens/Inventory/ItemDetails';
-import {config} from 'process';
+import routes from './../../routes';
+import InventoryScreen from '../../../screens/Inventory/InventoryScreen';
+import ItemDetails from '../../../screens/Inventory/ItemDetails';
 
 const Stack = createStackNavigator();
 
 const InventoryNavigator = () => {
-  const {curlang} = useContext(StateContext);
-  const animConfig = {
-    animation: 'spring',
-    config: {
-      stiffness: 1000,
-      damping: 500,
-      mass: 3,
-      overshootClamping: true,
-      restDisplacementThreshold: 0.01,
-      restSpeedThreshold: 0.01,
-    },
-  };
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />

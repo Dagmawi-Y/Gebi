@@ -1,7 +1,7 @@
 export default Object.freeze({
   langSelect: 'languageSelect',
   intro: 'Intro',
-  inventory: 'Inventory',
+  inventory: 'InventoryScreen',
   sales: 'Sales',
   newSale: 'NewSale',
   expenses: 'Expenses',
@@ -9,5 +9,5 @@ export default Object.freeze({
   introNav: 'Introduction',
   appNav: 'Home',
   itemDetails: 'ItemDetails',
-  inventoryNav: 'inventoryNav',
+  inventoryNav: 'Inventory',
 });

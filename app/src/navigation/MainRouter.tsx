@@ -6,12 +6,12 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import {StateContext} from '../global/context';
 
-import AuthNavigator from './AuthNavigator';
+import AuthNavigator from './AuthNavigators/AuthNavigator';
 
 import Loading from '../components/lotties/Loading';
 import colors from '../config/colors';
 
-import AppMainNavigtor from './AppMainNavigtor';
+import AppMainNavigtor from './AppNavigators/AppMainNavigtor';
 
 const RouteApp = () => {
   const {user, initializing} = useContext(StateContext);
@@ -40,6 +40,11 @@ const RouteApp = () => {
 
 export default RouteApp;
 
+
+// 
+// 
+// 
+// 
 //                                                       README
 // Main Router is the main entry Navigation container where Auth is checked and from there navigators re rendered accordingly
 // AppDrawerNavigator is a DRAWER Navigator, it nest both AppNavigator (TabNavigator) and Intro Navigator (Stack Navigator)
@@ -62,3 +67,4 @@ export default RouteApp;
 //                                                               Expenses Screen|
 //                                                               Planning Screen|
 //            
+// =*= We can only nest Tab in Drawer, but not vise versa. :(

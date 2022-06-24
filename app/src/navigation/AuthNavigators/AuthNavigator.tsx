@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from '../screens/AuthScreens/LoginScreen';
-import RegisterScreen from '../screens/AuthScreens/Register';
+import LoginScreen from '../../screens/AuthScreens/LoginScreen';
+import RegisterScreen from '../../screens/AuthScreens/Register';
 import { StatusBar } from 'react-native';
 
 const Stack = createStackNavigator();

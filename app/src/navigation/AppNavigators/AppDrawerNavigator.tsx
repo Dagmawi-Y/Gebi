@@ -1,16 +1,16 @@
 import React from 'react';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import SettingsScreen from '../screens/Settings/SettingsScreen';
-import colors from '../config/colors';
-import AppTabNavigator from './AppTabNavigator';
+import SettingsScreen from '../../screens/Settings/SettingsScreen';
+import colors from '../../config/colors';
+import AppTabNavigator from '../AppNavigators/AppTabNavigator/AppTabNavigator';
 
 const Drawer = createDrawerNavigator();
 
 function AppDrawerNavigator() {
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
+      initialRouteName="Gebi"
       screenOptions={{
         headerShown: true,
         headerTintColor: colors.white,
@@ -20,7 +20,7 @@ function AppDrawerNavigator() {
           elevation: 0,
         },
       }}>
-      <Drawer.Screen name="Home" component={AppTabNavigator} />
+      <Drawer.Screen name="Gebi" component={AppTabNavigator} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
     </Drawer.Navigator>
   );

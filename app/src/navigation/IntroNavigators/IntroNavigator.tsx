@@ -2,10 +2,10 @@ import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {StatusBar} from 'react-native';
-import Intro from '../screens/Intro/Intro';
-import LanguageSelector from '../screens/Intro/LanguageSelector';
-import routes from './routes';
-import {StateContext} from '../global/context';
+import Intro from '../../screens/Intro/Intro';
+import LanguageSelector from '../../screens/Intro/LanguageSelector';
+import routes from './../routes';
+import {StateContext} from '../../global/context';
 
 const Stack = createStackNavigator();
 

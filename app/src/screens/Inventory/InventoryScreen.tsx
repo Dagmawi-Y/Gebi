@@ -93,15 +93,18 @@ export default function Items({navigation}) {
         {/* <Menu /> */}
         <ScrollView>
           <AddNew />
-          <TopBar
-            navigation={navigation}
-            title={'የእቃ ክፍል'}
-            income={''}
-            expense={''}
-            calc={false}
-            totalCost={`${sumPrice} ብር`}
-            totalItem={totalItems}
-          />
+          <TopBar title={'የእቃ ክፍል'}>
+            <View style={topCard.boardContainer}>
+              <View style={topCard.boardCol}>
+                <Text style={topCard.boardTopTitle}>{totalItems}</Text>
+                <Text style={topCard.boardSubTitle}>ያሉ እቃዎች</Text>
+              </View>
+              <View style={[topCard.boardCol, {alignItems: 'flex-end'}]}>
+                <Text style={topCard.boardTopTitle}>{sumPrice}</Text>
+                <Text style={topCard.boardSubTitle}>አጠቃላይ ዋጋ</Text>
+              </View>
+            </View>
+          </TopBar>
 
           <View style={styles.contentContainer}>
             <View
@@ -242,5 +245,32 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   boardTopTitle: {fontSize: 22, fontWeight: '900'},
+  boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
+});
+
+const topCard = StyleSheet.create({
+  statContainer: {
+    marginTop: 10,
+  },
+
+  // Typetwo
+  boardContainer: {
+    marginVertical: 5,
+    backgroundColor: 'white',
+    height: 80,
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+  },
+  boardCol: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  boardTopTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: colors.black,
+  },
   boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
 });

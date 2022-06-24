@@ -16,20 +16,35 @@ import items from './items';
 import TopBar from '../../components/TopBar/TopBar';
 import {useContext} from 'react';
 import {StateContext} from '../../global/context';
+import StatCard from '../../components/statCards/StatCard';
+import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 
-export default function SalesScreen({ navigation }) {
+export default function SalesScreen({navigation}) {
   const {curlang, setCurlang} = useContext(StateContext);
 
   return (
     <SafeAreaView>
-      <TopBar
-        title={'ሽያጭ'}
-        income={'1287'}
-        expense={'8979'}
-        calc={true}
-        totalCost={''}
-        totalItem={''}
-      />
+      <TopBar title={'ሽያጭ'}>
+        <View style={styles.statContainer}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{flex: 1, marginRight: 2}}>
+              <StatCard label="ገቢ" value={"65621"} trend="positive" />
+            </View>
+            <View style={{flex: 1, marginLeft: 2}}>
+              <StatCard label="ወጪ" value={"99451"} trend="negative" />
+            </View>
+          </View>
+          <View style={{marginVertical: 10}}>
+            <StatCardFullWidth
+              label="የቀኑ ትርፍ"
+              // value={aggregate.toString()}
+              value={'65451'}
+              // trend={aggregate > 0 ? 'positive' : 'negative'}
+              trend={'negative'}
+            />
+          </View>
+        </View>
+      </TopBar>
 
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Sales</Text>
