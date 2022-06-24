@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import routes from './routes';
-import InventoryNavigator from '../navigation/InventoryNavigator';
+import InventoryNavigator from './InventoryNavigator';
 
 const logout = () => {
   auth()
@@ -21,7 +21,7 @@ const logout = () => {
 
 const Tab = createBottomTabNavigator();
 
-const AppNavigator = () => {
+const AppTabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -77,4 +77,5 @@ const AppNavigator = () => {
   );
 };
 
-export default AppNavigator;
+// export default AppDrawerNavigator;
+export default AppTabNavigator;

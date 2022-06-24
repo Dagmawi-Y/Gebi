@@ -10,7 +10,8 @@ import AuthNavigator from './AuthNavigator';
 
 import Loading from '../components/lotties/Loading';
 import colors from '../config/colors';
-import AppDrawerNavigator from './AppDrawerNavigator';
+
+import AppMainNavigtor from './AppMainNavigtor';
 
 const RouteApp = () => {
   const {user, initializing} = useContext(StateContext);
@@ -31,7 +32,7 @@ const RouteApp = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        {!user ? <AuthNavigator /> : <AppDrawerNavigator />}
+        {!user ? <AuthNavigator /> : <AppMainNavigtor />}
       </NavigationContainer>
     </SafeAreaProvider>
   );
@@ -45,17 +46,19 @@ export default RouteApp;
 //
 //                                                       Navigation Map
 //
-//                                            Main Router
-//                                                |
-//                            AuthNavigator-------|----------AppDrawerNavigtor
-//                                 |                                 |
-//                       Register--|--Login      AppStackNavigator---|---OtherScreens...(settings...)
-//                                                       |
-//                                                       |
-//                                IntroNavigator(Stack)--|--AppNavigator(Tab)
-//                                                                 |
-//                                                                 |Sales Screen
-//                                                                 |Inventory Screen
-//                                                                 |Expenses Screen
-//                                                                 |Planning Screen
-//
+//                                                      Main Router
+//                                                           |
+//           AuthNavigator-----------------------------------|-------------   AppMainNavigtor
+//                   |                                                              |
+//                   |                                                              |
+//         Register--|--Login                                                       |  
+//                                                           IntroNavigator(Stack)--|-- AppDrawerNavigator
+//                                                                                              |
+//                                                                                              |
+//                                                                   AppTabNavigator(Tab)  -----|---- OtherScreens...(settings...)
+//                                                                              |
+//                                                                  Sales Screen|
+//                                                              Inventory Screen|
+//                                                               Expenses Screen|
+//                                                               Planning Screen|
+//            

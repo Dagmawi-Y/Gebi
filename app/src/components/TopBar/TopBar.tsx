@@ -21,17 +21,6 @@ export default function SalesScreen({
   return (
     <View style={styles.topBar}>
       <View style={{marginVertical: 0, marginHorizontal: 10}}>
-        <View style={styles.topBarContainer}>
-          <TouchableHighlight
-            style={{flex: 1.2, backgroundColor: colors.primary}}
-            onPress={() => {
-              navigation.openDrawer();
-            }}>
-            <Icon2 name="menu-sharp" size={30} color={colors.white} />
-          </TouchableHighlight>
-          <Text style={{color: 'white', fontSize: 25, flex: 8}}>{title}</Text>
-          <Icon name="bell" size={20} color={colors.white} style={{flex: 1}} />
-        </View>
         {calc ? (
           <View style={styles.statContainer}>
             <View
@@ -71,9 +60,6 @@ export default function SalesScreen({
 const styles = StyleSheet.create({
   topBar: {
     backgroundColor: colors.primary,
-    borderBottomEndRadius: 30,
-    paddingHorizontal: 0,
-    paddingVertical: 10,
   },
   topBarContainer: {
     flexDirection: 'row',
