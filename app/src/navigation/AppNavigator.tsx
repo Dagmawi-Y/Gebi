@@ -4,14 +4,14 @@ import auth from '@react-native-firebase/auth';
 
 import SalesScreen from '../screens/sales/SalesScreen';
 import ExpensesScreen from '../screens/Expenses/Expenses';
-import IntroNavigator from '../navigation/InventoryNavigator';
 import PlanerScreen from '../screens/Planner/PlannerScreen';
-import NewSaleButton from './NewSaleButton';
+import NewSaleButton from './components/NewSaleButton';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import routes from './routes';
+import InventoryNavigator from '../navigation/InventoryNavigator';
 
 const logout = () => {
   auth()
@@ -26,7 +26,7 @@ const AppNavigator = () => {
     <Tab.Navigator>
       <Tab.Screen
         name={routes.inventoryNav}
-        component={IntroNavigator}
+        component={InventoryNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
@@ -35,8 +35,8 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        component={SalesScreen}
         name={routes.sales}
+        component={SalesScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (

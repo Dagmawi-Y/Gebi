@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 
 export default function SalesScreen({
+  navigation,
   title,
   income,
   expense,
@@ -16,11 +17,16 @@ export default function SalesScreen({
   totalCost,
 }) {
   const aggregate = calc ? parseFloat(income) - parseFloat(expense) : '';
+
   return (
     <View style={styles.topBar}>
       <View style={{marginVertical: 0, marginHorizontal: 10}}>
         <View style={styles.topBarContainer}>
-          <TouchableHighlight style={{flex: 1.2, backgroundColor:colors.primary}}>
+          <TouchableHighlight
+            style={{flex: 1.2, backgroundColor: colors.primary}}
+            onPress={() => {
+              navigation.openDrawer();
+            }}>
             <Icon2 name="menu-sharp" size={30} color={colors.white} />
           </TouchableHighlight>
           <Text style={{color: 'white', fontSize: 25, flex: 8}}>{title}</Text>

@@ -13,7 +13,7 @@ import {config} from 'process';
 
 const Stack = createStackNavigator();
 
-const IntroNavigator = () => {
+const InventoryNavigator = () => {
   const {curlang} = useContext(StateContext);
   const animConfig = {
     animation: 'spring',
@@ -69,4 +69,4 @@ const IntroNavigator = () => {
   );
 };
 
-export default IntroNavigator;
+export default InventoryNavigator;

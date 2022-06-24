@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StateContext} from '../global/context';
+import {StateContext} from '../../global/context';
 
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
 function NewListingButton() {
   const {addNewModalVisible, setAdNewModalVisible} = useContext(StateContext);

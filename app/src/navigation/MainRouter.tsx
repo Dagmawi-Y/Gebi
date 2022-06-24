@@ -1,28 +1,21 @@
-import React, {useEffect, useContext, useState} from 'react';
-import {View, StatusBar} from 'react-native';
+import React, {useContext} from 'react';
+import {View} from 'react-native';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import auth from '@react-native-firebase/auth';
 
 import {StateContext} from '../global/context';
 
-import AppNavigator from './AppNavigator';
 import AuthNavigator from './AuthNavigator';
-import IntroNavigator from './IntroNavigator';
-import routes from './routes';
-import LanguageSelector from '../screens/Intro/LanguageSelector';
+
 import Loading from '../components/lotties/Loading';
 import colors from '../config/colors';
-
-const Stack = createStackNavigator();
+import AppDrawerNavigator from './AppDrawerNavigator';
 
 const RouteApp = () => {
-  const {curlang, introDone, user, setUser, initializing, setInitializing} =
-    useContext(StateContext);
+  const {user, initializing} = useContext(StateContext);
 
-  if (initializing)
+  if (initializing) {
     return (
       <View
         style={{
@@ -33,30 +26,36 @@ const RouteApp = () => {
         <Loading size={150} />
       </View>
     );
+  }
 
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        {!user ? (
-          <AuthNavigator />
-          ) : (
-            <Stack.Navigator
-            screenOptions={{headerShown: false}}
-            initialRouteName={
-              curlang && introDone ? routes.appNav : routes.introNav
-            }>
-            <Stack.Group>
-              <Stack.Screen name={routes.introNav} component={IntroNavigator} />
-              <Stack.Screen
-                name={routes.appNav}
-                children={() => <AppNavigator />}
-              />
-            </Stack.Group>
-          </Stack.Navigator>
-        )}
+        {!user ? <AuthNavigator /> : <AppDrawerNavigator />}
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
 
 export default RouteApp;
+
+//                                                       README
+// Main Router is the main entry Navigation container where Auth is checked and from there navigators re rendered accordingly
+// AppDrawerNavigator is a DRAWER Navigator, it nest both AppNavigator (TabNavigator) and Intro Navigator (Stack Navigator)
+//
+//                                                       Navigation Map
+//
+//                                            Main Router
+//                                                |
+//                            AuthNavigator-------|----------AppDrawerNavigtor
+//                                 |                                 |
+//                       Register--|--Login      AppStackNavigator---|---OtherScreens...(settings...)
+//                                                       |
+//                                                       |
+//                                IntroNavigator(Stack)--|--AppNavigator(Tab)
+//                                                                 |
+//                                                                 |Sales Screen
+//                                                                 |Inventory Screen
+//                                                                 |Expenses Screen
+//                                                                 |Planning Screen
+//
