@@ -36,7 +36,7 @@ const ItemDetails = ({route, navigation}) => {
             .collection('inventory')
             .doc(itemId)
             .delete();
-          navigation.pop();
+          navigation.navigate(routes.inventory);
         },
         style: 'default',
       },
@@ -181,9 +181,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     display: 'flex',
-    marginHorizontal: 5,
   },
   keyboardAwareScrollContainer: {
+    marginHorizontal: 5,
     paddingVertical: 10,
     justifyContent: 'space-between',
     display: 'flex',

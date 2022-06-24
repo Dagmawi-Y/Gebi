@@ -79,6 +79,34 @@ export default function Items({navigation}) {
     }
   };
 
+  const Menu = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          flex: 1,
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#00000060',
+        }}>
+        <View
+          style={{
+            backgroundColor: colors.faded_dark,
+            width: '60%',
+            maxWidth: 400,
+            height: '40%',
+            maxHeight: 500,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{color: 'white'}}>Hello</Text>
+        </View>
+      </View>
+    );
+  };
   useEffect(() => {
     getInventory();
   }, []);
@@ -90,9 +118,9 @@ export default function Items({navigation}) {
           barStyle={'light-content'}
           backgroundColor={colors.primary}
         />
+        {/* <Menu /> */}
         <ScrollView>
           <AddNew />
-
           <TopBar
             title={'የእቃ ክፍል'}
             income={''}
@@ -175,7 +203,7 @@ export default function Items({navigation}) {
                             const id = item.id;
                             navigation.push(routes.itemDetails, {
                               data: item.doc,
-                              itemId:id
+                              itemId: id,
                             });
                           }}>
                           <InvetoryListItem
