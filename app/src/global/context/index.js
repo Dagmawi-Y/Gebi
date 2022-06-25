@@ -7,6 +7,7 @@ const StateContext = React.createContext();
 const StateContextProvider = ({children}) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [headerVisible, setHeaderVisible] = useState(true);
 
   const [addNewModalVisible, setAdNewModalVisible] = useState(false);
 
@@ -46,18 +47,18 @@ const StateContextProvider = ({children}) => {
   }, []);
 
   const value = {
+    user,
     curlang,
     introDone,
-    introDone,
     initializing,
-    user,
+    headerVisible,
     addNewModalVisible,
     setAdNewModalVisible,
-    setUser,
+    setHeaderVisible,
     setInitializing,
     setIntroDone,
     setCurlang,
-    setIntroDone,
+    setUser,
   };
 
   return (

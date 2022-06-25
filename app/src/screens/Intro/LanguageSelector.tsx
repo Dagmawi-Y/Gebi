@@ -51,7 +51,7 @@ const LanguageSelector = ({navigation}) => {
       </View>
       <View style={{flex: 2, alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 25, marginBottom: 20}}>
-          ለመጀመር ቋንቋ ይምረጡ {curlang}/{!introDone ? 'False' : 'True'}
+          ለመጀመር ቋንቋ ይምረጡ
         </Text>
         <View
           style={{

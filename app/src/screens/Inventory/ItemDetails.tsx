@@ -51,7 +51,7 @@ const ItemDetails = ({route, navigation}) => {
     <SafeAreaView style={[styles.container]}>
       {/* Header */}
 
-      <View style={header.topBar}>
+      {/* <View style={header.topBar}>
         <View style={{marginVertical: 0, marginHorizontal: 10}}>
           <View style={header.topBarContainer}>
             <TouchableOpacity
@@ -78,7 +78,7 @@ const ItemDetails = ({route, navigation}) => {
             <Text style={{color: colors.white}}>Delete</Text>
           </Pressable>
         </View>
-      </View>
+      </View> */}
       {/* End Header */}
 
       <ScrollView style={{flex: 1}}>

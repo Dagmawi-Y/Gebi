@@ -4,16 +4,16 @@ import {Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Dimensions} from 'react-native';
-import colors from '../../config/colors';
+import colors from '../../../config/colors';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Button from '../../components/misc/Button';
-import LoadingOTP from '../../components/lotties/LoadingOTP';
+import Button from '../../../components/misc/Button';
+import Loading from '../../../components/lotties/Loading';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-export default function RegisterPhone() {
+const PhoneInputScreen = ({navigation}) => {
   const [phoneNumber, setphoneNumber] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ export default function RegisterPhone() {
   return (
     <SafeAreaView style={[styles.container]}>
       {loading ? (
-        <LoadingOTP />
+        <Loading size={100}/>
       ) : (
         <KeyboardAwareScrollView
           enableOnAndroid
@@ -99,7 +99,7 @@ export default function RegisterPhone() {
                     alignItems: 'center',
                   }}>
                   <Image
-                    source={require('../../assets/ethiopianflag.png')}
+                    source={require('../../../assets/ethiopianflag.png')}
                     style={{
                       width: 50,
                       height: 50,
@@ -177,7 +177,7 @@ export default function RegisterPhone() {
                 }}>
                 <Image
                   style={{resizeMode: 'center'}}
-                  source={require('../../assets/logo-blue.png')}
+                  source={require('../../../assets/logo-blue.png')}
                 />
               </View>
               <Text
@@ -226,14 +226,15 @@ export default function RegisterPhone() {
                   marginTop: 20,
                   justifyContent: 'space-around',
                 }}>
-                <Button
+                {/* <Button
                   btnStyle={'outlined'}
                   title={'ድጋሜ ኮድ ላክ'}
-                  onPress={() => confirmCode()}
-                />
+                  onPress={() => {}}
+                /> */}
                 <Button
                   btnStyle={'normal'}
                   title={'አረጋግጥ'}
+                  // onPress={() => navigation.navigate('UserInfoInput')}
                   onPress={() => confirmCode()}
                 />
               </View>
@@ -243,7 +244,7 @@ export default function RegisterPhone() {
       )}
     </SafeAreaView>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: "blue",
@@ -298,4 +299,5 @@ const styles = StyleSheet.create({
   },
 });
 
-RegisterPhone.routeName = 'RegisterPhone';
+export default PhoneInputScreen;
+PhoneInputScreen.routeName = 'RegisterPhone';

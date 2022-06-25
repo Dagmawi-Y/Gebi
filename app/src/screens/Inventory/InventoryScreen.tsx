@@ -14,8 +14,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import LottieView from 'lottie-react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 
 import TopBar from '../../components/TopBar/TopBar';
@@ -31,8 +30,11 @@ export default function Items({navigation}) {
   const {user} = useContext(StateContext);
 
   const [data, setData]: Array<any> = useState([]);
+  const [filter, setFilter]: Array<any> = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchVisible, setSearchVisible] = useState(false);
 
+  const [searchKey, setSearchKey] = useState('');
   const [sumPrice, setSumPrice] = useState('0');
   const [totalItems, setTotalItems] = useState('0');
 
@@ -93,7 +95,10 @@ export default function Items({navigation}) {
         {/* <Menu /> */}
         <ScrollView>
           <AddNew />
-          <TopBar title={'የእቃ ክፍል'}>
+          <TopBar
+            title={'የእቃ ክፍል'}
+            action={setSearchVisible}
+            actionValue={searchVisible}>
             <View style={topCard.boardContainer}>
               <View style={topCard.boardCol}>
                 <Text style={topCard.boardTopTitle}>{totalItems}</Text>
@@ -106,6 +111,39 @@ export default function Items({navigation}) {
             </View>
           </TopBar>
 
+          {/* Search Input */}
+          {searchVisible && (
+            <View
+              style={{
+                width: '80%',
+                alignSelf: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderRadius: 10,
+                marginVertical: 5,
+                marginHorizontal: 10,
+                backgroundColor: colors.white,
+                paddingHorizontal: 10,
+                borderWidth: 1,
+              }}>
+              <TextInput
+                style={{
+                  backgroundColor: colors.white,
+                  flexGrow: 1,
+                  height: 40,
+                  fontSize: 20,
+                  color: colors.black,
+                }}
+                selectionColor="black"
+                placeholder="search..."
+                onChangeText={val => setSearchKey(val)}
+                value={searchKey}
+                keyboardType="default"
+                placeholderTextColor={colors.faded_grey}
+              />
+              <Icon name="search1" size={25} color={colors.primary} />
+            </View>
+          )}
           <View style={styles.contentContainer}>
             <View
               style={{
@@ -123,29 +161,7 @@ export default function Items({navigation}) {
                 }}>
                 ያሉ አቃዎች
               </Text>
-              {/* <TouchableOpacity
-                style={styles.buttonwithIcon}
-                onPress={() => {
-                  setSuccessAnimation(false);
-                  setWrittingData(false);
-                  setAdNewModalVisible(true);
-                }}>
-                <Text
-                  style={{
-                    color: colors.black,
-                  }}>
-                  Add New
-                </Text>
-                <Icon
-                  name="plus"
-                  size={25}
-                  color={colors.black}
-                  style={{alignSelf: 'flex-end'}}
-                  onPress={() => {
-                    setWrittingData(false);
-                  }}
-                />
-              </TouchableOpacity> */}
+
               <TouchableOpacity
                 style={styles.buttonwithIcon}
                 onPress={() =>
@@ -169,27 +185,29 @@ export default function Items({navigation}) {
                 {data.length == 0 ? (
                   <EmptyBox message={'Inventory Empty'} />
                 ) : data.length > 0 ? (
-                  <View style={{}}>
-                    {data.map((item, i) => {
-                      return (
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          key={item.id}
-                          onPress={() => {
-                            const id = item.id;
-                            navigation.navigate(routes.itemDetails, {
-                              data: item.doc,
-                              itemId: id,
-                            });
-                          }}>
-                          <InvetoryListItem
-                            title={item.doc.item_name}
-                            unitPrice={item.doc.stock.unit_price}
-                            quantity={item.doc.stock.quantity}
-                          />
-                        </TouchableOpacity>
-                      );
-                    })}
+                  <View>
+                    {data
+                      .filter(dt => dt.doc.item_name.includes(searchKey.toLowerCase()))
+                      .map(item => {
+                        return (
+                          <TouchableOpacity
+                            activeOpacity={0.5}
+                            key={item.id}
+                            onPress={() => {
+                              const id = item.id;
+                              navigation.navigate(routes.itemDetails, {
+                                data: item.doc,
+                                itemId: id,
+                              });
+                            }}>
+                            <InvetoryListItem
+                              title={item.doc.item_name}
+                              unitPrice={item.doc.stock.unit_price}
+                              quantity={item.doc.stock.quantity}
+                            />
+                          </TouchableOpacity>
+                        );
+                      })}
                   </View>
                 ) : null}
               </ScrollView>
@@ -208,7 +226,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 10,
-    paddingVertical: 10,
     flex: 1,
   },
   boardContainer: {

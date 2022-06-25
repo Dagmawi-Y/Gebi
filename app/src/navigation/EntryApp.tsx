@@ -13,7 +13,7 @@ import colors from '../config/colors';
 
 import AppMainNavigtor from './AppNavigators/AppMainNavigtor';
 
-const RouteApp = () => {
+const EntryApp = () => {
   const {user, initializing} = useContext(StateContext);
 
   if (initializing) {
@@ -38,14 +38,14 @@ const RouteApp = () => {
   );
 };
 
-export default RouteApp;
+export default EntryApp;
 
 
 // 
 // 
+// ======================================================README==============================================================
 // 
 // 
-//                                                       README
 // Main Router is the main entry Navigation container where Auth is checked and from there navigators re rendered accordingly
 // AppDrawerNavigator is a DRAWER Navigator, it nest both AppNavigator (TabNavigator) and Intro Navigator (Stack Navigator)
 //

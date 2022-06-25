@@ -1,4 +1,5 @@
 import React from 'react';
+import {Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
 
@@ -12,6 +13,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import routes from './../../routes';
 import InventoryNavigator from './InventoryNavigator';
+import colors from '../../../config/colors';
 
 const logout = () => {
   auth()
@@ -23,12 +25,22 @@ const Tab = createBottomTabNavigator();
 
 const AppTabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        unmountOnBlur: true,
+
+        headerShown: false,
+        headerTintColor: colors.white,
+        headerStyle: {
+          backgroundColor: colors.primary,
+          borderBottomColor: colors.primary,
+          elevation: 0,
+        },
+      }}>
       <Tab.Screen
         name={routes.inventoryNav}
         component={InventoryNavigator}
         options={{
-          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <MaterialIcon name="warehouse" color={color} size={size} />
           ),
@@ -38,7 +50,6 @@ const AppTabNavigator = () => {
         name={routes.sales}
         component={SalesScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <MaterialIcon name="home" color={color} size={size} />
           ),
@@ -57,7 +68,6 @@ const AppTabNavigator = () => {
         name={routes.expenses}
         component={ExpensesScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <MaterialIcon name="trending-up" color={color} size={size} />
           ),
@@ -67,7 +77,6 @@ const AppTabNavigator = () => {
         name={routes.plan}
         component={PlanerScreen}
         options={{
-          headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="pencil" color={color} size={size} />
           ),

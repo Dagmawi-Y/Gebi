@@ -4,10 +4,11 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 
-import {StatusBar} from 'react-native';
+import {StatusBar, View, Text} from 'react-native';
 import routes from './../../routes';
 import InventoryScreen from '../../../screens/Inventory/InventoryScreen';
 import ItemDetails from '../../../screens/Inventory/ItemDetails';
+import colors from '../../../config/colors';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,7 @@ const InventoryNavigator = () => {
 
       <Stack.Navigator
         screenOptions={{
-          headerShown: false,
+          headerShown: true,
           animationEnabled: true,
           gestureEnabled: true,
           gestureDirection: 'horizontal',
@@ -47,9 +48,23 @@ const InventoryNavigator = () => {
               },
             },
           },
+          // headerLeft:()=><View><Text>Hello</Text></View>,
+          headerTintColor: colors.white,
+          headerStyle: {
+            backgroundColor: colors.primary,
+            borderBottomColor: colors.primary,
+            elevation: 0,
+          },
+          headerTitleStyle: {
+            fontSize: 30,
+          },
         }}>
         <Stack.Screen name={routes.inventory} component={InventoryScreen} />
-        <Stack.Screen name={routes.itemDetails} component={ItemDetails} />
+        <Stack.Screen
+          name={routes.itemDetails}
+          // options={{headerShown: false}}
+          component={ItemDetails}
+        />
       </Stack.Navigator>
     </>
   );

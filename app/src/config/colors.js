@@ -1,6 +1,6 @@
 export default {
   primary: '#0047CC',
-  secondary: '#4ecdc4',
+  secondary: '#000',
   black: '#000',
   white: '#fff',
   medium: '#6e6969',
@@ -13,4 +13,5 @@ export default {
   faded_grey: '#5e5b5bbd',
   green: '#13B805',
   red: 'red',
+  ligthGreen: '#E6ECF0',
 };

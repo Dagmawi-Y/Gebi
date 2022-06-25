@@ -34,8 +34,10 @@ const AddNew = () => {
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
   const [unitPrice, setUnitPrice] = useState('');
+  const [category, setCategory] = useState('');
 
   const quantifiers = ['pieces', 'Kilo-gram', 'Litres'];
+  const categories = ['Phones', 'Desktops', 'Home appliances'];
 
   const reset = () => {
     setSuccessAnimation(false);
@@ -74,6 +76,7 @@ const AddNew = () => {
             quantity: quantity,
             date: new Date().toLocaleDateString(),
             unit: unit,
+            category: category,
             unit_price: unitPrice,
           },
         });
@@ -363,10 +366,38 @@ const AddNew = () => {
                     fontSize: 20,
                     marginBottom: 5,
                   }}>
+                  አይነት
+                </Text>
+                <SelectDropdown
+                  data={categories}
+                  defaultButtonText="የአቃው አይነት"
+                  renderDropdownIcon={() => (
+                    <View>
+                      <Icon name="caretdown" size={20} color={colors.black} />
+                    </View>
+                  )}
+                  buttonStyle={styles.dropDown}
+                  onSelect={selectedItem => {
+                    setCategory(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item;
+                  }}
+                />
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 20,
+                    marginBottom: 5,
+                  }}>
                   መለኪያ
                 </Text>
                 <SelectDropdown
                   data={quantifiers}
+                  defaultButtonText="የብዛት መለኪየ"
                   renderDropdownIcon={() => (
                     <View>
                       <Icon name="caretdown" size={20} color={colors.black} />

@@ -1,13 +1,12 @@
 import React from 'react';
 import {StateContextProvider} from './global/context';
 
-import RouteApp from './navigation/MainRouter';
+import EntryApp from './navigation/EntryApp';
 
 const App = () => {
-
   return (
     <StateContextProvider>
-      <RouteApp />
+      <EntryApp />
     </StateContextProvider>
   );
 };
