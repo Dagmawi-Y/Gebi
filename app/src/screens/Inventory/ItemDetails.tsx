@@ -10,6 +10,7 @@ import {
   TouchableHighlight,
   Pressable,
 } from 'react-native';
+
 import React, {useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -17,9 +18,10 @@ import colors from '../../config/colors';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
+
+import Edit from './Edit';
 
 const ItemDetails = ({route, navigation}) => {
   const {data, itemId} = route.params;
@@ -49,36 +51,42 @@ const ItemDetails = ({route, navigation}) => {
   };
   return (
     <SafeAreaView style={[styles.container]}>
-      {/* Header */}
-
-      {/* <View style={header.topBar}>
-        <View style={{marginVertical: 0, marginHorizontal: 10}}>
-          <View style={header.topBarContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate(routes.inventory);
-              }}
-              style={{
-                flex: 1.2,
-                backgroundColor: colors.primary,
-                marginRight: 20,
-              }}>
-              <Icon name="arrow-left" size={30} color={colors.white} />
-            </TouchableOpacity>
-            <Text style={{color: 'white', fontSize: 25, flex: 8}}>የዕቃ መረጃ</Text>
-          </View>
+      <View style={header.topBar}>
+        <View
+          style={{
+            marginVertical: 0,
+            marginHorizontal: 5,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginBottom: 5,
+          }}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate(routes.EditItem, {
+                data: data,
+                itemId: itemId,
+              })
+            }
+            style={{
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+              marginHorizontal: 10,
+            }}>
+            <Icon name="lead-pencil" size={25} color={colors.white} />
+            <Text style={{color: colors.white}}>Edit</Text>
+          </Pressable>
           <Pressable
             onPress={() => deleteItem()}
             style={{
               alignSelf: 'flex-end',
-              marginHorizontal: 20,
+              marginHorizontal: 10,
               alignItems: 'center',
             }}>
             <Icon name="delete" size={25} color={colors.white} />
             <Text style={{color: colors.white}}>Delete</Text>
           </Pressable>
         </View>
-      </View> */}
+      </View>
       {/* End Header */}
 
       <ScrollView style={{flex: 1}}>
@@ -251,9 +259,8 @@ const tableStyles = StyleSheet.create({
 const header = StyleSheet.create({
   topBar: {
     backgroundColor: colors.primary,
-    borderBottomEndRadius: 30,
     paddingHorizontal: 0,
-    paddingVertical: 10,
+    paddingVertical: 0,
   },
   topBarContainer: {
     flexDirection: 'row',

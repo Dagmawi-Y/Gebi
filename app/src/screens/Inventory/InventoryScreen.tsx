@@ -81,8 +81,35 @@ export default function Items({navigation}) {
     }
   };
 
+  const onSnapshot = async () => {
+    let result: Array<Object> = [];
+    try {
+      firestore()
+        .collection('users')
+        .doc(user.uid)
+        .collection('inventory')
+        .onSnapshot(sn => {
+          sn.forEach(r => {
+            const id = r.id;
+            const doc = r.data();
+            result.push({
+              id,
+              doc,
+            });
+          });
+          setData(result);
+          console.log(data);
+          setLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getInventory();
+    // onSnapshot()
   }, []);
 
   return (
@@ -92,7 +119,7 @@ export default function Items({navigation}) {
           barStyle={'light-content'}
           backgroundColor={colors.primary}
         />
-        {/* <Menu /> */}
+  
         <ScrollView>
           <AddNew />
           <TopBar
@@ -187,7 +214,9 @@ export default function Items({navigation}) {
                 ) : data.length > 0 ? (
                   <View>
                     {data
-                      .filter(dt => dt.doc.item_name.includes(searchKey.toLowerCase()))
+                      .filter(dt =>
+                        dt.doc.item_name.includes(searchKey.toLowerCase()),
+                      )
                       .map(item => {
                         return (
                           <TouchableOpacity

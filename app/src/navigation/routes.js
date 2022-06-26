@@ -9,6 +9,7 @@ export default Object.freeze({
   introNav: 'Intro',
   appNav: 'Home',
   itemDetails: 'Item Details',
+  EditItem: 'Edit Item',
   inventoryNav: 'Inventory',
   login: 'Login',
   register: 'Register',
