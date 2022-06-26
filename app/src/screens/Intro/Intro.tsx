@@ -40,7 +40,7 @@ export default function Intro({navigation}: any) {
   const _onDone = async () => {
     await AsyncStorage.setItem('introDone', 'true');
     setIntroDone(Boolean(true));
-    navigation.replace(routes.appNav, {screen: routes.inventory});
+    navigation.replace(routes.login);
   };
   function _renderItem({item}: any) {
     return (

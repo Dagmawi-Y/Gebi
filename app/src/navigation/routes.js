@@ -1,13 +1,15 @@
 export default Object.freeze({
-  langSelect: 'languageSelect',
-  intro: 'Intro',
+  langSelect: 'Choose Language',
+  intro: 'Introduction',
   inventory: 'InventoryScreen',
   sales: 'Sales',
   newSale: 'NewSale',
   expenses: 'Expenses',
   plan: 'Plan',
-  introNav: 'Introduction',
+  introNav: 'Intro',
   appNav: 'Home',
   itemDetails: 'ItemDetails',
   inventoryNav: 'Inventory',
+  login: 'Login',
+  register: 'Register',
 });

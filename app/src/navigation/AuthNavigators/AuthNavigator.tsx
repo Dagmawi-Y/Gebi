@@ -1,28 +1,31 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../../screens/AuthScreens/LoginScreen';
 import RegisterScreen from '../../screens/AuthScreens/Register';
-import { StatusBar } from 'react-native';
+import {StatusBar} from 'react-native';
+import routes from '../routes';
+import IntroNavigator from '../IntroNavigators/IntroNavigator';
+import {StateContext} from '../../global/context';
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = () => (
-  <>
-    <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
+const AuthNavigator = () => {
+  const {curlang, introDone} = useContext(StateContext);
 
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Register"
-        component={RegisterScreen}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  </>
-);
+  return (
+    <>
+      <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
 
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName={
+          curlang && introDone ? routes.appNav : routes.introNav
+        }>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name={routes.introNav} component={IntroNavigator} />
+      </Stack.Navigator>
+    </>
+  );
+};
 export default AuthNavigator;

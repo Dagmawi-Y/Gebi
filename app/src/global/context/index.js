@@ -22,20 +22,28 @@ const StateContextProvider = ({children}) => {
   // End  Auth
 
   const init = async () => {
-    await AsyncStorage.getItem('lang')
-      .then(ln => setCurlang(ln.toString()))
-      .catch(err => {});
-    await AsyncStorage.getItem('introDone')
-      .then(val => setIntroDone(val.toString()))
-      .catch(err => {});
+    try {
+      await AsyncStorage.getItem('lang')
+        .then(ln => setCurlang(ln.toString()))
+        .catch(err => {});
+      await AsyncStorage.getItem('introDone')
+        .then(val => setIntroDone(val.toString()))
+        .catch(err => {});
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const reset = async () => {
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'));
-    await AsyncStorage.removeItem('lang').catch(err => console.log(err));
-    await AsyncStorage.removeItem('introDone').catch(err => console.log(err));
+    try {
+      auth()
+        .signOut()
+        .then(() => console.log('User signed out!'));
+      await AsyncStorage.removeItem('lang').catch(err => console.log(err));
+      await AsyncStorage.removeItem('introDone').catch(err => console.log(err));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
