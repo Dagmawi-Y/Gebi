@@ -19,7 +19,7 @@ const InventoryNavigator = () => {
 
       <Stack.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
           animationEnabled: true,
           gestureEnabled: true,
           gestureDirection: 'horizontal',
@@ -62,7 +62,7 @@ const InventoryNavigator = () => {
         <Stack.Screen name={routes.inventory} component={InventoryScreen} />
         <Stack.Screen
           name={routes.itemDetails}
-          // options={{headerShown: false}}
+          options={{headerShown: true}}
           component={ItemDetails}
         />
       </Stack.Navigator>

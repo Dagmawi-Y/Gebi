@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import {StatusBar} from 'react-native';
 import Intro from '../../screens/Intro/Intro';
-import LanguageSelector from '../../screens/Intro/LanguageSelector';
+import LanguageSelector from '../../screens/AuthScreens/LanguageSelector';
 import routes from './../routes';
 import {StateContext} from '../../global/context';
 
