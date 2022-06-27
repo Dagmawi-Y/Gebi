@@ -8,17 +8,40 @@ const StateContextProvider = ({children}) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [headerVisible, setHeaderVisible] = useState(true);
+  const [isNewUser, setIsNewUser] = useState();
+  const [isReady, setIsReady] = useState(false);
 
   const [addNewModalVisible, setAdNewModalVisible] = useState(false);
 
   const [curlang, setCurlang] = useState('');
   const [introDone, setIntroDone] = useState(false);
 
+  const value = {
+    user,
+    curlang,
+    introDone,
+    initializing,
+    headerVisible,
+    addNewModalVisible,
+    isNewUser,
+    isReady,
+    setIsReady,
+    setIsNewUser,
+    setAdNewModalVisible,
+    setHeaderVisible,
+    setInitializing,
+    setIntroDone,
+    setCurlang,
+    setUser,
+  };
+
   // Auth
 
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
+    console.log(isNewUser)
+    setIsReady(true);
   }
   // End  Auth
 
@@ -51,23 +74,9 @@ const StateContextProvider = ({children}) => {
     // reset();
     init();
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
     return subscriber; // unsubscribe on unmount
   }, []);
-
-  const value = {
-    user,
-    curlang,
-    introDone,
-    initializing,
-    headerVisible,
-    addNewModalVisible,
-    setAdNewModalVisible,
-    setHeaderVisible,
-    setInitializing,
-    setIntroDone,
-    setCurlang,
-    setUser,
-  };
 
   return (
     <StateContext.Provider value={value}>{children}</StateContext.Provider>

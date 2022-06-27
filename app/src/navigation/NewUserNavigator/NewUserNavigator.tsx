@@ -3,11 +3,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {StatusBar} from 'react-native';
 import routes from '../routes';
 import {StateContext} from '../../global/context';
-import PhoneInputScreen from '../../screens/AuthScreens/Registration/PhoneInputScreen';
+import RegisterationNavigtor from './RegisterNavigator/RegisterNavigator';
+import IntroNavigator from './IntroNavigators/IntroNavigator';
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = () => {
+const NewUserNavigator = () => {
   const {curlang, introDone} = useContext(StateContext);
 
   return (
@@ -15,9 +16,10 @@ const AuthNavigator = () => {
       <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
 
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name={routes.otp} component={PhoneInputScreen} />
+        <Stack.Screen name={routes.otp} component={RegisterationNavigtor} />
+        <Stack.Screen name={routes.introNav} component={IntroNavigator} />
       </Stack.Navigator>
     </>
   );
 };
-export default AuthNavigator;
+export default NewUserNavigator;

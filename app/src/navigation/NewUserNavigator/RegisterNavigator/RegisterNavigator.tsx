@@ -6,6 +6,7 @@ import PhoneInputScreen from '../../../screens/AuthScreens/Registration/PhoneInp
 import {StatusBar} from 'react-native';
 import UserInfoInputScreen from '../../../screens/AuthScreens/Registration/UserInfoInputScreen';
 import colors from '../../../config/colors';
+import routes from '../../routes';
 
 const Stack = createStackNavigator();
 
@@ -15,12 +16,7 @@ const RegisterationNavigtor = () => (
 
     <Stack.Navigator>
       <Stack.Screen
-        name="PhoneInput"
-        component={PhoneInputScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="userInfo"
+        name={routes.register}
         component={UserInfoInputScreen}
         options={{headerShown: false}}
       />

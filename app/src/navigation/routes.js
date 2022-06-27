@@ -13,4 +13,6 @@ export default Object.freeze({
   inventoryNav: 'Inventory',
   login: 'Login',
   register: 'Register',
+  otp: 'OTP-Auth',
+  register: 'Register',
 });

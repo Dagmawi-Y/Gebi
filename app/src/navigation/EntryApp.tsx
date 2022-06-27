@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View} from 'react-native';
 
 import {StateContext} from '../global/context';
@@ -10,11 +10,15 @@ import AuthNavigator from './AuthNavigators/AuthNavigator';
 
 import Loading from '../components/lotties/Loading';
 import colors from '../config/colors';
+import firestore from '@react-native-firebase/firestore';
+import NewUserNavigator from './NewUserNavigator/NewUserNavigator';
 
 const EntryApp = () => {
   const {user, initializing} = useContext(StateContext);
+  const {isNewUser} = useContext(StateContext);
+  const {isReady, setIsNewUser} = useContext(StateContext);
 
-  if (initializing) {
+  if (initializing || !isReady) {
     return (
       <View
         style={{

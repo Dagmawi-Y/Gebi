@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, TextInput, Image} from 'react-native';
 import {Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
@@ -13,20 +13,21 @@ import Button from '../../../components/misc/Button';
 import Loading from '../../../components/lotties/Loading';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import StatusBox from '../../../components/misc/StatusBox';
+import routes from '../../../navigation/routes';
+import {StateContext} from '../../../global/context';
 
 const PhoneInputScreen = ({navigation}) => {
   const [phoneNumber, setphoneNumber] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const {isNewUser, setIsNewUser} = useContext(StateContext);
 
   // OTP Section
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const [code, setCode] = useState('');
 
-  const handleConfirm = () => {
-    navigation.navigate('userInfo', {code : {code}});
-  };
+  const handleConfirm = () => {};
 
   // Handle the button press
   async function signInWithPhoneNumber(n) {
@@ -36,7 +37,7 @@ const PhoneInputScreen = ({navigation}) => {
         return;
       }
       setLoading(true);
-      console.log(n);
+      // console.log(n);
       const confirmation = await auth().signInWithPhoneNumber('+251' + n);
       setConfirm(confirmation);
       setLoading(false);
@@ -49,10 +50,11 @@ const PhoneInputScreen = ({navigation}) => {
   const confirmCode = async () => {
     setLoading(true);
     try {
-      await confirm?.confirm(code);
+      const user = await confirm?.confirm(code);
+      setIsNewUser(user!.additionalUserInfo?.isNewUser);
       setLoading(false);
     } catch (error) {
-      console.log('Invalid code.');
+      console.log('Invalid code.', error);
       setLoading(false);
     }
   };
@@ -236,16 +238,10 @@ const PhoneInputScreen = ({navigation}) => {
                   marginTop: 20,
                   justifyContent: 'space-around',
                 }}>
-                {/* <Button
-                  btnStyle={'outlined'}
-                  title={'ድጋሜ ኮድ ላክ'}
-                  onPress={() => {}}
-                /> */}
                 <Button
                   btnStyle={'normal'}
                   title={'አረጋግጥ'}
-                  // onPress={() => navigation.navigate('UserInfoInput')}
-                  onPress={() => handleConfirm()}
+                  onPress={() => confirmCode()}
                 />
               </View>
             </View>
