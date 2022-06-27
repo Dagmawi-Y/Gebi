@@ -6,6 +6,7 @@ import {StatusBar} from 'react-native';
 import routes from '../routes';
 import IntroNavigator from '../IntroNavigators/IntroNavigator';
 import {StateContext} from '../../global/context';
+import RegisterationNavigtor from './RegisterNavigator/RegisterNavigator';
 
 const Stack = createStackNavigator();
 
@@ -18,11 +19,12 @@ const AuthNavigator = () => {
 
       <Stack.Navigator
         screenOptions={{headerShown: false}}
-        initialRouteName={
-          curlang && introDone ? routes.appNav : routes.introNav
-        }>
+        // initialRouteName={
+        //   curlang && introDone ? routes.appNav : routes.introNav
+        // }
+      >
+        <Stack.Screen name="Register" component={RegisterationNavigtor} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name={routes.introNav} component={IntroNavigator} />
       </Stack.Navigator>
     </>

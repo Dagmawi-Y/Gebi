@@ -120,36 +120,37 @@ const AddNew = () => {
         }}>
         {writtingData ? (
           <View
+          style={{
+            position: 'absolute',
+            zIndex: 12,
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#00000060',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
             style={{
-              position: 'absolute',
-              zIndex: 12,
-              flex: 1,
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#00000060',
+              height: 100,
+              borderRadius: 20,
+              aspectRatio: 1,
+              backgroundColor: '#fff',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View
+            <LottieView
               style={{
-                height: 100,
-                borderRadius: 20,
-                aspectRatio: 1,
+                height: 80,
                 backgroundColor: '#fff',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <LottieView
-                style={{
-                  height: 200,
-                  backgroundColor: '#fff',
-                }}
-                source={require('../../assets/loading.json')}
-                autoPlay
-                loop={true}
-              />
-            </View>
+              }}
+              source={require('../../assets/loading.json')}
+              speed={1.3}
+              autoPlay
+              loop={false}
+            />
           </View>
+        </View>
         ) : successAnimation ? (
           <View
             style={{

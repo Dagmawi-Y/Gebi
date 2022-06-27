@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Button from '../../../components/misc/Button';
 import Loading from '../../../components/lotties/Loading';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import StatusBox from '../../../components/misc/StatusBox';
 
 const PhoneInputScreen = ({navigation}) => {
   const [phoneNumber, setphoneNumber] = useState('');
@@ -22,6 +23,10 @@ const PhoneInputScreen = ({navigation}) => {
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const [code, setCode] = useState('');
+
+  const handleConfirm = () => {
+    navigation.navigate('userInfo', {code : {code}});
+  };
 
   // Handle the button press
   async function signInWithPhoneNumber(n) {
@@ -64,7 +69,12 @@ const PhoneInputScreen = ({navigation}) => {
   return (
     <SafeAreaView style={[styles.container]}>
       {loading ? (
-        <Loading size={100}/>
+        <StatusBox
+          msg={'Sending SMS...'}
+          type={'loading'}
+          overlay={false}
+          onPress={() => {}}
+        />
       ) : (
         <KeyboardAwareScrollView
           enableOnAndroid
@@ -235,7 +245,7 @@ const PhoneInputScreen = ({navigation}) => {
                   btnStyle={'normal'}
                   title={'አረጋግጥ'}
                   // onPress={() => navigation.navigate('UserInfoInput')}
-                  onPress={() => confirmCode()}
+                  onPress={() => handleConfirm()}
                 />
               </View>
             </View>

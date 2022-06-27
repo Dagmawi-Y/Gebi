@@ -14,14 +14,14 @@ const RegisterationNavigtor = () => (
     <StatusBar barStyle="dark-content" backgroundColor={colors.lightBlue} />
 
     <Stack.Navigator>
-      {/* <Stack.Screen
-        name="UserInfoInput"
-        component={UserInfoInputScreen}
-        options={{headerShown: false}}
-      /> */}
       <Stack.Screen
         name="PhoneInput"
         component={PhoneInputScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="userInfo"
+        component={UserInfoInputScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

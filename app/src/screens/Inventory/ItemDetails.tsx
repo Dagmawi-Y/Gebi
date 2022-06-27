@@ -38,7 +38,7 @@ const ItemDetails = ({route, navigation}) => {
             .collection('inventory')
             .doc(itemId)
             .delete();
-          navigation.navigate(routes.inventory);
+          navigation.replace(routes.inventory);
         },
         style: 'default',
       },
