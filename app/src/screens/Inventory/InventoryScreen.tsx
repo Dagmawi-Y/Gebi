@@ -71,7 +71,6 @@ export default function Items({navigation}) {
               doc: documentSnapshot.data(),
             });
           });
-          console.log(result);
           setData(result);
           reCalculate(result);
         });
@@ -233,6 +232,7 @@ export default function Items({navigation}) {
                             key={item.id}
                             onPress={() => {
                               const id = item.id;
+                              // console.log(item.doc);
                               navigation.navigate(routes.itemDetails, {
                                 data: item.doc,
                                 itemId: id,

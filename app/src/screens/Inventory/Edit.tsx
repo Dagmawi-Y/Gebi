@@ -30,7 +30,7 @@ const Edit = ({route, navigation}) => {
 
   const [supplierName, setSupplierName] = useState('');
   const [itemName, setItemName] = useState('');
-  const [quantity, setAmount] = useState('');
+  const [quantity, setQuantity] = useState('');
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
   const [unitPrice, setUnitPrice] = useState('');
@@ -43,7 +43,7 @@ const Edit = ({route, navigation}) => {
     setSupplierName(data.stock.supplier_name);
     setItemName(data.item_name);
     setPhoto(data.photo);
-    setAmount(data.stock.quantity);
+    setQuantity(data.stock.quantity);
     setUnit(data.stock.unit);
     setUnitPrice(data.stock.unit_price);
     setCategory(data.stock.category);
@@ -280,9 +280,9 @@ const Edit = ({route, navigation}) => {
               <TextInput
                 style={[styles.Input]}
                 onChangeText={val => {
-                  setAmount(val.replace(/[^0-9]/g, ''));
+                  setQuantity(val.replace(/[^0-9]/g, ''));
                 }}
-                value={quantity}
+                value={quantity.toString()}
                 keyboardType="numeric"
                 placeholderTextColor={colors.faded_grey}
               />
@@ -334,7 +334,7 @@ const Edit = ({route, navigation}) => {
                   <Icon name="caretdown" size={20} color={colors.black} />
                 </View>
               )}
-              defaultValue={'categories'}
+              defaultValue={category.toString()}
               buttonStyle={styles.dropDown}
               onSelect={selectedItem => {
                 setCategory(selectedItem);
@@ -362,6 +362,7 @@ const Edit = ({route, navigation}) => {
                   <Icon name="caretdown" size={20} color={colors.black} />
                 </View>
               )}
+              defaultValue={unit.toString()}
               buttonStyle={styles.dropDown}
               onSelect={selectedItem => {
                 setUnit(selectedItem);
