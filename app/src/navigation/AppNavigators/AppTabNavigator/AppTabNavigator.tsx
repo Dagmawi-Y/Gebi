@@ -14,12 +14,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from './../../routes';
 import InventoryNavigator from './InventoryNavigator';
 import colors from '../../../config/colors';
-
-const logout = () => {
-  auth()
-    .signOut()
-    .then(() => console.log('User signed out!'));
-};
+import SalesNavigator from './SalesNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +23,6 @@ const AppTabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         unmountOnBlur: true,
-
         headerShown: false,
         headerTintColor: colors.white,
         headerStyle: {
@@ -38,6 +32,16 @@ const AppTabNavigator = () => {
         },
       }}>
       <Tab.Screen
+        name={routes.salesNav}
+        component={SalesNavigator}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <MaterialIcon name="warehouse" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
         name={routes.inventoryNav}
         component={InventoryNavigator}
         options={{
@@ -46,23 +50,14 @@ const AppTabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name={routes.sales}
-        component={SalesScreen}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcon name="home" color={color} size={size} />
-          ),
-        }}
-      />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name={routes.newSale}
         component={SalesScreen}
         options={({navigation}) => ({
           tabBarButton: () => <NewSaleButton />,
         })}
-      />
+      /> */}
 
       <Tab.Screen
         name={routes.expenses}

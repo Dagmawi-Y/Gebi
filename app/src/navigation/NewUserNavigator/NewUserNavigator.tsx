@@ -16,7 +16,6 @@ const NewUserNavigator = () => {
       <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
 
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name={routes.otp} component={RegisterationNavigtor} />
         <Stack.Screen name={routes.introNav} component={IntroNavigator} />
       </Stack.Navigator>
     </>

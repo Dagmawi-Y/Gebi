@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">918645274056-n1emj9fumi0uq1upus74vio8nhft7slv.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">918645274056</string>
+    <string name="google_api_key" translatable="false">AIzaSyB6Sdumorijlvmt7uyQlvzZQQ6qxvF9cJ0</string>
+    <string name="google_app_id" translatable="false">1:918645274056:android:a0bbbc1908aeef57073cfd</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB6Sdumorijlvmt7uyQlvzZQQ6qxvF9cJ0</string>
+    <string name="google_storage_bucket" translatable="false">gebi-bdf92.appspot.com</string>
+    <string name="project_id" translatable="false">gebi-bdf92</string>
+</resources>

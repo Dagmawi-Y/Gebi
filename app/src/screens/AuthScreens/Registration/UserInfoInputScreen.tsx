@@ -18,10 +18,15 @@ import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../../global/context';
 
-const PhoneInputScreen = ({navigation}) => {
+const UserInfoInputScreen = ({navigation}) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const {user} = useContext(StateContext);
+  const {isNewUser, setIsNewUser} = useContext(StateContext);
+
+  useEffect(() => {
+    !isNewUser && navigation.navigate(routes.appNav);
+  }, []);
 
   // OTP
   const [confirm, setConfirm] =
@@ -57,7 +62,7 @@ const PhoneInputScreen = ({navigation}) => {
     try {
       await firestore().collection('users').add(userData);
       setLoading(false);
-      navigation.navigate(routes.introNav);
+      setIsNewUser(false);
     } catch (error) {
       console.log(error);
     }
@@ -280,5 +285,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PhoneInputScreen;
-PhoneInputScreen.routeName = 'RegisterPhone';
+export default UserInfoInputScreen;
+UserInfoInputScreen.routeName = 'RegisterPhone';

@@ -10,14 +10,15 @@ import InventoryScreen from '../../../screens/Inventory/InventoryScreen';
 import ItemDetails from '../../../screens/Inventory/ItemDetails';
 import colors from '../../../config/colors';
 import Edit from '../../../screens/Inventory/Edit';
+import CustomMenu from '../../../components/misc/CustomMenu';
 
 const Stack = createStackNavigator();
 
-const InventoryNavigator = () => {
+const InventoryNavigator = ({navigation}) => {
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
-
+      <CustomMenu navigation={navigation} />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -49,7 +50,6 @@ const InventoryNavigator = () => {
               },
             },
           },
-          // headerLeft:()=><View><Text>Hello</Text></View>,
           headerTintColor: colors.white,
           headerStyle: {
             backgroundColor: colors.primary,

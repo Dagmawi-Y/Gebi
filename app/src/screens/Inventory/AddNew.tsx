@@ -18,9 +18,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 
-const AddNew = () => {
+const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const {user} = useContext(StateContext);
-  const {addNewModalVisible, setAdNewModalVisible} = useContext(StateContext);
 
   const [successAnimation, setSuccessAnimation] = useState(false);
   const [failedAnimation, setFailedAnimation] = useState(false);
@@ -65,10 +64,9 @@ const AddNew = () => {
 
     try {
       await firestore()
-        .collection('users')
-        .doc(user.uid)
         .collection('inventory')
         .add({
+          owner: user.uid,
           item_name: itemName,
           photo: 'photourl',
           stock: {
@@ -80,27 +78,15 @@ const AddNew = () => {
             unit_price: unitPrice,
           },
         });
-      // .then(res => {
-      //   let itemId = res['_documentPath']['_parts'][1];
-      //   firestore()
-      //     .collection('inventory')
-      //     .doc(itemId)
-      //     .collection('stock')
-      //     .add({
-      //       quantity: quantity,
-      //       date: new Date(),
-      //       unit: unit,
-      //       unit_price: unitPrice,
-      //     });
-      // });
+
       setWrittingData(false);
       setSuccessAnimation(true);
       setTimeout(() => {
         setSuccessAnimation(false);
-        setAdNewModalVisible(false);
+        setAddNewModalVisible(false);
       }, 500);
       setTimeout(() => {
-        setAdNewModalVisible(false);
+        setAddNewModalVisible(false);
       }, 600);
     } catch (error) {
       setWrittingData(false);
@@ -112,45 +98,43 @@ const AddNew = () => {
   return (
     <KeyboardAvoidingView style={{flex: 1}}>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={addNewModalVisible}
-        onRequestClose={() => {
-          console.log('Closed');
-        }}>
+        onRequestClose={() => {}}>
         {writtingData ? (
           <View
-          style={{
-            position: 'absolute',
-            zIndex: 12,
-            flex: 1,
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#00000060',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
             style={{
-              height: 100,
-              borderRadius: 20,
-              aspectRatio: 1,
-              backgroundColor: '#fff',
+              position: 'absolute',
+              zIndex: 12,
+              flex: 1,
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#00000060',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <LottieView
+            <View
               style={{
-                height: 80,
+                height: 100,
+                borderRadius: 20,
+                aspectRatio: 1,
                 backgroundColor: '#fff',
-              }}
-              source={require('../../assets/loading.json')}
-              speed={1.3}
-              autoPlay
-              loop={false}
-            />
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <LottieView
+                style={{
+                  height: 80,
+                  backgroundColor: '#fff',
+                }}
+                source={require('../../assets/loading.json')}
+                speed={1.3}
+                autoPlay
+                loop={false}
+              />
+            </View>
           </View>
-        </View>
         ) : successAnimation ? (
           <View
             style={{
@@ -252,7 +236,7 @@ const AddNew = () => {
                 borderRadius: 20,
                 padding: 20,
               }}>
-              <TouchableOpacity onPress={() => setAdNewModalVisible(false)}>
+              <TouchableOpacity onPress={() => setAddNewModalVisible(false)}>
                 <Icon
                   name="close"
                   size={25}

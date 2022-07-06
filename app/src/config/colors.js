@@ -15,4 +15,6 @@ export default {
   green: '#13B805',
   red: 'red',
   ligthGreen: '#E6ECF0',
+  warning: '#FFCC00',
+  yellow: '#FFC700',
 };

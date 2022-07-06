@@ -40,7 +40,6 @@ const StateContextProvider = ({children}) => {
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
-    console.log(isNewUser)
     setIsReady(true);
   }
   // End  Auth

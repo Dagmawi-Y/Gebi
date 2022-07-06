@@ -12,30 +12,40 @@ import Loading from '../components/lotties/Loading';
 import colors from '../config/colors';
 import firestore from '@react-native-firebase/firestore';
 import NewUserNavigator from './NewUserNavigator/NewUserNavigator';
+import LottieView from 'lottie-react-native';
 
 const EntryApp = () => {
   const {user, initializing} = useContext(StateContext);
   const {isNewUser} = useContext(StateContext);
   const {isReady, setIsNewUser} = useContext(StateContext);
 
-  if (initializing || !isReady) {
+  if (initializing && !isReady) {
     return (
       <View
         style={{
           flex: 1,
+          zIndex: 12,
+          width: '100%',
+          height: '100%',
           justifyContent: 'center',
-          backgroundColor: colors.white,
+          alignItems: 'center',
         }}>
-        <Loading size={150} />
+        <LottieView
+          style={{
+            height: 100,
+          }}
+          source={require('../assets/loading.json')}
+          speed={1.3}
+          autoPlay
+          loop={true}
+        />
       </View>
     );
   }
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        {!user ? <AuthNavigator /> : <AppDrawerNavigator />}
-      </NavigationContainer>
+      {!user || isNewUser ? <AuthNavigator /> : <AppDrawerNavigator />}
     </SafeAreaProvider>
   );
 };

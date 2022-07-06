@@ -40,7 +40,7 @@ export default function Intro({navigation}: any) {
   const _onDone = async () => {
     await AsyncStorage.setItem('introDone', 'true');
     setIntroDone(Boolean(true));
-    navigation.navigate(routes.appNav);
+    navigation.navigate('app');
   };
   function _renderItem({item}: any) {
     return (

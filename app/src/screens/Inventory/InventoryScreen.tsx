@@ -14,8 +14,8 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 import TopBar from '../../components/TopBar/TopBar';
 import Loading from '../../components/lotties/Loading';
@@ -25,6 +25,7 @@ import colors from '../../config/colors';
 import routes from '../../navigation/routes';
 
 import AddNew from './AddNew';
+import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
 export default function Items({navigation}) {
   const {user} = useContext(StateContext);
@@ -37,9 +38,10 @@ export default function Items({navigation}) {
   const [searchKey, setSearchKey] = useState('');
   const [sumPrice, setSumPrice] = useState('0');
   const [totalItems, setTotalItems] = useState('0');
+  const [addNewModalVisible, setAddNewModalVisible] = useState(false);
 
   const formatNumber = num => {
-    return String(num.toString()).replace(/(.)(?=(\d{3})+$)/g, '$1,');
+    return String(num.toString()).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
   };
 
   const reCalculate = dt => {
@@ -59,9 +61,8 @@ export default function Items({navigation}) {
     setLoading(true);
     try {
       firestore()
-        .collection('users')
-        .doc(user.uid)
         .collection('inventory')
+        .where('owner', '==', user.uid)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(documentSnapshot => {
@@ -70,37 +71,12 @@ export default function Items({navigation}) {
               doc: documentSnapshot.data(),
             });
           });
+          console.log(result);
           setData(result);
           reCalculate(result);
         });
 
       setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const onSnapshot = async () => {
-    let result: Array<Object> = [];
-    try {
-      firestore()
-        .collection('users')
-        .doc(user.uid)
-        .collection('inventory')
-        .onSnapshot(sn => {
-          sn.forEach(r => {
-            const id = r.id;
-            const doc = r.data();
-            result.push({
-              id,
-              doc,
-            });
-          });
-          setData(result);
-          console.log(data);
-          setLoading(false);
-        });
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -114,14 +90,23 @@ export default function Items({navigation}) {
 
   return (
     <>
+      <FloatingButton
+        action={setAddNewModalVisible}
+        value={addNewModalVisible}
+      />
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle={'light-content'}
           backgroundColor={colors.primary}
         />
-  
+
         <ScrollView>
-          <AddNew />
+          {addNewModalVisible && (
+            <AddNew
+              setAddNewModalVisible={setAddNewModalVisible}
+              addNewModalVisible={addNewModalVisible}
+            />
+          )}
           <TopBar
             title={'የእቃ ክፍል'}
             action={setSearchVisible}
@@ -163,12 +148,14 @@ export default function Items({navigation}) {
                 }}
                 selectionColor="black"
                 placeholder="search..."
-                onChangeText={val => setSearchKey(val)}
+                onChangeText={val => {
+                  setSearchKey(val);
+                }}
                 value={searchKey}
                 keyboardType="default"
                 placeholderTextColor={colors.faded_grey}
               />
-              <Icon name="search1" size={25} color={colors.primary} />
+              <Icon name="search1" size={20} color={colors.primary} />
             </View>
           )}
           <View style={styles.contentContainer}>
@@ -190,7 +177,10 @@ export default function Items({navigation}) {
               </Text>
 
               <TouchableOpacity
-                style={styles.buttonwithIcon}
+                style={[
+                  styles.buttonwithIcon,
+                  {marginLeft: 'auto', marginRight: 10},
+                ]}
                 onPress={() =>
                   navigation.navigate('AuthNavigator', {screen: 'Login'})
                 }>
@@ -204,6 +194,23 @@ export default function Items({navigation}) {
                   Print QR
                 </Text>
               </TouchableOpacity>
+              <View style={{marginRight: 10}}>
+                {!searchVisible ? (
+                  <Icon
+                    name="search1"
+                    color={colors.primary}
+                    size={22}
+                    onPress={() => setSearchVisible(!searchVisible)}
+                  />
+                ) : (
+                  <Icon
+                    name="close"
+                    color={colors.primary}
+                    size={22}
+                    onPress={() => setSearchVisible(!searchVisible)}
+                  />
+                )}
+              </View>
             </View>
             {loading ? (
               <Loading size={100} />
@@ -215,7 +222,9 @@ export default function Items({navigation}) {
                   <View>
                     {data
                       .filter(dt =>
-                        dt.doc.item_name.includes(searchKey.toLowerCase()),
+                        dt.doc.item_name
+                          .toLowerCase()
+                          .includes(searchKey.toLowerCase()),
                       )
                       .map(item => {
                         return (

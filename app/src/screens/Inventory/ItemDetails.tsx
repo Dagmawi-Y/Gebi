@@ -32,12 +32,7 @@ const ItemDetails = ({route, navigation}) => {
       {
         text: 'Yes',
         onPress: async () => {
-          await firestore()
-            .collection('users')
-            .doc(user.uid)
-            .collection('inventory')
-            .doc(itemId)
-            .delete();
+          await firestore().collection('inventory').doc(itemId).delete();
           navigation.replace(routes.inventory);
         },
         style: 'default',

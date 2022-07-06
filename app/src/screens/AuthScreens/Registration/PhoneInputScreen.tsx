@@ -37,7 +37,6 @@ const PhoneInputScreen = ({navigation}) => {
         return;
       }
       setLoading(true);
-      // console.log(n);
       const confirmation = await auth().signInWithPhoneNumber('+251' + n);
       setConfirm(confirmation);
       setLoading(false);
@@ -52,9 +51,11 @@ const PhoneInputScreen = ({navigation}) => {
     try {
       const user = await confirm?.confirm(code);
       setIsNewUser(user!.additionalUserInfo?.isNewUser);
+      console.log('phoneInput: ', user!.additionalUserInfo?.isNewUser);
+      navigation.navigate(routes.register);
       setLoading(false);
     } catch (error) {
-      console.log('Invalid code.', error);
+      console.log(error);
       setLoading(false);
     }
   };
@@ -72,7 +73,7 @@ const PhoneInputScreen = ({navigation}) => {
     <SafeAreaView style={[styles.container]}>
       {loading ? (
         <StatusBox
-          msg={'Sending SMS...'}
+          msg={'Please wait...'}
           type={'loading'}
           overlay={false}
           onPress={() => {}}

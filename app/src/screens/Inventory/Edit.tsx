@@ -14,7 +14,7 @@ import firestore from '@react-native-firebase/firestore';
 import LottieView from 'lottie-react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/AntDesign';
-import routes from '../../navigation/routes'
+import routes from '../../navigation/routes';
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 
@@ -69,8 +69,6 @@ const Edit = ({route, navigation}) => {
 
     try {
       await firestore()
-        .collection('users')
-        .doc(user.uid)
         .collection('inventory')
         .doc(itemId)
         .update({
@@ -90,7 +88,7 @@ const Edit = ({route, navigation}) => {
       setSuccessAnimation(true);
       setTimeout(() => {
         setSuccessAnimation(false);
-        navigation.navigate(routes.inventory)
+        navigation.navigate(routes.inventory);
       }, 500);
       setTimeout(() => {}, 600);
     } catch (error) {
