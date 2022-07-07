@@ -8,7 +8,7 @@ const ListItem = ({title, unitPrice, quantity}) => {
       <View style={styles.listLeft}>
         <View style={styles.thumbnail}>
           <Image
-            style={{width: 40, height: 40}}
+            style={{width: 50, height: 50, borderRadius: 10}}
             source={require('../../assets/images/phone_image.jpg')}
           />
         </View>
@@ -44,8 +44,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    height: 60,
     borderRadius: 10,
     margin: 5,
   },

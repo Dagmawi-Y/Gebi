@@ -1,21 +1,33 @@
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../../config/colors';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import routes from '../../navigation/routes';
+import {useNavigation} from '@react-navigation/native';
+import formatNumber from '../../utils/formatNumber';
 
-const ListItem = sale => {
+const ListItem = (sale, navigation) => {
   const {invoiceNumber, customerName, date, items, paymentMethod} = sale.sale;
   const itemsLength = Object.getOwnPropertyNames(items).length;
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState('');
 
   const init = () => {
+    let tot = 0;
     setTotalPrice(0);
-    Object.keys(items).forEach(key => {
-      setTotalPrice(totalPrice + parseFloat(items[key].unitPrice));
+    Object.keys(items).map(key => {
+      console.log(items[key].unitPrice);
+      tot += parseFloat(items[key].unitPrice) * parseFloat(items[key].quantity);
+      setTotalPrice(formatNumber(tot));
     });
   };
 
   useEffect(() => {
-    init();
+    let mounted = true;
+    mounted && init();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (

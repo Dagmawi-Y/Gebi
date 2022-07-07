@@ -1,4 +1,3 @@
-import {useContext} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -7,11 +6,10 @@ import {
   StyleSheet,
   Image,
   View,
-  TouchableHighlight,
   Pressable,
 } from 'react-native';
 
-import React, {useState} from 'react';
+import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import colors from '../../config/colors';
@@ -19,13 +17,9 @@ import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
 import firestore from '@react-native-firebase/firestore';
-import {StateContext} from '../../global/context';
-
-import Edit from './Edit';
 
 const ItemDetails = ({route, navigation}) => {
   const {data, itemId} = route.params;
-  const {user} = useContext(StateContext);
 
   const deleteItem = async () => {
     Alert.alert(`Are you sure,you want to delete`, `${data.item_name}?`, [
@@ -93,36 +87,22 @@ const ItemDetails = ({route, navigation}) => {
               backgroundColor: 'white',
               flexDirection: 'row',
               alignItems: 'center',
-              padding: 25,
+              padding: 10,
               justifyContent: 'space-between',
             }}>
             <View>
-              <Text
-                style={{fontSize: 22, marginBottom: 5, color: colors.black}}>
-                የእቃ ስም
-              </Text>
-              <Text
-                style={{fontSize: 22, fontWeight: 'bold', color: colors.black}}>
-                {data.item_name}
-              </Text>
+              <Text style={styles.textBold}>የእቃ ስም</Text>
+              <Text style={styles.textLight}>{data.item_name}</Text>
             </View>
             <View>
               <Image
-                style={{width: 100, height: 100}}
-                resizeMode="contain"
+                style={{width: 250, height: 150, borderRadius: 10}}
+                resizeMode="cover"
                 source={require('../../assets/images/phone_image.jpg')}
               />
             </View>
           </View>
-          <Text
-            style={{
-              fontSize: 22,
-              marginTop: 25,
-              fontWeight: 'bold',
-              color: colors.black,
-            }}>
-            ዕቃ መረጃ
-          </Text>
+          <Text style={styles.textBold}>ዕቃ መረጃ</Text>
           <View style={styles.boardContainer}>
             <View style={styles.boardCol}>
               <Text style={styles.boardTopTitle}>የመሸጫ ዋጋ</Text>
@@ -135,15 +115,7 @@ const ItemDetails = ({route, navigation}) => {
               <Text style={styles.boardSubTitle}>{data.stock.quantity}</Text>
             </View>
           </View>
-          <Text
-            style={{
-              fontSize: 22,
-              marginTop: 25,
-              fontWeight: 'bold',
-              color: colors.black,
-            }}>
-            የእቃ ታሪክ
-          </Text>
+          <Text style={styles.textBold}>የእቃ ታሪክ</Text>
           <View style={{marginVertical: 20}}>
             <View style={tableStyles.thead}>
               <Text style={tableStyles.theadFont}>ዋጋ</Text>
@@ -204,13 +176,30 @@ const styles = StyleSheet.create({
   },
   boardCol: {
     justifyContent: 'center',
-    alignItems: 'center',
   },
-  boardTopTitle: {fontSize: 18, color: colors.black, fontWeight: '800'},
+  boardTopTitle: {
+    fontSize: 18,
+    color: colors.black,
+    fontWeight: '800',
+  },
   boardSubTitle: {
-    fontWeight: 'bold',
+    fontWeight: '300',
+    textAlign: 'left',
     fontSize: 22,
     color: colors.black,
+  },
+  textBold: {
+    fontSize: 22,
+    marginTop: 25,
+    fontWeight: 'bold',
+    color: colors.black,
+    paddingHorizontal: 10,
+  },
+  textLight: {
+    fontSize: 22,
+    fontWeight: '400',
+    color: colors.black,
+    marginHorizontal: 20,
   },
 });
 
@@ -234,6 +223,8 @@ const tableStyles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 15,
     paddingVertical: 10,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#00000030',
   },
   trowFont: {
     fontSize: 16,

@@ -13,7 +13,7 @@ export default {
   grey: '#5E5B5B',
   faded_grey: '#5e5b5bbd',
   green: '#13B805',
-  red: 'red',
+  red: '#F24750',
   ligthGreen: '#E6ECF0',
   warning: '#FFCC00',
   yellow: '#FFC700',

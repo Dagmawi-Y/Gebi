@@ -147,7 +147,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                 <TextInput
                   style={styles.textInput}
                   onChangeText={val => {
-                    setQuantity(val.replace(/[^0-9]/g, ''));
+                    setQuantity(val.replace(/[^0-9\.?]/g, ''));
                     if (parseFloat(val) > parseFloat(detailsItem!.quantity)) {
                       setQuntityInputError('Maximum value exceeded.');
                     } else {
@@ -177,7 +177,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                 <TextInput
                   style={styles.textInput}
                   onChangeText={val => {
-                    setPrice(val.replace(/[^0-9]/g, ''));
+                    setPrice(val.replace(/[^0-9\.?]/g, ''));
                   }}
                   placeholder={'Enter Unit Price'}
                   value={price}

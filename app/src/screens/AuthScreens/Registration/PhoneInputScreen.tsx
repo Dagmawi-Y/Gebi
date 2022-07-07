@@ -1,5 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, StyleSheet, TextInput, Image} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Image,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -51,7 +57,7 @@ const PhoneInputScreen = ({navigation}) => {
     try {
       const user = await confirm?.confirm(code);
       setIsNewUser(user!.additionalUserInfo?.isNewUser);
-      console.log('phoneInput: ', user!.additionalUserInfo?.isNewUser);
+      // console.log('phoneInput: ', user!.additionalUserInfo?.isNewUser);
       navigation.navigate(routes.register);
       setLoading(false);
     } catch (error) {
@@ -79,9 +85,8 @@ const PhoneInputScreen = ({navigation}) => {
           onPress={() => {}}
         />
       ) : (
-        <KeyboardAwareScrollView
-          enableOnAndroid
-          contentContainerStyle={{
+        <View
+          style={{
             paddingVertical: 10,
             justifyContent: 'space-evenly',
             display: 'flex',
@@ -121,7 +126,7 @@ const PhoneInputScreen = ({navigation}) => {
                     }}
                   />
                   <Text
-                    style={{fontSize: 28, marginLeft: 5, fontWeight: 'bold'}}>
+                    style={{fontSize: 25, marginLeft: 5, fontWeight: 'bold'}}>
                     +251
                   </Text>
                   <TextInput
@@ -177,7 +182,11 @@ const PhoneInputScreen = ({navigation}) => {
               </View>
             </>
           ) : (
-            <View style={{flex: 0.6, justifyContent: 'center'}}>
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 150,
+              }}>
               <View
                 style={{
                   marginHorizontal: 'auto',
@@ -194,22 +203,28 @@ const PhoneInputScreen = ({navigation}) => {
                 />
               </View>
               <Text
-                style={{fontSize: 16, marginBottom: 10, fontWeight: 'bold'}}>
+                style={{
+                  fontSize: 16,
+                  marginBottom: 10,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}>
                 {phoneNumber ? (
                   <Text
                     style={{
-                      fontSize: 20,
+                      fontSize: 25,
                       width: '100%',
                       textAlign: 'center',
                     }}>
                     {' '}
-                    ወደ{' '}
+                    ወደ
                     <Text
                       style={{
                         color: colors.primary,
                         fontStyle: 'italic',
                         fontWeight: '600',
                       }}>
+                      {' +251'}
                       {phoneNumber}
                       {'  '}
                     </Text>
@@ -221,11 +236,11 @@ const PhoneInputScreen = ({navigation}) => {
               </Text>
               <View
                 style={{
-                  // flexDirection: 'row',
-                  justifyContent: 'space-evenly',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <TextInput
-                  style={styles.confirmInput}
+                  style={[styles.confirmInput]}
                   onChangeText={(code: any) => setCode(code)}
                   value={code}
                   placeholder={'ምሳሌ፡ 123456'}
@@ -238,6 +253,8 @@ const PhoneInputScreen = ({navigation}) => {
                   flex: 0.2,
                   marginTop: 20,
                   justifyContent: 'space-around',
+                  width: '80%',
+                  alignSelf: 'center',
                 }}>
                 <Button
                   btnStyle={'normal'}
@@ -247,7 +264,7 @@ const PhoneInputScreen = ({navigation}) => {
               </View>
             </View>
           )}
-        </KeyboardAwareScrollView>
+        </View>
       )}
     </SafeAreaView>
   );
@@ -292,9 +309,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: 25,
+    marginVertical: 10,
     flexGrow: 1,
+    width: '80%',
+    textAlign: 'center',
   },
   phoneInput: {
     height: 60,
@@ -302,7 +321,7 @@ const styles = StyleSheet.create({
 
     color: colors.black,
     padding: 5,
-    fontSize: 28,
+    fontSize: 25,
   },
 });
 

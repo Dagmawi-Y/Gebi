@@ -6486,6 +6486,11 @@ react-native-app-intro-slider@^4.0.4:
   resolved "https://registry.yarnpkg.com/react-native-app-intro-slider/-/react-native-app-intro-slider-4.0.4.tgz#fa5cda7057db62c448ac975ffd2ba0cff94cc8d8"
   integrity sha512-Zkjaol6X3BbZkHUpVDj2LjdidpS6rCgKi0fx80xgGKa0pHxBRd4swWTv2bHnnvu5k1/HXwYk0mY2TbK+2jHl5w==
 
+react-native-autocomplete-input@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-autocomplete-input/-/react-native-autocomplete-input-5.1.0.tgz#01bb16873a4b2589ad47cda4ad69ae67dcf3c793"
+  integrity sha512-y6gIBm189hcsJO+6a4Hn8lNdy1qmY7yw1NAA6Bgvg8rznZk0r+35xXd1tu81aOZYJo9/LxGNlNL6Zblo3N1kGw==
+
 react-native-bouncy-checkbox-group@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-native-bouncy-checkbox-group/-/react-native-bouncy-checkbox-group-0.1.0.tgz#ce38bb70f42d764f0984953cfc8fb2d38dac2857"

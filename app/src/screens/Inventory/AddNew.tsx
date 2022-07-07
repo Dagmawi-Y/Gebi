@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   TextInput,
@@ -13,12 +13,13 @@ import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import LottieView from 'lottie-react-native';
 import SelectDropdown from 'react-native-select-dropdown';
+import Autocomplete from 'react-native-autocomplete-input';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 
-const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
+const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
   const {user} = useContext(StateContext);
 
   const [successAnimation, setSuccessAnimation] = useState(false);
@@ -27,6 +28,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
 
   const [errorMessage, setErrorNessage] = useState('');
 
+  const [id, setId] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [itemName, setItemName] = useState('');
   const [quantity, setAmount] = useState('');
@@ -34,9 +36,10 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const [photo, setPhoto] = useState('');
   const [unitPrice, setUnitPrice] = useState('');
   const [category, setCategory] = useState('');
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  const quantifiers = ['pieces', 'Kilo-gram', 'Litres'];
-  const categories = ['Phones', 'Desktops', 'Home appliances'];
+  const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
+  const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];
 
   const reset = () => {
     setSuccessAnimation(false);
@@ -270,6 +273,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                 keyboardType="default"
                 placeholderTextColor={colors.faded_grey}
               />
+              {/* <CustomForm
+                label="የእቃ ስም"
+                itemName={itemName}
+                setId={setId}
+                setItemName={setItemName}
+                setIsUpadate={setIsUpdate}
+              /> */}
               <Text
                 style={{
                   color: colors.black,
@@ -308,7 +318,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   <TextInput
                     style={[styles.Input]}
                     onChangeText={val => {
-                      setAmount(val.replace(/[^0-9]/g, ''));
+                      setAmount(val.replace(/[^0-9\.?]/g, ''));
                     }}
                     value={quantity}
                     keyboardType="numeric"
@@ -327,12 +337,12 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                       fontSize: 20,
                       marginBottom: 5,
                     }}>
-                    የአንዱ ዋጋ
+                    የአንዱ ዋጋ (ብር)
                   </Text>
                   <TextInput
                     style={[styles.Input]}
                     onChangeText={val => {
-                      setUnitPrice(val.replace(/[^0-9]/g, ''));
+                      setUnitPrice(val.replace(/[^0-9\.?]/g, ''));
                     }}
                     value={unitPrice}
                     keyboardType="numeric"
@@ -422,7 +432,120 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   );
 };
 
-export default AddNew;
+// const CustomForm = ({label, setItemName, itemName, setIsUpadate, setId}) => {
+//   // const CustomForm = ({label, data}) => {
+//   const [searchKey, setSearchKey] = useState('');
+//   const [visible, setVisible] = useState(false);
+//   // const [cachedData, setcachedData] = useState(data);
+
+//   const [data, setData] = useState([]);
+
+//   const fetchData = async () => {
+//     try {
+//       await firestore()
+//         .collection('inventory')
+//         .onSnapshot(sn => {
+//           let arr = [];
+
+//           sn.forEach(i => {
+//             let id = i.id;
+//             let itemName = i.data().item_name;
+//             arr.push({id: id, itemName: itemName});
+//           });
+//           setData(arr);
+//         });
+//     } catch (er) {
+//       console.log(er);
+//     }
+//   };
+
+//   useEffect(() => {
+//     let mounted = true;
+
+//     if (mounted) fetchData();
+
+//     return () => {
+//       mounted = false;
+//     };
+//   }, []);
+
+//   return (
+//     <KeyboardAvoidingView>
+//       <Text
+//         style={{
+//           color: colors.black,
+//           fontSize: 20,
+//           marginBottom: 5,
+//         }}>
+//         {label}
+//       </Text>
+
+//       <TextInput
+//         // onPressIn={() => setVisible(true)}
+//         style={{
+//           color: colors.black,
+//           height: 50,
+//           borderWidth: 1,
+//           padding: 10,
+//           borderRadius: 10,
+//           fontSize: 20,
+//         }}
+//         onChangeText={val => {
+//           setSearchKey(val);
+//           setItemName(val);
+//           setVisible(true);
+//           if (!val) {
+//             setIsUpadate(false);
+//             setVisible(false);
+//           }
+//         }}
+//         value={itemName}
+//         keyboardType="default"
+//         placeholderTextColor={colors.faded_grey}
+//       />
+
+//       {visible && (
+//         <ScrollView
+//           style={{
+//             zIndex: 10,
+//             backgroundColor: colors.white,
+//             padding: 10,
+//             elevation: 5,
+//             borderRadius: 10,
+//           }}>
+//           {data &&
+//             data
+//               .filter(j => {
+//                 return j.itemName
+//                   .toLowerCase()
+//                   .includes(searchKey.toLowerCase());
+//               })
+//               .map(i => (
+//                 <Pressable
+//                   onPress={() => {
+//                     setItemName(i.itemName);
+//                     setIsUpadate(false);
+//                     setVisible(false);
+//                   }}>
+//                   <Text
+//                     key={i.id}
+//                     style={{
+//                       color: colors.black,
+//                       fontSize: 20,
+//                       marginBottom: 5,
+//                       // elevation: 10,
+//                       backgroundColor: colors.white,
+//                       paddingVertical: 5,
+//                     }}>
+//                     {i.itemName}
+//                   </Text>
+//                 </Pressable>
+//               ))}
+//         </ScrollView>
+//       )}
+//     </KeyboardAvoidingView>
+//   );
+// };
 
 const styles = StyleSheet.create({
   container: {
@@ -477,3 +600,5 @@ const styles = StyleSheet.create({
   boardTopTitle: {fontSize: 22, fontWeight: '900'},
   boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
 });
+
+export default AddNew;

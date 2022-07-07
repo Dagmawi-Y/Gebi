@@ -1,12 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import auth from '@react-native-firebase/auth';
 
-import SalesScreen from '../../../screens/sales/SalesScreen';
 import ExpensesScreen from '../../../screens/Expenses/Expenses';
 import PlanerScreen from '../../../screens/Planner/PlannerScreen';
-import NewSaleButton from '../../../components/misc/NewSaleButton';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,6 +21,7 @@ const AppTabNavigator = () => {
         unmountOnBlur: true,
         headerShown: false,
         headerTintColor: colors.white,
+
         headerStyle: {
           backgroundColor: colors.primary,
           borderBottomColor: colors.primary,
@@ -50,14 +47,6 @@ const AppTabNavigator = () => {
           ),
         }}
       />
-
-      {/* <Tab.Screen
-        name={routes.newSale}
-        component={SalesScreen}
-        options={({navigation}) => ({
-          tabBarButton: () => <NewSaleButton />,
-        })}
-      /> */}
 
       <Tab.Screen
         name={routes.expenses}

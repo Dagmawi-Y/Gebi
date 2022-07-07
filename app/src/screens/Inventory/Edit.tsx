@@ -328,7 +328,6 @@ const Edit = ({route, navigation}) => {
             <SelectDropdown
               data={categories}
               defaultButtonText="የአቃው አይነት"
-              selectedRowStyle={{backgroundColor: 'red'}}
               renderDropdownIcon={() => (
                 <View>
                   <Icon name="caretdown" size={20} color={colors.black} />

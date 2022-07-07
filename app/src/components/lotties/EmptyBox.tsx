@@ -5,7 +5,7 @@ import colors from '../../config/colors';
 
 const Loading = ({message}) => {
   return (
-    <View style={{flex: 0.7, alignItems: 'center'}}>
+    <View style={{flex: 0.8, marginTop: 20, alignItems: 'center'}}>
       <LottieView
         style={{height: 150}}
         source={require('../../assets/empty.json')}
@@ -15,7 +15,6 @@ const Loading = ({message}) => {
       <Text
         style={{
           fontSize: 18,
-          marginTop: 20,
           color: colors.primary,
           fontFamily: 'monospace',
         }}>

@@ -27,36 +27,14 @@ import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
-// import AddNew from './AddNew';
-
 export default function Items({navigation}) {
   const {user} = useContext(StateContext);
 
   const [data, setData]: Array<any> = useState([]);
-  const [filter, setFilter]: Array<any> = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
 
   const [searchKey, setSearchKey] = useState('');
-  const [sumPrice, setSumPrice] = useState('0');
-  const [totalItems, setTotalItems] = useState('0');
-
-  const formatNumber = num => {
-    return String(num.toString()).replace(/(.)(?=(\d{3})+$)/g, '$1,');
-  };
-
-  // const reCalculate = dt => {
-  //   let sumItem = 0;
-  //   let sumItemPrice = 0;
-  //   dt.map(it => {
-  //     sumItem += parseFloat(it.doc.stock.quantity);
-  //     sumItemPrice +=
-  //       parseFloat(it.doc.stock.quantity) * parseFloat(it.doc.stock.unit_price);
-  //   });
-
-  //   setTotalItems(formatNumber(sumItem));
-  //   setSumPrice(formatNumber(sumItemPrice));
-  // };
 
   const getSales = async () => {
     setLoading(true);
@@ -88,34 +66,13 @@ export default function Items({navigation}) {
     }
   };
 
-  const onSnapshot = async () => {
-    let result: Array<Object> = [];
-    try {
-      firestore()
-        .collection('users')
-        .doc(user.uid)
-        .collection('inventory')
-        .onSnapshot(sn => {
-          sn.forEach(r => {
-            const id = r.id;
-            const doc = r.data();
-            result.push({
-              id,
-              doc,
-            });
-          });
-          setData(result);
-          setLoading(false);
-        });
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    getSales();
-    // onSnapshot()
+    let mounted = true;
+    mounted && getSales();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -131,7 +88,6 @@ export default function Items({navigation}) {
         />
 
         <ScrollView>
-          {/* <AddNew /> */}
           <TopBar
             title={'የእቃ ክፍል'}
             action={setSearchVisible}
@@ -158,7 +114,6 @@ export default function Items({navigation}) {
             </View>
           </TopBar>
 
-          {/* Search Input */}
           {searchVisible && (
             <View
               style={{
@@ -199,34 +154,26 @@ export default function Items({navigation}) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 marginVertical: 5,
+                paddingVertical: 3,
+                borderBottomWidth: 0.5,
+                borderBottomColor: '#00000040',
               }}>
               <Text
                 style={{
                   fontWeight: 'bold',
                   fontSize: 20,
+                  paddingHorizontal: 5,
                   color: colors.faded_dark,
                 }}>
-                ያሉ አቃዎች
+                ሽያጭ
               </Text>
-
-              {/* <TouchableOpacity
-                style={styles.buttonwithIcon}
-                onPress={() => navigation.navigate(routes.newSale)}>
-                <Icon name={'plus'} color={colors.black} size={20} />
-                <Text
-                  style={{
-                    color: colors.black,
-                  }}>
-                  Add New
-                </Text>
-              </TouchableOpacity> */}
             </View>
             {loading ? (
               <Loading size={100} />
             ) : (
               <ScrollView>
                 {data.length == 0 ? (
-                  <EmptyBox message={'No sales yet.'} />
+                  <EmptyBox message={'እስካሁን የተካሄደ ሽያጭ ያልም።'} />
                 ) : data.length > 0 ? (
                   <View>
                     {data.map(sale => {
@@ -236,12 +183,11 @@ export default function Items({navigation}) {
                           key={sale.id}
                           onPress={() => {
                             const id = sale.id;
-                            navigation.navigate(routes.itemDetails, {
-                              data: sale.doc,
-                              itemId: id,
+                            navigation.navigate(routes.saleDetails, {
+                              data: sale,
                             });
                           }}>
-                          <SalesListItem sale={sale} />
+                          <SalesListItem sale={sale} navigation={navigation} />
                         </TouchableOpacity>
                       );
                     })}

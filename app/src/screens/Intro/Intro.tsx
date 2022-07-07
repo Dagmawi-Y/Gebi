@@ -55,7 +55,7 @@ export default function Intro({navigation}: any) {
     return (
       <View
         style={[
-          {width: 90, alignItems: 'center'},
+          {maxWidth: 100, width: 100, alignItems: 'center'},
           rowType == 'row' ? styles.row : styles.rowReverse,
         ]}>
         <Text

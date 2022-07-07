@@ -17,6 +17,8 @@ import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
 import Icon from 'react-native-vector-icons/AntDesign';
 
+import formatNumber from '../../utils/formatNumber';
+
 import TopBar from '../../components/TopBar/TopBar';
 import Loading from '../../components/lotties/Loading';
 import EmptyBox from '../../components/lotties/EmptyBox';
@@ -26,12 +28,13 @@ import routes from '../../navigation/routes';
 
 import AddNew from './AddNew';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
+import {useRef} from 'react';
 
 export default function Items({navigation}) {
   const {user} = useContext(StateContext);
+  const mountedRef = useRef(true);
 
   const [data, setData]: Array<any> = useState([]);
-  const [filter, setFilter]: Array<any> = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
 
@@ -39,10 +42,6 @@ export default function Items({navigation}) {
   const [sumPrice, setSumPrice] = useState('0');
   const [totalItems, setTotalItems] = useState('0');
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
-
-  const formatNumber = num => {
-    return String(num.toString()).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-  };
 
   const reCalculate = dt => {
     let sumItem = 0;
@@ -83,8 +82,11 @@ export default function Items({navigation}) {
   };
 
   useEffect(() => {
-    getInventory();
-    // onSnapshot()
+    mountedRef && getInventory();
+
+    return () => {
+      mountedRef.current = false;
+    };
   }, []);
 
   return (
@@ -102,6 +104,7 @@ export default function Items({navigation}) {
         <ScrollView>
           {addNewModalVisible && (
             <AddNew
+              data={data}
               setAddNewModalVisible={setAddNewModalVisible}
               addNewModalVisible={addNewModalVisible}
             />
@@ -216,7 +219,7 @@ export default function Items({navigation}) {
             ) : (
               <ScrollView>
                 {data.length == 0 ? (
-                  <EmptyBox message={'Inventory Empty'} />
+                  <EmptyBox message={'የአቃ ክፍሉ ባዶ ነው።'} />
                 ) : data.length > 0 ? (
                   <View>
                     {data
@@ -232,7 +235,6 @@ export default function Items({navigation}) {
                             key={item.id}
                             onPress={() => {
                               const id = item.id;
-                              // console.log(item.doc);
                               navigation.navigate(routes.itemDetails, {
                                 data: item.doc,
                                 itemId: id,

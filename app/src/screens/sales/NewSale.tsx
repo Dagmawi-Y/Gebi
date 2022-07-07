@@ -7,15 +7,12 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/AntDesign';
-import SelectDropdown from 'react-native-select-dropdown';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
 
 import firestore from '@react-native-firebase/firestore';
-import firebase from '@react-native-firebase/firestore';
 
 import AddNewItem from './AddNewItem';
 
@@ -27,8 +24,6 @@ import {StateContext} from '../../global/context';
 const NewSale = ({navigation}) => {
   const {user} = useContext(StateContext);
 
-  // const navigation = useNavigation();
-
   const [selected, setSelected] = useState('ABC BUILDING');
   const [listItems, setListItems] = useState([
     {id: 1, item_name: 'ሲሚንቶ 50 ኪ.ግ', quantity: '45', price: '600'},
@@ -39,6 +34,7 @@ const NewSale = ({navigation}) => {
   ]);
   const [error, setError] = useState('');
 
+  const mountedRef = useRef(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [customer, setCustomer] = useState('');
@@ -130,33 +126,40 @@ const NewSale = ({navigation}) => {
       firestore()
         .collection('sales')
         .add(sale)
-        .then(res =>
-          addedItems.map(i => {
-            firestore()
+        .then(async res => {
+          for (var i in addedItems) {
+            await firestore()
               .collection('inventory')
-              .doc(i.id)
-              .update({
-                'stock.quantity': firestore.FieldValue.increment(-i.quantity),
+              .doc(addedItems[i].id)
+              .get()
+              .then(async res => {
+                await firestore()
+                  .collection('inventory')
+                  .doc(addedItems[i].id)
+                  .update({
+                    'stock.quantity':
+                      res.data()!.stock.quantity - addedItems[i].quantity,
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
               });
-          }),
-        );
-      console.log('Adding Sale Complete!');
+          }
+        });
       setAddedItems([]);
       navigation.pop();
+      console.log('Adding Sale Complete!');
     } catch (error) {
       console.log(error);
     }
   };
-
-  const saleItems = [...addedItems];
-
-  const generatePdf = () => {};
 
   const handleSubmit = () => {
     addNewSale();
   };
 
   const calculate = () => {
+    if (!mountedRef) return;
     let sum: number = 0;
     let total: number = 0;
     addedItems.map(i => {
@@ -168,10 +171,9 @@ const NewSale = ({navigation}) => {
   };
 
   useEffect(() => {
-    let mounted = true;
-    mounted && calculate();
+    calculate();
     return () => {
-      mounted = false;
+      mountedRef.current = false;
     };
   }, [addedItems]);
 
@@ -215,7 +217,7 @@ const NewSale = ({navigation}) => {
               alignSelf: 'center',
               marginTop: 10,
               marginBottom: 10,
-              borderRadius: 10,
+              borderRadius: 20,
               borderWidth: 1,
               height: 50,
               paddingHorizontal: 15,
@@ -293,7 +295,7 @@ const NewSale = ({navigation}) => {
                 ]}>
                 <Icon name="folderopen" size={25} />
                 {'  '}
-                Empty
+                ባዶ
               </Text>
             )}
           </ScrollView>
@@ -309,14 +311,15 @@ const NewSale = ({navigation}) => {
               justifyContent: 'center',
               width: 'auto',
               alignSelf: 'center',
-              borderRadius: 10,
+              borderRadius: 20,
+              paddingHorizontal: 10,
             }}>
             <Text
               style={[
                 styles.textBold,
                 {color: colors.white, textAlign: 'center'},
               ]}>
-              Add New Item
+              እቃዎች
             </Text>
           </TouchableOpacity>
         </View>
@@ -410,7 +413,7 @@ const NewSale = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(`Are you sure,you want`, `?`, [
+              Alert.alert(`Are you sure,you want exit?`, ``, [
                 {
                   text: 'Exit',
                   onPress: () => {
@@ -433,7 +436,7 @@ const NewSale = ({navigation}) => {
               justifyContent: 'space-between',
               width: 150,
               alignItems: 'center',
-              borderRadius: 10,
+              borderRadius: 20,
               borderWidth: 1,
               borderColor: colors.primary,
               flexDirection: 'row',
@@ -451,7 +454,7 @@ const NewSale = ({navigation}) => {
                 styles.textBold,
                 {color: colors.primary, textAlign: 'center'},
               ]}>
-              Cancel
+              ተመለስ
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -464,7 +467,7 @@ const NewSale = ({navigation}) => {
               justifyContent: 'space-between',
               width: 150,
               alignItems: 'center',
-              borderRadius: 10,
+              borderRadius: 20,
               flexDirection: 'row',
             }}>
             <Text
@@ -472,7 +475,7 @@ const NewSale = ({navigation}) => {
                 styles.textBold,
                 {color: colors.white, textAlign: 'center'},
               ]}>
-              Submit
+              ቀጥል
             </Text>
             <Image
               resizeMethod="auto"
@@ -492,7 +495,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    marginTop: 10,
+    paddingVertical: 15,
   },
   header: {
     flexDirection: 'row',
@@ -546,7 +549,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
+    borderRadius: 20,
     alignSelf: 'center',
   },
   LeftContainer: {
@@ -562,7 +565,7 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     marginVertical: 20,
     elevation: 1,
     paddingVertical: 10,
@@ -579,7 +582,7 @@ const styles = StyleSheet.create({
   },
   paymentTypeContainer: {
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     marginBottom: 15,
     elevation: 1,
     paddingVertical: 10,
