@@ -36,17 +36,17 @@ const Edit = ({route, navigation}) => {
   const [unitPrice, setUnitPrice] = useState('');
   const [category, setCategory] = useState('');
 
-  const quantifiers = ['pieces', 'Kilo-gram', 'Litres'];
-  const categories = ['Phones', 'Desktops', 'Home appliances'];
+  const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
+  const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];
 
   const populate = () => {
-    setSupplierName(data.stock.supplier_name);
-    setItemName(data.item_name);
-    setPhoto(data.photo);
-    setQuantity(data.stock.quantity);
-    setUnit(data.stock.unit);
-    setUnitPrice(data.stock.unit_price);
-    setCategory(data.stock.category);
+    console.log(data);
+    // setSupplierName(data.stock.supplier_name);
+    // setItemName(data.item_name);
+    // setQuantity(data.stock.quantity);
+    // setUnit(data.stock.unit);
+    // setUnitPrice(data.stock.unit_price);
+    // setCategory(data.stock.category);
   };
 
   const checkEmpty = () => {
@@ -325,6 +325,7 @@ const Edit = ({route, navigation}) => {
               }}>
               አይነት
             </Text>
+
             <SelectDropdown
               data={categories}
               defaultButtonText="የአቃው አይነት"
@@ -333,7 +334,7 @@ const Edit = ({route, navigation}) => {
                   <Icon name="caretdown" size={20} color={colors.black} />
                 </View>
               )}
-              defaultValue={category.toString()}
+              defaultValue={category}
               buttonStyle={styles.dropDown}
               onSelect={selectedItem => {
                 setCategory(selectedItem);
@@ -345,6 +346,7 @@ const Edit = ({route, navigation}) => {
                 return item;
               }}
             />
+
             <Text
               style={{
                 color: colors.black,

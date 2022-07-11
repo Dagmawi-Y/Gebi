@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 
 import {StateContext} from '../global/context';
 
@@ -45,6 +45,7 @@ const EntryApp = () => {
 
   return (
     <SafeAreaProvider>
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       {!user || isNewUser ? <AuthNavigator /> : <AppDrawerNavigator />}
     </SafeAreaProvider>
   );

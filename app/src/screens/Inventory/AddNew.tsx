@@ -71,15 +71,21 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
         .add({
           owner: user.uid,
           item_name: itemName,
-          photo: 'photourl',
-          stock: {
+          unit_price: unitPrice,
+          currentCount: quantity,
+        })
+        .then(res => {
+          const item_id = res['_documentPath']['_parts'][1];
+          firestore().collection('stock').add({
+            item_id: item_id,
             supplier_name: supplierName,
-            quantity: quantity,
-            date: new Date().toLocaleDateString(),
-            unit: unit,
+            initialCount: quantity,
             category: category,
             unit_price: unitPrice,
-          },
+            unit: unit,
+            owner: user.uid,
+            date: new Date().toLocaleDateString(),
+          });
         });
 
       setWrittingData(false);
@@ -134,7 +140,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                 source={require('../../assets/loading.json')}
                 speed={1.3}
                 autoPlay
-                loop={false}
+                loop={true}
               />
             </View>
           </View>

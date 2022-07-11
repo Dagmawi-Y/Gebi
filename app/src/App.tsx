@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Pressable} from 'react-native';
+import {View, Text, TouchableOpacity, Pressable, StatusBar} from 'react-native';
 import {StateContextProvider} from './global/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -12,6 +12,7 @@ import EntryApp from './navigation/EntryApp';
 import SplashScreen from 'react-native-splash-screen';
 import IntroNavigator from './navigation/NewUserNavigator/IntroNavigators/IntroNavigator';
 import LottieView from 'lottie-react-native';
+import colors from './config/colors';
 
 const Stack = createStackNavigator();
 
@@ -87,6 +88,7 @@ const App = () => {
 
   return (
     <StateContextProvider>
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={lang && intro ? 'app' : 'intro'}

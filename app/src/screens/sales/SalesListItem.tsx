@@ -15,7 +15,6 @@ const ListItem = (sale, navigation) => {
     let tot = 0;
     setTotalPrice(0);
     Object.keys(items).map(key => {
-      console.log(items[key].unitPrice);
       tot += parseFloat(items[key].unitPrice) * parseFloat(items[key].quantity);
       setTotalPrice(formatNumber(tot));
     });

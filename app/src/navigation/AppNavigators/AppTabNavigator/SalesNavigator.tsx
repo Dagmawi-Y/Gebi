@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+import {useRoute} from '@react-navigation/native';
 import routes from '../../routes';
 
 import SalesScreen from '../../../screens/sales/SalesScreen';
@@ -13,9 +14,13 @@ import SaleDetails from '../../../screens/sales/SaleDetails';
 const Stack = createStackNavigator();
 
 const SalesNavigator = ({navigation}) => {
+  const [isHeaderShown, setIsHeaderShown] = useState(true);
+
+  const route = useRoute();
+
   return (
     <>
-      <CustomMenu navigation={navigation} />
+      {/* {isHeaderShown && <CustomMenu navigation={navigation} />} */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

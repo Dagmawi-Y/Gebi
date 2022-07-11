@@ -21,17 +21,9 @@ import BouncyCheckboxGroup, {
 } from 'react-native-bouncy-checkbox-group';
 import {StateContext} from '../../global/context';
 
-const NewSale = ({navigation}) => {
+const NewSale = ({navigation, route}) => {
   const {user} = useContext(StateContext);
 
-  const [selected, setSelected] = useState('ABC BUILDING');
-  const [listItems, setListItems] = useState([
-    {id: 1, item_name: 'ሲሚንቶ 50 ኪ.ግ', quantity: '45', price: '600'},
-    {id: 2, item_name: 'ሲሚንቶ 100 ኪ.ግ', quantity: '18', price: '1200'},
-    {id: 3, item_name: 'ሲሚንቶ 100 ኪ.ግ', quantity: '18', price: '1200'},
-    {id: 4, item_name: 'ሲሚንቶ 100 ኪ.ግ', quantity: '18', price: '1200'},
-    {id: 5, item_name: 'ሲሚንቶ 100 ኪ.ግ', quantity: '18', price: '1200'},
-  ]);
   const [error, setError] = useState('');
 
   const mountedRef = useRef(true);
@@ -137,8 +129,8 @@ const NewSale = ({navigation}) => {
                   .collection('inventory')
                   .doc(addedItems[i].id)
                   .update({
-                    'stock.quantity':
-                      res.data()!.stock.quantity - addedItems[i].quantity,
+                    currentCount:
+                      res.data()!.currentCount - addedItems[i].quantity,
                   })
                   .catch(err => {
                     console.log(err);
@@ -413,7 +405,7 @@ const NewSale = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(`Are you sure,you want exit?`, ``, [
+              Alert.alert(`እርግጠኛ ነዎት?`, ``, [
                 {
                   text: 'Exit',
                   onPress: () => {

@@ -9,7 +9,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import colors from '../../config/colors';
@@ -19,10 +19,12 @@ import routes from '../../navigation/routes';
 import firestore from '@react-native-firebase/firestore';
 
 const ItemDetails = ({route, navigation}) => {
-  const {data, itemId} = route.params;
+  const {data, owner, itemId} = route.params;
+
+  const [stockHistory, setStockHistory]: Array<any> = ([] = useState([]));
 
   const deleteItem = async () => {
-    Alert.alert(`Are you sure,you want to delete`, `${data.item_name}?`, [
+    Alert.alert(`እርግጠኛ ነዎት?`, ``, [
       {
         text: 'Yes',
         onPress: async () => {
@@ -38,6 +40,30 @@ const ItemDetails = ({route, navigation}) => {
       },
     ]);
   };
+
+  const getStockHistory = async () => {
+    try {
+      firestore()
+        .collection('stock')
+        .where('owner', '==', owner)
+        .where('item_id', '==', itemId)
+        .onSnapshot(querySnapshot => {
+          let result: Array<any> = [];
+          querySnapshot.forEach(documentSnapshot => {
+            result.push({
+              id: documentSnapshot.id,
+              doc: documentSnapshot.data(),
+            });
+          });
+          setStockHistory(result);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getStockHistory();
+  }, []);
   return (
     <SafeAreaView style={[styles.container]}>
       <View style={header.topBar}>
@@ -49,7 +75,7 @@ const ItemDetails = ({route, navigation}) => {
             justifyContent: 'flex-end',
             marginBottom: 5,
           }}>
-          <Pressable
+          {/* <Pressable
             onPress={() =>
               navigation.navigate(routes.EditItem, {
                 data: data,
@@ -63,7 +89,7 @@ const ItemDetails = ({route, navigation}) => {
             }}>
             <Icon name="lead-pencil" size={25} color={colors.white} />
             <Text style={{color: colors.white}}>Edit</Text>
-          </Pressable>
+          </Pressable> */}
           <Pressable
             onPress={() => deleteItem()}
             style={{
@@ -79,9 +105,7 @@ const ItemDetails = ({route, navigation}) => {
       {/* End Header */}
 
       <ScrollView style={{flex: 1}}>
-        <KeyboardAwareScrollView
-          enableOnAndroid
-          contentContainerStyle={[styles.keyboardAwareScrollContainer]}>
+        <View style={[styles.viewContainer]}>
           <View
             style={{
               backgroundColor: 'white',
@@ -106,47 +130,47 @@ const ItemDetails = ({route, navigation}) => {
           <View style={styles.boardContainer}>
             <View style={styles.boardCol}>
               <Text style={styles.boardTopTitle}>የመሸጫ ዋጋ</Text>
-              <Text style={styles.boardSubTitle}>
-                {data.stock.unit_price} ብር
-              </Text>
+              <Text style={styles.boardSubTitle}>{data.unit_price} ብር</Text>
             </View>
             <View style={styles.boardCol}>
               <Text style={styles.boardTopTitle}>በእጅ ያለ</Text>
-              <Text style={styles.boardSubTitle}>{data.stock.quantity}</Text>
+              <Text style={styles.boardSubTitle}>{data.currentCount}</Text>
             </View>
           </View>
           <Text style={styles.textBold}>የእቃ ታሪክ</Text>
           <View style={{marginVertical: 20}}>
             <View style={tableStyles.thead}>
               <Text style={tableStyles.theadFont}>ዋጋ</Text>
-              <Text style={tableStyles.theadFont}>ብዛት</Text>
+              <Text style={tableStyles.theadFont}>መመዝኛ</Text>
               <Text style={tableStyles.theadFont}>አቅራቢ</Text>
               <Text style={tableStyles.theadFont}>ቀን</Text>
             </View>
-            {[1].map(e => {
+            {stockHistory.map(history => {
               return (
                 <View
-                  key={e}
+                  key={Math.random()}
                   style={[
                     tableStyles.trow,
-                    {backgroundColor: e % 2 != 0 ? 'transparent' : 'white'},
+                    {
+                      backgroundColor:
+                        history.doc % 2 != 0 ? 'transparent' : 'white',
+                    },
                   ]}>
                   <Text style={tableStyles.trowFont}>
-                    {data.stock.unit_price} ብር
+                    {history.doc.unit_price} ብር
                   </Text>
                   <Text style={tableStyles.trowFont}>
-                    {data.stock.quantity} pcs
+                    {history.doc.initialCount} {history.doc.unit}
                   </Text>
                   <Text style={tableStyles.trowFont}>
-                    {data.stock.supplier_name}
+                    {history.doc.supplier_name}
                   </Text>
-                  <Text style={tableStyles.trowFont}>{data.stock.date}</Text>
-                  {/* <Text style={tableStyles.trowFont}>{data.stock.date}</Text> */}
+                  <Text style={tableStyles.trowFont}>{history.doc.date}</Text>
                 </View>
               );
             })}
           </View>
-        </KeyboardAwareScrollView>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -157,7 +181,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
   },
-  keyboardAwareScrollContainer: {
+  viewContainer: {
     marginHorizontal: 5,
     paddingVertical: 10,
     justifyContent: 'space-between',

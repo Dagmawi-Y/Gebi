@@ -12,7 +12,6 @@ const Stack = createStackNavigator();
 const AuthNavigator = () => {
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name={routes.otp} component={PhoneInputScreen} />
         <Stack.Screen

@@ -2,12 +2,14 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import colors from '../../config/colors';
 import {useRoute} from '@react-navigation/native';
-import {useNavigation} from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import routes from '../../navigation/routes';
+import {useEffect} from 'react';
 
 const CustomMenu = ({navigation}) => {
   const route = useRoute();
+
   return (
     <View
       style={{
@@ -21,7 +23,13 @@ const CustomMenu = ({navigation}) => {
       <Pressable onPress={() => navigation.openDrawer()}>
         <Icon name="menu" color={colors.white} size={30}></Icon>
       </Pressable>
-      <Text style={{color: colors.white, fontSize: 25, marginHorizontal: 20}}>
+      <Text
+        style={{
+          color: colors.white,
+          fontSize: 25,
+          marginHorizontal: 20,
+          fontWeight: 'bold',
+        }}>
         {route.name}
       </Text>
     </View>

@@ -27,6 +27,8 @@ import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
+import useFirebase from '../../utils/useFirebase';
+
 export default function Items({navigation}) {
   const {user} = useContext(StateContext);
 
@@ -35,6 +37,8 @@ export default function Items({navigation}) {
   const [searchVisible, setSearchVisible] = useState(false);
 
   const [searchKey, setSearchKey] = useState('');
+
+  // const data = useFirebase(user);
 
   const getSales = async () => {
     setLoading(true);
@@ -69,6 +73,7 @@ export default function Items({navigation}) {
   useEffect(() => {
     let mounted = true;
     mounted && getSales();
+    // if (result) setData(result);
 
     return () => {
       mounted = false;

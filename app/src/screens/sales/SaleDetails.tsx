@@ -20,6 +20,7 @@ const SaleDetails = ({route, navigation}) => {
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const calculate = () => {
     let sum: number = 0;
@@ -34,29 +35,47 @@ const SaleDetails = ({route, navigation}) => {
 
   const rollBackSale = async () => {
     setLoading(true);
-    const items = data.items;
-    for (var i in items) {
-      await firestore()
-        .collection('inventory')
-        .doc(items[i].id)
-        .get()
-        .then(async res => {
-          await firestore()
-            .collection('inventory')
-            .doc(items[i].id)
-            .update({
-              'stock.quantity':
-                parseFloat(res.data()!.stock.quantity) +
-                parseFloat(items[i].quantity),
-            })
-            .catch(err => {
-              console.log(err);
-            });
-          setLoading(false);
-        });
+    let proceed = false;
+    try {
+      const items = data.items;
+      for (var i in items) {
+        await firestore()
+          .collection('inventory')
+          .doc(items[i].id)
+          .get()
+          .then(async res => {
+            if (!res.data()) {
+              setLoading(false);
+              setError('Item does not exist in stock!');
+              Alert.alert(`Item does not exist in stock!`, ``, [
+                {
+                  text: 'ተመለስ',
+                  onPress: () => {},
+                  style: 'default',
+                },
+              ]);
+              return;
+            }
+            proceed = true;
+            await firestore()
+              .collection('inventory')
+              .doc(items[i].id)
+              .update({
+                'stock.quantity':
+                  parseFloat(res.data()!.stock.quantity) +
+                  parseFloat(items[i].quantity),
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            setLoading(false);
+          });
+      }
+      proceed && firestore().collection('sales').doc(data.id).delete();
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
     }
-    firestore().collection('sales').doc(data.id).delete();
-    navigation.goBack();
   };
 
   useEffect(() => {

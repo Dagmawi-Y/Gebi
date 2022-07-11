@@ -59,8 +59,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
             const item = {
               id: sn.id,
               itemName: sn.data().item_name,
-              quantity: sn.data().stock.quantity,
-              unitPrice: sn.data().stock.unit_price,
+              quantity: sn.data().currentCount,
+              unitPrice: sn.data().unit_price,
             };
             if (addedItems.length) {
               addedItems.map(i => {

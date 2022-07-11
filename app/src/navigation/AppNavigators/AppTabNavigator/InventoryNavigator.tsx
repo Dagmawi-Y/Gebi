@@ -17,8 +17,6 @@ const Stack = createStackNavigator();
 const InventoryNavigator = ({navigation}) => {
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor={'#EEF1F2'} />
-      <CustomMenu navigation={navigation} />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

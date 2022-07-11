@@ -1469,6 +1469,7 @@ drawable rn_edit_text_material
 drawable src_assets_ethiopianflag
 drawable src_assets_icons_arrowleftb
 drawable src_assets_icons_arrowright
+drawable src_assets_images_avatar
 drawable src_assets_images_phone_image
 drawable src_assets_intro_intro1
 drawable src_assets_intro_intro2

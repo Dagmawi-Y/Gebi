@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 50,
   },
   buttonOulined: {
     backgroundColor: colors.white,

@@ -39,7 +39,7 @@ const PhoneInputScreen = ({navigation}) => {
   async function signInWithPhoneNumber(n) {
     try {
       if (n.length > 9 || n.length < 9 || !n.startsWith('9')) {
-        setError('Invalid phone number');
+        setError('ቁጥሩ ትክክል አይደለም!');
         return;
       }
       setLoading(true);
@@ -271,12 +271,10 @@ const PhoneInputScreen = ({navigation}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "blue",
     flex: 1,
     display: 'flex',
     marginHorizontal: 15,
     justifyContent: 'center',
-    // alignItems: 'center'
   },
   buttonContainer: {
     width: '100%',
@@ -306,7 +304,9 @@ const styles = StyleSheet.create({
   confirmInput: {
     color: colors.black,
     height: 50,
-    borderWidth: 1,
+    backgroundColor: colors.white,
+    elevation: 10,
+    shadowColor: colors.transWhite,
     padding: 10,
     borderRadius: 10,
     fontSize: 25,
@@ -318,7 +318,6 @@ const styles = StyleSheet.create({
   phoneInput: {
     height: 60,
     margin: 12,
-
     color: colors.black,
     padding: 5,
     fontSize: 25,

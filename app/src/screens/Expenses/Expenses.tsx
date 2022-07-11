@@ -13,20 +13,36 @@ import {ListItem, Text} from '@rneui/themed';
 import {ExpenseTypes, getIconForExpenseType} from './expenseTypes';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TopBar from '../../components/TopBar/TopBar';
+import StatCard from '../../components/statCards/StatCard';
+import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 
 export default function Expenses({navigation}: any) {
   let dimensions = Dimensions.get('window');
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <TopBar
-          title={'ውጪ'}
-          income={'3315'}
-          expense={'2023'}
-          calc={true}
-          totalCost={''}
-          totalItem={''}
-        />
+        <TopBar title={'የእቃ ክፍል'} action={() => {}} actionValue={''}>
+          <View style={topCard.statContainer}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <View style={{flex: 1, marginRight: 2}}>
+                <StatCard label="ገቢ" value={'65621'} trend="positive" />
+              </View>
+              <View style={{flex: 1, marginLeft: 2}}>
+                <StatCard label="ወጪ" value={'99451'} trend="negative" />
+              </View>
+            </View>
+            <View style={{marginVertical: 10}}>
+              <StatCardFullWidth
+                label="የቀኑ ትርፍ"
+                // value={aggregate.toString()}
+                value={'65451'}
+                // trend={aggregate > 0 ? 'positive' : 'negative'}
+                trend={'negative'}
+              />
+            </View>
+          </View>
+        </TopBar>
         <View style={styles.contentContainer}>
           <View
             style={{
@@ -125,4 +141,31 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
   },
+});
+
+const topCard = StyleSheet.create({
+  statContainer: {
+    marginTop: 10,
+  },
+
+  // Typetwo
+  boardContainer: {
+    marginVertical: 5,
+    backgroundColor: 'white',
+    height: 80,
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+  },
+  boardCol: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  boardTopTitle: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: colors.black,
+  },
+  boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
 });

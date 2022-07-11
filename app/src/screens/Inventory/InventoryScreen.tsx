@@ -47,9 +47,9 @@ export default function Items({navigation}) {
     let sumItem = 0;
     let sumItemPrice = 0;
     dt.map(it => {
-      sumItem += parseFloat(it.doc.stock.quantity);
+      sumItem += parseFloat(it.doc.currentCount);
       sumItemPrice +=
-        parseFloat(it.doc.stock.quantity) * parseFloat(it.doc.stock.unit_price);
+        parseFloat(it.doc.currentCount) * parseFloat(it.doc.unit_price);
     });
 
     setTotalItems(formatNumber(sumItem));
@@ -237,13 +237,14 @@ export default function Items({navigation}) {
                               const id = item.id;
                               navigation.navigate(routes.itemDetails, {
                                 data: item.doc,
+                                owner: item.doc.owner,
                                 itemId: id,
                               });
                             }}>
                             <InvetoryListItem
                               title={item.doc.item_name}
-                              unitPrice={item.doc.stock.unit_price}
-                              quantity={item.doc.stock.quantity}
+                              unitPrice={item.doc.unit_price}
+                              quantity={item.doc.currentCount}
                             />
                           </TouchableOpacity>
                         );
