@@ -21,6 +21,8 @@ import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 // lottie-react-native
 import com.airbnb.android.react.lottie.LottiePackage;
+// react-native-fs
+import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-print
@@ -31,12 +33,16 @@ import com.swmansion.reanimated.ReanimatedPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-share
+import cl.json.RNSharePackage;
 // react-native-splash-screen
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 // react-native-system-navigation-bar
 import com.reactnativesystemnavigationbar.SystemNavigationBarPackage;
 // react-native-vector-icons
 import com.oblador.vectoricons.VectorIconsPackage;
+// react-native-view-shot
+import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 
 public class PackageList {
   private Application application;
@@ -87,14 +93,17 @@ public class PackageList {
       new ReactNativeFirebaseAuthPackage(),
       new ReactNativeFirebaseFirestorePackage(),
       new LottiePackage(),
+      new RNFSPackage(),
       new RNGestureHandlerPackage(),
       new RNPrintPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
+      new RNSharePackage(),
       new SplashScreenReactPackage(),
       new SystemNavigationBarPackage(),
-      new VectorIconsPackage()
+      new VectorIconsPackage(),
+      new RNViewShotPackage()
     ));
   }
 }

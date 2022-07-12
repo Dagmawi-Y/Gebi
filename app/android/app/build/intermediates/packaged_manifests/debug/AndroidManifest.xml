@@ -67,6 +67,15 @@
             android:authorities="com.meda.gebi.reactnativefirebaseappinitprovider"
             android:exported="false"
             android:initOrder="99" />
+        <provider
+            android:name="cl.json.RNShareFileProvider"
+            android:authorities="com.meda.gebi.rnshare.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/share_download_paths" />
+        </provider>
 
         <activity
             android:name="com.google.firebase.auth.internal.GenericIdpActivity"
