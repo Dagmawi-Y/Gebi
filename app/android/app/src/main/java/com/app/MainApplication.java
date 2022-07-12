@@ -12,9 +12,15 @@ import com.facebook.soloader.SoLoader;
 import com.meda.gebi.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+// import com.christopherdro.RNPrint.RNPrintPackage;
+
+
+
 
 // SplashScreen
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+  // new MainReactPackage(),
+  // new RNPrintPackage(),
 
 
 public class MainApplication extends Application implements ReactApplication {

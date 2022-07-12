@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
   View,
-  Pressable,
+  TouchableOpacity,
 } from 'react-native';
 
 import React, {useEffect, useState} from 'react';
@@ -26,7 +26,7 @@ const ItemDetails = ({route, navigation}) => {
   const deleteItem = async () => {
     Alert.alert(`እርግጠኛ ነዎት?`, ``, [
       {
-        text: 'Yes',
+        text: 'ቀጥል',
         onPress: async () => {
           await firestore().collection('inventory').doc(itemId).delete();
           navigation.replace(routes.inventory);
@@ -34,7 +34,7 @@ const ItemDetails = ({route, navigation}) => {
         style: 'default',
       },
       {
-        text: 'Cancel',
+        text: 'ተመለስ',
         onPress: () => {},
         style: 'cancel',
       },
@@ -66,7 +66,7 @@ const ItemDetails = ({route, navigation}) => {
   }, []);
   return (
     <SafeAreaView style={[styles.container]}>
-      <View style={header.topBar}>
+      {/* <View style={header.topBar}>
         <View
           style={{
             marginVertical: 0,
@@ -75,7 +75,7 @@ const ItemDetails = ({route, navigation}) => {
             justifyContent: 'flex-end',
             marginBottom: 5,
           }}>
-          {/* <Pressable
+          <Pressable
             onPress={() =>
               navigation.navigate(routes.EditItem, {
                 data: data,
@@ -89,7 +89,7 @@ const ItemDetails = ({route, navigation}) => {
             }}>
             <Icon name="lead-pencil" size={25} color={colors.white} />
             <Text style={{color: colors.white}}>Edit</Text>
-          </Pressable> */}
+          </Pressable>
           <Pressable
             onPress={() => deleteItem()}
             style={{
@@ -101,7 +101,7 @@ const ItemDetails = ({route, navigation}) => {
             <Text style={{color: colors.white}}>Delete</Text>
           </Pressable>
         </View>
-      </View>
+      </View> */}
       {/* End Header */}
 
       <ScrollView style={{flex: 1}}>
@@ -172,6 +172,35 @@ const ItemDetails = ({route, navigation}) => {
           </View>
         </View>
       </ScrollView>
+      <View
+        style={{
+          paddingHorizontal: 10,
+        }}>
+        <TouchableOpacity
+          onPress={() => deleteItem()}
+          style={{
+            backgroundColor: colors.red,
+            height: 60,
+            marginBottom: 10,
+            paddingHorizontal: 25,
+            justifyContent: 'space-between',
+            width: 'auto',
+            alignItems: 'center',
+            borderRadius: 30,
+            flexDirection: 'row',
+          }}>
+          <Text
+            style={{
+              color: colors.white,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 25,
+            }}>
+            አጥፋ
+          </Text>
+          <Icon name="delete" size={25} color={colors.white} />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -183,7 +212,6 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     marginHorizontal: 5,
-    paddingVertical: 10,
     justifyContent: 'space-between',
     display: 'flex',
     flexGrow: 1,
@@ -268,7 +296,7 @@ const tableStyles = StyleSheet.create({
 
 const header = StyleSheet.create({
   topBar: {
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary,
     paddingHorizontal: 0,
     paddingVertical: 0,
   },

@@ -304,6 +304,9 @@ dependencies {
 
     // splash screen setup
     implementation project(':react-native-splash-screen')
+
+    // compile project(':react-native-print')
+
 }
 
 if (isNewArchitectureEnabled()) {

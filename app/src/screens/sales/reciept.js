@@ -1,208 +1,194 @@
-module.exports = () => {
-  return `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+module.exports = arg => {
+  console.log(arg);
+  const {customerName, date, paymentMethod, invoiceNumber} = arg.data;
+  const {sum, tax, total} = arg;
+  const items = arg.data.items;
 
-    <title>Invoice Template</title>
+  return ` 
+<style>
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
 
-    <!-- Invoice styling -->
-    <style>
-      body {
-        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-        text-align: center;
-        color: #777;
-      }
+.box-shadow {
+  box-shadow: rgba(54, 53, 114, 0.1) 0px 5px 5px;
+}
 
-      body h1 {
-        font-weight: 300;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-        color: #000;
-      }
+.border-radius {
+  border-radius: 5px;
+}
 
-      body h3 {
-        font-weight: 300;
-        margin-top: 10px;
-        margin-bottom: 20px;
-        font-style: italic;
-        color: #555;
-      }
+.container {
+  width: 350px;
+  margin:auto;
+  border: 1px solid #00000030;
+  padding: 20px;
+  font-family: monospace;
+  border-radius:10px;
+  padding-bottom:50px;
+}
+.qrCode {
+  // background-color: aquamarine;
+  height: 200px;
+  width: 100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
 
-      body a {
-        color: #06f;
-      }
+.heading {
+  margin-right: 20px;
+  font-weight: 300;
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-      .invoice-box {
-        max-width: 800px;
-        margin: auto;
-        padding: 30px;
-        border: 1px solid #eee;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-        font-size: 16px;
-        line-height: 24px;
-        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-        color: #555;
-      }
+.heading div:nth-child(2) {
+  text-align: end;
+}
+.heading div > p:nth-child(2) {
+  font-size: 13px;
+  color: rgb(144 144 144);
+}
+.title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
-      .invoice-box table {
-        width: 100%;
-        line-height: inherit;
-        text-align: left;
-        border-collapse: collapse;
-      }
+.customer {
+  display: flex;
+  flex-direction: row;
+  padding-left: 5px;
+  margin: 10px 0 10px 0;
+  align-items: center;
+}
 
-      .invoice-box table td {
-        padding: 5px;
-        vertical-align: top;
-      }
+.customer h2 {
+  margin-right: 20px;
+  font-weight: 600;
+  font-size: 20px;
+}
+.customer h3 {
+  font-weight: 300;
+  font-size: 18px;
+}
+.items {
+  border: 1px solid #00000015;
+}
 
-      .invoice-box table tr td:nth-child(2) {
-        text-align: right;
-      }
+.padding {
+  padding: 15px;
+}
+.items h2 {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
 
-      .invoice-box table tr.top table td {
-        padding-bottom: 20px;
-      }
+.item {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #00000015;
+}
 
-      .invoice-box table tr.top table td.title {
-        font-size: 45px;
-        line-height: 45px;
-        color: #333;
-      }
+.item-left p {
+  margin: 0;
+  margin-bottom: 5px;
+}
 
-      .invoice-box table tr.information table td {
-        padding-bottom: 40px;
-      }
+.price {
+  margin-top: 20px;
+  border: 1px solid #00000015;
+}
 
-      .invoice-box table tr.heading td {
-        background: #eee;
-        border-bottom: 1px solid #ddd;
-        font-weight: bold;
-      }
+.price-div div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-      .invoice-box table tr.details td {
-        padding-bottom: 20px;
-      }
+.total {
+  font-size: 15px;
+  font-weight: 700;
+}
+.payment-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.payment-type p:nth-child(2) {
+  font-size: 15px;
+  font-weight: 700;
+}
 
-      .invoice-box table tr.item td {
-        border-bottom: 1px solid #eee;
-      }
-
-      .invoice-box table tr.item.last td {
-        border-bottom: none;
-      }
-
-      .invoice-box table tr.total td:nth-child(2) {
-        border-top: 2px solid #eee;
-        font-weight: bold;
-      }
-
-      @media only screen and (max-width: 600px) {
-        .invoice-box table tr.top table td {
-          width: 100%;
-          display: block;
-          text-align: center;
-        }
-
-        .invoice-box table tr.information table td {
-          width: 100%;
-          display: block;
-          text-align: center;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="invoice-box">
-      <table>
-        <tr class="top">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td class="title">
-                  <img
-                    src="./images/logo.png"
-                    alt="Company logo"
-                    style="width: 100%; max-width: 300px" />
-                </td>
-
-                <td>
-                  Invoice #: 123<br />
-                  Created: January 1, 2015<br />
-                  Due: February 1, 2015
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <tr class="information">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td>
-                  Sparksuite, Inc.<br />
-                  12345 Sunny Road<br />
-                  Sunnyville, TX 12345
-                </td>
-
-                <td>
-                  Acme Corp.<br />
-                  John Doe<br />
-                  john@example.com
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <tr class="heading">
-          <td>Payment Method</td>
-
-          <td>Check #</td>
-        </tr>
-
-        <tr class="details">
-          <td>Check</td>
-
-          <td>1000</td>
-        </tr>
-
-        <tr class="heading">
-          <td>Item</td>
-
-          <td>Price</td>
-        </tr>
-
-        <tr class="item">
-          <td>Website design</td>
-
-          <td>$300.00</td>
-        </tr>
-
-        <tr class="item">
-          <td>Hosting (3 months)</td>
-
-          <td>$75.00</td>
-        </tr>
-
-        <tr class="item last">
-          <td>Domain name (1 year)</td>
-
-          <td>$10.00</td>
-        </tr>
-
-        <tr class="total">
-          <td></td>
-
-          <td>Total: $385.00</td>
-        </tr>
-      </table>
+</style>
+  
+<div class="container box-shadow">
+  <h2 class="title">የሽያጭ ደረሰኝ</h2>
+  <div class="heading">
+    <div class="date">
+      <p>${date}</p>
+      <p>የክፍያ መጠየቂያ ቀን</p>
     </div>
-  </body>
-</html>
+    <div class="invoice-number">
+      <p>${invoiceNumber}</p>
+      <p>የደረሰኝ ቁጥር</p>
+    </div>
+  </div>
+
+  <div class="qrCode">
+  <h1> << QR CODE >> </h1>
+  </div>
+  <div class="details-container">
+    <div class="customer">
+      <h2>ደንበኛ</h2>
+      <h3>${customerName}</h3>
+    </div>
+    <div class="items padding box-shadow border-radius">
+      <h2>የእቃዎች ዝርዝር</h2>
+      ${Object.getOwnPropertyNames(items).map(i => {
+        return `<div class="item">
+          <div class="item-left">
+            <p>${items[i].itemName}</p>
+            <p>${items[i].quantity} ብዛት</p>
+          </div>
+          <p class="item-right">${items[i].unitPrice} ብር</p>
+        </div>`;
+      })}
+      
+    </div>
+    <div class="price padding box-shadow border-radius">
+      <div class="price-div">
+        <div>
+          <p>ድምር</p>
+          <p>${sum} ብር</p>
+        </div>
+        <div>
+          <p>ታክስ (15% ቫት)</p>
+          <p>${tax} ብር</p>
+        </div>
+      </div>
+      <hr />
+      <div class="price-div">
+        <div class="total">
+          <p>አጠቃላይ ድምር</p>
+          <p>${total} ብር</p>
+        </div>
+      </div>
+    </div>
+    <div class="payment-type padding box-shadow">
+      <p>የክፍያ አይነት</p>
+      <p>${paymentMethod}</p>
+    </div>
+  </div>
+</div>
 `;
 };

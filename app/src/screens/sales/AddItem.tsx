@@ -6,16 +6,16 @@ import {
   View,
   ScrollView,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import StatusBox from '../../components/misc/StatusBox';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/AntDesign';
 import colors from '../../config/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
-import {v4 as uuidv4} from 'uuid';
 
 const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
   const {user} = useContext(StateContext);
@@ -30,6 +30,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
   const [priceInputError, setPriceInputError] = useState('');
 
   const [data, setData]: Array<any> = useState([]);
+  const [filterValue, setFilterValue] = useState('');
 
   let unmounted = false;
 
@@ -97,7 +98,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
         height: '100%',
         width: '100%',
         position: 'absolute',
-        backgroundColor: '#00000060',
+        backgroundColor: colors.white,
         zIndex: 1,
       }}>
       {loading ? (
@@ -111,19 +112,19 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
-                backgroundColor: '#00000060',
+                backgroundColor: '#00000090',
                 position: 'absolute',
                 flex: 1,
                 zIndex: 4,
               }}>
               <View
                 style={{
-                  backgroundColor: colors.white,
                   width: '90%',
                   maxWidth: 360,
                   paddingVertical: 20,
                   paddingHorizontal: 10,
                   borderRadius: 20,
+                  backgroundColor: colors.white,
                 }}>
                 <Text
                   style={[
@@ -140,7 +141,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 20,
                   }}>
-                  Quantity {'(Total: '}
+                  ብዛት {'(ቀሪ ብዛት: '}
                   {detailsItem!.quantity}
                   {')'}
                 </Text>
@@ -169,7 +170,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 20,
                   }}>
-                  Unit Price{' (Unit Price: '}
+                  የአንዱ ዋጋ{' (የቀድሞው ዋጋ: '}
                   {detailsItem!.unitPrice}
                   {')'}
                 </Text>
@@ -189,26 +190,26 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-evenly',
+                    marginTop: 10,
                   }}>
                   <TouchableOpacity onPress={() => setDetailsVisible(false)}>
                     <Text
                       style={[
                         styles.textBold,
                         {
-                          backgroundColor: colors.white,
-                          borderWidth: 2,
+                          borderWidth: 0.5,
                           color: colors.black,
                           textAlign: 'center',
                           width: 120,
                           maxWidth: 200,
                           alignSelf: 'center',
                           padding: 10,
-                          borderRadius: 20,
+                          borderRadius: 10,
                           marginBottom: 5,
                           marginTop: 5,
                         },
                       ]}>
-                      Cancel
+                      ተመለስ
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={handleSubmit}>
@@ -221,48 +222,83 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                           textAlign: 'center',
                           width: 120,
                           borderWidth: 2,
+                          borderColor: colors.black,
                           maxWidth: 200,
                           alignSelf: 'center',
                           padding: 10,
-                          borderRadius: 20,
+                          borderRadius: 10,
                           marginBottom: 5,
                           marginTop: 5,
                         },
                       ]}>
-                      Add Item
+                      ጨምር
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </Pressable>
           ) : null}
-          <View>
+
+          <KeyboardAvoidingView>
             <Text
               style={[
                 styles.textBold,
                 {
                   textAlign: 'center',
-                  backgroundColor: colors.white,
-                  marginTop: 20,
                   paddingTop: 20,
                   fontSize: 25,
                   width: '95%',
                   alignSelf: 'center',
-                  paddingVertical: 20,
+                  paddingVertical: 10,
                   borderTopRightRadius: 20,
                   borderTopLeftRadius: 20,
                 },
               ]}>
-              Add Item
+              እቃ ጨምር
             </Text>
+
+            <View
+              style={{
+                backgroundColor: colors.white,
+                marginHorizontal: 20,
+                marginVertical: 10,
+                paddingHorizontal: 10,
+                elevation: 0,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderRadius: 10,
+                borderWidth: 0.8,
+              }}>
+              <TextInput
+                style={{
+                  flexGrow: 1,
+                  padding: 5,
+                  paddingHorizontal: 10,
+                  fontSize: 20,
+                  color: colors.black,
+                }}
+                autoFocus={true}
+                placeholder="ፈልግ..."
+                placeholderTextColor={'#00000070'}
+                onChangeText={val => setFilterValue(val)}
+              />
+
+              <Icon2
+                name="search1"
+                color={colors.primary}
+                size={25}
+                style={{}}
+              />
+            </View>
             <Icon
               name="close"
               color={colors.black}
-              size={30}
-              style={{position: 'absolute', right: 30, top: 35}}
+              size={35}
+              style={{position: 'absolute', right: 10, top: 10}}
               onPress={() => setIsModalVisible(false)}
             />
-          </View>
+          </KeyboardAvoidingView>
 
           <ScrollView
             contentContainerStyle={{
@@ -279,33 +315,39 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
               width: '95%',
               alignSelf: 'center',
             }}>
-            {data.map(item => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  key={item.id}
-                  onPress={() => {
-                    setDetailsVisible(true);
-                    setDetailsItem(item);
-                    setSelectedItem([...selectedItem, item]);
-                  }}
-                  style={styles.ListItem}>
-                  <View style={styles.LeftContainer}>
-                    <View style={{marginLeft: 10}}>
-                      <Text style={styles.textBold}>{item.itemName}</Text>
-                      <Text style={styles.textLight}>
-                        <Text style={styles.textBold}>{item.unitPrice}ብር</Text>
-                        /አንዱን
-                      </Text>
+            {data
+              .filter(i =>
+                i.itemName.toLowerCase().includes(filterValue.toLowerCase()),
+              )
+              .map(item => {
+                return (
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    key={item.id}
+                    onPress={() => {
+                      setDetailsVisible(true);
+                      setDetailsItem(item);
+                      setSelectedItem([...selectedItem, item]);
+                    }}
+                    style={styles.ListItem}>
+                    <View style={styles.LeftContainer}>
+                      <View style={{marginLeft: 10}}>
+                        <Text style={styles.textBold}>{item.itemName}</Text>
+                        <Text style={styles.textLight}>
+                          <Text style={styles.textBold}>
+                            {item.unitPrice}ብር
+                          </Text>
+                          /አንዱን
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  <View style={styles.RightContainer}>
-                    <Text style={styles.textBold}>ብዛት {item.quantity}</Text>
-                  </View>
-                  <Icon name="plus-circle" color={colors.black} size={30} />
-                </TouchableOpacity>
-              );
-            })}
+                    <View style={styles.RightContainer}>
+                      <Text style={styles.textBold}>ብዛት {item.quantity}</Text>
+                    </View>
+                    <Icon name="plus-circle" color={colors.black} size={30} />
+                  </TouchableOpacity>
+                );
+              })}
           </ScrollView>
         </>
       )}
@@ -331,24 +373,23 @@ const styles = StyleSheet.create({
 
   ListItemContainer: {},
   ListItem: {
-    zIndex: 1,
-    marginTop: 5,
-    marginBottom: 10,
-    elevation: 5,
-    backgroundColor: colors.white,
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    zIndex: 1,
+    marginTop: 5,
+    marginBottom: 5,
     paddingVertical: 5,
+    backgroundColor: colors.white,
+    paddingHorizontal: 10,
     borderRadius: 10,
     width: '95%',
-    alignSelf: 'center',
+    elevation: 5,
   },
   LeftContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
   },
   RightContainer: {
     flexDirection: 'row',

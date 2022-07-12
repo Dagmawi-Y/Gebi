@@ -38,6 +38,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
   const [category, setCategory] = useState('');
   const [isUpdate, setIsUpdate] = useState(false);
 
+  const [searchResult, setSearchResult]: Array<any> = useState([]);
+  const [itemId, setItemId]: Array<any> = useState('');
+
   const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
   const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];
 
@@ -45,6 +48,28 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
     setSuccessAnimation(false);
     setFailedAnimation(false);
     setWrittingData(false);
+  };
+
+  const searchItem = key => {
+    console.log(key);
+    if (!key) setSearchResult([]);
+    if (key) {
+      // setSearchResult([]);
+      firestore()
+        .collection('inventory')
+        .where('item_name', '>=', key)
+        .where('item_name', '<=', key + '\uf8ff')
+        .onSnapshot(qsn => {
+          let result: Array<any> = [];
+          qsn.forEach(sn => {
+            result.push({
+              id: sn.id,
+              doc: sn.data(),
+            });
+          });
+          setSearchResult(result);
+        });
+    }
   };
 
   const checkEmpty = () => {
@@ -66,37 +91,69 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
     setWrittingData(true);
 
     try {
-      await firestore()
-        .collection('inventory')
-        .add({
-          owner: user.uid,
-          item_name: itemName,
-          unit_price: unitPrice,
-          currentCount: quantity,
-        })
-        .then(res => {
-          const item_id = res['_documentPath']['_parts'][1];
-          firestore().collection('stock').add({
-            item_id: item_id,
-            supplier_name: supplierName,
-            initialCount: quantity,
-            category: category,
+      if (itemId) {
+        await firestore()
+          .collection('inventory')
+          .doc(itemId)
+          .update({
             unit_price: unitPrice,
-            unit: unit,
-            owner: user.uid,
-            date: new Date().toLocaleDateString(),
+            currentCount: firestore.FieldValue.increment(parseFloat(quantity)),
+          })
+          .then(res => {
+            firestore().collection('stock').add({
+              item_id: itemId,
+              supplier_name: supplierName,
+              initialCount: quantity,
+              category: category,
+              unit_price: unitPrice,
+              unit: unit,
+              owner: user.uid,
+              date: new Date().toLocaleDateString(),
+            });
           });
-        });
 
-      setWrittingData(false);
-      setSuccessAnimation(true);
-      setTimeout(() => {
-        setSuccessAnimation(false);
-        setAddNewModalVisible(false);
-      }, 500);
-      setTimeout(() => {
-        setAddNewModalVisible(false);
-      }, 600);
+        setWrittingData(false);
+        setSuccessAnimation(true);
+        setTimeout(() => {
+          setSuccessAnimation(false);
+          setAddNewModalVisible(false);
+        }, 500);
+        setTimeout(() => {
+          setAddNewModalVisible(false);
+        }, 600);
+      } else {
+        await firestore()
+          .collection('inventory')
+          .add({
+            owner: user.uid,
+            item_name: itemName,
+            unit_price: unitPrice,
+            currentCount: quantity,
+          })
+          .then(res => {
+            const item_id = res['_documentPath']['_parts'][1];
+            firestore().collection('stock').add({
+              item_id: item_id,
+              supplier_name: supplierName,
+              initialCount: quantity,
+              category: category,
+              unit_price: unitPrice,
+              unit: unit,
+              owner: user.uid,
+              date: new Date().toLocaleDateString(),
+            });
+          });
+
+        setWrittingData(false);
+        setSuccessAnimation(true);
+        setTimeout(() => {
+          setSuccessAnimation(false);
+          setAddNewModalVisible(false);
+        }, 500);
+        setTimeout(() => {
+          setAddNewModalVisible(false);
+        }, 600);
+      }
     } catch (error) {
       setWrittingData(false);
       raiseError(`Something went wrong.\nTry again.`);
@@ -221,8 +278,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                 {errorMessage}
               </Text>
               <Icon
-                name="refresh"
-                size={50}
+                name="reload1"
+                size={25}
                 color={colors.primary}
                 style={{alignSelf: 'center', marginTop: 40}}
                 onPress={addNewInventory}
@@ -279,30 +336,65 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                 keyboardType="default"
                 placeholderTextColor={colors.faded_grey}
               />
-              {/* <CustomForm
-                label="የእቃ ስም"
-                itemName={itemName}
-                setId={setId}
-                setItemName={setItemName}
-                setIsUpadate={setIsUpdate}
-              /> */}
-              <Text
-                style={{
-                  color: colors.black,
-                  fontSize: 20,
-                  marginBottom: 5,
-                }}>
-                የእቃ ስም
-              </Text>
-              <TextInput
-                style={[styles.Input]}
-                onChangeText={val => {
-                  setItemName(val);
-                }}
-                value={itemName}
-                keyboardType="default"
-                placeholderTextColor={colors.faded_grey}
-              />
+
+              <View>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 20,
+                    marginBottom: 5,
+                  }}>
+                  የእቃ ስም
+                </Text>
+                <TextInput
+                  style={[styles.Input]}
+                  onChangeText={val => {
+                    setItemName(val);
+                    searchItem(val);
+                  }}
+                  value={itemName}
+                  keyboardType="default"
+                  placeholderTextColor={colors.faded_grey}
+                />
+                {searchResult.length ? (
+                  <View
+                    style={{
+                      zIndex: 10,
+                    }}>
+                    <View
+                      style={{
+                        backgroundColor: colors.white,
+                        position: 'absolute',
+                        top: -30,
+                        width: '100%',
+                        elevation: 10,
+                        padding: 10,
+                        marginTop: 10,
+                      }}>
+                      {searchResult.map(i => (
+                        <TouchableOpacity
+                          key={i.id}
+                          onPress={() => {
+                            setItemName(i.doc.item_name);
+                            setItemId(i.id);
+                            setSearchResult([]);
+                          }}>
+                          <Text
+                            style={{
+                              color: colors.black,
+                              fontSize: 22,
+                              marginVertical: 5,
+                              borderBottomWidth: 0.4,
+                              borderColor: '#00000040',
+                            }}>
+                            {i.doc.item_name}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+                ) : null}
+              </View>
               <View
                 style={{
                   flexDirection: 'row',

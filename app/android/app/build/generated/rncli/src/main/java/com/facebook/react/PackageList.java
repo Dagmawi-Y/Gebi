@@ -23,6 +23,8 @@ import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
+// react-native-print
+import com.christopherdro.RNPrint.RNPrintPackage;
 // react-native-reanimated
 import com.swmansion.reanimated.ReanimatedPackage;
 // react-native-safe-area-context
@@ -86,6 +88,7 @@ public class PackageList {
       new ReactNativeFirebaseFirestorePackage(),
       new LottiePackage(),
       new RNGestureHandlerPackage(),
+      new RNPrintPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),

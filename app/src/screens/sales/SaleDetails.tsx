@@ -13,6 +13,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import Loading from '../../components/lotties/Loading';
 import StatusBox from '../../components/misc/StatusBox';
+import RNPrint from 'react-native-print';
+
+import receipt from './reciept';
 
 const SaleDetails = ({route, navigation}) => {
   const {data} = route.params;
@@ -61,8 +64,8 @@ const SaleDetails = ({route, navigation}) => {
               .collection('inventory')
               .doc(items[i].id)
               .update({
-                'stock.quantity':
-                  parseFloat(res.data()!.stock.quantity) +
+                currentCount:
+                  parseFloat(res.data()!.currentCount) +
                   parseFloat(items[i].quantity),
               })
               .catch(err => {
@@ -76,6 +79,19 @@ const SaleDetails = ({route, navigation}) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const print = async () => {
+    const printData = {
+      data: data,
+      sum: sum,
+      tax: sum * 0.15,
+      total: total,
+    };
+
+    await RNPrint.print({
+      html: receipt(printData),
+    });
   };
 
   useEffect(() => {
@@ -104,12 +120,17 @@ const SaleDetails = ({route, navigation}) => {
           justifyContent: 'center',
         }}>
         <View style={styles.header}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{width: 40}}
             onPress={() => navigation.goBack()}>
             <Icon name="arrowleft" size={28} color={colors.black} />
+          </TouchableOpacity> */}
+          <Text style={styles.pageTitle}>የሽያጭ ደረሰኝ</Text>
+          <TouchableOpacity
+            style={{alignSelf: 'flex-end', marginLeft: 'auto'}}
+            onPress={() => print()}>
+            <Icon name={'pdffile1'} size={25} color={colors.primary} />
           </TouchableOpacity>
-          <Text style={styles.pageTitle}>አዲስ የሽያጭ ደረሰኝ</Text>
         </View>
         <View style={styles.topInfo}>
           <View style={styles.topInfoLeft}>

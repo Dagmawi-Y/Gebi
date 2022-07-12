@@ -61,7 +61,7 @@ const InventoryNavigator = ({navigation}) => {
         <Stack.Screen name={routes.inventory} component={InventoryScreen} />
         <Stack.Screen
           name={routes.itemDetails}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
           component={ItemDetails}
         />
         <Stack.Screen

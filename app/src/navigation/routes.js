@@ -3,6 +3,7 @@ export default Object.freeze({
   intro: 'Introduction',
   inventory: 'InventoryScreen',
   sales: 'Sales',
+  addItem: 'Add Item',
   saleDetails: 'saleDetail',
   salesNav: 'ሽያጭ',
   expensesNav: 'ወጪ',

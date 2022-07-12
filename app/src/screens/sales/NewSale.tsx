@@ -14,7 +14,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 import firestore from '@react-native-firebase/firestore';
 
-import AddNewItem from './AddNewItem';
+import AddItem from './AddItem';
 
 import BouncyCheckboxGroup, {
   ICheckboxButton,
@@ -172,7 +172,7 @@ const NewSale = ({navigation, route}) => {
   return (
     <>
       {isModalVisible ? (
-        <AddNewItem
+        <AddItem
           setIsModalVisible={setIsModalVisible}
           addedItems={addedItems}
           setAddedItems={setAddedItems}
@@ -311,7 +311,7 @@ const NewSale = ({navigation, route}) => {
                 styles.textBold,
                 {color: colors.white, textAlign: 'center'},
               ]}>
-              እቃዎች
+              እቃ ጨምር
             </Text>
           </TouchableOpacity>
         </View>
@@ -414,7 +414,7 @@ const NewSale = ({navigation, route}) => {
                   style: 'default',
                 },
                 {
-                  text: 'Return',
+                  text: 'ተመለስ',
                   onPress: () => {},
                   style: 'default',
                 },
@@ -450,7 +450,22 @@ const NewSale = ({navigation, route}) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={handleSubmit}
+            onPress={() => {
+              Alert.alert(`እርግጠኛ ነዎት?`, ``, [
+                {
+                  text: 'አዎ',
+                  onPress: () => {
+                    handleSubmit();
+                  },
+                  style: 'default',
+                },
+                {
+                  text: 'ተመለስ',
+                  onPress: () => {},
+                  style: 'default',
+                },
+              ]);
+            }}
             style={{
               backgroundColor: colors.primary,
               height: 50,

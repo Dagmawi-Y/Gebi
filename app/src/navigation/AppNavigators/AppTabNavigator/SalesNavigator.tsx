@@ -10,6 +10,7 @@ import SalesScreen from '../../../screens/sales/SalesScreen';
 import NewSale from '../../../screens/sales/NewSale';
 import CustomMenu from '../../../components/misc/CustomMenu';
 import SaleDetails from '../../../screens/sales/SaleDetails';
+import AddItem from '../../../screens/sales/AddItem';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,7 @@ const SalesNavigator = ({navigation}) => {
         }}>
         <Stack.Screen name={routes.sales} component={SalesScreen} />
         <Stack.Screen name={routes.newSale} component={NewSale} />
+        <Stack.Screen name={routes.addItem} component={AddItem} />
         <Stack.Screen name={routes.saleDetails} component={SaleDetails} />
       </Stack.Navigator>
     </>
