@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     margin: 5,
+    // elevation: 10,
+    borderColor: '#00000030',
+    borderWidth: 0.5,
   },
   listItemDesc: {
     marginLeft: 5,

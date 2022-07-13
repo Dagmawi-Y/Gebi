@@ -15,6 +15,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 
 import AddItem from './AddItem';
+import paymentTypes from './paymentTypes';
 
 import BouncyCheckboxGroup, {
   ICheckboxButton,
@@ -34,61 +35,6 @@ const NewSale = ({navigation, route}) => {
 
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
-
-  const paymentTypes = [
-    {
-      id: 1,
-      text: 'ዱቤ',
-      fillColor: colors.primary,
-      unfillColor: '#FFFFFF',
-      isChecked: true,
-      iconStyle: {
-        marginBottom: 10,
-        marginLeft: 30,
-        borderColor: colors.primary,
-        borderWidth: 3,
-      },
-      textStyle: {
-        marginBottom: 10,
-        marginRight: 30,
-        textDecorationLine: 'none',
-      },
-    },
-    {
-      id: 2,
-      text: 'ካሽ',
-      fillColor: colors.primary,
-      unfillColor: '#FFFFFF',
-      iconStyle: {
-        marginBottom: 10,
-        marginLeft: 30,
-        borderColor: colors.primary,
-        borderWidth: 3,
-      },
-      textStyle: {
-        marginBottom: 10,
-        marginRight: 30,
-        textDecorationLine: 'none',
-      },
-    },
-    {
-      id: 3,
-      text: 'ቼክ',
-      fillColor: colors.primary,
-      unfillColor: '#FFFFFF',
-      iconStyle: {
-        marginBottom: 10,
-        marginLeft: 30,
-        borderColor: colors.primary,
-        borderWidth: 3,
-      },
-      textStyle: {
-        marginBottom: 10,
-        marginRight: 30,
-        textDecorationLine: 'none',
-      },
-    },
-  ];
 
   const categories = ['ABC Bldg', 'Another Building', 'Kalkidan'];
 
@@ -184,11 +130,6 @@ const NewSale = ({navigation, route}) => {
           justifyContent: 'center',
         }}>
         <View style={styles.header}>
-          <TouchableOpacity
-            style={{width: 40}}
-            onPress={() => navigation.goBack()}>
-            <Icon name="arrowleft" size={28} color={colors.black} />
-          </TouchableOpacity>
           <Text style={styles.pageTitle}>አዲስ የሽያጭ ደረሰኝ</Text>
         </View>
         <View style={styles.topInfo}>
@@ -209,14 +150,16 @@ const NewSale = ({navigation, route}) => {
               alignSelf: 'center',
               marginTop: 10,
               marginBottom: 10,
-              borderRadius: 20,
-              borderWidth: 1,
+              borderRadius: 10,
+              borderWidth: 0.4,
+              borderColor: '#00000040',
               height: 50,
               paddingHorizontal: 15,
               color: colors.black,
               fontSize: 20,
               flexDirection: 'row-reverse',
               justifyContent: 'flex-start',
+              backgroundColor: colors.white,
             }}
             placeholder="Enter customer name"
             onChangeText={val => {
@@ -281,6 +224,7 @@ const NewSale = ({navigation, route}) => {
                   {
                     paddingVertical: 10,
                     marginHorizontal: 10,
+                    borderRadius: 10,
                     textAlign: 'center',
                     backgroundColor: '#ffffff',
                   },
@@ -303,7 +247,7 @@ const NewSale = ({navigation, route}) => {
               justifyContent: 'center',
               width: 'auto',
               alignSelf: 'center',
-              borderRadius: 20,
+              borderRadius: 10,
               paddingHorizontal: 10,
             }}>
             <Text
@@ -407,7 +351,7 @@ const NewSale = ({navigation, route}) => {
             onPress={() => {
               Alert.alert(`እርግጠኛ ነዎት?`, ``, [
                 {
-                  text: 'Exit',
+                  text: 'አዎ',
                   onPress: () => {
                     navigation.goBack();
                   },
@@ -428,8 +372,8 @@ const NewSale = ({navigation, route}) => {
               justifyContent: 'space-between',
               width: 150,
               alignItems: 'center',
-              borderRadius: 20,
-              borderWidth: 1,
+              borderRadius: 10,
+              borderWidth: 0.3,
               borderColor: colors.primary,
               flexDirection: 'row',
             }}>
@@ -474,7 +418,7 @@ const NewSale = ({navigation, route}) => {
               justifyContent: 'space-between',
               width: 150,
               alignItems: 'center',
-              borderRadius: 20,
+              borderRadius: 10,
               flexDirection: 'row',
             }}>
             <Text
@@ -514,6 +458,8 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: 'bold',
     marginLeft: 10,
+    width: '100%',
+    textAlign: 'center',
   },
   topInfo: {
     borderBottomWidth: 1,
@@ -556,7 +502,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 20,
+    borderRadius: 10,
     alignSelf: 'center',
   },
   LeftContainer: {
@@ -572,7 +518,7 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     paddingHorizontal: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     marginVertical: 20,
     elevation: 1,
     paddingVertical: 10,
@@ -589,7 +535,7 @@ const styles = StyleSheet.create({
   },
   paymentTypeContainer: {
     paddingHorizontal: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     marginBottom: 15,
     elevation: 1,
     paddingVertical: 10,

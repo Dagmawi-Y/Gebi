@@ -37,6 +37,8 @@ export default function Items({navigation}) {
   const [searchVisible, setSearchVisible] = useState(false);
 
   const [searchKey, setSearchKey] = useState('');
+  const [filterValue, setFilterValue] = useState('');
+  const [filterVisible, setFilterVisible] = useState(false);
 
   // const data = useFirebase(user);
 
@@ -162,6 +164,7 @@ export default function Items({navigation}) {
                 paddingVertical: 3,
                 borderBottomWidth: 0.5,
                 borderBottomColor: '#00000040',
+                zIndex: 10,
               }}>
               <Text
                 style={{
@@ -172,30 +175,160 @@ export default function Items({navigation}) {
                 }}>
                 ሽያጭ
               </Text>
+              {/* Filter button */}
+              <View style={{flexDirection: 'row', marginRight: 10}}>
+                {filterValue ? (
+                  <View
+                    style={{
+                      backgroundColor: colors.faded_dark,
+                      flexDirection: 'row',
+                      paddingHorizontal: 5,
+                      marginRight: 10,
+                      borderRadius: 10,
+                    }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        color: colors.white,
+                        fontSize: 25,
+                        alignItems: 'center',
+                      }}>
+                      {filterValue}
+                      {'  '}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => setFilterValue('')}
+                      style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Icon name="close" color={colors.white} size={20} />
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+                <TouchableOpacity
+                  onPress={() => setFilterVisible(!filterVisible)}
+                  style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text
+                    style={{
+                      color: colors.black,
+                      fontSize: 20,
+                      marginRight: 10,
+                    }}>
+                    አጣራ
+                  </Text>
+
+                  <Icon name="caretdown" color={colors.black} size={15} />
+                </TouchableOpacity>
+              </View>
             </View>
             {loading ? (
               <Loading size={100} />
             ) : (
-              <ScrollView>
+              <ScrollView style={{zIndex: -1}}>
                 {data.length == 0 ? (
                   <EmptyBox message={'እስካሁን የተካሄደ ሽያጭ ያልም።'} />
                 ) : data.length > 0 ? (
-                  <View>
-                    {data.map(sale => {
-                      return (
+                  <View style={{backgroundColor: colors.white}}>
+                    {filterVisible ? (
+                      <View
+                        style={{
+                          width: '30%',
+                          justifyContent: 'space-between',
+                          marginLeft: 'auto',
+                          backgroundColor: colors.white,
+                        }}>
                         <TouchableOpacity
-                          activeOpacity={0.5}
-                          key={sale.id}
                           onPress={() => {
-                            const id = sale.id;
-                            navigation.navigate(routes.saleDetails, {
-                              data: sale,
-                            });
+                            setFilterValue('ካሽ');
+                            setFilterVisible(!filterVisible);
                           }}>
-                          <SalesListItem sale={sale} navigation={navigation} />
+                          <Text
+                            style={[
+                              filterValue == 'ካሽ'
+                                ? {backgroundColor: colors.faded_dark}
+                                : {backgroundColor: colors.primary},
+                              {
+                                textAlign: 'center',
+                                color: colors.white,
+
+                                marginVertical: 5,
+                                borderRadius: 10,
+                                fontSize: 25,
+                                marginRight: 10,
+                              },
+                            ]}>
+                            ካሽ
+                          </Text>
                         </TouchableOpacity>
-                      );
-                    })}
+                        <TouchableOpacity
+                          onPress={() => {
+                            setFilterValue('ዱቤ');
+                            setFilterVisible(!filterVisible);
+                          }}>
+                          <Text
+                            style={[
+                              filterValue == 'ዱቤ'
+                                ? {backgroundColor: colors.faded_dark}
+                                : {backgroundColor: colors.primary},
+                              {
+                                textAlign: 'center',
+                                color: colors.white,
+                                marginVertical: 5,
+                                borderRadius: 10,
+                                fontSize: 25,
+                                marginRight: 10,
+                              },
+                            ]}>
+                            ዱቤ
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setFilterValue('ቼክ');
+                            setFilterVisible(!filterVisible);
+                          }}>
+                          <Text
+                            style={[
+                              filterValue == 'ቼክ'
+                                ? {backgroundColor: colors.faded_dark}
+                                : {backgroundColor: colors.primary},
+                              {
+                                textAlign: 'center',
+                                color: colors.white,
+                                marginVertical: 5,
+                                borderRadius: 10,
+                                fontSize: 25,
+                                marginRight: 10,
+                              },
+                            ]}>
+                            ቼክ
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
+                    {data
+                      .filter(saleItem => {
+                        if (!filterValue) return saleItem;
+                        return (
+                          saleItem.paymentMethod.toLowerCase() === filterValue
+                        );
+                      })
+                      .map(sale => {
+                        return (
+                          <TouchableOpacity
+                            activeOpacity={0.5}
+                            key={sale.id}
+                            onPress={() => {
+                              const id = sale.id;
+                              navigation.navigate(routes.saleDetails, {
+                                data: sale,
+                              });
+                            }}>
+                            <SalesListItem
+                              sale={sale}
+                              navigation={navigation}
+                            />
+                          </TouchableOpacity>
+                        );
+                      })}
                   </View>
                 ) : null}
               </ScrollView>
@@ -211,6 +344,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     display: 'flex',
+    backgroundColor: colors.white,
   },
   contentContainer: {
     paddingHorizontal: 10,
