@@ -2,6 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import PlanerScreen from '../../../screens/Planner/PlannerScreen';
+import {useTranslation} from 'react-i18next';
 
 import {View} from 'react-native';
 
@@ -18,6 +19,8 @@ import ExpensesNavigator from './ExpensesNavigator';
 const Tab = createBottomTabNavigator();
 
 const AppTabNavigator = () => {
+  const {t} = useTranslation();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -32,7 +35,7 @@ const AppTabNavigator = () => {
         },
       }}>
       <Tab.Screen
-        name={routes.salesNav}
+        name={t(routes.salesNav)}
         component={SalesNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
@@ -41,7 +44,7 @@ const AppTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={routes.expensesNav}
+        name={t(routes.expensesNav)}
         component={ExpensesNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
@@ -55,7 +58,7 @@ const AppTabNavigator = () => {
       />
 
       <Tab.Screen
-        name={routes.inventoryNav}
+        name={t(routes.inventoryNav)}
         component={InventoryNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
@@ -65,7 +68,7 @@ const AppTabNavigator = () => {
       />
 
       <Tab.Screen
-        name={routes.plan}
+        name={t(routes.plan)}
         component={PlanerScreen}
         options={{
           tabBarIcon: ({color, size}) => (

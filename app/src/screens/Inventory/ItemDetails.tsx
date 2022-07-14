@@ -29,7 +29,7 @@ const ItemDetails = ({route, navigation}) => {
         text: 'ቀጥል',
         onPress: async () => {
           await firestore().collection('inventory').doc(itemId).delete();
-          navigation.replace(routes.inventory);
+          navigation.replace(routes.inventoryHome);
         },
         style: 'default',
       },

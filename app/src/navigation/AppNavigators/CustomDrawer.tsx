@@ -111,8 +111,9 @@ const CustomDrawer = ({route, navigation}) => {
           active={active}
           setActive={setActive}
           navigation={navigation}
-          route={routes.plan}
+          route={routes.settingsNav}
           title={'ቅንብር'}
+          rootRoute={true}
           icon="settings"
         />
       </View>
@@ -164,13 +165,18 @@ const DrawerButton = ({
   route,
   icon,
   iconType = '1',
+  rootRoute = false,
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={() => {
         setActive(route);
-        navigation.navigate(routes.appNav, {screen: route});
+        if (rootRoute) {
+          navigation.navigate(route);
+        } else {
+          navigation.navigate(routes.Gebi, {screen: route});
+        }
       }}
       style={
         active == route

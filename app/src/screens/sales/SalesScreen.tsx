@@ -27,10 +27,13 @@ import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
+import {useTranslation} from 'react-i18next';
+
 import useFirebase from '../../utils/useFirebase';
 
 export default function Items({navigation}) {
   const {user} = useContext(StateContext);
+  const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
   const [loading, setLoading] = useState(true);
@@ -173,8 +176,9 @@ export default function Items({navigation}) {
                   paddingHorizontal: 5,
                   color: colors.faded_dark,
                 }}>
-                ሽያጭ
+                {t('Sales')}
               </Text>
+
               {/* Filter button */}
               <View style={{flexDirection: 'row', marginRight: 10}}>
                 {filterValue ? (
@@ -204,7 +208,9 @@ export default function Items({navigation}) {
                   </View>
                 ) : null}
                 <TouchableOpacity
-                  onPress={() => setFilterVisible(!filterVisible)}
+                  onPress={() => {
+                    setFilterVisible(!filterVisible);
+                  }}
                   style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text
                     style={{
@@ -212,7 +218,7 @@ export default function Items({navigation}) {
                       fontSize: 20,
                       marginRight: 10,
                     }}>
-                    አጣራ
+                    {t('Filter')}
                   </Text>
 
                   <Icon name="caretdown" color={colors.black} size={15} />

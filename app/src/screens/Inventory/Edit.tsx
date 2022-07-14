@@ -88,7 +88,7 @@ const Edit = ({route, navigation}) => {
       setSuccessAnimation(true);
       setTimeout(() => {
         setSuccessAnimation(false);
-        navigation.navigate(routes.inventory);
+        navigation.navigate(routes.inventoryHome);
       }, 500);
       setTimeout(() => {}, 600);
     } catch (error) {

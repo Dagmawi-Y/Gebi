@@ -26,7 +26,7 @@ const LanguageSelector = ({navigation}) => {
 
       setCurlang(ln);
       introDone
-        ? navigation.replace(routes.appNav, {screen: routes.inventory})
+        ? navigation.replace(routes.Gebi, {screen: routes.inventoryHome})
         : navigation.navigate(routes.intro);
     } catch (error) {
       console.log(error);

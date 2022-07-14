@@ -8,13 +8,13 @@ MERGED from C:\Users\seidr\Desktop\Gebi\app\android\app\src\main\AndroidManifest
 MERGED from [com.facebook.flipper:flipper:0.125.0] C:\Users\seidr\.gradle\caches\transforms-3\926be17b21b5f76b1a382f6d4687e847\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:8:1-18:12
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.125.0] C:\Users\seidr\.gradle\caches\transforms-3\33d929e126f1426518efcfad21f81a27\transformed\jetified-flipper-network-plugin-0.125.0\AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.125.0] C:\Users\seidr\.gradle\caches\transforms-3\ad7fdeb693f0061a6c7ffb5b1809155d\transformed\jetified-flipper-fresco-plugin-0.125.0\AndroidManifest.xml:8:1-15:12
-MERGED from [:react-native-fs] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-splash-screen] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-splash-screen\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-async-storage_async-storage] C:\Users\seidr\Desktop\Gebi\app\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-firebase_auth] C:\Users\seidr\Desktop\Gebi\app\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-firebase_firestore] C:\Users\seidr\Desktop\Gebi\app\node_modules\@react-native-firebase\firestore\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-firebase_app] C:\Users\seidr\Desktop\Gebi\app\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-32:12
 MERGED from [:lottie-react-native] C:\Users\seidr\Desktop\Gebi\app\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-fs] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-gesture-handler] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-print] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-print\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-safe-area-context] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
@@ -241,8 +241,6 @@ MERGED from [com.facebook.flipper:flipper-network-plugin:0.125.0] C:\Users\seidr
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.125.0] C:\Users\seidr\.gradle\caches\transforms-3\33d929e126f1426518efcfad21f81a27\transformed\jetified-flipper-network-plugin-0.125.0\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.125.0] C:\Users\seidr\.gradle\caches\transforms-3\ad7fdeb693f0061a6c7ffb5b1809155d\transformed\jetified-flipper-fresco-plugin-0.125.0\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.125.0] C:\Users\seidr\.gradle\caches\transforms-3\ad7fdeb693f0061a6c7ffb5b1809155d\transformed\jetified-flipper-fresco-plugin-0.125.0\AndroidManifest.xml:11:5-13:41
-MERGED from [:react-native-fs] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-fs] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-splash-screen] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-splash-screen\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-splash-screen] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-splash-screen\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-async-storage_async-storage] C:\Users\seidr\Desktop\Gebi\app\node_modules\@react-native-async-storage\async-storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
@@ -255,6 +253,8 @@ MERGED from [:react-native-firebase_app] C:\Users\seidr\Desktop\Gebi\app\node_mo
 MERGED from [:react-native-firebase_app] C:\Users\seidr\Desktop\Gebi\app\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:41
 MERGED from [:lottie-react-native] C:\Users\seidr\Desktop\Gebi\app\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:lottie-react-native] C:\Users\seidr\Desktop\Gebi\app\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-fs] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-fs] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-fs\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-gesture-handler] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-gesture-handler] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-print] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-print\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41

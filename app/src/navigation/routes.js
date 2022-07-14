@@ -1,7 +1,7 @@
 export default Object.freeze({
   langSelect: 'Choose Language',
   intro: 'Introduction',
-  inventory: 'InventoryScreen',
+  inventoryHome: 'InventoryScreen',
   sales: 'Sales',
   addItem: 'Add Item',
   saleDetails: 'saleDetail',
@@ -11,7 +11,7 @@ export default Object.freeze({
   expenses: 'Expenses',
   plan: 'Plan',
   introNav: 'Intro',
-  appNav: 'ገቢ',
+  Gebi: 'ገቢ',
   itemDetails: 'Item Details',
   EditItem: 'Edit Item',
   inventoryNav: 'አቃ ክፍል',
@@ -19,4 +19,7 @@ export default Object.freeze({
   register: 'Register',
   otp: 'OTP-Auth',
   register: 'Register',
+  settingsNav: 'SettingsNav',
+  settings: 'Settings Home',
+  selectLanguage: 'Select Language',
 });

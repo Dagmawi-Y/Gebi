@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import {useTranslation} from 'react-i18next';
 
 const StateContext = React.createContext();
 
@@ -12,6 +13,7 @@ const StateContextProvider = ({children}) => {
   const [isReady, setIsReady] = useState(false);
 
   const [addNewModalVisible, setAdNewModalVisible] = useState(false);
+  const {i18n} = useTranslation();
 
   const [curlang, setCurlang] = useState('');
   const [introDone, setIntroDone] = useState(false);
@@ -47,7 +49,12 @@ const StateContextProvider = ({children}) => {
   const init = async () => {
     try {
       await AsyncStorage.getItem('lang')
-        .then(ln => setCurlang(ln.toString()))
+        .then(ln => {
+          if (ln) {
+            setCurlang(ln.toString());
+            i18n.changeLanguage(ln);
+          }
+        })
         .catch(err => {});
       await AsyncStorage.getItem('introDone')
         .then(val => setIntroDone(val.toString()))

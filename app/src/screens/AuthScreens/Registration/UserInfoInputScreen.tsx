@@ -25,7 +25,7 @@ const UserInfoInputScreen = ({navigation}) => {
   const {isNewUser, setIsNewUser, isReady} = useContext(StateContext);
 
   useEffect(() => {
-    !isNewUser && navigation.navigate(routes.appNav, {screen: routes.salesNav});
+    !isNewUser && navigation.navigate(routes.Gebi, {screen: routes.salesNav});
   }, []);
 
   if (!isReady) return null;
@@ -149,7 +149,6 @@ const UserInfoInputScreen = ({navigation}) => {
                     )}
                     buttonStyle={styles.dropDown}
                     onSelect={(selectedItem, index) => {
-                      // ['ዕለታዊ ግብ', 'ወርሃዊ ግብ', 'የስድስት ወር ግብ', 'አመታዊ ግብ']
                       setPlan(selectedItem);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {

@@ -58,7 +58,7 @@ const InventoryNavigator = ({navigation}) => {
             fontSize: 30,
           },
         }}>
-        <Stack.Screen name={routes.inventory} component={InventoryScreen} />
+        <Stack.Screen name={routes.inventoryHome} component={InventoryScreen} />
         <Stack.Screen
           name={routes.itemDetails}
           options={{headerShown: false}}
