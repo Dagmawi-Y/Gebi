@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import PlanerScreen from '../../../screens/Planner/PlannerScreen';
@@ -15,11 +15,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import ExpensesNavigator from './ExpensesNavigator';
+import {StateContext} from '../../../global/context';
 
 const Tab = createBottomTabNavigator();
 
 const AppTabNavigator = () => {
+  const {isReady} = useContext(StateContext);
   const {t} = useTranslation();
+
+  if (!isReady) return null;
 
   return (
     <Tab.Navigator
@@ -35,12 +39,14 @@ const AppTabNavigator = () => {
         },
       }}>
       <Tab.Screen
-        name={t(routes.salesNav)}
+        name={routes.salesNav}
         component={SalesNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
             <Icon name="point-of-sale" color={color} size={size} />
           ),
+          tabBarLabel: t('Sales'),
+          headerTitle: t('Sales'),
         }}
       />
       <Tab.Screen
@@ -54,6 +60,8 @@ const AppTabNavigator = () => {
               size={size}
             />
           ),
+          tabBarLabel: t('Expense'),
+          headerTitle: t('Expense'),
         }}
       />
 
@@ -64,6 +72,8 @@ const AppTabNavigator = () => {
           tabBarIcon: ({color, size}) => (
             <Icon3 name="warehouse" color={color} size={size} />
           ),
+          tabBarLabel: t('Inventory'),
+          headerTitle: t('Inventory'),
         }}
       />
 
@@ -74,6 +84,8 @@ const AppTabNavigator = () => {
           tabBarIcon: ({color, size}) => (
             <Icon2 name="clipboard-pencil" color={color} size={size} />
           ),
+          tabBarLabel: t('Plan'),
+          headerTitle: t('Plan'),
         }}
       />
     </Tab.Navigator>

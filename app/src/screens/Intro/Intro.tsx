@@ -1,5 +1,5 @@
 import {StackActions} from '@react-navigation/native';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useTransition} from 'react';
 import {View, Text, Image, StyleSheet, StatusBar} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
 import {StateContext} from '../../global/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTranslation} from 'react-i18next';
 
 const slides = [
   {
@@ -35,6 +36,7 @@ const slides = [
 ];
 
 export default function Intro({navigation}: any) {
+  const {t} = useTranslation();
   const {setIntroDone} = useContext(StateContext);
 
   const _onDone = async () => {
@@ -67,7 +69,7 @@ export default function Intro({navigation}: any) {
             color: colors.black,
             flex: 1,
           }}>
-          {text}
+          {t(text)}
         </Text>
         <Icon name={`arrow-${arrow}`} color="black" size={22} />
       </View>
@@ -78,10 +80,10 @@ export default function Intro({navigation}: any) {
     <SafeAreaView style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
       <AppIntroSlider
-        renderPrevButton={() => renderText('ተመለስ', 'left', 'row-reverse')}
-        renderNextButton={() => renderText('ቀጥል', 'right', 'row')}
-        renderSkipButton={() => renderText('ዝለል', 'right', 'row')}
-        renderDoneButton={() => renderText('ዝግጁ', 'right', 'row')}
+        renderPrevButton={() => renderText('Prev', 'left', 'row-reverse')}
+        renderNextButton={() => renderText('Next', 'right', 'row')}
+        renderSkipButton={() => renderText('Skip', 'right', 'row')}
+        renderDoneButton={() => renderText('Ready', 'right', 'row')}
         activeDotStyle={{
           backgroundColor: colors.primary,
           marginHorizontal: 4,

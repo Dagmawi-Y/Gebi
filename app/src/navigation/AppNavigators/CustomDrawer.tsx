@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Alert, Image, StyleSheet} from 'react-native';
 
 import {View, Text} from 'react-native';
@@ -13,10 +13,45 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import routes from '../routes';
+import {useTranslation} from 'react-i18next';
+import {StateContext} from '../../global/context';
 
 const CustomDrawer = ({route, navigation}) => {
+  const {t} = useTranslation();
   const [active, setActive] = useState(routes.salesNav);
+  const {user} = useContext(StateContext);
+  const [userData, setUserData]: Array<any> = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getUserInfo = async () => {
+    try {
+      setLoading(true);
+      firestore()
+        .collection('users')
+        .where('userId', '==', user.uid)
+        .onSnapshot(querySnapshot => {
+          let result: Array<any> = [];
+          querySnapshot.forEach(documentSnapshot => {
+            result.push({
+              id: documentSnapshot.id,
+              doc: documentSnapshot.data(),
+            });
+          });
+
+          setUserData(result);
+          setLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    // getUserInfo();
+  }, []);
+  // if (loading) return null;
 
   return (
     <View
@@ -28,9 +63,7 @@ const CustomDrawer = ({route, navigation}) => {
       <View
         style={{
           alignItems: 'center',
-
           width: '90%',
-
           borderRadius: 10,
           alignSelf: 'center',
           paddingTop: 15,
@@ -40,9 +73,33 @@ const CustomDrawer = ({route, navigation}) => {
           source={require('../../assets/images/avatar.jpg')}
           style={{width: 150, height: 150, borderRadius: 180}}
         />
+
+        {/* <View
+          style={{
+            backgroundColor: 'white',
+            width: 150,
+            height: 150,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 150,
+          }}>
+          <Text
+            style={{
+              fontSize: 150,
+              padding: 0,
+              color: colors.black,
+              fontWeight: 'bold',
+            }}>
+            {userData[0].doc.orgName.substring(0, 1)}
+          </Text>
+        </View> */}
         <View style={{marginVertical: 15}}>
-          <Text style={{fontSize: 30, color: colors.white}}>Eldix.</Text>
+          <Text style={{fontSize: 30, color: colors.white}}>
+            {/* {userData[0].doc.orgName} */}
+            Eldix.
+          </Text>
           <Text style={{fontSize: 18, color: colors.white, fontWeight: '300'}}>
+            {/* {userData[0].doc.name} */}
             Lorem Ipsum
           </Text>
         </View>
@@ -71,7 +128,7 @@ const CustomDrawer = ({route, navigation}) => {
           setActive={setActive}
           navigation={navigation}
           route={routes.salesNav}
-          title={'ሽያጭ'}
+          title={'Sales'}
           icon="point-of-sale"
         />
         <DrawerButton
@@ -79,7 +136,7 @@ const CustomDrawer = ({route, navigation}) => {
           setActive={setActive}
           navigation={navigation}
           route={routes.expensesNav}
-          title={'ወጪ'}
+          title={'Expense'}
           icon="point-of-sale"
         />
         <DrawerButton
@@ -87,7 +144,7 @@ const CustomDrawer = ({route, navigation}) => {
           setActive={setActive}
           navigation={navigation}
           route={routes.inventoryNav}
-          title={'እቃዎች'}
+          title={'Items'}
           icon="home-work"
         />
         <DrawerButton
@@ -95,7 +152,7 @@ const CustomDrawer = ({route, navigation}) => {
           setActive={setActive}
           navigation={navigation}
           route={routes.plan}
-          title={'እቅድ'}
+          title={'Plan'}
           icon="clipboard-pencil"
           iconType="2"
         />
@@ -104,7 +161,7 @@ const CustomDrawer = ({route, navigation}) => {
           setActive={setActive}
           navigation={navigation}
           route={routes.plan}
-          title={'ትርፍ እና ትርፍ ማስያ'}
+          title={'Calculator'}
           icon="point-of-sale"
         />
         <DrawerButton
@@ -112,7 +169,7 @@ const CustomDrawer = ({route, navigation}) => {
           setActive={setActive}
           navigation={navigation}
           route={routes.settingsNav}
-          title={'ቅንብር'}
+          title={'Settings'}
           rootRoute={true}
           icon="settings"
         />
@@ -147,7 +204,7 @@ const CustomDrawer = ({route, navigation}) => {
             marginRight: 10,
             color: colors.white,
           }}>
-          Logout{' '}
+          {t('Logout')}{' '}
         </Text>
         <Icon name="logout" size={20} color={colors.white} />
       </TouchableOpacity>
@@ -167,6 +224,8 @@ const DrawerButton = ({
   iconType = '1',
   rootRoute = false,
 }) => {
+  const {t} = useTranslation();
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -197,7 +256,7 @@ const DrawerButton = ({
           marginLeft: 10,
           color: colors.white,
         }}>
-        {title}
+        {t(title)}
       </Text>
     </TouchableOpacity>
   );

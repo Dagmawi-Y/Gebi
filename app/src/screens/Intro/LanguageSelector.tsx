@@ -13,13 +13,16 @@ import colors from '../../config/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import routes from '../../navigation/routes';
 import {StateContext} from '../../global/context';
+import {useTranslation} from 'react-i18next';
 
 const LanguageSelector = ({navigation}) => {
+  const {t, i18n} = useTranslation();
   SystemNavigationBar.lightNavigationBar(false);
   const {introDone, curlang, setCurlang} = useContext(StateContext);
 
-  const languageClicked = async (ln: String) => {
+  const languageClicked = async (ln: string) => {
     try {
+      i18n.changeLanguage(ln);
       await AsyncStorage.setItem('lang', ln.toString()).catch(err => {
         console.log(err);
       });
@@ -51,7 +54,7 @@ const LanguageSelector = ({navigation}) => {
       </View>
       <View style={{flex: 2, alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 25, marginBottom: 20}}>
-          ለመጀመር ቋንቋ ይምረጡ
+          {t('Choose_Language_To_Start')}
         </Text>
         <View
           style={{
@@ -63,13 +66,13 @@ const LanguageSelector = ({navigation}) => {
             activeOpacity={0.5}
             style={[styles.button, styles.shadowProp]}
             onPress={() => languageClicked('am')}>
-            <Text style={styles.buttonText}>አማርኛ</Text>
+            <Text style={styles.buttonText}>{t('Amharic')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.button}
             onPress={() => languageClicked('en')}>
-            <Text style={styles.buttonText}>English</Text>
+            <Text style={styles.buttonText}>{t('English')}</Text>
           </TouchableOpacity>
         </View>
       </View>

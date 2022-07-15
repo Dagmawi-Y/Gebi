@@ -15,14 +15,15 @@ import {ScrollView} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 
 import AddItem from './AddItem';
-import paymentTypes from './paymentTypes';
 
 import BouncyCheckboxGroup, {
   ICheckboxButton,
 } from 'react-native-bouncy-checkbox-group';
 import {StateContext} from '../../global/context';
+import {useTranslation} from 'react-i18next';
 
 const NewSale = ({navigation, route}) => {
+  const {t} = useTranslation();
   const {user} = useContext(StateContext);
 
   const [error, setError] = useState('');
@@ -37,6 +38,61 @@ const NewSale = ({navigation, route}) => {
   const [total, setTotal] = useState(0);
 
   const categories = ['ABC Bldg', 'Another Building', 'Kalkidan'];
+
+  const paymentTypes = [
+    {
+      id: 1,
+      text: t('Debt'),
+      fillColor: colors.primary,
+      unfillColor: '#FFFFFF',
+      isChecked: true,
+      iconStyle: {
+        marginBottom: 10,
+        marginLeft: 30,
+        borderColor: colors.primary,
+        borderWidth: 3,
+      },
+      textStyle: {
+        marginBottom: 10,
+        marginRight: 30,
+        textDecorationLine: 'none',
+      },
+    },
+    {
+      id: 2,
+      text: t('Cash'),
+      fillColor: colors.primary,
+      unfillColor: '#FFFFFF',
+      iconStyle: {
+        marginBottom: 10,
+        marginLeft: 30,
+        borderColor: colors.primary,
+        borderWidth: 3,
+      },
+      textStyle: {
+        marginBottom: 10,
+        marginRight: 30,
+        textDecorationLine: 'none',
+      },
+    },
+    {
+      id: 3,
+      text: t('Check'),
+      fillColor: colors.primary,
+      unfillColor: '#FFFFFF',
+      iconStyle: {
+        marginBottom: 10,
+        marginLeft: 30,
+        borderColor: colors.primary,
+        borderWidth: 3,
+      },
+      textStyle: {
+        marginBottom: 10,
+        marginRight: 30,
+        textDecorationLine: 'none',
+      },
+    },
+  ];
 
   const sale = {
     owner: user.uid,
@@ -56,40 +112,56 @@ const NewSale = ({navigation, route}) => {
 
   const addNewSale = async () => {
     if (checkEmpty()) {
-      console.log('Error, Empty');
+      setError('Empty_Empty_Fields_Are_Not_Allowed');
+      setTimeout(() => {
+        setError('');
+      }, 2000);
       return;
     }
-    console.log('wait...');
-    try {
-      firestore()
-        .collection('sales')
-        .add(sale)
-        .then(async res => {
-          for (var i in addedItems) {
-            await firestore()
-              .collection('inventory')
-              .doc(addedItems[i].id)
-              .get()
+
+    Alert.alert(`እርግጠኛ ነዎት?`, ``, [
+      {
+        text: 'አዎ',
+        onPress: () => {
+          try {
+            firestore()
+              .collection('sales')
+              .add(sale)
               .then(async res => {
-                await firestore()
-                  .collection('inventory')
-                  .doc(addedItems[i].id)
-                  .update({
-                    currentCount:
-                      res.data()!.currentCount - addedItems[i].quantity,
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  });
+                for (var i in addedItems) {
+                  await firestore()
+                    .collection('inventory')
+                    .doc(addedItems[i].id)
+                    .get()
+                    .then(async res => {
+                      await firestore()
+                        .collection('inventory')
+                        .doc(addedItems[i].id)
+                        .update({
+                          currentCount:
+                            res.data()!.currentCount - addedItems[i].quantity,
+                        })
+                        .catch(err => {
+                          console.log(err);
+                        });
+                    });
+                }
               });
+            setAddedItems([]);
+            navigation.pop();
+            console.log('Adding Sale Complete!');
+          } catch (error) {
+            console.log(error);
           }
-        });
-      setAddedItems([]);
-      navigation.pop();
-      console.log('Adding Sale Complete!');
-    } catch (error) {
-      console.log(error);
-    }
+        },
+        style: 'default',
+      },
+      {
+        text: 'ተመለስ',
+        onPress: () => {},
+        style: 'default',
+      },
+    ]);
   };
 
   const handleSubmit = () => {
@@ -129,21 +201,45 @@ const NewSale = ({navigation, route}) => {
         contentContainerStyle={{
           justifyContent: 'center',
         }}>
+        {error ? (
+          <View
+            style={{
+              backgroundColor: colors.red,
+              height: 50,
+              zIndex: 10,
+              width: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              justifyContent: 'space-between',
+              paddingHorizontal: 20,
+              alignItems: 'center',
+              flexDirection: 'row',
+              borderRadius: 10,
+            }}>
+            <Text style={{color: colors.white, fontSize: 15}}>{t(error)}</Text>
+            <TouchableOpacity onPress={() => setError('')}>
+              <Icon name="close" color={colors.white} size={20} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
         <View style={styles.header}>
-          <Text style={styles.pageTitle}>አዲስ የሽያጭ ደረሰኝ</Text>
+          <Text style={styles.pageTitle}>{t('New_Sales_Reciept')}</Text>
         </View>
         <View style={styles.topInfo}>
           <View style={styles.topInfoLeft}>
-            <Text style={styles.textBold}>የካቲት 20፣ 2014</Text>
-            <Text style={styles.textLight}>የካቲት 20፣ 2014</Text>
+            <Text style={styles.textBold}>
+              {new Date().toLocaleDateString()}
+            </Text>
+            <Text style={styles.textLight}>{t('Date')}</Text>
           </View>
           <View style={styles.topInfoRight}>
             <Text style={styles.textBold}>23/20/014</Text>
-            <Text style={styles.textLight}>የደረሰኝ ቁጥር</Text>
+            <Text style={styles.textLight}>{t('Receipt_Number')}</Text>
           </View>
         </View>
         <View style={{marginTop: 20}}>
-          <Text style={styles.textBold}>ደንበኛ</Text>
+          <Text style={styles.textBold}>{t('Customer')}</Text>
           <TextInput
             style={{
               width: '95%',
@@ -161,7 +257,7 @@ const NewSale = ({navigation, route}) => {
               justifyContent: 'flex-start',
               backgroundColor: colors.white,
             }}
-            placeholder="Enter customer name"
+            placeholder={t('Enter_Customer_Name')}
             onChangeText={val => {
               setCustomer(val);
             }}
@@ -176,7 +272,7 @@ const NewSale = ({navigation, route}) => {
               styles.textBold,
               {marginVertical: 10, paddingHorizontal: 15},
             ]}>
-            የእቃዎች ዝርዝር
+            {t('Items_List')}
           </Text>
 
           <ScrollView style={{maxHeight: 300, width: '100%'}}>
@@ -203,15 +299,21 @@ const NewSale = ({navigation, route}) => {
                         <View style={{flexDirection: 'row'}}>
                           <Text style={styles.textBold}>
                             {item.quantity}
-                            <Text style={styles.textLight}> - ብዛት</Text>
+                            <Text style={styles.textLight}>
+                              {' '}
+                              - {t('Amount')}
+                            </Text>
                           </Text>
                         </View>
                       </View>
                     </View>
                     <View style={styles.RightContainer}>
                       <Text style={styles.textLight}>
-                        <Text style={styles.textBold}>{item.unitPrice}ብር </Text>
-                        /አንዱን
+                        <Text style={styles.textBold}>
+                          {item.unitPrice}
+                          {t('Birr')}
+                        </Text>
+                        /{t('Single')}
                       </Text>
                     </View>
                   </View>
@@ -231,7 +333,7 @@ const NewSale = ({navigation, route}) => {
                 ]}>
                 <Icon name="folderopen" size={25} />
                 {'  '}
-                ባዶ
+                {t('Empty')}
               </Text>
             )}
           </ScrollView>
@@ -255,7 +357,7 @@ const NewSale = ({navigation, route}) => {
                 styles.textBold,
                 {color: colors.white, textAlign: 'center'},
               ]}>
-              እቃ ጨምር
+              {t('Add_Item')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -268,10 +370,10 @@ const NewSale = ({navigation, route}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={styles.textLight}>ድምር</Text>
+              <Text style={styles.textLight}>{t('Sum')}</Text>
               <Text
                 style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                {sum} ብር
+                {sum} {t('Birr')}
               </Text>
             </View>
             <View
@@ -281,10 +383,12 @@ const NewSale = ({navigation, route}) => {
                 alignItems: 'center',
                 marginBottom: 10,
               }}>
-              <Text style={styles.textLight}>ታክስ (15% ቫት)</Text>
+              <Text style={styles.textLight}>
+                {t('Tax')} (15% {t('Vat')})
+              </Text>
               <Text
                 style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                {sum * 0.15} ብር
+                {sum * 0.15} {t('Birr')}
               </Text>
             </View>
           </View>
@@ -297,7 +401,7 @@ const NewSale = ({navigation, route}) => {
               }}>
               <Text
                 style={[styles.textBold, {fontSize: 20, fontWeight: '600'}]}>
-                አጠቃላይ ድምር
+                {t('Total')} {t('Sum')}
               </Text>
               <Text
                 style={[
@@ -309,7 +413,7 @@ const NewSale = ({navigation, route}) => {
                     textDecorationLine: 'underline',
                   },
                 ]}>
-                {total} ብር
+                {total} {t('Birr')}
               </Text>
             </View>
           </View>
@@ -322,7 +426,7 @@ const NewSale = ({navigation, route}) => {
                 styles.textBold,
                 {marginBottom: 5, paddingHorizontal: 15},
               ]}>
-              የክፍያ አይነት
+              {t('Payment')} {t('Type')}
             </Text>
             <View
               style={{
@@ -334,7 +438,32 @@ const NewSale = ({navigation, route}) => {
                 data={paymentTypes}
                 onChange={(selectedItem: ICheckboxButton) => {
                   const val = selectedItem.text;
-                  setPaymentMethod(val!.toString());
+                  let option: string;
+
+                  switch (val!.toString()) {
+                    case 'Cash':
+                      setPaymentMethod('Cash');
+                      break;
+                    case 'Debt':
+                      setPaymentMethod('Debt');
+                      break;
+                    case 'Check':
+                      setPaymentMethod('Check');
+                      break;
+
+                    case 'ካሽ':
+                      setPaymentMethod('Cash');
+                      break;
+                    case 'ዱቤ':
+                      setPaymentMethod('Debt');
+                      break;
+                    case 'ቼክ':
+                      setPaymentMethod('Check');
+                      break;
+
+                    default:
+                      break;
+                  }
                 }}
               />
             </View>
@@ -349,16 +478,16 @@ const NewSale = ({navigation, route}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(`እርግጠኛ ነዎት?`, ``, [
+              Alert.alert(t('Are_You_Sure'), ``, [
                 {
-                  text: 'አዎ',
+                  text: t('Yes'),
                   onPress: () => {
                     navigation.goBack();
                   },
                   style: 'default',
                 },
                 {
-                  text: 'ተመለስ',
+                  text: t('Cancel'),
                   onPress: () => {},
                   style: 'default',
                 },
@@ -390,25 +519,12 @@ const NewSale = ({navigation, route}) => {
                 styles.textBold,
                 {color: colors.primary, textAlign: 'center'},
               ]}>
-              ተመለስ
+              {t('Cancel')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(`እርግጠኛ ነዎት?`, ``, [
-                {
-                  text: 'አዎ',
-                  onPress: () => {
-                    handleSubmit();
-                  },
-                  style: 'default',
-                },
-                {
-                  text: 'ተመለስ',
-                  onPress: () => {},
-                  style: 'default',
-                },
-              ]);
+              addNewSale();
             }}
             style={{
               backgroundColor: colors.primary,
@@ -426,7 +542,7 @@ const NewSale = ({navigation, route}) => {
                 styles.textBold,
                 {color: colors.white, textAlign: 'center'},
               ]}>
-              ቀጥል
+              {t('Submit')}
             </Text>
             <Image
               resizeMethod="auto"

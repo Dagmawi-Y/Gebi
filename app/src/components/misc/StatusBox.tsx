@@ -5,7 +5,7 @@ import colors from '../../config/colors';
 
 const ErrorBox = ({msg, onPress, type, overlay = true}) => {
   const bg = overlay
-    ? {backgroundColor: '#00000060'}
+    ? {backgroundColor: '#00000090'}
     : {backgroundColor: '#000000000'};
 
   return (

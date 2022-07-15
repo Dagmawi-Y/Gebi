@@ -38,7 +38,7 @@ function AppDrawerNavigator() {
           swipeEdgeWidth: 150,
           headerShown: true,
           headerTintColor: colors.white,
-          headerTitle: getFocusedRouteNameFromRoute(route),
+          headerTitle: t(`${getFocusedRouteNameFromRoute(route) || 'Gebi'}`),
           headerStyle: {
             backgroundColor: colors.primary,
             borderBottomColor: colors.primary,

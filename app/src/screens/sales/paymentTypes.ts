@@ -3,7 +3,7 @@ import colors from '../../config/colors';
 export default [
   {
     id: 1,
-    text: 'ዱቤ',
+    text: 'Debt',
     fillColor: colors.primary,
     unfillColor: '#FFFFFF',
     isChecked: true,
@@ -21,7 +21,7 @@ export default [
   },
   {
     id: 2,
-    text: 'ካሽ',
+    text: 'Cash',
     fillColor: colors.primary,
     unfillColor: '#FFFFFF',
     iconStyle: {
@@ -38,7 +38,7 @@ export default [
   },
   {
     id: 3,
-    text: 'ቼክ',
+    text: 'Check',
     fillColor: colors.primary,
     unfillColor: '#FFFFFF',
     iconStyle: {

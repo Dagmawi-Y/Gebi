@@ -24,11 +24,13 @@ const UserInfoInputScreen = ({navigation}) => {
   const {user} = useContext(StateContext);
   const {isNewUser, setIsNewUser, isReady} = useContext(StateContext);
 
-  useEffect(() => {
-    !isNewUser && navigation.navigate(routes.Gebi, {screen: routes.salesNav});
-  }, []);
-
+  console.log(isReady);
   if (!isReady) return null;
+
+  useEffect(() => {
+    // !isNewUser && navigation.navigate(routes.Gebi, {screen: routes.salesNav});
+    console.log(isNewUser);
+  }, []);
   // OTP
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);

@@ -16,8 +16,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import colors from '../../config/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useTranslation} from 'react-i18next';
 
 const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
+  const {t} = useTranslation();
   const {user} = useContext(StateContext);
   const [loading, setLoading] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
@@ -141,7 +143,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 20,
                   }}>
-                  ብዛት {'(ቀሪ ብዛት: '}
+                  {t('Amount')} {`(${t('Current_Amount')}: `}
                   {detailsItem!.quantity}
                   {')'}
                 </Text>
@@ -156,7 +158,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     }
                   }}
                   value={quantity}
-                  placeholder={'Enter Quantity'}
+                  placeholder={t('Enter_Amount')}
                   keyboardType="numeric"
                   placeholderTextColor={colors.faded_grey}
                 />
@@ -170,7 +172,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 20,
                   }}>
-                  የአንዱ ዋጋ{' (የቀድሞው ዋጋ: '}
+                  {t('Unit_Price')}
+                  {` (${t('Current_Price')}: `}
                   {detailsItem!.unitPrice}
                   {')'}
                 </Text>
@@ -180,7 +183,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                   onChangeText={val => {
                     setPrice(val.replace(/[^0-9\.?]/g, ''));
                   }}
-                  placeholder={'Enter Unit Price'}
+                  placeholder={t('Enter_Unit_Price')}
                   value={price}
                   keyboardType="numeric"
                   placeholderTextColor={colors.faded_grey}
@@ -209,7 +212,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                           marginTop: 5,
                         },
                       ]}>
-                      ተመለስ
+                      {t('Cancel')}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={handleSubmit}>
@@ -231,7 +234,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                           marginTop: 5,
                         },
                       ]}>
-                      ጨምር
+                      {t('Add')}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -254,7 +257,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                   borderTopLeftRadius: 20,
                 },
               ]}>
-              እቃ ጨምር
+              {t('Add_Item')}
             </Text>
 
             <View
@@ -279,7 +282,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                   color: colors.black,
                 }}
                 autoFocus={true}
-                placeholder="ፈልግ..."
+                placeholder={`${t('Search')}...`}
                 placeholderTextColor={'#00000070'}
                 onChangeText={val => setFilterValue(val)}
               />
@@ -335,14 +338,17 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                         <Text style={styles.textBold}>{item.itemName}</Text>
                         <Text style={styles.textLight}>
                           <Text style={styles.textBold}>
-                            {item.unitPrice}ብር
+                            {item.unitPrice}
+                            {t('Birr')}
                           </Text>
-                          /አንዱን
+                          /{t('Single')}
                         </Text>
                       </View>
                     </View>
                     <View style={styles.RightContainer}>
-                      <Text style={styles.textBold}>ብዛት {item.quantity}</Text>
+                      <Text style={styles.textBold}>
+                        {t('Amount')} {item.quantity}
+                      </Text>
                     </View>
                     <Icon name="plus-circle" color={colors.black} size={30} />
                   </TouchableOpacity>

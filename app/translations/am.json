@@ -1,4 +1,13 @@
 {
+  "Wrong_Number": "ቁጥሩ ትክክል አይደለም!",
+  "Choose_Language_To_Start": "ለመጀመር ቋንቋ ይምረጡ",
+
+  "Next": "ቀጣይ",
+  "Prev": "የፊት",
+  "Skip": "ዝለል",
+  "Ready": "ዝግጁ",
+
+  "Gebi": "ገቢ",
   "Filter": "አጣራ",
   "Sales": "ሽያጭ",
   "Select_Language": "ቋንቋ ምረጥ",
@@ -6,5 +15,75 @@
   "Languages": "ቋንቋዎች",
   "English": "English",
   "Amharic": "አማርኛ",
-  "Current_Language": "ቋንቋ"
+  "Current_Language": "ቋንቋ",
+  "Logout": "ውጣ",
+  "Date": "ቀን",
+
+  "Cash": "ካሽ",
+  "Debt": "ዱቤ",
+  "Check": "ቼክ",
+
+  "Income": "ገቢ",
+  "Expense": "ወጪ",
+  "Inventory": "አቃ ክፍል",
+  "No_Sales_Yet": "እስካሁን የተካሄደ ሽያጭ ያልም።",
+  "Total_Items": "ያሉ እቃዎች",
+  "Birr": "ብር",
+  "In_Stock": "በእጅ ያል",
+  "Single": "አንዱን",
+  "Total_Price": "አጠቃላይ ድምር",
+  "Print_QR": "QR አትም",
+  "Search": "ፈልግ",
+  "Inventory_Empty": "የአቃ ክፍሉ ባዶ ነው።",
+  "Plan": "እቅድ",
+  "Profit": "ትርፍ",
+
+  "Add_New_Item": "አዲስ አቃ መመዝጋቢያ",
+  "Item_Name": "የእቃ ስም",
+  "Amount": "ብዛት",
+  "Unit_Price": "የአንዱ ዋጋ",
+  "Category": "አይነት",
+  "Unit": "መለኪያ",
+  "Supplier_Name": "የአከፋፋይ ስም",
+
+  "Add": "ጨምር",
+  "Item": "እቃ",
+  "Items": "እቃዎች",
+  "Price": "ዋጋ",
+  "Total": "አጠቃላይ",
+  "Payment": "ክፍያ",
+  "Type": "አይነት",
+  "Empty": "ባዶ",
+  "Sum": "ድምር",
+  "Vat": "ቫት",
+  "Yes": "አዎ",
+  "Cancel": "ትመለስ",
+  "Submit": "ቀጥል",
+  "Add_Item": "እቃ ጨምር",
+  "Delete": "አጥፋ",
+
+  "Current_Price": "የቀድሞው ዋጋ",
+  "Current_Amount": "የቀድሞው ብዛት",
+
+  "Enter_Unit_Price": "የአንዱን ዋጋ ያስግቡ",
+  "Enter_Amount": "ብዛት?",
+
+  "New_Sales_Reciept": "አዲስ የሽያጭ ደረሰኝ",
+  "Receipt_Number": "የደረሰኝ ቁጥር",
+  "Customer": "ደንበኛ",
+  "Items_List": "የእቃዎች ዝርዝር",
+  "Tax": "ታክስ",
+  "Enter_Customer_Name": "የ ደንብኛ ስም አስገባ",
+  "Calculator": "ማስያ",
+
+  "Are_You_Sure?": "እርግጠኛ ነዎት?",
+
+  "Please_Wait...": "እባክዎን ይጥብቁ...",
+  "Enter_Your_Phone_Number": "የስልክዎን ቁጥሮን ያስገቡ",
+  "Register_Here": "ይመዝገቡ",
+
+  "Item_Details": "ዕቃ መረጃ",
+  "Item_History": "የእቃ ታሪክ",
+  "Supplier": "አቅራቢ",
+  "Empty_Empty_Fields_Are_Not_Allowed": "ያልትሞላ ምረጃ አለ።"
 }

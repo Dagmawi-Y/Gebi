@@ -112,7 +112,7 @@ const Edit = ({route, navigation}) => {
             flex: 1,
             width: '100%',
             height: '100%',
-            backgroundColor: '#00000060',
+            backgroundColor: '#00000090',
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -145,7 +145,7 @@ const Edit = ({route, navigation}) => {
             flex: 1,
             width: '100%',
             height: '100%',
-            backgroundColor: '#00000060',
+            backgroundColor: '#00000090',
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -183,7 +183,7 @@ const Edit = ({route, navigation}) => {
             flex: 1,
             width: '100%',
             height: '100%',
-            backgroundColor: '#00000060',
+            backgroundColor: '#00000090',
             justifyContent: 'center',
             alignItems: 'center',
           }}>

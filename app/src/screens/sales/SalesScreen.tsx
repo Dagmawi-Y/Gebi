@@ -16,6 +16,7 @@ import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
+import {useTranslation} from 'react-i18next';
 
 import TopBar from '../../components/TopBar/TopBar';
 import Loading from '../../components/lotties/Loading';
@@ -26,8 +27,6 @@ import SalesListItem from './SalesListItem';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
-
-import {useTranslation} from 'react-i18next';
 
 import useFirebase from '../../utils/useFirebase';
 
@@ -99,22 +98,30 @@ export default function Items({navigation}) {
 
         <ScrollView>
           <TopBar
-            title={'የእቃ ክፍል'}
+            title={t('Inventory')}
             action={setSearchVisible}
             actionValue={searchVisible}>
             <View style={topCard.statContainer}>
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flex: 1, marginRight: 2}}>
-                  <StatCard label="ገቢ" value={'65621'} trend="positive" />
+                  <StatCard
+                    label={t('Income')}
+                    value={'65621'}
+                    trend="positive"
+                  />
                 </View>
                 <View style={{flex: 1, marginLeft: 2}}>
-                  <StatCard label="ወጪ" value={'99451'} trend="negative" />
+                  <StatCard
+                    label={t('Expense')}
+                    value={'99451'}
+                    trend="negative"
+                  />
                 </View>
               </View>
               <View style={{marginVertical: 10}}>
                 <StatCardFullWidth
-                  label="የቀኑ ትርፍ"
+                  label={t('Profit')}
                   // value={aggregate.toString()}
                   value={'65451'}
                   // trend={aggregate > 0 ? 'positive' : 'negative'}
@@ -179,14 +186,15 @@ export default function Items({navigation}) {
                 {t('Sales')}
               </Text>
 
-              {/* Filter button */}
+              {/* Filter button and filter Tag*/}
               <View style={{flexDirection: 'row', marginRight: 10}}>
                 {filterValue ? (
                   <View
                     style={{
-                      backgroundColor: colors.faded_dark,
+                      backgroundColor: colors.primary,
                       flexDirection: 'row',
                       paddingHorizontal: 5,
+                      paddingVertical: 2,
                       marginRight: 10,
                       borderRadius: 10,
                     }}>
@@ -194,7 +202,7 @@ export default function Items({navigation}) {
                       style={{
                         textAlign: 'center',
                         color: colors.white,
-                        fontSize: 25,
+                        fontSize: 20,
                         alignItems: 'center',
                       }}>
                       {filterValue}
@@ -230,7 +238,7 @@ export default function Items({navigation}) {
             ) : (
               <ScrollView style={{zIndex: -1}}>
                 {data.length == 0 ? (
-                  <EmptyBox message={'እስካሁን የተካሄደ ሽያጭ ያልም።'} />
+                  <EmptyBox message={t('No_Sales_Yet')} />
                 ) : data.length > 0 ? (
                   <View style={{backgroundColor: colors.white}}>
                     {filterVisible ? (
@@ -241,80 +249,42 @@ export default function Items({navigation}) {
                           marginLeft: 'auto',
                           backgroundColor: colors.white,
                         }}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setFilterValue('ካሽ');
-                            setFilterVisible(!filterVisible);
-                          }}>
-                          <Text
-                            style={[
-                              filterValue == 'ካሽ'
-                                ? {backgroundColor: colors.faded_dark}
-                                : {backgroundColor: colors.primary},
-                              {
-                                textAlign: 'center',
-                                color: colors.white,
+                        {['Cash', 'Debt', 'Check'].map(i => {
+                          return (
+                            <TouchableOpacity
+                              key={i}
+                              onPress={() => {
+                                setFilterValue('Cash');
+                                setFilterVisible(!filterVisible);
+                              }}>
+                              <Text
+                                style={[
+                                  filterValue == i
+                                    ? {backgroundColor: colors.faded_dark}
+                                    : {backgroundColor: colors.primary},
+                                  {
+                                    textAlign: 'center',
+                                    color: colors.white,
 
-                                marginVertical: 5,
-                                borderRadius: 10,
-                                fontSize: 25,
-                                marginRight: 10,
-                              },
-                            ]}>
-                            ካሽ
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setFilterValue('ዱቤ');
-                            setFilterVisible(!filterVisible);
-                          }}>
-                          <Text
-                            style={[
-                              filterValue == 'ዱቤ'
-                                ? {backgroundColor: colors.faded_dark}
-                                : {backgroundColor: colors.primary},
-                              {
-                                textAlign: 'center',
-                                color: colors.white,
-                                marginVertical: 5,
-                                borderRadius: 10,
-                                fontSize: 25,
-                                marginRight: 10,
-                              },
-                            ]}>
-                            ዱቤ
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setFilterValue('ቼክ');
-                            setFilterVisible(!filterVisible);
-                          }}>
-                          <Text
-                            style={[
-                              filterValue == 'ቼክ'
-                                ? {backgroundColor: colors.faded_dark}
-                                : {backgroundColor: colors.primary},
-                              {
-                                textAlign: 'center',
-                                color: colors.white,
-                                marginVertical: 5,
-                                borderRadius: 10,
-                                fontSize: 25,
-                                marginRight: 10,
-                              },
-                            ]}>
-                            ቼክ
-                          </Text>
-                        </TouchableOpacity>
+                                    marginVertical: 5,
+                                    borderRadius: 10,
+                                    fontSize: 20,
+                                    marginRight: 10,
+                                  },
+                                ]}>
+                                {t(i)}
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        })}
                       </View>
                     ) : null}
                     {data
                       .filter(saleItem => {
                         if (!filterValue) return saleItem;
                         return (
-                          saleItem.paymentMethod.toLowerCase() === filterValue
+                          saleItem.paymentMethod.toLowerCase() ===
+                          filterValue.toLowerCase()
                         );
                       })
                       .map(sale => {

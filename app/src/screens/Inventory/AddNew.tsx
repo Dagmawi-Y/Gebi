@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   TextInput,
@@ -18,8 +18,10 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
+import {useTranslation} from 'react-i18next';
 
 const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
+  const {t} = useTranslation();
   const {user} = useContext(StateContext);
 
   const [successAnimation, setSuccessAnimation] = useState(false);
@@ -51,23 +53,25 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
   };
 
   const searchItem = key => {
-    console.log(key);
     if (!key) setSearchResult([]);
     if (key) {
-      // setSearchResult([]);
       firestore()
         .collection('inventory')
+        .where('owner', '==', user.uid)
         .where('item_name', '>=', key)
         .where('item_name', '<=', key + '\uf8ff')
         .onSnapshot(qsn => {
           let result: Array<any> = [];
-          qsn.forEach(sn => {
-            result.push({
-              id: sn.id,
-              doc: sn.data(),
+          if (qsn) {
+            qsn.forEach(sn => {
+              result.push({
+                id: sn.id,
+                doc: sn.data(),
+              });
             });
-          });
-          setSearchResult(result);
+
+            setSearchResult(result);
+          }
         });
     }
   };
@@ -87,7 +91,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
   };
 
   const addNewInventory = async () => {
-    if (checkEmpty()) return raiseError('Empty Fields are not allowed');
+    if (checkEmpty())
+      return raiseError('Error:_Empty_Empty_Fields_Are_Not_allowed');
     setWrittingData(true);
 
     try {
@@ -176,7 +181,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
               flex: 1,
               width: '100%',
               height: '100%',
-              backgroundColor: '#00000060',
+              backgroundColor: '#00000090',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -209,7 +214,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
               flex: 1,
               width: '100%',
               height: '100%',
-              backgroundColor: '#00000060',
+              backgroundColor: '#00000090',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -247,7 +252,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
               flex: 1,
               width: '100%',
               height: '100%',
-              backgroundColor: '#00000060',
+              backgroundColor: '#00000090',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -291,7 +296,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
           style={{
             padding: 10,
             flex: 1,
-            backgroundColor: '#00000060',
+            backgroundColor: '#00000095',
           }}>
           <ScrollView>
             <View
@@ -317,7 +322,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                   textAlign: 'center',
                   marginVertical: 20,
                 }}>
-                የእቃ መመዝቢያ ፎርም
+                {t('Add_New_Item')}
               </Text>
               <Text
                 style={{
@@ -325,7 +330,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                   fontSize: 20,
                   marginBottom: 5,
                 }}>
-                የአከፋፋይ ስም
+                {t('Supplier_Name')}
               </Text>
               <TextInput
                 style={[styles.Input]}
@@ -344,7 +349,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                     fontSize: 20,
                     marginBottom: 5,
                   }}>
-                  የእቃ ስም
+                  {t('Item_Name')}
                 </Text>
                 <TextInput
                   style={[styles.Input]}
@@ -411,7 +416,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                       fontSize: 20,
                       marginBottom: 5,
                     }}>
-                    ብዛት
+                    {t('Amount')}
                   </Text>
                   <TextInput
                     style={[styles.Input]}
@@ -435,7 +440,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                       fontSize: 20,
                       marginBottom: 5,
                     }}>
-                    የአንዱ ዋጋ (ብር)
+                    {t('Unit_Price')} {`(${t('Birr')})`}
                   </Text>
                   <TextInput
                     style={[styles.Input]}
@@ -459,11 +464,11 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                     fontSize: 20,
                     marginBottom: 5,
                   }}>
-                  አይነት
+                  {t('Category')}
                 </Text>
                 <SelectDropdown
                   data={categories}
-                  defaultButtonText="የአቃው አይነት"
+                  defaultButtonText={t('Category')}
                   renderDropdownIcon={() => (
                     <View>
                       <Icon name="caretdown" size={20} color={colors.black} />
@@ -486,11 +491,11 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                     fontSize: 20,
                     marginBottom: 5,
                   }}>
-                  መለኪያ
+                  {t('Unit')}
                 </Text>
                 <SelectDropdown
                   data={quantifiers}
-                  defaultButtonText="የብዛት መለኪየ"
+                  defaultButtonText={t('Unit')}
                   renderDropdownIcon={() => (
                     <View>
                       <Icon name="caretdown" size={20} color={colors.black} />
@@ -520,7 +525,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                   borderRadius: 10,
                   backgroundColor: colors.primary,
                 }}>
-                <Text style={{color: colors.white, fontSize: 25}}>ጨምር</Text>
+                <Text style={{color: colors.white, fontSize: 25}}>
+                  {t('Add')}
+                </Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -529,121 +536,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
     </KeyboardAvoidingView>
   );
 };
-
-// const CustomForm = ({label, setItemName, itemName, setIsUpadate, setId}) => {
-//   // const CustomForm = ({label, data}) => {
-//   const [searchKey, setSearchKey] = useState('');
-//   const [visible, setVisible] = useState(false);
-//   // const [cachedData, setcachedData] = useState(data);
-
-//   const [data, setData] = useState([]);
-
-//   const fetchData = async () => {
-//     try {
-//       await firestore()
-//         .collection('inventory')
-//         .onSnapshot(sn => {
-//           let arr = [];
-
-//           sn.forEach(i => {
-//             let id = i.id;
-//             let itemName = i.data().item_name;
-//             arr.push({id: id, itemName: itemName});
-//           });
-//           setData(arr);
-//         });
-//     } catch (er) {
-//       console.log(er);
-//     }
-//   };
-
-//   useEffect(() => {
-//     let mounted = true;
-
-//     if (mounted) fetchData();
-
-//     return () => {
-//       mounted = false;
-//     };
-//   }, []);
-
-//   return (
-//     <KeyboardAvoidingView>
-//       <Text
-//         style={{
-//           color: colors.black,
-//           fontSize: 20,
-//           marginBottom: 5,
-//         }}>
-//         {label}
-//       </Text>
-
-//       <TextInput
-//         // onPressIn={() => setVisible(true)}
-//         style={{
-//           color: colors.black,
-//           height: 50,
-//           borderWidth: 1,
-//           padding: 10,
-//           borderRadius: 10,
-//           fontSize: 20,
-//         }}
-//         onChangeText={val => {
-//           setSearchKey(val);
-//           setItemName(val);
-//           setVisible(true);
-//           if (!val) {
-//             setIsUpadate(false);
-//             setVisible(false);
-//           }
-//         }}
-//         value={itemName}
-//         keyboardType="default"
-//         placeholderTextColor={colors.faded_grey}
-//       />
-
-//       {visible && (
-//         <ScrollView
-//           style={{
-//             zIndex: 10,
-//             backgroundColor: colors.white,
-//             padding: 10,
-//             elevation: 5,
-//             borderRadius: 10,
-//           }}>
-//           {data &&
-//             data
-//               .filter(j => {
-//                 return j.itemName
-//                   .toLowerCase()
-//                   .includes(searchKey.toLowerCase());
-//               })
-//               .map(i => (
-//                 <Pressable
-//                   onPress={() => {
-//                     setItemName(i.itemName);
-//                     setIsUpadate(false);
-//                     setVisible(false);
-//                   }}>
-//                   <Text
-//                     key={i.id}
-//                     style={{
-//                       color: colors.black,
-//                       fontSize: 20,
-//                       marginBottom: 5,
-//                       // elevation: 10,
-//                       backgroundColor: colors.white,
-//                       paddingVertical: 5,
-//                     }}>
-//                     {i.itemName}
-//                   </Text>
-//                 </Pressable>
-//               ))}
-//         </ScrollView>
-//       )}
-//     </KeyboardAvoidingView>
-//   );
-// };
 
 const styles = StyleSheet.create({
   container: {

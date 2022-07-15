@@ -1,4 +1,13 @@
 {
+  "Wrong_Number": "Wrong Number",
+  "Choose_Language_To_Start": "Choose Language To Start",
+
+  "Next": "Next",
+  "Prev": "Prev",
+  "Skip": "Skip",
+  "Ready": "Ready",
+
+  "Gebi": "Gebi",
   "Filter": "Filter",
   "Sales": "Sales",
   "Select_Language": "Select Language",
@@ -6,5 +15,75 @@
   "Languages": "Languages",
   "English": "English",
   "Amharic": "አማርኛ",
-  "Current_Language": "Current Language"
+  "Current_Language": "Current Language",
+  "Logout": "Logout",
+  "Date": "Date",
+
+  "Cash": "Cash",
+  "Debt": "Debt",
+  "Check": "Check",
+
+  "Income": "Income",
+  "Expense": "Expense",
+  "Inventory": "Inventory",
+  "No_Sales_Yet": "No Sales Yet",
+  "Total_Items": "Inventory items",
+  "Birr": "Birr",
+  "In_Stock": "In stock",
+  "Single": "Single",
+  "Total_Price": "Total price",
+  "Print_QR": "Print QR",
+  "Add_New_Item": "Add New Item",
+  "Search": "Search",
+  "Inventory_Empty": "Inventory Empty.",
+  "Plan": "Plan",
+  "Profit": "Profit",
+
+  "Supplier_Name": "የአከፋፋይ ስም",
+  "Item_Name": "Item Name",
+  "Amount": "Amount",
+  "Unit_Price": "Unit Price",
+  "Category": "Category",
+  "Unit": "Unit",
+
+  "Add": "Add",
+  "Item": "Item",
+  "Items": "Items",
+  "Price": "Price",
+  "Total": "Total",
+  "Payment": "Payment",
+  "Type": "Type",
+  "Empty": "Empty",
+  "Sum": "Sum",
+  "Vat": "Vat",
+  "Yes": "Yes",
+  "Cancel": "Cancel",
+  "Submit": "Submit",
+  "Add_Item": "Add Item",
+  "Delete": "Delete",
+
+  "Current_Price": "Prev. Price",
+  "Current_Amount": "Prev. Amount",
+
+  "Enter_Unit_Price": "የአንዱን ዋጋ ያስግቡ",
+  "Enter_Amount": "Enter Amount",
+
+  "New_Sales_Reciept": "New Sales Reciept",
+  "Receipt_Number": "Receipt Number",
+  "Customer": "Customer",
+  "Items_List": "Items List",
+  "Tax": "Tax",
+  "Enter_Customer_Name": "Enter Customer Name",
+  "Calculator": "Calculator",
+
+  "Are_You_Sure?": "Are You Sure?",
+
+  "Please_Wait...": "እባክዎን ይጥብቁ...",
+  "Enter_Your_Phone_Number": "Enter your phone Number",
+  "Register_Here": "Register Here.",
+
+  "Item_Details": "Item details",
+  "Item_History": "Stock history",
+  "Supplier": "Supplier",
+  "Empty_Empty_Fields_Are_Not_Allowed": "Empty empty fields are not allowed."
 }

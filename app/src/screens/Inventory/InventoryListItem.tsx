@@ -1,8 +1,10 @@
 import {View, StyleSheet, Text, Image} from 'react-native';
 import React from 'react';
 import colors from '../../config/colors';
+import {useTranslation} from 'react-i18next';
 
 const ListItem = ({title, unitPrice, quantity}) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.listItem}>
       <View style={styles.listLeft}>
@@ -17,8 +19,12 @@ const ListItem = ({title, unitPrice, quantity}) => {
             <Text style={styles.listTextbold}>{title}</Text>
           </View>
           <View style={styles.listdescription}>
-            <Text style={styles.listTextbold}>{unitPrice}ብር</Text>
-            <Text style={styles.listTextLight}>/አንዱን</Text>
+            <Text style={[styles.listTextbold]}>
+              {unitPrice} {t('Birr')}
+            </Text>
+            <Text style={[styles.listTextLight, {marginBottom: 2}]}>
+              /{t('Single')}
+            </Text>
           </View>
         </View>
       </View>
@@ -30,7 +36,7 @@ const ListItem = ({title, unitPrice, quantity}) => {
         </View>
         <View>
           <Text style={[styles.listTextLight, {textAlign: 'right'}]}>
-            በእጅ ያለ
+            {t('In_Stock')}
           </Text>
         </View>
       </View>
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
   },
   listdescription: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   listPriceContainer: {
     flexDirection: 'row',

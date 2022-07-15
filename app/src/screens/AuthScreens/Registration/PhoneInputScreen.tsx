@@ -21,25 +21,25 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import StatusBox from '../../../components/misc/StatusBox';
 import routes from '../../../navigation/routes';
 import {StateContext} from '../../../global/context';
+import {useTranslation} from 'react-i18next';
 
 const PhoneInputScreen = ({navigation}) => {
+  const {t} = useTranslation();
   const [phoneNumber, setphoneNumber] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const {isNewUser, setIsNewUser} = useContext(StateContext);
+  const {isNewUser, user, setIsNewUser} = useContext(StateContext);
 
   // OTP Section
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const [code, setCode] = useState('');
 
-  const handleConfirm = () => {};
-
   // Handle the button press
   async function signInWithPhoneNumber(n) {
     try {
       if (n.length > 9 || n.length < 9 || !n.startsWith('9')) {
-        setError('ቁጥሩ ትክክል አይደለም!');
+        setError(t('Wrong_Number'));
         return;
       }
       setLoading(true);
@@ -58,7 +58,7 @@ const PhoneInputScreen = ({navigation}) => {
       const user = await confirm?.confirm(code);
       setIsNewUser(user!.additionalUserInfo?.isNewUser);
       // console.log('phoneInput: ', user!.additionalUserInfo?.isNewUser);
-      navigation.navigate(routes.register);
+
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -70,6 +70,7 @@ const PhoneInputScreen = ({navigation}) => {
   // END OTP Section
 
   useEffect(() => {
+    user ? navigation.navigate(routes.register) : null;
     SystemNavigationBar.setNavigationColor(colors.light);
   }, []);
 
@@ -79,7 +80,7 @@ const PhoneInputScreen = ({navigation}) => {
     <SafeAreaView style={[styles.container]}>
       {loading ? (
         <StatusBox
-          msg={'Please wait...'}
+          msg={t('Please_Wait...')}
           type={'loading'}
           overlay={false}
           onPress={() => {}}
@@ -100,13 +101,13 @@ const PhoneInputScreen = ({navigation}) => {
                   marginTop: dimensions.height * 0.2,
                 }}>
                 <Text h3 style={{marginBottom: 40, color: colors.primary}}>
-                  ለመጀመር ይመዝገቡ
+                  {t('Register_Here')}
                 </Text>
               </View>
               <View style={{marginBottom: dimensions.height * 0.1}}>
                 <Text
                   style={{fontSize: 25, marginBottom: 5, fontWeight: 'bold'}}>
-                  የስልክዎን ቁጥር ያስገቡ
+                  {t('Enter_Your_Phone_Number')}
                 </Text>
                 <View
                   style={{
@@ -174,7 +175,7 @@ const PhoneInputScreen = ({navigation}) => {
                         fontSize: 25,
                         color: colors.white,
                       }}>
-                      ቀጥል
+                      {t('Submit')}
                     </Text>
                     <Icon name={'arrow-right'} color={'white'} size={35} />
                   </View>

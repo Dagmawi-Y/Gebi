@@ -3,6 +3,7 @@ import React from 'react';
 import {Text} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../config/colors';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   containerStyle?: ViewStyle;
@@ -17,7 +18,10 @@ export default function StatCardFullWidth({
   value,
   trend = 'positive',
 }: Props) {
+
   const positive = trend == 'positive';
+  const {t} = useTranslation();
+
   return (
     <View
       style={{
@@ -80,7 +84,7 @@ export default function StatCardFullWidth({
             fontSize: 30,
             color: trend == 'positive' ? colors.green : colors.red,
           }}>
-          {value} {`ብር`}
+          {value} {`${t('Birr')}`}
         </Text>
       </View>
     </View>

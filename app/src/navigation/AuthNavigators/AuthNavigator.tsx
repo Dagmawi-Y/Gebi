@@ -10,9 +10,14 @@ import {StateContext} from '../../global/context';
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => {
+  const {user, isReady} = useContext(StateContext);
+  if (!isReady) return null;
+
   return (
     <>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator
+        initialRouteName={user ? routes.register : routes.otp}
+        screenOptions={{headerShown: false}}>
         <Stack.Screen name={routes.otp} component={PhoneInputScreen} />
         <Stack.Screen
           name={routes.register}

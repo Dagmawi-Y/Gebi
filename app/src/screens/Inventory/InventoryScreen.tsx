@@ -16,6 +16,7 @@ import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {useTranslation} from 'react-i18next';
 
 import formatNumber from '../../utils/formatNumber';
 
@@ -31,6 +32,7 @@ import FloatingButton from '../../components/FloatingButton/FloatingButton';
 import {useRef} from 'react';
 
 export default function Items({navigation}) {
+  const {t} = useTranslation();
   const {user} = useContext(StateContext);
   const mountedRef = useRef(true);
 
@@ -110,17 +112,17 @@ export default function Items({navigation}) {
             />
           )}
           <TopBar
-            title={'የእቃ ክፍል'}
+            title={t('Inventory')}
             action={setSearchVisible}
             actionValue={searchVisible}>
             <View style={topCard.boardContainer}>
               <View style={topCard.boardCol}>
                 <Text style={topCard.boardTopTitle}>{totalItems}</Text>
-                <Text style={topCard.boardSubTitle}>ያሉ እቃዎች</Text>
+                <Text style={topCard.boardSubTitle}>{t('Total_Items')}</Text>
               </View>
               <View style={[topCard.boardCol, {alignItems: 'flex-end'}]}>
                 <Text style={topCard.boardTopTitle}>{sumPrice}</Text>
-                <Text style={topCard.boardSubTitle}>አጠቃላይ ዋጋ</Text>
+                <Text style={topCard.boardSubTitle}>{t('Total_Price')}</Text>
               </View>
             </View>
           </TopBar>
@@ -149,7 +151,7 @@ export default function Items({navigation}) {
                   color: colors.black,
                 }}
                 selectionColor="black"
-                placeholder="search..."
+                placeholder={`${t('Search')}...`}
                 onChangeText={val => {
                   setSearchKey(val);
                 }}
@@ -175,7 +177,7 @@ export default function Items({navigation}) {
                   fontSize: 20,
                   color: colors.faded_dark,
                 }}>
-                ያሉ አቃዎች
+                {t('Total_Items')}
               </Text>
 
               <TouchableOpacity
@@ -193,7 +195,7 @@ export default function Items({navigation}) {
                   style={{
                     color: colors.black,
                   }}>
-                  Print QR
+                  {t('Print_QR')}
                 </Text>
               </TouchableOpacity>
               <View style={{marginRight: 10}}>
@@ -219,7 +221,7 @@ export default function Items({navigation}) {
             ) : (
               <ScrollView>
                 {data.length == 0 ? (
-                  <EmptyBox message={'የአቃ ክፍሉ ባዶ ነው።'} />
+                  <EmptyBox message={t('Inventory_Empty')} />
                 ) : data.length > 0 ? (
                   <View>
                     {data

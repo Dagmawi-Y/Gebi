@@ -5,8 +5,10 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import routes from '../../navigation/routes';
 import {useNavigation} from '@react-navigation/native';
 import formatNumber from '../../utils/formatNumber';
+import {useTranslation} from 'react-i18next';
 
 const ListItem = (sale, navigation) => {
+  const {t} = useTranslation();
   const {invoiceNumber, customerName, date, items, paymentMethod} = sale.sale;
   const itemsLength = Object.getOwnPropertyNames(items).length;
   const [totalPrice, setTotalPrice] = useState('');
@@ -55,8 +57,11 @@ const ListItem = (sale, navigation) => {
       <View style={styles.listRight}>
         <View style={styles.listPriceContainer}>
           <Text style={[styles.listTextbold, {color: colors.green}]}>
-            {totalPrice}ብር{' '}
-            <Text style={{color: colors.yellow}}>{`(${paymentMethod})`}</Text>
+            {totalPrice}
+            {t('Birr')}{' '}
+            <Text style={{color: colors.yellow}}>{`(${t(
+              paymentMethod,
+            )})`}</Text>
           </Text>
         </View>
         <View>

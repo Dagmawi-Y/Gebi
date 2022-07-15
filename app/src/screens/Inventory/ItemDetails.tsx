@@ -17,16 +17,18 @@ import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
 import firestore from '@react-native-firebase/firestore';
+import {useTranslation} from 'react-i18next';
 
 const ItemDetails = ({route, navigation}) => {
   const {data, owner, itemId} = route.params;
+  const {t} = useTranslation();
 
   const [stockHistory, setStockHistory]: Array<any> = ([] = useState([]));
 
   const deleteItem = async () => {
-    Alert.alert(`እርግጠኛ ነዎት?`, ``, [
+    Alert.alert(t('Are_You_Sure?'), ``, [
       {
-        text: 'ቀጥል',
+        text: t('Yes'),
         onPress: async () => {
           await firestore().collection('inventory').doc(itemId).delete();
           navigation.replace(routes.inventoryHome);
@@ -34,7 +36,7 @@ const ItemDetails = ({route, navigation}) => {
         style: 'default',
       },
       {
-        text: 'ተመለስ',
+        text: t('Cancel'),
         onPress: () => {},
         style: 'cancel',
       },
@@ -66,44 +68,6 @@ const ItemDetails = ({route, navigation}) => {
   }, []);
   return (
     <SafeAreaView style={[styles.container]}>
-      {/* <View style={header.topBar}>
-        <View
-          style={{
-            marginVertical: 0,
-            marginHorizontal: 5,
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            marginBottom: 5,
-          }}>
-          <Pressable
-            onPress={() =>
-              navigation.navigate(routes.EditItem, {
-                data: data,
-                itemId: itemId,
-              })
-            }
-            style={{
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-              marginHorizontal: 10,
-            }}>
-            <Icon name="lead-pencil" size={25} color={colors.white} />
-            <Text style={{color: colors.white}}>Edit</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => deleteItem()}
-            style={{
-              alignSelf: 'flex-end',
-              marginHorizontal: 10,
-              alignItems: 'center',
-            }}>
-            <Icon name="delete" size={25} color={colors.white} />
-            <Text style={{color: colors.white}}>Delete</Text>
-          </Pressable>
-        </View>
-      </View> */}
-      {/* End Header */}
-
       <ScrollView style={{flex: 1}}>
         <View style={[styles.viewContainer]}>
           <View
@@ -114,9 +78,13 @@ const ItemDetails = ({route, navigation}) => {
               padding: 10,
               justifyContent: 'space-between',
             }}>
-            <View>
-              <Text style={styles.textBold}>የእቃ ስም</Text>
-              <Text style={styles.textLight}>{data.item_name}</Text>
+            <View style={{justifyContent: 'flex-start'}}>
+              <Text style={[styles.textBold, {marginHorizontal: 0}]}>
+                {t('Item_Name')}
+              </Text>
+              <Text style={[styles.textLight, {marginHorizontal: 10}]}>
+                {data.item_name}
+              </Text>
             </View>
             <View>
               <Image
@@ -126,24 +94,28 @@ const ItemDetails = ({route, navigation}) => {
               />
             </View>
           </View>
-          <Text style={styles.textBold}>ዕቃ መረጃ</Text>
+          <Text style={styles.textBold}>{t('Item_Details')}</Text>
           <View style={styles.boardContainer}>
             <View style={styles.boardCol}>
-              <Text style={styles.boardTopTitle}>የመሸጫ ዋጋ</Text>
-              <Text style={styles.boardSubTitle}>{data.unit_price} ብር</Text>
+              <Text style={styles.boardTopTitle}>{t('Price')}</Text>
+              <Text style={styles.boardSubTitle}>
+                {data.unit_price} {t('Birr')}
+              </Text>
             </View>
             <View style={styles.boardCol}>
-              <Text style={styles.boardTopTitle}>በእጅ ያለ</Text>
-              <Text style={styles.boardSubTitle}>{data.currentCount}</Text>
+              <Text style={styles.boardTopTitle}>{t('Total')}</Text>
+              <Text style={[styles.boardSubTitle, {textAlign: 'right'}]}>
+                {data.currentCount}
+              </Text>
             </View>
           </View>
-          <Text style={styles.textBold}>የእቃ ታሪክ</Text>
+          <Text style={styles.textBold}>{t('Item_History')}</Text>
           <View style={{marginVertical: 20}}>
             <View style={tableStyles.thead}>
-              <Text style={tableStyles.theadFont}>ዋጋ</Text>
-              <Text style={tableStyles.theadFont}>መመዝኛ</Text>
-              <Text style={tableStyles.theadFont}>አቅራቢ</Text>
-              <Text style={tableStyles.theadFont}>ቀን</Text>
+              <Text style={tableStyles.theadFont}>{t('Price')}</Text>
+              <Text style={tableStyles.theadFont}>{t('Unit')}</Text>
+              <Text style={tableStyles.theadFont}>{t('Supplier')}</Text>
+              <Text style={tableStyles.theadFont}>{t('date')}</Text>
             </View>
             {stockHistory.map(history => {
               return (
@@ -157,7 +129,7 @@ const ItemDetails = ({route, navigation}) => {
                     },
                   ]}>
                   <Text style={tableStyles.trowFont}>
-                    {history.doc.unit_price} ብር
+                    {history.doc.unit_price} {t('Birr')}
                   </Text>
                   <Text style={tableStyles.trowFont}>
                     {history.doc.initialCount} {history.doc.unit}
@@ -194,9 +166,9 @@ const ItemDetails = ({route, navigation}) => {
               color: colors.white,
               textAlign: 'center',
               fontWeight: 'bold',
-              fontSize: 25,
+              fontSize: 22,
             }}>
-            አጥፋ
+            {t('Delete')}
           </Text>
           <Icon name="delete" size={25} color={colors.white} />
         </TouchableOpacity>
@@ -224,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
   },
   boardCol: {
     justifyContent: 'center',
@@ -294,52 +266,4 @@ const tableStyles = StyleSheet.create({
   },
 });
 
-const header = StyleSheet.create({
-  topBar: {
-    // backgroundColor: colors.primary,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-  },
-  topBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 10,
-  },
-  statContainer: {
-    marginTop: 10,
-  },
-
-  // Typetwo
-  boardContainer: {
-    marginHorizontal: 5,
-    marginVertical: 20,
-    backgroundColor: 'white',
-    height: 80,
-    borderRadius: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30,
-  },
-  boardCol: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  buttonwithIcon: {
-    backgroundColor: colors.lightBlue,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderRadius: 5,
-    width: '25%',
-    padding: 10,
-    gap: 2,
-  },
-  boardTopTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: colors.black,
-  },
-  boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
-});
 export default ItemDetails;
