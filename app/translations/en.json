@@ -12,7 +12,7 @@
   "Sales": "Sales",
   "Select_Language": "Select Language",
   "Settings": "Settings",
-  "Languages": "Languages",
+  "Language": "Language",
   "English": "English",
   "Amharic": "አማርኛ",
   "Current_Language": "Current Language",
@@ -61,6 +61,7 @@
   "Submit": "Submit",
   "Add_Item": "Add Item",
   "Delete": "Delete",
+  "Roll_Back": "Roll Back",
 
   "Current_Price": "Prev. Price",
   "Current_Amount": "Prev. Amount",
@@ -68,6 +69,7 @@
   "Enter_Unit_Price": "የአንዱን ዋጋ ያስግቡ",
   "Enter_Amount": "Enter Amount",
 
+  "Sales_Receipt": "የሽያጭ ደረሰኝ",
   "New_Sales_Reciept": "New Sales Reciept",
   "Receipt_Number": "Receipt Number",
   "Customer": "Customer",

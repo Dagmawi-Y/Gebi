@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.meda.gebi.app-mergeDebugResources-30:/values-v24/values-v24.xml",
+            "outputFile": "com.meda.gebi.app-mergeDebugResources-32:/values-v24/values-v24.xml",
             "map": [
                 {
                     "source": "C:\\Users\\seidr\\.gradle\\caches\\transforms-3\\617b90748b989372a5035b8ab2bd06f3\\transformed\\appcompat-1.3.1\\res\\values-v24\\values-v24.xml",

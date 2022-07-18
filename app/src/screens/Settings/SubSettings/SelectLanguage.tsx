@@ -63,18 +63,20 @@ const LanguageSelector = () => {
         }}
         activeOpacity={0.6}
         style={{
-          backgroundColor: colors.primary,
-          paddingVertical: 20,
+          backgroundColor: colors.white,
+          paddingVertical: 10,
           paddingHorizontal: 20,
           borderRadius: 10,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
+          borderWidth: 0.4,
+          borderColor: '#00000040',
+          shadowColor: '#00000040',
+          elevation: 10,
         }}>
-        <Text style={{color: colors.white, fontSize: 25}}>
-          {t('Languages')}
-        </Text>
-        <Icon name="caretdown" color={colors.white} size={20} />
+        <Text style={{color: colors.black, fontSize: 25}}>{t('Language')}</Text>
+        <Icon name="caretdown" color={colors.black} size={20} />
       </TouchableOpacity>
 
       <Animated.View

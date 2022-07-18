@@ -12,7 +12,7 @@
   "Sales": "ሽያጭ",
   "Select_Language": "ቋንቋ ምረጥ",
   "Settings": "ቅንብር",
-  "Languages": "ቋንቋዎች",
+  "Language": "ቋንቋ",
   "English": "English",
   "Amharic": "አማርኛ",
   "Current_Language": "ቋንቋ",
@@ -61,6 +61,7 @@
   "Submit": "ቀጥል",
   "Add_Item": "እቃ ጨምር",
   "Delete": "አጥፋ",
+  "Roll_Back": "ተመላሽ አድርግ",
 
   "Current_Price": "የቀድሞው ዋጋ",
   "Current_Amount": "የቀድሞው ብዛት",
@@ -68,6 +69,7 @@
   "Enter_Unit_Price": "የአንዱን ዋጋ ያስግቡ",
   "Enter_Amount": "ብዛት?",
 
+  "Sales_Receipt": "የሽያጭ ደረሰኝ",
   "New_Sales_Reciept": "አዲስ የሽያጭ ደረሰኝ",
   "Receipt_Number": "የደረሰኝ ቁጥር",
   "Customer": "ደንበኛ",

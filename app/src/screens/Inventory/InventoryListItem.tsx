@@ -3,7 +3,7 @@ import React from 'react';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 
-const ListItem = ({title, unitPrice, quantity}) => {
+const ListItem = ({title, unitPrice, quantity, picture}) => {
   const {t} = useTranslation();
   return (
     <View style={styles.listItem}>
@@ -11,7 +11,11 @@ const ListItem = ({title, unitPrice, quantity}) => {
         <View style={styles.thumbnail}>
           <Image
             style={{width: 50, height: 50, borderRadius: 10}}
-            source={require('../../assets/images/phone_image.jpg')}
+            source={
+              picture
+                ? {uri: picture}
+                : require('../../assets/images/no_image.jpg')
+            }
           />
         </View>
         <View style={{marginLeft: 10}}>

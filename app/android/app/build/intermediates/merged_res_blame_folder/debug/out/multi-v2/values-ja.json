@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.meda.gebi.app-mergeDebugResources-30:/values-ja/values-ja.xml",
+            "outputFile": "com.meda.gebi.app-mergeDebugResources-32:/values-ja/values-ja.xml",
             "map": [
                 {
                     "source": "C:\\Users\\seidr\\.gradle\\caches\\transforms-3\\0618f8afd54eda1d3ca5867361b48ad8\\transformed\\jetified-play-services-base-18.0.1\\res\\values-ja\\values.xml",
@@ -18,6 +18,23 @@
                         "startOffsets": "2691,2795,2929,3049,3155,3287,3407,3512,3733,3867,3968,4101,4220,4340,4460,4520,4579",
                         "endColumns": "103,133,119,105,131,119,104,98,133,100,132,118,119,119,59,58,70",
                         "endOffsets": "2790,2924,3044,3150,3282,3402,3507,3606,3862,3963,4096,4215,4335,4455,4515,4574,4645"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\seidr\\.gradle\\caches\\transforms-3\\4213cb9e074d8f186381f8d02fbd6b35\\transformed\\jetified-ucrop-2.2.6-native\\res\\values-ja\\values-ja.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,97,153,208,257,301",
+                        "endColumns": "41,55,54,48,43,42",
+                        "endOffsets": "92,148,203,252,296,339"
+                    },
+                    "to": {
+                        "startLines": "53,54,55,56,57,58",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "5214,5256,5312,5367,5416,5460",
+                        "endColumns": "41,55,54,48,43,42",
+                        "endOffsets": "5251,5307,5362,5411,5455,5498"
                     }
                 },
                 {

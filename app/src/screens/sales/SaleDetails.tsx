@@ -5,11 +5,12 @@ import {
   View,
   Image,
   Alert,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {ScrollView} from 'react-native-gesture-handler';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
 import Loading from '../../components/lotties/Loading';
 import StatusBox from '../../components/misc/StatusBox';
@@ -19,8 +20,10 @@ import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 
 import receipt from './reciept';
+import {useTranslation} from 'react-i18next';
 
 const SaleDetails = ({route, navigation}) => {
+  const {t} = useTranslation();
   const {data} = route.params;
 
   const [sum, setSum] = useState(0);
@@ -117,7 +120,7 @@ const SaleDetails = ({route, navigation}) => {
   }, [data]);
 
   return (
-    <>
+    <ScrollView style={{flex: 1}}>
       {loading && (
         <StatusBox
           msg={'Please wait...'}
@@ -188,27 +191,49 @@ const SaleDetails = ({route, navigation}) => {
       <ViewShot
         ref={imageRef}
         options={{format: 'jpg', quality: 0.9}}
-        style={{backgroundColor: 'white'}}>
+        style={{backgroundColor: colors.white, paddingHorizontal: 10}}>
         <ScrollView
           contentContainerStyle={{
             justifyContent: 'center',
           }}>
           <View style={styles.header}>
-            <Text style={styles.pageTitle}>የሽያጭ ደረሰኝ</Text>
+            <Text style={styles.pageTitle}>{t('Sales_Receipt')}</Text>
           </View>
           <View style={styles.topInfo}>
             <View style={styles.topInfoLeft}>
               <Text style={styles.textBold}>{data.date}</Text>
-              <Text style={styles.textLight}>ቀን</Text>
+              <Text style={styles.textLight}>{t('Date')}</Text>
             </View>
             <View style={styles.topInfoRight}>
-              <Text style={styles.textLight}>የደረሰኝ ቁጥር</Text>
-              <Text style={styles.textBold}>23/20/014</Text>
+              <Text style={styles.textBold}>
+                {data.invoiceNumber.substring(0, 9)}
+                {'...'}
+              </Text>
+              <Text style={styles.textLight}>{t('Receipt_Number')}</Text>
             </View>
           </View>
-          <View style={{marginTop: 20}}>
-            <Text style={styles.textBold}>ደንበኛ</Text>
-            <Text style={styles.textValue}>{data.customerName}</Text>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingVertical: 10,
+              paddingHorizontal: 5,
+              borderRadius: 10,
+              backgroundColor: colors.white,
+              marginHorizontal: 5,
+              borderWidth: 0.4,
+              borderColor: '#00000040',
+              shadowColor: '#00000040',
+              elevation: 10,
+            }}>
+            <Text style={styles.textBold}>
+              {t('Customer')}
+              {':'}
+            </Text>
+            <Text style={{fontSize: 20, color: colors.faded_dark}}>
+              {data.customerName}
+            </Text>
           </View>
           <View style={styles.ListItemContainer}>
             <Text
@@ -216,24 +241,32 @@ const SaleDetails = ({route, navigation}) => {
                 styles.textBold,
                 {marginVertical: 10, paddingHorizontal: 15},
               ]}>
-              የእቃዎች ዝርዝር
+              {t('Items_List')}
             </Text>
 
             <ScrollView
-              style={{maxHeight: 300, width: '100%'}}
+              style={{width: '100%'}}
               contentContainerStyle={{paddingHorizontal: 5}}>
               {Object.keys(data.items).map(i => {
                 return (
                   <View key={Math.random()} style={styles.ListItem}>
                     <View style={styles.LeftContainer}>
                       <View style={{marginLeft: 10}}>
-                        <Text style={styles.textBold}>
+                        <Text
+                          style={{
+                            color: colors.black,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                          }}>
                           {data.items[i].itemName}
                         </Text>
                         <View style={{flexDirection: 'row'}}>
                           <Text style={styles.textBold}>
                             {data.items[i].quantity}
-                            <Text style={styles.textLight}> - ብዛት</Text>
+                            <Text style={styles.textLight}>
+                              {' '}
+                              - {t('Amount')}
+                            </Text>
                           </Text>
                         </View>
                       </View>
@@ -241,9 +274,10 @@ const SaleDetails = ({route, navigation}) => {
                     <View style={styles.RightContainer}>
                       <Text style={styles.textLight}>
                         <Text style={styles.textBold}>
-                          {data.items[i].unitPrice}ብር
+                          {data.items[i].unitPrice}
+                          {t('Birr')}
                         </Text>
-                        /አንዱን
+                        / {t('Single')}
                       </Text>
                     </View>
                   </View>
@@ -260,10 +294,10 @@ const SaleDetails = ({route, navigation}) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={styles.textLight}>ድምር</Text>
+                <Text style={styles.textLight}>{t('Sum')}</Text>
                 <Text
                   style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                  {sum} ብር
+                  {sum} {t('Birr')}
                 </Text>
               </View>
               <View
@@ -273,10 +307,12 @@ const SaleDetails = ({route, navigation}) => {
                   alignItems: 'center',
                   marginBottom: 10,
                 }}>
-                <Text style={styles.textLight}>ታክስ (15% ቫት)</Text>
+                <Text style={styles.textLight}>
+                  {t('Tax')} (15% {t('Vat')})
+                </Text>
                 <Text
                   style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                  {sum * 0.15} ብር
+                  {sum * 0.15} {t('Birr')}
                 </Text>
               </View>
             </View>
@@ -289,7 +325,7 @@ const SaleDetails = ({route, navigation}) => {
                 }}>
                 <Text
                   style={[styles.textBold, {fontSize: 20, fontWeight: '600'}]}>
-                  አጠቃላይ ድምር
+                  {t('Total')}
                 </Text>
                 <Text
                   style={[
@@ -301,7 +337,7 @@ const SaleDetails = ({route, navigation}) => {
                       textDecorationLine: 'underline',
                     },
                   ]}>
-                  {total} ብር
+                  {total} {t('Birr')}
                 </Text>
               </View>
             </View>
@@ -314,7 +350,7 @@ const SaleDetails = ({route, navigation}) => {
                   styles.textBold,
                   {marginBottom: 5, paddingHorizontal: 15},
                 ]}>
-                የክፍያ አይነት
+                {t('Payment')}
               </Text>
               <Text
                 style={[
@@ -325,7 +361,7 @@ const SaleDetails = ({route, navigation}) => {
                     color: colors.yellow,
                   },
                 ]}>
-                {data.paymentMethod}
+                {t(data.paymentMethod)}
               </Text>
             </View>
           </View>
@@ -339,16 +375,16 @@ const SaleDetails = ({route, navigation}) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            Alert.alert(`እርግጠኛ ነዎት?`, ``, [
+            Alert.alert(t('Are_You_Sure?'), ``, [
               {
-                text: 'አዎ',
+                text: t('Yes'),
                 onPress: () => {
                   rollBackSale();
                 },
                 style: 'default',
               },
               {
-                text: 'ተመለስ',
+                text: t('Cancel'),
                 onPress: () => {},
                 style: 'default',
               },
@@ -370,16 +406,17 @@ const SaleDetails = ({route, navigation}) => {
               styles.textBold,
               {color: colors.white, textAlign: 'center'},
             ]}>
-            ተመላሽ አድርግ
+            {t('Roll_Back')}
           </Text>
-          <Image
+          <Icon2 name="backup-restore" size={25} color={colors.white} />
+          {/* <Image
             resizeMethod="auto"
             source={require('../../assets/icons/arrow-right.png')}
             style={{width: 20, height: 20}}
-          />
+          /> */}
         </TouchableOpacity>
       </View>
-    </>
+    </ScrollView>
   );
 };
 
@@ -457,25 +494,30 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     alignSelf: 'center',
+
+    borderWidth: 0.4,
+    borderColor: '#00000040',
   },
   LeftContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
   },
   RightContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
     marginLeft: 'auto',
   },
   summaryContainer: {
     paddingHorizontal: 10,
     borderRadius: 10,
     marginVertical: 20,
-    elevation: 1,
+    borderWidth: 0.4,
+    borderColor: '#00000040',
+    shadowColor: '#00000040',
+    elevation: 10,
     paddingVertical: 10,
     backgroundColor: colors.white,
+    marginHorizontal: 5,
   },
   summaryTop: {
     justifyContent: 'space-between',
@@ -487,12 +529,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   paymentTypeContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     borderRadius: 10,
     marginBottom: 15,
-    elevation: 1,
     paddingVertical: 10,
     backgroundColor: colors.white,
+    borderWidth: 0.4,
+    borderColor: '#00000040',
+    shadowColor: '#00000040',
+    elevation: 10,
+    marginHorizontal: 5,
   },
   paymentTop: {
     justifyContent: 'space-between',

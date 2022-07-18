@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.meda.gebi.app-mergeDebugResources-30:/values-pt-rPT/values-pt-rPT.xml",
+            "outputFile": "com.meda.gebi.app-mergeDebugResources-32:/values-pt-rPT/values-pt-rPT.xml",
             "map": [
                 {
                     "source": "C:\\Users\\seidr\\.gradle\\caches\\transforms-3\\0618f8afd54eda1d3ca5867361b48ad8\\transformed\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",

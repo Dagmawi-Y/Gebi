@@ -90,7 +90,11 @@ const ItemDetails = ({route, navigation}) => {
               <Image
                 style={{width: 250, height: 150, borderRadius: 10}}
                 resizeMode="cover"
-                source={require('../../assets/images/phone_image.jpg')}
+                source={
+                  data.picture
+                    ? {uri: data.picture}
+                    : require('../../assets/images/no_image.jpg')
+                }
               />
             </View>
           </View>

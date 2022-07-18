@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.meda.gebi.app-mergeDebugResources-30:/values-zh-rTW/values-zh-rTW.xml",
+            "outputFile": "com.meda.gebi.app-mergeDebugResources-32:/values-zh-rTW/values-zh-rTW.xml",
             "map": [
                 {
                     "source": "C:\\Users\\seidr\\.gradle\\caches\\transforms-3\\0618f8afd54eda1d3ca5867361b48ad8\\transformed\\jetified-play-services-base-18.0.1\\res\\values-zh-rTW\\values.xml",
@@ -86,6 +86,23 @@
                         "startOffsets": "4939",
                         "endColumns": "100",
                         "endOffsets": "5035"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\seidr\\.gradle\\caches\\transforms-3\\4213cb9e074d8f186381f8d02fbd6b35\\transformed\\jetified-ucrop-2.2.6-native\\res\\values-zh-rTW\\values-zh-rTW.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,132,186,240,287",
+                        "endColumns": "76,53,53,46,116",
+                        "endOffsets": "127,181,235,282,399"
+                    },
+                    "to": {
+                        "startLines": "53,54,55,56,57",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "5040,5117,5171,5225,5272",
+                        "endColumns": "76,53,53,46,116",
+                        "endOffsets": "5112,5166,5220,5267,5384"
                     }
                 }
             ]

@@ -8,17 +8,22 @@ import {
   TouchableOpacity,
   Pressable,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+
 import LottieView from 'lottie-react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Autocomplete from 'react-native-autocomplete-input';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/EvilIcons';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
   const {t} = useTranslation();
@@ -30,7 +35,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
 
   const [errorMessage, setErrorNessage] = useState('');
 
-  const [id, setId] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [itemName, setItemName] = useState('');
   const [quantity, setAmount] = useState('');
@@ -39,6 +43,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
   const [unitPrice, setUnitPrice] = useState('');
   const [category, setCategory] = useState('');
   const [isUpdate, setIsUpdate] = useState(false);
+  const [transferRate, setTransferRate] = useState(0);
 
   const [searchResult, setSearchResult]: Array<any> = useState([]);
   const [itemId, setItemId]: Array<any> = useState('');
@@ -50,6 +55,20 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
     setSuccessAnimation(false);
     setFailedAnimation(false);
     setWrittingData(false);
+  };
+
+  const pickImage = type => {
+    type == 'image'
+      ? ImagePicker.openPicker({})
+          .then(image => {
+            setPhoto(image.path);
+          })
+          .catch(err => console.log(err))
+      : ImagePicker.openCamera({useFrontCamera: false})
+          .then(image => {
+            setPhoto(image.path);
+          })
+          .catch(err => console.log(err));
   };
 
   const searchItem = key => {
@@ -81,84 +100,100 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
     if (!itemName) return true;
     if (!quantity) return true;
     if (!unit) return true;
-    // if (!photo) return true;
+    if (!photo) return true;
     if (!unitPrice) return true;
     return false;
   };
+
   const raiseError = msg => {
     setErrorNessage(msg);
     setFailedAnimation(true);
   };
 
   const addNewInventory = async () => {
-    if (checkEmpty())
-      return raiseError('Error:_Empty_Empty_Fields_Are_Not_allowed');
+    if (checkEmpty()) return raiseError('Empty_Empty_Fields_Are_Not_Allowed');
     setWrittingData(true);
-
     try {
-      if (itemId) {
-        await firestore()
-          .collection('inventory')
-          .doc(itemId)
-          .update({
-            unit_price: unitPrice,
-            currentCount: firestore.FieldValue.increment(parseFloat(quantity)),
-          })
-          .then(res => {
-            firestore().collection('stock').add({
-              item_id: itemId,
-              supplier_name: supplierName,
-              initialCount: quantity,
-              category: category,
-              unit_price: unitPrice,
-              unit: unit,
-              owner: user.uid,
-              date: new Date().toLocaleDateString(),
-            });
-          });
+      const reference = storage().ref(`image_${Date.now()}`);
+      const pathToFile = photo;
+      const task = reference.putFile(pathToFile);
 
-        setWrittingData(false);
-        setSuccessAnimation(true);
-        setTimeout(() => {
-          setSuccessAnimation(false);
-          setAddNewModalVisible(false);
-        }, 500);
-        setTimeout(() => {
-          setAddNewModalVisible(false);
-        }, 600);
-      } else {
-        await firestore()
-          .collection('inventory')
-          .add({
-            owner: user.uid,
-            item_name: itemName,
-            unit_price: unitPrice,
-            currentCount: quantity,
-          })
-          .then(res => {
-            const item_id = res['_documentPath']['_parts'][1];
-            firestore().collection('stock').add({
-              item_id: item_id,
-              supplier_name: supplierName,
-              initialCount: quantity,
-              category: category,
-              unit_price: unitPrice,
-              unit: unit,
-              owner: user.uid,
-              date: new Date().toLocaleDateString(),
-            });
-          });
+      task.on('state_changed', taskSnapshot => {
+        setTransferRate(taskSnapshot.bytesTransferred);
+      });
 
-        setWrittingData(false);
-        setSuccessAnimation(true);
-        setTimeout(() => {
-          setSuccessAnimation(false);
-          setAddNewModalVisible(false);
-        }, 500);
-        setTimeout(() => {
-          setAddNewModalVisible(false);
-        }, 600);
-      }
+      task
+        .then(async res => {
+          const fileUrl = await reference.getDownloadURL();
+
+          if (itemId) {
+            await firestore()
+              .collection('inventory')
+              .doc(itemId)
+              .update({
+                unit_price: unitPrice,
+                currentCount: firestore.FieldValue.increment(
+                  parseFloat(quantity),
+                ),
+              })
+              .then(res => {
+                firestore().collection('stock').add({
+                  item_id: itemId,
+                  supplier_name: supplierName,
+                  initialCount: quantity,
+                  category: category,
+                  unit_price: unitPrice,
+                  unit: unit,
+                  owner: user.uid,
+                  date: new Date().toLocaleDateString(),
+                });
+              });
+
+            setWrittingData(false);
+            setSuccessAnimation(true);
+            setTimeout(() => {
+              setSuccessAnimation(false);
+              setAddNewModalVisible(false);
+            }, 500);
+            setTimeout(() => {
+              setAddNewModalVisible(false);
+            }, 600);
+          } else {
+            await firestore()
+              .collection('inventory')
+              .add({
+                owner: user.uid,
+                item_name: itemName,
+                unit_price: unitPrice,
+                currentCount: quantity,
+                picture: fileUrl,
+              })
+              .then(res => {
+                const item_id = res['_documentPath']['_parts'][1];
+                firestore().collection('stock').add({
+                  item_id: item_id,
+                  supplier_name: supplierName,
+                  initialCount: quantity,
+                  category: category,
+                  unit_price: unitPrice,
+                  unit: unit,
+                  owner: user.uid,
+                  date: new Date().toLocaleDateString(),
+                });
+              });
+
+            setWrittingData(false);
+            setSuccessAnimation(true);
+            setTimeout(() => {
+              setSuccessAnimation(false);
+              setAddNewModalVisible(false);
+            }, 500);
+            setTimeout(() => {
+              setAddNewModalVisible(false);
+            }, 600);
+          }
+        })
+        .catch(err => console.log(err));
     } catch (error) {
       setWrittingData(false);
       raiseError(`Something went wrong.\nTry again.`);
@@ -258,7 +293,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
             }}>
             <View
               style={{
-                height: 250,
+                height: 200,
                 borderRadius: 20,
                 aspectRatio: 1,
                 backgroundColor: '#fff',
@@ -273,22 +308,15 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                 source={require('../../assets/failed.json')}
                 speed={1.3}
                 autoPlay
-                loop={false}
+                loop={true}
               />
               <Text
                 style={{
                   fontSize: 20,
                   textAlign: 'center',
                 }}>
-                {errorMessage}
+                {t(errorMessage)}
               </Text>
-              <Icon
-                name="reload1"
-                size={25}
-                color={colors.primary}
-                style={{alignSelf: 'center', marginTop: 40}}
-                onPress={addNewInventory}
-              />
             </View>
           </Pressable>
         ) : null}
@@ -320,10 +348,105 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
                   fontSize: 30,
                   color: colors.primary,
                   textAlign: 'center',
-                  marginVertical: 20,
+                  marginVertical: 5,
                 }}>
                 {t('Add_New_Item')}
               </Text>
+
+              <View
+                style={{
+                  marginBottom: 10,
+                  height: 150,
+                  width: '80%',
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {photo ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View>
+                      <Image
+                        source={{
+                          uri: photo,
+                        }}
+                        style={{
+                          width: 145,
+                          borderRadius: 10,
+                          aspectRatio: 1,
+                        }}
+                        resizeMode="cover"
+                      />
+                      <TouchableOpacity
+                        onPress={() => setPhoto('')}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          right: 0,
+                          zIndex: 10,
+                          backgroundColor: colors.red,
+                          borderRadius: 30,
+                          height: 30,
+                          width: 30,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <Icon2 name="close" size={25} color={colors.white} />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View>
+                      <TouchableOpacity onPress={() => pickImage('image')}>
+                        <Icon2
+                          name="image"
+                          size={50}
+                          color={colors.black}
+                          style={{marginBottom: 15}}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => pickImage('camera')}>
+                        <Icon2 name="camera" size={50} color={colors.black} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginBottom: 10,
+                    }}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginBottom: 10,
+                        flexDirection: 'row',
+                      }}>
+                      <TouchableOpacity onPress={() => pickImage('image')}>
+                        <Icon2
+                          name="image"
+                          size={65}
+                          color={colors.black}
+                          style={{marginRight: 15}}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => pickImage('camera')}>
+                        <Icon2 name="camera" size={65} color={colors.black} />
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text style={{color: colors.black, fontSize: 20}}>
+                      የእቃ ፎቶ ማያያዣ
+                    </Text>
+                  </View>
+                )}
+              </View>
               <Text
                 style={{
                   color: colors.black,

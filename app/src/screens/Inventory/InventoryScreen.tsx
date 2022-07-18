@@ -247,6 +247,7 @@ export default function Items({navigation}) {
                               title={item.doc.item_name}
                               unitPrice={item.doc.unit_price}
                               quantity={item.doc.currentCount}
+                              picture={item.doc.picture}
                             />
                           </TouchableOpacity>
                         );

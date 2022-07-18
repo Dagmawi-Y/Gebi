@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useRef} from 'react';
 import {
   View,
   TextInput,
@@ -7,7 +7,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
+  Animated,
   Pressable,
   StatusBar,
 } from 'react-native';
@@ -42,7 +42,17 @@ export default function Items({navigation}) {
   const [filterValue, setFilterValue] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
 
+  const progress = useRef(new Animated.Value(0)).current;
+
   // const data = useFirebase(user);
+
+  const animate = val => {
+    let to = !filterVisible ? 1 : 0;
+    Animated.spring(progress, {
+      toValue: to,
+      useNativeDriver: true,
+    }).start();
+  };
 
   const getSales = async () => {
     setLoading(true);
@@ -205,11 +215,13 @@ export default function Items({navigation}) {
                         fontSize: 20,
                         alignItems: 'center',
                       }}>
-                      {filterValue}
+                      {t(filterValue)}
                       {'  '}
                     </Text>
                     <TouchableOpacity
-                      onPress={() => setFilterValue('')}
+                      onPress={() => {
+                        setFilterValue('');
+                      }}
                       style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Icon name="close" color={colors.white} size={20} />
                     </TouchableOpacity>
@@ -218,6 +230,7 @@ export default function Items({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     setFilterVisible(!filterVisible);
+                    animate(!filterVisible);
                   }}
                   style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text
@@ -236,78 +249,80 @@ export default function Items({navigation}) {
             {loading ? (
               <Loading size={100} />
             ) : (
-              <ScrollView style={{zIndex: -1}}>
-                {data.length == 0 ? (
-                  <EmptyBox message={t('No_Sales_Yet')} />
-                ) : data.length > 0 ? (
-                  <View style={{backgroundColor: colors.white}}>
-                    {filterVisible ? (
-                      <View
-                        style={{
-                          width: '30%',
-                          justifyContent: 'space-between',
-                          marginLeft: 'auto',
-                          backgroundColor: colors.white,
-                        }}>
-                        {['Cash', 'Debt', 'Check'].map(i => {
+              <>
+                {filterVisible ? (
+                  <View
+                    style={{
+                      width: '30%',
+                      justifyContent: 'space-between',
+                      marginLeft: 'auto',
+                    }}>
+                    {['Cash', 'Debt', 'Check'].map(i => {
+                      return (
+                        <TouchableOpacity
+                          key={i}
+                          onPress={() => {
+                            setFilterValue(i);
+                            setFilterVisible(!filterVisible);
+                          }}>
+                          <Text
+                            style={[
+                              filterValue == i
+                                ? {backgroundColor: colors.faded_dark}
+                                : {backgroundColor: colors.primary},
+                              {
+                                textAlign: 'center',
+                                color: colors.white,
+                                marginVertical: 5,
+                                borderRadius: 10,
+                                fontSize: 20,
+                                marginRight: 10,
+                              },
+                            ]}>
+                            {t(i)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                ) : null}
+
+                <ScrollView style={{zIndex: -1}}>
+                  {data.length == 0 ? (
+                    <EmptyBox message={t('No_Sales_Yet')} />
+                  ) : data.length > 0 ? (
+                    <View
+                      style={{backgroundColor: colors.white, elevation: 10}}>
+                      {data
+                        .filter(saleItem => {
+                          if (!filterValue) return saleItem;
+                          return (
+                            saleItem.paymentMethod.toLowerCase() ===
+                            filterValue.toLowerCase()
+                          );
+                        })
+                        .map(sale => {
                           return (
                             <TouchableOpacity
-                              key={i}
+                              activeOpacity={0.5}
+                              key={sale.id}
                               onPress={() => {
-                                setFilterValue('Cash');
-                                setFilterVisible(!filterVisible);
+                                const id = sale.id;
+                                navigation.navigate(routes.saleDetails, {
+                                  data: sale,
+                                });
                               }}>
-                              <Text
-                                style={[
-                                  filterValue == i
-                                    ? {backgroundColor: colors.faded_dark}
-                                    : {backgroundColor: colors.primary},
-                                  {
-                                    textAlign: 'center',
-                                    color: colors.white,
-
-                                    marginVertical: 5,
-                                    borderRadius: 10,
-                                    fontSize: 20,
-                                    marginRight: 10,
-                                  },
-                                ]}>
-                                {t(i)}
-                              </Text>
+                              <SalesListItem
+                                sale={sale}
+                                navigation={navigation}
+                              />
                             </TouchableOpacity>
                           );
                         })}
-                      </View>
-                    ) : null}
-                    {data
-                      .filter(saleItem => {
-                        if (!filterValue) return saleItem;
-                        return (
-                          saleItem.paymentMethod.toLowerCase() ===
-                          filterValue.toLowerCase()
-                        );
-                      })
-                      .map(sale => {
-                        return (
-                          <TouchableOpacity
-                            activeOpacity={0.5}
-                            key={sale.id}
-                            onPress={() => {
-                              const id = sale.id;
-                              navigation.navigate(routes.saleDetails, {
-                                data: sale,
-                              });
-                            }}>
-                            <SalesListItem
-                              sale={sale}
-                              navigation={navigation}
-                            />
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </View>
-                ) : null}
-              </ScrollView>
+                    </View>
+                  ) : null}
+                </ScrollView>
+              </>
             )}
           </View>
         </ScrollView>
