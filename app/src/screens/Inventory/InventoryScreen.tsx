@@ -54,8 +54,10 @@ export default function Items({navigation}) {
         parseFloat(it.doc.currentCount) * parseFloat(it.doc.unit_price);
     });
 
-    setTotalItems(formatNumber(sumItem));
-    setSumPrice(formatNumber(sumItemPrice));
+    if (mountedRef) {
+      setTotalItems(formatNumber(sumItem));
+      setSumPrice(formatNumber(sumItemPrice));
+    }
   };
 
   const getInventory = async () => {
@@ -72,8 +74,11 @@ export default function Items({navigation}) {
               doc: documentSnapshot.data(),
             });
           });
-          setData(result);
-          reCalculate(result);
+
+          if (mountedRef) {
+            setData(result);
+            reCalculate(result);
+          }
         });
 
       setLoading(false);

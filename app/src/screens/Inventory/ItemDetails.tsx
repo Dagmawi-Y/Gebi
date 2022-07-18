@@ -17,7 +17,9 @@ import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import {useTranslation} from 'react-i18next';
+import formatNumber from '../../utils/formatNumber';
 
 const ItemDetails = ({route, navigation}) => {
   const {data, owner, itemId} = route.params;
@@ -30,6 +32,8 @@ const ItemDetails = ({route, navigation}) => {
       {
         text: t('Yes'),
         onPress: async () => {
+          let pictureRef = storage().refFromURL(data.picture);
+          pictureRef.delete().catch(err => console.log(err));
           await firestore().collection('inventory').doc(itemId).delete();
           navigation.replace(routes.inventoryHome);
         },
@@ -103,13 +107,13 @@ const ItemDetails = ({route, navigation}) => {
             <View style={styles.boardCol}>
               <Text style={styles.boardTopTitle}>{t('Price')}</Text>
               <Text style={styles.boardSubTitle}>
-                {data.unit_price} {t('Birr')}
+                {formatNumber(data.unit_price)} {t('Birr')}
               </Text>
             </View>
             <View style={styles.boardCol}>
               <Text style={styles.boardTopTitle}>{t('Total')}</Text>
               <Text style={[styles.boardSubTitle, {textAlign: 'right'}]}>
-                {data.currentCount}
+                {formatNumber(data.currentCount)}
               </Text>
             </View>
           </View>
@@ -133,10 +137,10 @@ const ItemDetails = ({route, navigation}) => {
                     },
                   ]}>
                   <Text style={tableStyles.trowFont}>
-                    {history.doc.unit_price} {t('Birr')}
+                    {formatNumber(history.doc.unit_price)} {t('Birr')}
                   </Text>
                   <Text style={tableStyles.trowFont}>
-                    {history.doc.initialCount} {history.doc.unit}
+                    {formatNumber(history.doc.initialCount)} {history.doc.unit}
                   </Text>
                   <Text style={tableStyles.trowFont}>
                     {history.doc.supplier_name}

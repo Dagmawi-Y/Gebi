@@ -12,8 +12,8 @@ import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
-import Loading from '../../components/lotties/Loading';
 import StatusBox from '../../components/misc/StatusBox';
+import formatNumber from '../../utils/formatNumber';
 
 import RNPrint from 'react-native-print';
 import ViewShot from 'react-native-view-shot';
@@ -120,7 +120,7 @@ const SaleDetails = ({route, navigation}) => {
   }, [data]);
 
   return (
-    <ScrollView style={{flex: 1}}>
+    <>
       {loading && (
         <StatusBox
           msg={'Please wait...'}
@@ -129,294 +129,305 @@ const SaleDetails = ({route, navigation}) => {
           onPress={() => {}}
         />
       )}
-      <View style={{backgroundColor: colors.white, width: '100%'}}>
-        <TouchableOpacity
-          style={{
-            justifyContent: 'flex-end',
-            marginLeft: 'auto',
-          }}
-          onPress={() => setMenuvisible(!menuvisible)}>
-          <Icon
-            name={!menuvisible ? 'sharealt' : 'close'}
-            size={25}
-            color={colors.primary}
-            style={{margin: 5, marginLeft: 'auto'}}
-          />
-        </TouchableOpacity>
-      </View>
-      {menuvisible ? (
-        <View
-          style={{
-            backgroundColor: 'white',
-            elevation: 10,
-            position: 'absolute',
-            right: 30,
-            zIndex: 10,
-            top: 30,
-            width: 100,
-            justifyContent: 'space-around',
-            paddingHorizontal: 10,
-            height: 100,
-            borderRadius: 15,
-            borderTopRightRadius: 0,
-            alignItems: 'flex-start',
-            borderWidth: 0.6,
-            borderColor: '#00000040',
-          }}>
+      <ScrollView style={{flex: 1}}>
+        <View style={{backgroundColor: colors.white, width: '100%'}}>
           <TouchableOpacity
             style={{
-              alignItems: 'center',
-              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              marginLeft: 'auto',
             }}
-            onPress={() => print()}>
-            <Icon name={'pdffile1'} size={30} color={colors.primary} />
-            <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
-              PDF
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-            onPress={() => capture()}>
-            <Icon name={'picture'} size={30} color={colors.primary} />
-            <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
-              Photo
-            </Text>
+            onPress={() => setMenuvisible(!menuvisible)}>
+            <Icon
+              name={!menuvisible ? 'sharealt' : 'close'}
+              size={25}
+              color={colors.primary}
+              style={{margin: 5, marginLeft: 'auto'}}
+            />
           </TouchableOpacity>
         </View>
-      ) : null}
-
-      <ViewShot
-        ref={imageRef}
-        options={{format: 'jpg', quality: 0.9}}
-        style={{backgroundColor: colors.white, paddingHorizontal: 10}}>
-        <ScrollView
-          contentContainerStyle={{
-            justifyContent: 'center',
-          }}>
-          <View style={styles.header}>
-            <Text style={styles.pageTitle}>{t('Sales_Receipt')}</Text>
-          </View>
-          <View style={styles.topInfo}>
-            <View style={styles.topInfoLeft}>
-              <Text style={styles.textBold}>{data.date}</Text>
-              <Text style={styles.textLight}>{t('Date')}</Text>
-            </View>
-            <View style={styles.topInfoRight}>
-              <Text style={styles.textBold}>
-                {data.invoiceNumber.substring(0, 9)}
-                {'...'}
-              </Text>
-              <Text style={styles.textLight}>{t('Receipt_Number')}</Text>
-            </View>
-          </View>
+        {menuvisible ? (
           <View
             style={{
-              marginTop: 20,
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingVertical: 10,
-              paddingHorizontal: 5,
-              borderRadius: 10,
-              backgroundColor: colors.white,
-              marginHorizontal: 5,
-              borderWidth: 0.4,
-              borderColor: '#00000040',
-              shadowColor: '#00000040',
+              backgroundColor: 'white',
               elevation: 10,
+              position: 'absolute',
+              right: 30,
+              zIndex: 10,
+              top: 30,
+              width: 100,
+              justifyContent: 'space-around',
+              paddingHorizontal: 10,
+              height: 100,
+              borderRadius: 15,
+              borderTopRightRadius: 0,
+              alignItems: 'flex-start',
+              borderWidth: 0.6,
+              borderColor: '#00000040',
             }}>
-            <Text style={styles.textBold}>
-              {t('Customer')}
-              {':'}
-            </Text>
-            <Text style={{fontSize: 20, color: colors.faded_dark}}>
-              {data.customerName}
-            </Text>
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+              onPress={() => print()}>
+              <Icon name={'pdffile1'} size={30} color={colors.primary} />
+              <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
+                PDF
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+              onPress={() => capture()}>
+              <Icon name={'picture'} size={30} color={colors.primary} />
+              <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
+                Photo
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.ListItemContainer}>
-            <Text
-              style={[
-                styles.textBold,
-                {marginVertical: 10, paddingHorizontal: 15},
-              ]}>
-              {t('Items_List')}
-            </Text>
+        ) : null}
 
-            <ScrollView
-              style={{width: '100%'}}
-              contentContainerStyle={{paddingHorizontal: 5}}>
-              {Object.keys(data.items).map(i => {
-                return (
-                  <View key={Math.random()} style={styles.ListItem}>
-                    <View style={styles.LeftContainer}>
-                      <View style={{marginLeft: 10}}>
-                        <Text
-                          style={{
-                            color: colors.black,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                          }}>
-                          {data.items[i].itemName}
-                        </Text>
-                        <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.textBold}>
-                            {data.items[i].quantity}
-                            <Text style={styles.textLight}>
-                              {' '}
-                              - {t('Amount')}
-                            </Text>
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                    <View style={styles.RightContainer}>
-                      <Text style={styles.textLight}>
-                        <Text style={styles.textBold}>
-                          {data.items[i].unitPrice}
-                          {t('Birr')}
-                        </Text>
-                        / {t('Single')}
-                      </Text>
-                    </View>
-                  </View>
-                );
-              })}
-            </ScrollView>
-          </View>
-
-          <View style={styles.summaryContainer}>
-            <View style={styles.summaryTop}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <Text style={styles.textLight}>{t('Sum')}</Text>
-                <Text
-                  style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                  {sum} {t('Birr')}
-                </Text>
+        <ViewShot
+          ref={imageRef}
+          options={{format: 'jpg', quality: 0.9}}
+          style={{backgroundColor: colors.white, paddingHorizontal: 10}}>
+          <ScrollView
+            contentContainerStyle={{
+              justifyContent: 'center',
+            }}>
+            <View style={styles.header}>
+              <Text style={styles.pageTitle}>{t('Sales_Receipt')}</Text>
+            </View>
+            <View style={styles.topInfo}>
+              <View style={styles.topInfoLeft}>
+                <Text style={styles.textBold}>{data.date}</Text>
+                <Text style={styles.textLight}>{t('Date')}</Text>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 10,
-                }}>
-                <Text style={styles.textLight}>
-                  {t('Tax')} (15% {t('Vat')})
+              <View style={styles.topInfoRight}>
+                <Text style={styles.textBold}>
+                  {data.invoiceNumber.substring(0, 9)}
+                  {'...'}
                 </Text>
-                <Text
-                  style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                  {sum * 0.15} {t('Birr')}
-                </Text>
+                <Text style={styles.textLight}>{t('Receipt_Number')}</Text>
               </View>
             </View>
-            <View style={styles.summaryBottom}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
+            <View
+              style={{
+                marginTop: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 10,
+                paddingHorizontal: 5,
+                borderRadius: 10,
+                backgroundColor: colors.white,
+                marginHorizontal: 5,
+                borderWidth: 0.4,
+                borderColor: '#00000040',
+                shadowColor: '#00000040',
+                elevation: 10,
+              }}>
+              <Text style={styles.textBold}>
+                {t('Customer')}
+                {':'}
+              </Text>
+              <Text style={{fontSize: 20, color: colors.faded_dark}}>
+                {data.customerName}
+              </Text>
+            </View>
+            <View style={styles.ListItemContainer}>
+              <Text
+                style={[
+                  styles.textBold,
+                  {marginVertical: 10, paddingHorizontal: 15},
+                ]}>
+                {t('Items_List')}
+              </Text>
+
+              <ScrollView
+                style={{width: '100%'}}
+                contentContainerStyle={{paddingHorizontal: 5}}>
+                {Object.keys(data.items).map(i => {
+                  return (
+                    <View key={Math.random()} style={styles.ListItem}>
+                      <View style={styles.LeftContainer}>
+                        <View style={{marginLeft: 10}}>
+                          <Text
+                            style={{
+                              color: colors.black,
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>
+                            {data.items[i].itemName}
+                          </Text>
+                          <View style={{flexDirection: 'row'}}>
+                            <Text style={styles.textBold}>
+                              {formatNumber(data.items[i].quantity)}
+                              <Text style={styles.textLight}>
+                                {' '}
+                                - {t('Amount')}
+                              </Text>
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View style={styles.RightContainer}>
+                        <Text style={styles.textLight}>
+                          <Text style={styles.textBold}>
+                            {formatNumber(data.items[i].unitPrice)}
+                            {t('Birr')}
+                          </Text>
+                          / {t('Single')}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+
+            <View style={styles.summaryContainer}>
+              <View style={styles.summaryTop}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={styles.textLight}>{t('Sum')}</Text>
+                  <Text
+                    style={[
+                      styles.textBold,
+                      {textAlign: 'right', fontSize: 20},
+                    ]}>
+                    {formatNumber(sum)} {t('Birr')}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 10,
+                  }}>
+                  <Text style={styles.textLight}>
+                    {t('Tax')} (15% {t('Vat')})
+                  </Text>
+                  <Text
+                    style={[
+                      styles.textBold,
+                      {textAlign: 'right', fontSize: 20},
+                    ]}>
+                    {formatNumber(sum * 0.15)} {t('Birr')}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.summaryBottom}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={[
+                      styles.textBold,
+                      {fontSize: 20, fontWeight: '600'},
+                    ]}>
+                    {t('Total')}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.textBold,
+                      {
+                        textAlign: 'right',
+                        fontSize: 25,
+                        textDecorationStyle: 'solid',
+                        textDecorationLine: 'underline',
+                      },
+                    ]}>
+                    {formatNumber(total)} {t('Birr')}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.paymentTypeContainer}>
+              <View style={styles.paymentTop}>
                 <Text
-                  style={[styles.textBold, {fontSize: 20, fontWeight: '600'}]}>
-                  {t('Total')}
+                  style={[
+                    styles.textBold,
+                    {marginBottom: 5, paddingHorizontal: 15},
+                  ]}>
+                  {t('Payment')}
                 </Text>
                 <Text
                   style={[
                     styles.textBold,
                     {
-                      textAlign: 'right',
-                      fontSize: 25,
-                      textDecorationStyle: 'solid',
-                      textDecorationLine: 'underline',
+                      marginBottom: 5,
+                      paddingHorizontal: 15,
+                      color: colors.yellow,
                     },
                   ]}>
-                  {total} {t('Birr')}
+                  {t(data.paymentMethod)}
                 </Text>
               </View>
             </View>
-          </View>
+          </ScrollView>
+        </ViewShot>
 
-          <View style={styles.paymentTypeContainer}>
-            <View style={styles.paymentTop}>
-              <Text
-                style={[
-                  styles.textBold,
-                  {marginBottom: 5, paddingHorizontal: 15},
-                ]}>
-                {t('Payment')}
-              </Text>
-              <Text
-                style={[
-                  styles.textBold,
-                  {
-                    marginBottom: 5,
-                    paddingHorizontal: 15,
-                    color: colors.yellow,
-                  },
-                ]}>
-                {t(data.paymentMethod)}
-              </Text>
-            </View>
-          </View>
-        </ScrollView>
-      </ViewShot>
-
-      <View
-        style={{
-          paddingHorizontal: 10,
-          marginTop: 20,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert(t('Are_You_Sure?'), ``, [
-              {
-                text: t('Yes'),
-                onPress: () => {
-                  rollBackSale();
-                },
-                style: 'default',
-              },
-              {
-                text: t('Cancel'),
-                onPress: () => {},
-                style: 'default',
-              },
-            ]);
-          }}
+        <View
           style={{
-            backgroundColor: colors.red,
-            height: 60,
-            marginBottom: 5,
-            paddingHorizontal: 20,
-            justifyContent: 'space-between',
-            width: 'auto',
-            alignItems: 'center',
-            borderRadius: 30,
-            flexDirection: 'row',
+            paddingHorizontal: 10,
+            marginTop: 20,
           }}>
-          <Text
-            style={[
-              styles.textBold,
-              {color: colors.white, textAlign: 'center'},
-            ]}>
-            {t('Roll_Back')}
-          </Text>
-          <Icon2 name="backup-restore" size={25} color={colors.white} />
-          {/* <Image
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(t('Are_You_Sure?'), ``, [
+                {
+                  text: t('Yes'),
+                  onPress: () => {
+                    rollBackSale();
+                  },
+                  style: 'default',
+                },
+                {
+                  text: t('Cancel'),
+                  onPress: () => {},
+                  style: 'default',
+                },
+              ]);
+            }}
+            style={{
+              backgroundColor: colors.red,
+              height: 60,
+              marginBottom: 5,
+              paddingHorizontal: 20,
+              justifyContent: 'space-between',
+              width: 'auto',
+              alignItems: 'center',
+              borderRadius: 30,
+              flexDirection: 'row',
+            }}>
+            <Text
+              style={[
+                styles.textBold,
+                {color: colors.white, textAlign: 'center'},
+              ]}>
+              {t('Roll_Back')}
+            </Text>
+            <Icon2 name="backup-restore" size={25} color={colors.white} />
+            {/* <Image
             resizeMethod="auto"
             source={require('../../assets/icons/arrow-right.png')}
             style={{width: 20, height: 20}}
           /> */}
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

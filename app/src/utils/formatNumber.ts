@@ -1,3 +1,3 @@
 export default function formatNumber(num) {
-  return String(num.toString()).replace(/(.)(?=(\d{3})+$)/g, '$1,');
+  return String(num.toString()).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

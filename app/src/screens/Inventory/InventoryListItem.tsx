@@ -2,6 +2,7 @@ import {View, StyleSheet, Text, Image} from 'react-native';
 import React from 'react';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
+import formatNumber from '../../utils/formatNumber';
 
 const ListItem = ({title, unitPrice, quantity, picture}) => {
   const {t} = useTranslation();
@@ -24,7 +25,7 @@ const ListItem = ({title, unitPrice, quantity, picture}) => {
           </View>
           <View style={styles.listdescription}>
             <Text style={[styles.listTextbold]}>
-              {unitPrice} {t('Birr')}
+              {formatNumber(unitPrice)} {t('Birr')}
             </Text>
             <Text style={[styles.listTextLight, {marginBottom: 2}]}>
               /{t('Single')}
@@ -35,7 +36,7 @@ const ListItem = ({title, unitPrice, quantity, picture}) => {
       <View style={styles.listRight}>
         <View style={styles.listPriceContainer}>
           <Text style={[styles.listTextbold, {color: colors.black}]}>
-            {quantity}
+            {formatNumber(quantity)}
           </Text>
         </View>
         <View>
