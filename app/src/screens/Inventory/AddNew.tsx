@@ -13,40 +13,34 @@ import {
 import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import {useTranslation} from 'react-i18next';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import LottieView from 'lottie-react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import Autocomplete from 'react-native-autocomplete-input';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
-import {useTranslation} from 'react-i18next';
-import ImagePicker from 'react-native-image-crop-picker';
 
-const AddNew = ({addNewModalVisible, setAddNewModalVisible, data}) => {
+const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const {t} = useTranslation();
   const {user} = useContext(StateContext);
 
-  const [successAnimation, setSuccessAnimation] = useState(false);
-  const [failedAnimation, setFailedAnimation] = useState(false);
-  const [writtingData, setWrittingData] = useState(false);
-
-  const [errorMessage, setErrorNessage] = useState('');
-
-  const [supplierName, setSupplierName] = useState('');
-  const [itemName, setItemName] = useState('');
-  const [quantity, setAmount] = useState('');
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
-  const [unitPrice, setUnitPrice] = useState('');
-  const [category, setCategory] = useState('');
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [transferRate, setTransferRate] = useState(0);
-
-  const [searchResult, setSearchResult]: Array<any> = useState([]);
   const [itemId, setItemId]: Array<any> = useState('');
+  const [category, setCategory] = useState('');
+  const [itemName, setItemName] = useState('');
+  const [quantity, setAmount] = useState('');
+  const [unitPrice, setUnitPrice] = useState('');
+  const [supplierName, setSupplierName] = useState('');
+  const [writtingData, setWrittingData] = useState(false);
+  const [errorMessage, setErrorNessage] = useState('');
+  const [failedAnimation, setFailedAnimation] = useState(false);
+  const [successAnimation, setSuccessAnimation] = useState(false);
+  const [searchResult, setSearchResult]: Array<any> = useState([]);
 
   const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
   const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];

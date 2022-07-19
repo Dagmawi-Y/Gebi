@@ -38,12 +38,19 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
 
   const handleSubmit = () => {
     if (quantityInputError) return;
+    let totalItems = quantity ? quantity : selectedItem[0].quantity;
+    let unitSalePrice = price ? price : selectedItem[0].unitPrice;
+    let salePofit =
+      totalItems * unitSalePrice - totalItems * selectedItem[0].unitPrice;
+
     const newItem = {
       listId: new Date(),
       id: selectedItem[0].id,
       itemName: selectedItem[0].itemName,
-      unitPrice: price ? price : selectedItem[0].unitPrice,
-      quantity: quantity ? quantity : selectedItem[0].quantity,
+      salePofit: salePofit,
+      originalPrice: selectedItem[0].unitPrice,
+      unitPrice: unitSalePrice,
+      quantity: totalItems,
     };
     setAddedItems([...addedItems, newItem]);
     setIsModalVisible(false);

@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import colors from '../../config/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ListItem, Text} from '@rneui/themed';
@@ -15,34 +15,21 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TopBar from '../../components/TopBar/TopBar';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
+import {StateContext} from '../../global/context';
+import {useTranslation} from 'react-i18next';
+import formatNumber from '../../utils/formatNumber';
 
 export default function Expenses({navigation}: any) {
   let dimensions = Dimensions.get('window');
+  const {t} = useTranslation();
+  const {totalExpense, setTotalExpense} = useContext(StateContext);
+  const {totalProfit, SetTotalProfit} = useContext(StateContext);
+  const {totalIncome, SetTotalIncome} = useContext(StateContext);
+
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <TopBar title={'የእቃ ክፍል'} action={() => {}} actionValue={''}>
-          <View style={topCard.statContainer}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{flex: 1, marginRight: 2}}>
-                <StatCard label="ገቢ" value={'65621'} trend="positive" />
-              </View>
-              <View style={{flex: 1, marginLeft: 2}}>
-                <StatCard label="ወጪ" value={'99451'} trend="negative" />
-              </View>
-            </View>
-            <View style={{marginVertical: 10}}>
-              <StatCardFullWidth
-                label="የቀኑ ትርፍ"
-                // value={aggregate.toString()}
-                value={'65451'}
-                // trend={aggregate > 0 ? 'positive' : 'negative'}
-                trend={'negative'}
-              />
-            </View>
-          </View>
-        </TopBar>
+        <TopBar />
         <View style={styles.contentContainer}>
           <View
             style={{

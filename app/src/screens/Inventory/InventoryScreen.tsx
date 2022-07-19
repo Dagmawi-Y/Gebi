@@ -90,7 +90,6 @@ export default function Items({navigation}) {
 
   useEffect(() => {
     mountedRef && getInventory();
-
     return () => {
       mountedRef.current = false;
     };

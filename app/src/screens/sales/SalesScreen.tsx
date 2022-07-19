@@ -29,12 +29,17 @@ import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
 import useFirebase from '../../utils/useFirebase';
+import formatNumber from '../../utils/formatNumber';
 
 export default function Items({navigation}) {
   const {user} = useContext(StateContext);
   const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
+  const {totalExpense, setTotalExpense} = useContext(StateContext);
+  const {totalProfit, SetTotalProfit} = useContext(StateContext);
+  const {totalIncome, SetTotalIncome} = useContext(StateContext);
+
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
 
@@ -45,6 +50,23 @@ export default function Items({navigation}) {
   const progress = useRef(new Animated.Value(0)).current;
 
   // const data = useFirebase(user);
+
+  const totalCalc = data => {
+    let totalSaleExpense: number = 0;
+    let totalSaleProfit: number = 0;
+    let totalSaleIncome: number = 0;
+    data.forEach(i => {
+      Object.keys(i.items).map(key => {
+        totalSaleIncome = totalSaleIncome + parseFloat(i.items[key].unitPrice);
+        totalSaleProfit = totalSaleProfit + parseFloat(i.items[key].salePofit);
+        totalSaleExpense =
+          totalSaleExpense + parseFloat(i.items[key].originalPrice);
+      });
+    });
+    setTotalExpense(totalSaleExpense);
+    SetTotalProfit(totalSaleProfit);
+    SetTotalIncome(totalSaleIncome);
+  };
 
   const animate = val => {
     let to = !filterVisible ? 1 : 0;
@@ -65,18 +87,19 @@ export default function Items({navigation}) {
           querySnapshot.forEach(sn => {
             const item = {
               id: sn.id,
+              date: sn.data().date,
               customerName: sn.data().customerName,
               invoiceNumber: sn.data().invoiceNumber,
-              date: sn.data().date,
               items: sn.data().items,
-              owner: sn.data().owner,
               paymentMethod: sn.data().paymentMethod,
+              saleProfit: sn.data().saleProfit,
             };
             result.push(item);
           });
           setData(result);
         });
 
+      if (data) totalCalc(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -86,8 +109,16 @@ export default function Items({navigation}) {
 
   useEffect(() => {
     let mounted = true;
+    data && totalCalc(data);
+
+    return () => {
+      mounted = false;
+    };
+  }, [data]);
+
+  useEffect(() => {
+    let mounted = true;
     mounted && getSales();
-    // if (result) setData(result);
 
     return () => {
       mounted = false;
@@ -107,40 +138,7 @@ export default function Items({navigation}) {
         />
 
         <ScrollView>
-          <TopBar
-            title={t('Inventory')}
-            action={setSearchVisible}
-            actionValue={searchVisible}>
-            <View style={topCard.statContainer}>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flex: 1, marginRight: 2}}>
-                  <StatCard
-                    label={t('Income')}
-                    value={'65621'}
-                    trend="positive"
-                  />
-                </View>
-                <View style={{flex: 1, marginLeft: 2}}>
-                  <StatCard
-                    label={t('Expense')}
-                    value={'99451'}
-                    trend="negative"
-                  />
-                </View>
-              </View>
-              <View style={{marginVertical: 10}}>
-                <StatCardFullWidth
-                  label={t('Profit')}
-                  // value={aggregate.toString()}
-                  value={'65451'}
-                  // trend={aggregate > 0 ? 'positive' : 'negative'}
-                  trend={'negative'}
-                />
-              </View>
-            </View>
-          </TopBar>
-
+          <TopBar />
           {searchVisible && (
             <View
               style={{

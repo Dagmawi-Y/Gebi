@@ -9,19 +9,26 @@ type Props = {
   containerStyle?: ViewStyle;
   label: string;
   value: string;
-  trend?: 'positive' | 'negative';
+  trend?: 'positive' | 'negative' | 'neutral';
 };
 
-export default function StatCardFullWidth({
-  containerStyle,
-  label,
-  value,
-  trend = 'positive',
-}: Props) {
-
+export default function StatCardFullWidth({containerStyle, label, value, trend}: Props) {
   const positive = trend == 'positive';
   const {t} = useTranslation();
 
+  const color =
+    trend == 'positive'
+      ? colors.green
+      : trend == 'negative'
+      ? colors.red
+      : colors.black;
+
+  const icon =
+    trend == 'positive'
+      ? 'long-arrow-up'
+      : trend == 'negative'
+      ? 'long-arrow-down'
+      : 'minus';
   return (
     <View
       style={{
@@ -29,37 +36,32 @@ export default function StatCardFullWidth({
         height: 60,
         borderRadius: 10,
         flexDirection: 'row',
-        // flex:1,
+        justifyContent: 'center',
         ...{...(containerStyle ?? ({} as any))},
       }}>
       <View
         style={{
           height: '100%',
-          width: '30%',
-          marginRight: 20,
+          marginRight: 10,
           paddingLeft: 10,
-          //   flex: 1,
           alignItems: 'flex-start',
           justifyContent: 'center',
         }}>
         <View
           style={{
-            // padding: 10,
-            // margin: 5,
             width: 50,
             height: 50,
-            backgroundColor: positive
-              ? 'hsla(151, 65%, 45%, 0.3)'
-              : 'rgba(242, 71, 80,0.3)',
+            backgroundColor:
+              trend == 'positive'
+                ? colors.green
+                : trend == 'negative'
+                ? colors.red
+                : colors.white,
             borderRadius: 10,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Icon
-            name={positive ? 'long-arrow-up' : 'long-arrow-down'}
-            size={25}
-            color="green"
-          />
+          <Icon name={icon} size={25} color={colors.white} />
         </View>
       </View>
 
@@ -68,13 +70,14 @@ export default function StatCardFullWidth({
           alignItems: 'center',
           height: '100%',
           justifyContent: 'space-evenly',
-          // paddingLeft: '0%',
         }}>
         <Text
           h4
           h4Style={[
             {fontSize: 16, color: '#77869E'},
-            {color: trend == 'positive' ? colors.green : colors.red},
+            {
+              color: color,
+            },
           ]}>
           {label}
         </Text>
@@ -82,7 +85,7 @@ export default function StatCardFullWidth({
           style={{
             fontWeight: 'bold',
             fontSize: 30,
-            color: trend == 'positive' ? colors.green : colors.red,
+            color: color,
           }}>
           {value} {`${t('Birr')}`}
         </Text>

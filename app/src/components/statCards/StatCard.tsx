@@ -44,9 +44,7 @@ export default function StatCard({
           style={{
             width: 50,
             height: 50,
-            backgroundColor: positive
-              ? 'rgba(27, 199, 115,0.3)'
-              : 'rgba(242, 71, 80,0.3)',
+            backgroundColor: positive ? colors.green : colors.red,
             borderRadius: 10,
             alignItems: 'center',
             justifyContent: 'center',
@@ -54,7 +52,7 @@ export default function StatCard({
           <Icon
             name={positive ? 'long-arrow-up' : 'long-arrow-down'}
             size={30}
-            color={positive ? '#1BC773' : 'rgb(242, 71, 80)'}
+            color={colors.white}
           />
         </View>
       </View>

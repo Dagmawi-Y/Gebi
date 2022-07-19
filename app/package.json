@@ -34,7 +34,6 @@
     "react-is": "^18.2.0",
     "react-native": "^0.68.2",
     "react-native-app-intro-slider": "^4.0.4",
-    "react-native-autocomplete-input": "^5.1.0",
     "react-native-bouncy-checkbox": "^2.1.10",
     "react-native-bouncy-checkbox-group": "^0.1.0",
     "react-native-fs": "^2.20.0",

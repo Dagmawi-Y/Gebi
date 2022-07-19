@@ -8,26 +8,24 @@ import {
   Alert,
 } from 'react-native';
 import React, {useContext, useEffect, useState, useRef} from 'react';
-import colors from '../../config/colors';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {ScrollView} from 'react-native-gesture-handler';
-
 import firestore from '@react-native-firebase/firestore';
-
-import AddItem from './AddItem';
-
+import Icon from 'react-native-vector-icons/AntDesign';
+import {useTranslation} from 'react-i18next';
 import BouncyCheckboxGroup, {
   ICheckboxButton,
 } from 'react-native-bouncy-checkbox-group';
+
 import {StateContext} from '../../global/context';
-import {useTranslation} from 'react-i18next';
+import colors from '../../config/colors';
+import AddItem from './AddItem';
+import formatNumber from '../../utils/formatNumber';
 
 const NewSale = ({navigation, route}) => {
   const {t} = useTranslation();
   const {user} = useContext(StateContext);
 
   const [error, setError] = useState('');
-
   const mountedRef = useRef(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
@@ -37,7 +35,7 @@ const NewSale = ({navigation, route}) => {
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const categories = ['ABC Bldg', 'Another Building', 'Kalkidan'];
+  const categories = ['ABC Bldg', 'Another Building', 'Category two'];
 
   const paymentTypes = [
     {
@@ -115,7 +113,7 @@ const NewSale = ({navigation, route}) => {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
       setTimeout(() => {
         setError('');
-      }, 2000);
+      }, 3000);
       return;
     }
 
@@ -189,6 +187,29 @@ const NewSale = ({navigation, route}) => {
 
   return (
     <>
+      {error ? (
+        <View
+          style={{
+            backgroundColor: colors.red,
+            height: 50,
+            zIndex: 10,
+            width: '90%',
+            position: 'absolute',
+            top: 5,
+            right: 5,
+            justifyContent: 'space-between',
+            paddingHorizontal: 10,
+            paddingLeft: 20,
+            alignItems: 'center',
+            flexDirection: 'row',
+            borderRadius: 10,
+          }}>
+          <Text style={{color: colors.white, fontSize: 15}}>{t(error)}</Text>
+          <TouchableOpacity onPress={() => setError('')}>
+            <Icon name="close" color={colors.white} size={20} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
       {isModalVisible ? (
         <AddItem
           setIsModalVisible={setIsModalVisible}
@@ -201,28 +222,6 @@ const NewSale = ({navigation, route}) => {
         contentContainerStyle={{
           justifyContent: 'center',
         }}>
-        {error ? (
-          <View
-            style={{
-              backgroundColor: colors.red,
-              height: 50,
-              zIndex: 10,
-              width: '100%',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              justifyContent: 'space-between',
-              paddingHorizontal: 20,
-              alignItems: 'center',
-              flexDirection: 'row',
-              borderRadius: 10,
-            }}>
-            <Text style={{color: colors.white, fontSize: 15}}>{t(error)}</Text>
-            <TouchableOpacity onPress={() => setError('')}>
-              <Icon name="close" color={colors.white} size={20} />
-            </TouchableOpacity>
-          </View>
-        ) : null}
         <View style={styles.header}>
           <Text style={styles.pageTitle}>{t('New_Sales_Reciept')}</Text>
         </View>
@@ -298,7 +297,7 @@ const NewSale = ({navigation, route}) => {
                         <Text style={styles.textBold}>{item.itemName}</Text>
                         <View style={{flexDirection: 'row'}}>
                           <Text style={styles.textBold}>
-                            {item.quantity}
+                            {formatNumber(item.quantity)}
                             <Text style={styles.textLight}>
                               {' '}
                               - {t('Amount')}
@@ -310,7 +309,7 @@ const NewSale = ({navigation, route}) => {
                     <View style={styles.RightContainer}>
                       <Text style={styles.textLight}>
                         <Text style={styles.textBold}>
-                          {item.unitPrice}
+                          {formatNumber(item.unitPrice)}
                           {t('Birr')}
                         </Text>
                         /{t('Single')}
@@ -373,7 +372,7 @@ const NewSale = ({navigation, route}) => {
               <Text style={styles.textLight}>{t('Sum')}</Text>
               <Text
                 style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                {sum} {t('Birr')}
+                {formatNumber(sum)} {t('Birr')}
               </Text>
             </View>
             <View
@@ -388,7 +387,7 @@ const NewSale = ({navigation, route}) => {
               </Text>
               <Text
                 style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
-                {sum * 0.15} {t('Birr')}
+                {formatNumber(sum * 0.15)} {t('Birr')}
               </Text>
             </View>
           </View>
@@ -413,7 +412,7 @@ const NewSale = ({navigation, route}) => {
                     textDecorationLine: 'underline',
                   },
                 ]}>
-                {total} {t('Birr')}
+                {formatNumber(total)} {t('Birr')}
               </Text>
             </View>
           </View>

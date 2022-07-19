@@ -15,6 +15,10 @@ const StateContextProvider = ({children}) => {
   const [addNewModalVisible, setAdNewModalVisible] = useState(false);
   const {i18n} = useTranslation();
 
+  const [totalExpense, setTotalExpense] = useState(0);
+  const [totalProfit, SetTotalProfit] = useState(0);
+  const [totalIncome, SetTotalIncome] = useState(0);
+
   const [curlang, setCurlang] = useState('');
   const [introDone, setIntroDone] = useState(false);
 
@@ -25,10 +29,16 @@ const StateContextProvider = ({children}) => {
     initializing,
     headerVisible,
     addNewModalVisible,
+    totalExpense,
+    totalProfit,
+    totalIncome,
     isNewUser,
     isReady,
     setIsReady,
     setIsNewUser,
+    SetTotalProfit,
+    SetTotalIncome,
+    setTotalExpense,
     setAdNewModalVisible,
     setHeaderVisible,
     setInitializing,

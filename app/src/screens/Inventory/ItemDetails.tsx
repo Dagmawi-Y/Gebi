@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import colors from '../../config/colors';
@@ -20,12 +20,28 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
+import {StateContext} from '../../global/context';
 
 const ItemDetails = ({route, navigation}) => {
   const {data, owner, itemId} = route.params;
+  const {user} = useContext(StateContext);
   const {t} = useTranslation();
 
   const [stockHistory, setStockHistory]: Array<any> = ([] = useState([]));
+
+  const deleteStock = async () => {
+    let batch = firestore().batch();
+    const sales = await firestore()
+      .collection('stock')
+      .where('owner', '==', user.uid)
+      .where('item_id', '==', itemId)
+      .get();
+
+    sales.forEach(sale => {
+      batch.delete(sale.ref);
+    });
+    return batch.commit();
+  };
 
   const deleteItem = async () => {
     Alert.alert(t('Are_You_Sure?'), ``, [
@@ -35,6 +51,7 @@ const ItemDetails = ({route, navigation}) => {
           let pictureRef = storage().refFromURL(data.picture);
           pictureRef.delete().catch(err => console.log(err));
           await firestore().collection('inventory').doc(itemId).delete();
+          deleteStock();
           navigation.replace(routes.inventoryHome);
         },
         style: 'default',
