@@ -77,6 +77,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
       );
     }
   };
+
   const getItems = () => {
     firestore()
       .collection('inventory')
@@ -124,7 +125,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
       task
         .then(async res => {
           const fileUrl = await reference.getDownloadURL();
+          if (searchResult.length) {
+            console.log(searchResult);
+            setWrittingData(false);
+            raiseError('Item_Duplicate');
 
+            return;
+          }
           if (itemId) {
             await firestore()
               .collection('inventory')
@@ -290,7 +297,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
               flex: 1,
               width: '100%',
               height: '100%',
-              backgroundColor: '#00000090',
+              backgroundColor: '#00000099',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -320,6 +327,21 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                 }}>
                 {t(errorMessage)}
               </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setFailedAnimation(false);
+                  setWrittingData(false);
+                  setSuccessAnimation(false);
+                }}
+                style={{
+                  backgroundColor: colors.primary,
+                  paddingHorizontal: 30,
+                  paddingVertical: 5,
+                  marginTop: 20,
+                  borderRadius: 10,
+                }}>
+                <Icon name="back" color={colors.white} size={20} />
+              </TouchableOpacity>
             </View>
           </Pressable>
         ) : null}
