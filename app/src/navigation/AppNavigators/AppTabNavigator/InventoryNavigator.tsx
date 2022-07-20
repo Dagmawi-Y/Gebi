@@ -4,13 +4,14 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 
-import {StatusBar, View, Text} from 'react-native';
+
 import routes from './../../routes';
 import InventoryScreen from '../../../screens/Inventory/InventoryScreen';
 import ItemDetails from '../../../screens/Inventory/ItemDetails';
 import colors from '../../../config/colors';
 import Edit from '../../../screens/Inventory/Edit';
 import CustomMenu from '../../../components/misc/CustomMenu';
+import AddNewCategory from '../../../screens/Inventory/AddNewCategory';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,7 @@ const InventoryNavigator = ({navigation}) => {
           },
         }}>
         <Stack.Screen name={routes.inventoryHome} component={InventoryScreen} />
+        <Stack.Screen name={routes.addNewCategory} component={AddNewCategory} />
         <Stack.Screen
           name={routes.itemDetails}
           options={{headerShown: false}}

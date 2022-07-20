@@ -5,6 +5,7 @@ export default {
   black: '#042E6C',
   white: '#fff',
   transWhite: '#ffffff30',
+  transBlack: '#00000090',
   medium: '#6e6969',
   light: '#F2F4F5',
   lightBlue: '#DFE7F5',

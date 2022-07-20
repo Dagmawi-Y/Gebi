@@ -4,6 +4,7 @@ export default Object.freeze({
   inventoryHome: 'InventoryScreen',
   sales: 'SalesHome',
   addItem: 'Add Item',
+  addNewCategory: 'Add Category',
   saleDetails: 'saleDetail',
   salesNav: 'Sales',
   expensesNav: 'Expense',

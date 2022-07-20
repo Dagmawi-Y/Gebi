@@ -15,10 +15,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {useTranslation} from 'react-i18next';
-
+import LottieView from 'lottie-react-native';
 import formatNumber from '../../utils/formatNumber';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/EvilIcons';
 
 import TopBar from '../../components/TopBar/TopBar';
 import Loading from '../../components/lotties/Loading';
@@ -30,6 +31,7 @@ import routes from '../../navigation/routes';
 import AddNew from './AddNew';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 import {useRef} from 'react';
+import ImageSelector from '../../components/ImageSelector/ImageSelector';
 
 export default function Items({navigation}) {
   const {t} = useTranslation();
@@ -44,6 +46,7 @@ export default function Items({navigation}) {
   const [sumPrice, setSumPrice] = useState('0');
   const [totalItems, setTotalItems] = useState('0');
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
+  const [categories, setCategories]: Array<any> = useState([]);
 
   const reCalculate = dt => {
     let sumItem = 0;
@@ -88,8 +91,31 @@ export default function Items({navigation}) {
     }
   };
 
+  const getCategories = () => {
+    firestore()
+      .collection('categories')
+      .where('owner', '==', user.uid)
+      .onSnapshot(qsn => {
+        let result: Array<any> = [];
+        if (qsn) {
+          qsn.forEach(sn => {
+            result.push({
+              id: sn.data().id,
+              name:
+                sn.data().name.substring(0, 1).toUpperCase() +
+                sn.data().name.substring(1),
+            });
+          });
+          setCategories(result);
+        }
+      });
+  };
+
   useEffect(() => {
-    mountedRef && getInventory();
+    if (mountedRef) {
+      getInventory();
+      getCategories();
+    }
     return () => {
       mountedRef.current = false;
     };
@@ -101,6 +127,7 @@ export default function Items({navigation}) {
         action={setAddNewModalVisible}
         value={addNewModalVisible}
       />
+
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle={'light-content'}
@@ -170,7 +197,10 @@ export default function Items({navigation}) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginVertical: 5,
+                marginTop: 3,
+                paddingBottom: 3,
+                borderBottomWidth: 0.4,
+                borderColor: '#00000080',
               }}>
               <Text
                 style={{
@@ -186,9 +216,7 @@ export default function Items({navigation}) {
                   styles.buttonwithIcon,
                   {marginLeft: 'auto', marginRight: 10},
                 ]}
-                onPress={() =>
-                  navigation.navigate('AuthNavigator', {screen: 'Login'})
-                }>
+                onPress={() => {}}>
                 <Image
                   source={require('./qr_icon.png')}
                   style={{width: 20, height: 20}}></Image>
@@ -221,39 +249,67 @@ export default function Items({navigation}) {
               <Loading size={100} />
             ) : (
               <ScrollView>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(routes.addNewCategory)}
+                  style={{
+                    backgroundColor: colors.primary,
+                    borderRadius: 10,
+                    padding: 10,
+                    flexDirection: 'row',
+                    width: 150,
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    marginVertical: 5,
+                  }}>
+                  <Icon name="plus" color={colors.white} size={15} />
+                  <Text style={{color: colors.white, fontSize: 15}}>
+                    {t('Add_New_Category')}
+                  </Text>
+                </TouchableOpacity>
+
                 {data.length == 0 ? (
                   <EmptyBox message={t('Inventory_Empty')} />
                 ) : data.length > 0 ? (
-                  <View>
-                    {data
-                      .filter(dt =>
-                        dt.doc.item_name
-                          .toLowerCase()
-                          .includes(searchKey.toLowerCase()),
-                      )
-                      .map(item => {
-                        return (
-                          <TouchableOpacity
-                            activeOpacity={0.5}
-                            key={item.id}
-                            onPress={() => {
-                              const id = item.id;
-                              navigation.navigate(routes.itemDetails, {
-                                data: item.doc,
-                                owner: item.doc.owner,
-                                itemId: id,
-                              });
-                            }}>
-                            <InvetoryListItem
-                              title={item.doc.item_name}
-                              unitPrice={item.doc.unit_price}
-                              quantity={item.doc.currentCount}
-                              picture={item.doc.picture}
-                            />
-                          </TouchableOpacity>
-                        );
-                      })}
-                  </View>
+                  categories.map(i => (
+                    <View key={i.id}>
+                      <Text style={{color: colors.black, fontSize: 20}}>
+                        {i.name}
+                      </Text>
+                      {data
+                        .filter(dt =>
+                          dt.doc.item_name
+                            .toLowerCase()
+                            .includes(searchKey.toLowerCase()),
+                        )
+                        .filter(
+                          dt =>
+                            dt.doc.category.toLowerCase() ==
+                            i.name.toLowerCase(),
+                        )
+                        .map(item => {
+                          return (
+                            <TouchableOpacity
+                              key={item.id}
+                              activeOpacity={0.5}
+                              onPress={() => {
+                                const id = item.id;
+                                navigation.navigate(routes.itemDetails, {
+                                  data: item.doc,
+                                  owner: item.doc.owner,
+                                  itemId: id,
+                                });
+                              }}>
+                              <InvetoryListItem
+                                title={item.doc.item_name}
+                                unitPrice={item.doc.unit_price}
+                                quantity={item.doc.currentCount}
+                                picture={item.doc.picture}
+                              />
+                            </TouchableOpacity>
+                          );
+                        })}
+                    </View>
+                  ))
                 ) : null}
               </ScrollView>
             )}

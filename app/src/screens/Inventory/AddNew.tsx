@@ -14,15 +14,14 @@ import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {useTranslation} from 'react-i18next';
-import ImagePicker from 'react-native-image-crop-picker';
 
 import LottieView from 'lottie-react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Icon2 from 'react-native-vector-icons/EvilIcons';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
+import ImageSelector from '../../components/ImageSelector/ImageSelector';
 
 const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const {t} = useTranslation();
@@ -31,7 +30,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
   const [itemId, setItemId]: Array<any> = useState('');
-  const [category, setCategory] = useState('');
+  const [itemCategory, setItemCategory] = useState('');
   const [itemName, setItemName] = useState('');
   const [quantity, setAmount] = useState('');
   const [unitPrice, setUnitPrice] = useState('');
@@ -45,27 +44,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
   const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
-  const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];
-
-  const reset = () => {
-    setSuccessAnimation(false);
-    setFailedAnimation(false);
-    setWrittingData(false);
-  };
-
-  const pickImage = type => {
-    type == 'image'
-      ? ImagePicker.openPicker({})
-          .then(image => {
-            setPhoto(image.path);
-          })
-          .catch(err => console.log(err))
-      : ImagePicker.openCamera({useFrontCamera: false})
-          .then(image => {
-            setPhoto(image.path);
-          })
-          .catch(err => console.log(err));
-  };
+  const [categories, setCategories]: Array<any> = useState([]);
 
   const searchItem = key => {
     if (!key) setSearchResult([]);
@@ -93,6 +72,24 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
           });
 
           setAllItems(result);
+        }
+      });
+  };
+
+  const getCategories = () => {
+    firestore()
+      .collection('categories')
+      .where('owner', '==', user.uid)
+      .onSnapshot(qsn => {
+        let result: Array<any> = [];
+        if (qsn) {
+          qsn.forEach(sn => {
+            result.push(
+              sn.data().name.substring(0, 1).toUpperCase() +
+                sn.data().name.substring(1),
+            );
+          });
+          setCategories(result);
         }
       });
   };
@@ -126,7 +123,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
         .then(async res => {
           const fileUrl = await reference.getDownloadURL();
           if (searchResult.length) {
-            console.log(searchResult);
             setWrittingData(false);
             raiseError('Item_Duplicate');
 
@@ -147,7 +143,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   item_id: itemId,
                   supplier_name: supplierName,
                   initialCount: quantity,
-                  category: category,
                   unit_price: unitPrice,
                   unit: unit,
                   owner: user.uid,
@@ -173,6 +168,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                 unit_price: unitPrice,
                 currentCount: quantity,
                 picture: fileUrl,
+                category: itemCategory.toLowerCase(),
               })
               .then(res => {
                 const item_id = res['_documentPath']['_parts'][1];
@@ -180,7 +176,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   item_id: item_id,
                   supplier_name: supplierName,
                   initialCount: quantity,
-                  category: category,
                   unit_price: unitPrice,
                   unit: unit,
                   owner: user.uid,
@@ -209,6 +204,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
 
   useEffect(() => {
     getItems();
+    getCategories();
   }, []);
 
   return (
@@ -378,100 +374,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                 {t('Add_New_Item')}
               </Text>
 
-              <View
-                style={{
-                  marginBottom: 10,
-                  height: 150,
-                  width: '80%',
-                  alignSelf: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                {photo ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      width: '100%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View>
-                      <Image
-                        source={{
-                          uri: photo,
-                        }}
-                        style={{
-                          width: 145,
-                          borderRadius: 10,
-                          aspectRatio: 1,
-                        }}
-                        resizeMode="cover"
-                      />
-                      <TouchableOpacity
-                        onPress={() => setPhoto('')}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          right: 0,
-                          zIndex: 10,
-                          backgroundColor: colors.red,
-                          borderRadius: 30,
-                          height: 30,
-                          width: 30,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <Icon2 name="close" size={25} color={colors.white} />
-                      </TouchableOpacity>
-                    </View>
+              <ImageSelector photo={photo} setPhoto={setPhoto} />
 
-                    <View>
-                      <TouchableOpacity onPress={() => pickImage('image')}>
-                        <Icon2
-                          name="image"
-                          size={50}
-                          color={colors.black}
-                          style={{marginBottom: 15}}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => pickImage('camera')}>
-                        <Icon2 name="camera" size={50} color={colors.black} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginBottom: 10,
-                        flexDirection: 'row',
-                      }}>
-                      <TouchableOpacity onPress={() => pickImage('image')}>
-                        <Icon2
-                          name="image"
-                          size={65}
-                          color={colors.black}
-                          style={{marginRight: 15}}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => pickImage('camera')}>
-                        <Icon2 name="camera" size={65} color={colors.black} />
-                      </TouchableOpacity>
-                    </View>
-
-                    <Text style={{color: colors.black, fontSize: 20}}>
-                      የእቃ ፎቶ ማያያዣ
-                    </Text>
-                  </View>
-                )}
-              </View>
               <Text
                 style={{
                   color: colors.black,
@@ -630,7 +534,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   onFocus={() => setSearchResultVisible(false)}
                   buttonStyle={styles.dropDown}
                   onSelect={selectedItem => {
-                    setCategory(selectedItem);
+                    setItemCategory(selectedItem);
                   }}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
