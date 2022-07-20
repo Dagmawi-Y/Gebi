@@ -7,9 +7,9 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import colors from '../../config/colors';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaFrame} from 'react-native-safe-area-context';
 import {ListItem, SpeedDial, Text} from '@rneui/themed';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
@@ -18,9 +18,55 @@ import Modal from 'react-native-modal';
 import {ExpenseTypes, getIconForExpenseType} from '../Expenses/expenseTypes';
 // import AddItemModal from '../../Components/Items/AddItemModal';
 import PlanStatCard from './PlanStatCard';
+import useFirebase from '../../utils/useFirebase';
+import {StateContext} from '../../global/context';
+
+import firestore from '@react-native-firebase/firestore';
+import {useTranslation} from 'react-i18next';
+import formatNumber from '../../utils/formatNumber';
 
 export default function PlanerScreen({navigation}: any) {
-  let dimensions = Dimensions.get('window');
+  const {t} = useTranslation();
+  const {user} = useContext(StateContext);
+  const [userData, setUserData]: Array<any> = useState([]);
+  const [loading, setLoading] = useState(false);
+  const {totalExpense, setTotalExpense} = useContext(StateContext);
+  const {totalProfit, SetTotalProfit} = useContext(StateContext);
+  const {totalIncome, SetTotalIncome} = useContext(StateContext);
+
+  const getUserData = async () => {
+    setLoading(true);
+    try {
+      firestore()
+        .collection('users')
+        .where('userId', '==', user.uid)
+        .onSnapshot(querySnapshot => {
+          let result: Array<Object> = [];
+          querySnapshot.forEach(sn => {
+            const item = {
+              financial: sn.data().financial,
+              name: sn.data().name,
+              orgName: sn.data().orgName,
+              plan: sn.data().plan,
+              userId: sn.data().userId,
+            };
+            result.push(item);
+          });
+          setUserData(result);
+        });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log(userData);
+    getUserData();
+  }, []);
+
+  if (!userData.length) return null;
 
   return (
     <>
@@ -28,7 +74,6 @@ export default function PlanerScreen({navigation}: any) {
         <View
           style={{
             backgroundColor: colors.primary,
-            borderBottomEndRadius: 30,
             paddingHorizontal: 5,
           }}>
           <View style={{marginVertical: 20, marginHorizontal: 10}}>
@@ -45,7 +90,7 @@ export default function PlanerScreen({navigation}: any) {
                   fontSize: 20,
                   fontWeight: 'bold',
                 }}>
-                ገቢ
+                {t('Income')}
               </Text>
             </View>
             <View style={{flexDirection: 'row', marginBottom: 5}}>
@@ -56,14 +101,14 @@ export default function PlanerScreen({navigation}: any) {
                   justifyContent: 'space-between',
                 }}>
                 <PlanStatCard
-                  label="እቅድ"
-                  value="3,155"
+                  label={t('Plan')}
+                  value={formatNumber(userData[0].financial)}
                   trend="positive"
                   labelStyle={{color: 'black'}}
                 />
                 <PlanStatCard
-                  label="ትክክለኛ"
-                  value="1,000"
+                  label={t('Current')}
+                  value={formatNumber(totalIncome)}
                   trend="negative"
                   labelStyle={{color: 'black'}}
                 />
@@ -77,7 +122,7 @@ export default function PlanerScreen({navigation}: any) {
                   fontSize: 20,
                   fontWeight: 'bold',
                 }}>
-                ወጪዎች
+                {t('Expense')}
               </Text>
             </View>
             <View style={{flexDirection: 'row', marginBottom: 5}}>
@@ -88,52 +133,20 @@ export default function PlanerScreen({navigation}: any) {
                   justifyContent: 'space-between',
                 }}>
                 <PlanStatCard
-                  label="እቅድ"
-                  value="3,155"
+                  label={t('Plan')}
+                  value="-"
                   trend="positive"
                   labelStyle={{color: 'black'}}
                 />
                 <PlanStatCard
-                  label="ትክክለኛ"
-                  value="1,000"
+                  label={t('Current')}
+                  value={formatNumber(totalExpense)}
                   trend="negative"
                   labelStyle={{color: 'black'}}
                 />
               </View>
             </View>
           </View>
-
-          {/* <Button
-            // title=
-            // icon={{
-            //   name: 'arrow-right',
-            //   type: 'font-awesome',
-            //   size: 22,
-            //   color: '#0047CC',
-            // }}
-            // type="clear"
-            // titleStyle={{color: 'black'}}
-            // containerStyle={{
-            //   marginHorizontal: 10,
-            //   borderWidth: 2,
-            //   borderRadius: 10,
-            //   backgroundColor: 'white',
-            //   borderColor: '#0047CC',
-            // }}
-            // iconRight
-            // buttonStyle={{
-            //   justifyContent: 'space-between',
-            //   paddingHorizontal: 20,
-            //   marginVertical: 5,
-            // }}
-            onPress={
-              () => {
-                console.log('');
-              }
-              // navigation.navigate(SCREENS.CreateNewSales)
-            }>
-            "ዕለታዊ ዕቅዶች"
-          </Button> */}
         </View>
       </SafeAreaView>
     </>

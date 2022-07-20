@@ -115,10 +115,7 @@ export default function Items({navigation}) {
               addNewModalVisible={addNewModalVisible}
             />
           )}
-          <TopBar
-            title={t('Inventory')}
-            action={setSearchVisible}
-            actionValue={searchVisible}>
+          <View style={{backgroundColor: colors.primary, padding: 10}}>
             <View style={topCard.boardContainer}>
               <View style={topCard.boardCol}>
                 <Text style={topCard.boardTopTitle}>{totalItems}</Text>
@@ -129,7 +126,7 @@ export default function Items({navigation}) {
                 <Text style={topCard.boardSubTitle}>{t('Total_Price')}</Text>
               </View>
             </View>
-          </TopBar>
+          </View>
 
           {/* Search Input */}
           {searchVisible && (

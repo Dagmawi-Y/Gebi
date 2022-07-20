@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   TextInput,
@@ -40,7 +40,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const [errorMessage, setErrorNessage] = useState('');
   const [failedAnimation, setFailedAnimation] = useState(false);
   const [successAnimation, setSuccessAnimation] = useState(false);
+  const [allItems, setAllItems]: Array<any> = useState([]);
   const [searchResult, setSearchResult]: Array<any> = useState([]);
+  const [searchResultVisible, setSearchResultVisible] = useState(false);
 
   const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
   const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];
@@ -68,25 +70,30 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const searchItem = key => {
     if (!key) setSearchResult([]);
     if (key) {
-      firestore()
-        .collection('inventory')
-        .where('owner', '==', user.uid)
-        .where('item_name', '>=', key)
-        .where('item_name', '<=', key + '\uf8ff')
-        .onSnapshot(qsn => {
-          let result: Array<any> = [];
-          if (qsn) {
-            qsn.forEach(sn => {
-              result.push({
-                id: sn.id,
-                doc: sn.data(),
-              });
-            });
-
-            setSearchResult(result);
-          }
-        });
+      setSearchResult(
+        allItems.filter(i => {
+          return i.doc.item_name.toLowerCase().includes(key.toLowerCase());
+        }),
+      );
     }
+  };
+  const getItems = () => {
+    firestore()
+      .collection('inventory')
+      .where('owner', '==', user.uid)
+      .onSnapshot(qsn => {
+        let result: Array<any> = [];
+        if (qsn) {
+          qsn.forEach(sn => {
+            result.push({
+              id: sn.id,
+              doc: sn.data(),
+            });
+          });
+
+          setAllItems(result);
+        }
+      });
   };
 
   const checkEmpty = () => {
@@ -112,9 +119,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
       const pathToFile = photo;
       const task = reference.putFile(pathToFile);
 
-      task.on('state_changed', taskSnapshot => {
-        setTransferRate(taskSnapshot.bytesTransferred);
-      });
+      task.on('state_changed', taskSnapshot => {});
 
       task
         .then(async res => {
@@ -194,6 +199,10 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getItems();
+  }, []);
 
   return (
     <KeyboardAvoidingView style={{flex: 1}}>
@@ -454,6 +463,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                 onChangeText={val => {
                   setSupplierName(val);
                 }}
+                onFocus={() => setSearchResultVisible(false)}
                 value={supplierName}
                 keyboardType="default"
                 placeholderTextColor={colors.faded_grey}
@@ -473,12 +483,14 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   onChangeText={val => {
                     setItemName(val);
                     searchItem(val);
+                    setSearchResultVisible(true);
                   }}
+                  onFocus={() => setSearchResultVisible(true)}
                   value={itemName}
                   keyboardType="default"
                   placeholderTextColor={colors.faded_grey}
                 />
-                {searchResult.length ? (
+                {searchResult.length && searchResultVisible ? (
                   <View
                     style={{
                       zIndex: 10,
@@ -499,7 +511,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                           onPress={() => {
                             setItemName(i.doc.item_name);
                             setItemId(i.id);
-                            setSearchResult([]);
+                            setSearchResultVisible(false);
                           }}>
                           <Text
                             style={{
@@ -540,6 +552,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                     onChangeText={val => {
                       setAmount(val.replace(/[^0-9\.?]/g, ''));
                     }}
+                    onFocus={() => setSearchResultVisible(false)}
                     value={quantity}
                     keyboardType="numeric"
                     placeholderTextColor={colors.faded_grey}
@@ -564,6 +577,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                     onChangeText={val => {
                       setUnitPrice(val.replace(/[^0-9\.?]/g, ''));
                     }}
+                    onFocus={() => setSearchResultVisible(false)}
                     value={unitPrice}
                     keyboardType="numeric"
                     placeholderTextColor={colors.faded_grey}
@@ -591,6 +605,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                       <Icon name="caretdown" size={20} color={colors.black} />
                     </View>
                   )}
+                  onFocus={() => setSearchResultVisible(false)}
                   buttonStyle={styles.dropDown}
                   onSelect={selectedItem => {
                     setCategory(selectedItem);
@@ -622,6 +637,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   onSelect={selectedItem => {
                     setUnit(selectedItem);
                   }}
+                  onFocus={() => setSearchResultVisible(false)}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                   }}

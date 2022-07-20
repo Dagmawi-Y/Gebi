@@ -87,5 +87,7 @@
   "Item_Details": "ዕቃ መረጃ",
   "Item_History": "የእቃ ታሪክ",
   "Supplier": "አቅራቢ",
-  "Empty_Empty_Fields_Are_Not_Allowed": "ያልትሞላ ምረጃ አለ።"
+  "Empty_Empty_Fields_Are_Not_Allowed": "ያልትሞላ ምረጃ አለ።",
+
+  "Current": "ትክክለኛ"
 }

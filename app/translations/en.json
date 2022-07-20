@@ -87,5 +87,7 @@
   "Item_Details": "Item details",
   "Item_History": "Stock history",
   "Supplier": "Supplier",
-  "Empty_Empty_Fields_Are_Not_Allowed": "Empty empty fields are not allowed."
+  "Empty_Empty_Fields_Are_Not_Allowed": "Empty empty fields are not allowed.",
+
+  "Current": "Current"
 }

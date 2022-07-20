@@ -15,6 +15,7 @@ import {useTranslation} from 'react-i18next';
 import BouncyCheckboxGroup, {
   ICheckboxButton,
 } from 'react-native-bouncy-checkbox-group';
+import CheckboxButton from 'react-native-bouncy-checkbox';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
@@ -31,6 +32,8 @@ const NewSale = ({navigation, route}) => {
   const [addedItems, setAddedItems] = useState([]);
   const [customer, setCustomer] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [isVatIncluded, setIsVatIncluded] = useState(false);
+  const [isTotIncluded, setIsTotIncluded] = useState(false);
 
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
@@ -99,6 +102,8 @@ const NewSale = ({navigation, route}) => {
     invoiceNumber: Math.random().toString().split('.')[1],
     paymentMethod: paymentMethod,
     items: {...addedItems},
+    vat: isVatIncluded,
+    tot: isTotIncluded,
   };
 
   const checkEmpty = () => {
@@ -173,7 +178,17 @@ const NewSale = ({navigation, route}) => {
     addedItems.map(i => {
       sum = sum + i.quantity * i.unitPrice;
     });
-    total = sum * 0.15 + sum;
+    total = sum;
+    if (isVatIncluded && !isTotIncluded) {
+      total = sum + sum * 0.15;
+    }
+    if (isTotIncluded && !isVatIncluded) {
+      total = sum + sum * 0.02;
+    }
+    if (isTotIncluded && isVatIncluded) {
+      total = sum + sum * 0.02 + sum * 0.15;
+    }
+
     setSum(sum);
     setTotal(total);
   };
@@ -183,7 +198,7 @@ const NewSale = ({navigation, route}) => {
     return () => {
       mountedRef.current = false;
     };
-  }, [addedItems]);
+  }, [addedItems, isTotIncluded, isVatIncluded]);
 
   return (
     <>
@@ -369,9 +384,15 @@ const NewSale = ({navigation, route}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={styles.textLight}>{t('Sum')}</Text>
               <Text
-                style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
+                style={[styles.textBold, {marginLeft: 30, marginBottom: 10}]}>
+                {t('Sum')}
+              </Text>
+              <Text
+                style={[
+                  styles.textBold,
+                  {textAlign: 'right', fontSize: 20, marginBottom: 15},
+                ]}>
                 {formatNumber(sum)} {t('Birr')}
               </Text>
             </View>
@@ -382,12 +403,99 @@ const NewSale = ({navigation, route}) => {
                 alignItems: 'center',
                 marginBottom: 10,
               }}>
-              <Text style={styles.textLight}>
-                {t('Tax')} (15% {t('Vat')})
-              </Text>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}>
+                <CheckboxButton
+                  fillColor={colors.primary}
+                  size={25}
+                  isChecked={isVatIncluded}
+                  onPress={(isChecked: boolean) => {
+                    setIsVatIncluded(isChecked);
+                  }}
+                />
+                <Text
+                  style={[
+                    styles.textLight,
+                    {
+                      paddingHorizontal: 0,
+                      textDecorationStyle: 'solid',
+                      textDecorationLine: !isVatIncluded
+                        ? 'line-through'
+                        : 'none',
+                    },
+                  ]}>
+                  {t('Tax')} (15% {t('Vat')})
+                </Text>
+              </View>
+
               <Text
-                style={[styles.textBold, {textAlign: 'right', fontSize: 20}]}>
+                style={[
+                  styles.textBold,
+                  {
+                    textAlign: 'right',
+                    fontSize: 20,
+                    textDecorationStyle: 'solid',
+                    textDecorationLine: !isVatIncluded
+                      ? 'line-through'
+                      : 'none',
+                  },
+                ]}>
                 {formatNumber(sum * 0.15)} {t('Birr')}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}>
+                <CheckboxButton
+                  fillColor={colors.primary}
+                  size={25}
+                  isChecked={isTotIncluded}
+                  onPress={(isChecked: boolean) => {
+                    setIsTotIncluded(isChecked);
+                  }}
+                />
+                <Text
+                  style={[
+                    styles.textLight,
+                    {
+                      paddingHorizontal: 0,
+                      textDecorationStyle: 'solid',
+                      textDecorationLine: !isTotIncluded
+                        ? 'line-through'
+                        : 'none',
+                    },
+                  ]}>
+                  {t('TOT')} (2% {t('Tot')})
+                </Text>
+              </View>
+
+              <Text
+                style={[
+                  styles.textBold,
+                  {
+                    textAlign: 'right',
+                    fontSize: 20,
+                    textDecorationStyle: 'solid',
+                    textDecorationLine: !isTotIncluded
+                      ? 'line-through'
+                      : 'none',
+                  },
+                ]}>
+                {formatNumber(sum * 0.02)} {t('Birr')}
               </Text>
             </View>
           </View>

@@ -12,80 +12,75 @@ type Props = {
   trend?: 'positive' | 'negative' | 'neutral';
 };
 
-export default function StatCardFullWidth({containerStyle, label, value, trend}: Props) {
+export default function StatCardFullWidth({
+  containerStyle,
+  label,
+  value,
+  trend,
+}: Props) {
   const positive = trend == 'positive';
   const {t} = useTranslation();
 
-  const color =
-    trend == 'positive'
-      ? colors.green
-      : trend == 'negative'
-      ? colors.red
-      : colors.black;
-
-  const icon =
-    trend == 'positive'
-      ? 'long-arrow-up'
-      : trend == 'negative'
-      ? 'long-arrow-down'
-      : 'minus';
   return (
     <View
       style={{
         backgroundColor: 'white',
-        height: 60,
-        borderRadius: 10,
-        flexDirection: 'row',
         justifyContent: 'center',
-        ...{...(containerStyle ?? ({} as any))},
+        alignItems: 'center',
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        borderRadius: 10,
+        marginHorizontal: 5,
+        width: '60%',
+        alignSelf: 'center',
       }}>
       <View
         style={{
-          height: '100%',
-          marginRight: 10,
-          paddingLeft: 10,
-          alignItems: 'flex-start',
+          flexDirection: 'row',
           justifyContent: 'center',
+          alignItems: 'center',
         }}>
         <View
           style={{
-            width: 50,
-            height: 50,
-            backgroundColor:
-              trend == 'positive'
-                ? colors.green
-                : trend == 'negative'
-                ? colors.red
-                : colors.white,
-            borderRadius: 10,
+            width: 19,
+            height: 19,
+            backgroundColor: positive ? colors.green : colors.red,
+            borderRadius: 5,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Icon name={icon} size={25} color={colors.white} />
+          <Icon
+            name={positive ? 'long-arrow-up' : 'long-arrow-down'}
+            size={15}
+            color={colors.white}
+          />
         </View>
-      </View>
-
-      <View
-        style={{
-          alignItems: 'center',
-          height: '100%',
-          justifyContent: 'space-evenly',
-        }}>
         <Text
-          h4
-          h4Style={[
-            {fontSize: 16, color: '#77869E'},
-            {
-              color: color,
-            },
-          ]}>
+          style={{
+            color: trend == 'positive' ? colors.green : colors.red,
+            marginLeft: 5,
+            fontSize: 20,
+            fontWeight: '600',
+          }}>
           {label}
         </Text>
+      </View>
+      <View
+        style={{
+          height: '100%',
+          flex: 2,
+          paddingVertical: 2,
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+          paddingLeft: 5,
+          minWidth: 80,
+        }}>
         <Text
           style={{
             fontWeight: 'bold',
-            fontSize: 30,
-            color: color,
+            fontSize: 20,
+            textAlign: 'center',
+            color: trend == 'positive' ? colors.green : colors.red,
           }}>
           {value} {`${t('Birr')}`}
         </Text>

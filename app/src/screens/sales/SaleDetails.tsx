@@ -40,7 +40,12 @@ const SaleDetails = ({route, navigation}) => {
     Object.keys(data.items).map(i => {
       sum = sum + data.items[i].quantity * data.items[i].unitPrice;
     });
-    total = sum * 0.15 + sum;
+
+    if (data.vat && !data.tot) total = sum * 0.15 + sum;
+    if (!data.vat && data.tot) total = sum * 0.02 + sum;
+    if (data.vat && data.tot) total = sum * 0.15 + sum * 0.02 + sum;
+    if (!data.vat && !data.tot) total = sum;
+
     setSum(sum);
     setTotal(total);
   };
@@ -304,24 +309,45 @@ const SaleDetails = ({route, navigation}) => {
                     {formatNumber(sum)} {t('Birr')}
                   </Text>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 10,
-                  }}>
-                  <Text style={styles.textLight}>
-                    {t('Tax')} (15% {t('Vat')})
-                  </Text>
-                  <Text
-                    style={[
-                      styles.textBold,
-                      {textAlign: 'right', fontSize: 20},
-                    ]}>
-                    {formatNumber(sum * 0.15)} {t('Birr')}
-                  </Text>
-                </View>
+                {data.vat ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={styles.textLight}>
+                      {t('Tax')} (15% {t('Vat')})
+                    </Text>
+                    <Text
+                      style={[
+                        styles.textBold,
+                        {textAlign: 'right', fontSize: 20},
+                      ]}>
+                      {formatNumber(sum * 0.15)} {t('Birr')}
+                    </Text>
+                  </View>
+                ) : null}
+                {data.tot ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: 10,
+                    }}>
+                    <Text style={styles.textLight}>
+                      {t('TOT')} (0.02% {t('TOT')})
+                    </Text>
+                    <Text
+                      style={[
+                        styles.textBold,
+                        {textAlign: 'right', fontSize: 20},
+                      ]}>
+                      {formatNumber(sum * 0.02)} {t('Birr')}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
               <View style={styles.summaryBottom}>
                 <View
@@ -368,7 +394,12 @@ const SaleDetails = ({route, navigation}) => {
                     {
                       marginBottom: 5,
                       paddingHorizontal: 15,
-                      color: colors.yellow,
+                      color:
+                        data.paymentMethod == 'Cash'
+                          ? colors.green
+                          : data.paymentMethod == 'Check'
+                          ? colors.yellow
+                          : colors.red,
                     },
                   ]}>
                   {t(data.paymentMethod)}

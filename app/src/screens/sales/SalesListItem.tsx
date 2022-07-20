@@ -9,17 +9,24 @@ import {useTranslation} from 'react-i18next';
 
 const ListItem = (sale, navigation) => {
   const {t} = useTranslation();
-  const {invoiceNumber, customerName, date, items, paymentMethod} = sale.sale;
+  const {invoiceNumber, customerName, date, items, paymentMethod, vat, tot} =
+    sale.sale;
   const itemsLength = Object.getOwnPropertyNames(items).length;
   const [totalPrice, setTotalPrice] = useState('');
 
   const init = () => {
-    let tot = 0;
+    let totalSum = 0;
     setTotalPrice(0);
     Object.keys(items).map(key => {
-      tot += parseFloat(items[key].unitPrice) * parseFloat(items[key].quantity);
-      setTotalPrice(formatNumber(tot));
+      totalSum +=
+        parseFloat(items[key].unitPrice) * parseFloat(items[key].quantity);
     });
+
+    if (vat && !tot) totalSum = totalSum * 0.15 + totalSum;
+    if (!vat && tot) totalSum = totalSum * 0.02 + totalSum;
+    if (vat && tot) totalSum = totalSum * 0.15 + totalSum * 0.02 + totalSum;
+
+    setTotalPrice(formatNumber(totalSum));
   };
 
   useEffect(() => {
@@ -54,21 +61,71 @@ const ListItem = (sale, navigation) => {
           </View>
         </View>
       </View>
-      <View style={styles.listRight}>
-        <View style={styles.listPriceContainer}>
-          <Text style={[styles.listTextbold, {color: colors.green}]}>
-            {totalPrice}
-            {t('Birr')}{' '}
-            <Text style={{color: colors.yellow}}>{`(${t(
-              paymentMethod,
-            )})`}</Text>
-          </Text>
+      <View style={{flexDirection: 'row', paddingRight: 25}}>
+        <View style={[styles.listRight]}>
+          <View style={styles.listPriceContainer}>
+            <Text style={[styles.listTextbold, {color: colors.black}]}>
+              {totalPrice}
+              {t('Birr')}{' '}
+              <Text
+                style={{
+                  color:
+                    paymentMethod == 'Cash'
+                      ? colors.green
+                      : paymentMethod == 'Check'
+                      ? colors.yellow
+                      : colors.red,
+                }}>{`(${t(paymentMethod)})`}</Text>
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.listTextLight, {textAlign: 'right'}]}>
+              {date}
+            </Text>
+          </View>
         </View>
-        <View>
-          <Text style={[styles.listTextLight, {textAlign: 'right'}]}>
-            {date}
-          </Text>
-        </View>
+        {vat || tot ? (
+          <View
+            style={{
+              height: '100%',
+              width: 20,
+              marginRight: 0,
+              position: 'absolute',
+              top: 0,
+              right: -1,
+              alignItems: 'center',
+              borderTopRightRadius: 10,
+            }}>
+            {vat ? (
+              <Text
+                style={{
+                  backgroundColor: colors.green,
+                  width: '100%',
+                  textAlign: 'center',
+                  color: colors.white,
+                  borderRadius: 2,
+                  marginBottom: 5,
+                  fontSize: 15,
+                }}>
+                V
+              </Text>
+            ) : null}
+            {tot ? (
+              <Text
+                style={{
+                  backgroundColor: colors.yellow,
+                  width: '100%',
+                  borderRadius: 2,
+                  textAlign: 'center',
+                  marginBottom: 5,
+                  color: colors.white,
+                  fontSize: 15,
+                }}>
+                T
+              </Text>
+            ) : null}
+          </View>
+        ) : null}
       </View>
     </View>
   );
@@ -80,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingLeft: 20,
     paddingVertical: 10,
     borderRadius: 10,
     margin: 5,

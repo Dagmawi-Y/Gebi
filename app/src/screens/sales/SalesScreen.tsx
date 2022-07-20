@@ -36,9 +36,6 @@ export default function Items({navigation}) {
   const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
-  const {totalExpense, setTotalExpense} = useContext(StateContext);
-  const {totalProfit, SetTotalProfit} = useContext(StateContext);
-  const {totalIncome, SetTotalIncome} = useContext(StateContext);
 
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
@@ -48,25 +45,6 @@ export default function Items({navigation}) {
   const [filterVisible, setFilterVisible] = useState(false);
 
   const progress = useRef(new Animated.Value(0)).current;
-
-  // const data = useFirebase(user);
-
-  const totalCalc = data => {
-    let totalSaleExpense: number = 0;
-    let totalSaleProfit: number = 0;
-    let totalSaleIncome: number = 0;
-    data.forEach(i => {
-      Object.keys(i.items).map(key => {
-        totalSaleIncome = totalSaleIncome + parseFloat(i.items[key].unitPrice);
-        totalSaleProfit = totalSaleProfit + parseFloat(i.items[key].salePofit);
-        totalSaleExpense =
-          totalSaleExpense + parseFloat(i.items[key].originalPrice);
-      });
-    });
-    setTotalExpense(totalSaleExpense);
-    SetTotalProfit(totalSaleProfit);
-    SetTotalIncome(totalSaleIncome);
-  };
 
   const animate = val => {
     let to = !filterVisible ? 1 : 0;
@@ -93,28 +71,20 @@ export default function Items({navigation}) {
               items: sn.data().items,
               paymentMethod: sn.data().paymentMethod,
               saleProfit: sn.data().saleProfit,
+              vat: sn.data().vat,
+              tot: sn.data().tot,
             };
             result.push(item);
           });
           setData(result);
         });
 
-      if (data) totalCalc(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    let mounted = true;
-    data && totalCalc(data);
-
-    return () => {
-      mounted = false;
-    };
-  }, [data]);
 
   useEffect(() => {
     let mounted = true;
@@ -306,6 +276,7 @@ export default function Items({navigation}) {
                               key={sale.id}
                               onPress={() => {
                                 const id = sale.id;
+
                                 navigation.navigate(routes.saleDetails, {
                                   data: sale,
                                 });
