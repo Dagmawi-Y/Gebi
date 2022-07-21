@@ -42,8 +42,12 @@
   "Supplier_Name": "የአከፋፋይ ስም",
   "Item_Name": "Item Name",
   "Amount": "Amount",
-  "Unit_Price": "Unit Price",
+  "Unit_Price": "Unit Purchase Price",
+  "Unit_Sale_Price": "Unit Sale Price",
   "Category": "Category",
+  "Category_Name": "CategoryName",
+  "Description": "Description",
+  "Characters_Left": "Characters left",
   "Unit": "Unit",
 
   "Add": "Add",
@@ -88,6 +92,7 @@
   "Item_History": "Stock history",
   "Supplier": "Supplier",
   "Empty_Empty_Fields_Are_Not_Allowed": "Empty empty fields are not allowed.",
+  "Add_New_Category": "Add new category",
 
   "Current": "Current"
 }

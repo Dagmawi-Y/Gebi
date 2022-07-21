@@ -32,8 +32,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
   const [itemId, setItemId]: Array<any> = useState('');
   const [itemCategory, setItemCategory] = useState('');
   const [itemName, setItemName] = useState('');
-  const [quantity, setAmount] = useState('');
+  const [quantity, setAmount]: any = useState();
   const [unitPrice, setUnitPrice] = useState('');
+  const [unitSalePrice, setUnitSalePrice] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [writtingData, setWrittingData] = useState(false);
   const [errorMessage, setErrorNessage] = useState('');
@@ -84,10 +85,12 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
         let result: Array<any> = [];
         if (qsn) {
           qsn.forEach(sn => {
-            result.push(
-              sn.data().name.substring(0, 1).toUpperCase() +
+            result.push({
+              id: sn.id,
+              name:
+                sn.data().name.substring(0, 1).toUpperCase() +
                 sn.data().name.substring(1),
-            );
+            });
           });
           setCategories(result);
         }
@@ -101,6 +104,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
     if (!unit) return true;
     if (!photo) return true;
     if (!unitPrice) return true;
+    if (!unitSalePrice) return true;
     return false;
   };
 
@@ -116,6 +120,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
       const reference = storage().ref(`image_${Date.now()}`);
       const pathToFile = photo;
       const task = reference.putFile(pathToFile);
+      const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
 
       task.on('state_changed', taskSnapshot => {});
 
@@ -125,7 +130,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
           if (searchResult.length) {
             setWrittingData(false);
             raiseError('Item_Duplicate');
-
             return;
           }
           if (itemId) {
@@ -134,21 +138,31 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
               .doc(itemId)
               .update({
                 unit_price: unitPrice,
-                currentCount: firestore.FieldValue.increment(
-                  parseFloat(quantity),
-                ),
+                currentCount: firestore.FieldValue.increment(quantity),
               })
-              .then(res => {
-                firestore().collection('stock').add({
-                  item_id: itemId,
-                  supplier_name: supplierName,
-                  initialCount: quantity,
-                  unit_price: unitPrice,
-                  unit: unit,
-                  owner: user.uid,
-                  date: new Date().toLocaleDateString(),
-                });
-              });
+              .then(async res => {
+                await firestore()
+                  .collection('stock')
+                  .add({
+                    item_id: itemId,
+                    supplier_name: supplierName,
+                    initialCount: quantity,
+                    unit_price: unitPrice,
+                    unit_SalePrice: unitSalePrice,
+                    unit: unit,
+                    owner: user.uid,
+                    date: new Date().toLocaleDateString(),
+                  })
+                  .then(() => {
+                    firestore()
+                      .collection('categories')
+                      .doc(categoryId)
+                      .update({
+                        count: firestore.FieldValue.increment(quantity),
+                      });
+                  });
+              })
+              .catch(err => console.log(err));
 
             setWrittingData(false);
             setSuccessAnimation(true);
@@ -166,21 +180,33 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                 owner: user.uid,
                 item_name: itemName,
                 unit_price: unitPrice,
+                unit_SalePrice: unitSalePrice,
                 currentCount: quantity,
                 picture: fileUrl,
                 category: itemCategory.toLowerCase(),
+                categoryId: categoryId,
               })
               .then(res => {
                 const item_id = res['_documentPath']['_parts'][1];
-                firestore().collection('stock').add({
-                  item_id: item_id,
-                  supplier_name: supplierName,
-                  initialCount: quantity,
-                  unit_price: unitPrice,
-                  unit: unit,
-                  owner: user.uid,
-                  date: new Date().toLocaleDateString(),
-                });
+                firestore()
+                  .collection('stock')
+                  .add({
+                    item_id: item_id,
+                    supplier_name: supplierName,
+                    initialCount: quantity,
+                    unit_price: unitPrice,
+                    unit: unit,
+                    owner: user.uid,
+                    date: new Date().toLocaleDateString(),
+                  })
+                  .then(() => {
+                    firestore()
+                      .collection('categories')
+                      .doc(categoryId)
+                      .update({
+                        count: firestore.FieldValue.increment(quantity),
+                      });
+                  });
               });
 
             setWrittingData(false);
@@ -408,6 +434,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   style={[styles.Input]}
                   onChangeText={val => {
                     setItemName(val);
+                    setItemId(null);
                     searchItem(val);
                     setSearchResultVisible(true);
                   }}
@@ -436,8 +463,14 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                           key={i.id}
                           onPress={() => {
                             setItemName(i.doc.item_name);
+                            setItemCategory(
+                              i.doc.category.substring(0, 1).toUpperCase() +
+                                i.doc.category.substring(1),
+                            );
+
                             setItemId(i.id);
                             setSearchResultVisible(false);
+                            setSearchResult([]);
                           }}>
                           <Text
                             style={{
@@ -476,10 +509,12 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   <TextInput
                     style={[styles.Input]}
                     onChangeText={val => {
-                      setAmount(val.replace(/[^0-9\.?]/g, ''));
+                      setAmount(
+                        val ? parseInt(val.replace(/[^0-9\.?]/g, '')) : null,
+                      );
                     }}
                     onFocus={() => setSearchResultVisible(false)}
-                    value={quantity}
+                    value={quantity ? quantity.toString() : ''}
                     keyboardType="numeric"
                     placeholderTextColor={colors.faded_grey}
                   />
@@ -521,21 +556,77 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                     fontSize: 20,
                     marginBottom: 5,
                   }}>
+                  {t('Unit_Sale_Price')} {`(${t('Birr')})`}
+                </Text>
+                <TextInput
+                  style={[styles.Input]}
+                  onChangeText={val => {
+                    setUnitSalePrice(val.replace(/[^0-9\.?]/g, ''));
+                  }}
+                  onFocus={() => setSearchResultVisible(false)}
+                  value={unitSalePrice}
+                  keyboardType="numeric"
+                  placeholderTextColor={colors.faded_grey}
+                />
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  marginHorizontal: 5,
+                }}>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 20,
+                    marginBottom: 5,
+                  }}>
                   {t('Category')}
                 </Text>
-                <SelectDropdown
-                  data={categories}
+                {/* <SelectDropdown
+                  data={categories.map(i => i.name)}
                   defaultButtonText={t('Category')}
                   renderDropdownIcon={() => (
-                    <View>
-                      <Icon name="caretdown" size={20} color={colors.black} />
+                    <View style={{marginRight: 5}}>
+                      <Icon name={'caretdown'} size={20} color={colors.black} />
                     </View>
                   )}
                   onFocus={() => setSearchResultVisible(false)}
                   buttonStyle={styles.dropDown}
+                  defaultValue={itemCategory ? itemCategory.toString() : null}
                   onSelect={selectedItem => {
                     setItemCategory(selectedItem);
                   }}
+                  // disabled={itemId ? true : false}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item;
+                  }}
+                /> */}
+                <SelectDropdown
+                  data={categories.map(i => i.name)}
+                  defaultButtonText={t('Category')}
+                  renderDropdownIcon={() => (
+                    <View style={{marginRight: 5}}>
+                      <Icon
+                        name={itemId ? 'exclamationcircleo' : 'caretdown'}
+                        size={20}
+                        color={colors.black}
+                      />
+                    </View>
+                  )}
+                  onFocus={() => setSearchResultVisible(false)}
+                  buttonStyle={
+                    itemId ? styles.disabledDropDown : styles.dropDown
+                  }
+                  defaultValue={
+                    itemCategory && itemId ? itemCategory.toString() : null
+                  }
+                  onSelect={selectedItem => {
+                    setItemCategory(selectedItem);
+                  }}
+                  disabled={itemId ? true : false}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                   }}
@@ -563,7 +654,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible}) => {
                   onSelect={selectedItem => {
                     setUnit(selectedItem);
                   }}
-                  onFocus={() => setSearchResultVisible(false)}
+                  onFocus={() => {
+                    setSearchResultVisible(false);
+                  }}
                   buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                   }}
@@ -645,6 +738,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     backgroundColor: colors.white,
+  },
+  disabledDropDown: {
+    width: '100%',
+    borderRadius: 10,
+    marginBottom: 20,
   },
   boardTopTitle: {fontSize: 22, fontWeight: '900'},
   boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},

@@ -6,6 +6,7 @@ import routes from '../../navigation/routes';
 import {useNavigation} from '@react-navigation/native';
 import formatNumber from '../../utils/formatNumber';
 import {useTranslation} from 'react-i18next';
+import roundDecimal from '../../utils/roundDecimal';
 
 const ListItem = (sale, navigation) => {
   const {t} = useTranslation();

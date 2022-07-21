@@ -21,7 +21,7 @@ import formatNumber from '../../utils/formatNumber';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/EvilIcons';
 
-import TopBar from '../../components/TopBar/TopBar';
+import TopScreen from '../../components/TopScreen/TopScreen';
 import Loading from '../../components/lotties/Loading';
 import EmptyBox from '../../components/lotties/EmptyBox';
 import InvetoryListItem from './InventoryListItem';
@@ -100,7 +100,8 @@ export default function Items({navigation}) {
         if (qsn) {
           qsn.forEach(sn => {
             result.push({
-              id: sn.data().id,
+              id: sn.id,
+              count: sn.data().count,
               name:
                 sn.data().name.substring(0, 1).toUpperCase() +
                 sn.data().name.substring(1),
@@ -270,46 +271,48 @@ export default function Items({navigation}) {
                 {data.length == 0 ? (
                   <EmptyBox message={t('Inventory_Empty')} />
                 ) : data.length > 0 ? (
-                  categories.map(i => (
-                    <View key={i.id}>
-                      <Text style={{color: colors.black, fontSize: 20}}>
-                        {i.name}
-                      </Text>
-                      {data
-                        .filter(dt =>
-                          dt.doc.item_name
-                            .toLowerCase()
-                            .includes(searchKey.toLowerCase()),
-                        )
-                        .filter(
-                          dt =>
-                            dt.doc.category.toLowerCase() ==
-                            i.name.toLowerCase(),
-                        )
-                        .map(item => {
-                          return (
-                            <TouchableOpacity
-                              key={item.id}
-                              activeOpacity={0.5}
-                              onPress={() => {
-                                const id = item.id;
-                                navigation.navigate(routes.itemDetails, {
-                                  data: item.doc,
-                                  owner: item.doc.owner,
-                                  itemId: id,
-                                });
-                              }}>
-                              <InvetoryListItem
-                                title={item.doc.item_name}
-                                unitPrice={item.doc.unit_price}
-                                quantity={item.doc.currentCount}
-                                picture={item.doc.picture}
-                              />
-                            </TouchableOpacity>
-                          );
-                        })}
-                    </View>
-                  ))
+                  categories.map(cat =>
+                    cat.count > 0 ? (
+                      <View key={cat.id}>
+                        <Text style={{color: colors.black, fontSize: 20}}>
+                          {cat.name} {`(${cat.count})`}
+                        </Text>
+                        {data
+                          .filter(dt =>
+                            dt.doc.item_name
+                              .toLowerCase()
+                              .includes(searchKey.toLowerCase()),
+                          )
+                          .filter(
+                            dt =>
+                              dt.doc.category.toLowerCase() ==
+                              cat.name.toLowerCase(),
+                          )
+                          .map(item => {
+                            return (
+                              <TouchableOpacity
+                                key={item.id}
+                                activeOpacity={0.5}
+                                onPress={() => {
+                                  const id = item.id;
+                                  navigation.navigate(routes.itemDetails, {
+                                    data: item.doc,
+                                    owner: item.doc.owner,
+                                    itemId: id,
+                                  });
+                                }}>
+                                <InvetoryListItem
+                                  title={item.doc.item_name}
+                                  unitPrice={item.doc.unit_price}
+                                  quantity={item.doc.currentCount}
+                                  picture={item.doc.picture}
+                                />
+                              </TouchableOpacity>
+                            );
+                          })}
+                      </View>
+                    ) : null,
+                  )
                 ) : null}
               </ScrollView>
             )}

@@ -18,6 +18,7 @@ import colors from '../../config/colors';
 import ErrorBox from '../../components/ErrorBox/ErrorBox';
 import LottieView from 'lottie-react-native';
 import {StateContext} from '../../global/context';
+import formatNumber from '../../utils/formatNumber';
 
 const AddNewCategory = ({navigation}) => {
   const {user} = useContext(StateContext);
@@ -56,6 +57,7 @@ const AddNewCategory = ({navigation}) => {
                 description: categoryDescription,
                 photo: fileUrl,
                 owner: user.uid,
+                count: 0,
               };
               firestore()
                 .collection('categories')
@@ -128,25 +130,52 @@ const AddNewCategory = ({navigation}) => {
         }}>
         <ImageSelector photo={photo} setPhoto={setPhoto} />
         <View>
-          <Text style={category.text}>Category Name</Text>
+          <Text style={category.text}>{t('Category_Name')}</Text>
           <TextInput
             style={category.input}
+            value={categoryName}
             onChangeText={val => setCategoryName(val)}
           />
         </View>
         <View>
-          <Text style={category.text}>Price</Text>
+          <Text style={category.text}>{t('Price')}</Text>
           <TextInput
             style={category.input}
+            value={categoryPrice}
             onChangeText={val => setCategoryPrice(val)}
             keyboardType="numeric"
           />
         </View>
         <View>
-          <Text style={category.text}>Description</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: 5,
+              paddingRight: 5,
+            }}>
+            <Text style={category.text}>{t('Description')}</Text>
+            <Text
+              style={[
+                {color: colors.black, fontSize: 15},
+                categoryDescription.length >= 50 ? {color: colors.red} : {},
+              ]}>
+              {categoryDescription.length <= 50
+                ? 50 - categoryDescription.length
+                : 0}{' '}
+              {t('Characters_Left')}
+            </Text>
+          </View>
           <TextInput
-            style={category.input}
-            onChangeText={val => setCategoryDescription(val)}
+            style={[category.input]}
+            value={categoryDescription}
+            onChangeText={val => {
+              console.log(categoryDescription.length);
+              categoryDescription.length >= 50
+                ? setCategoryDescription(val.substring(0, 50))
+                : setCategoryDescription(val);
+            }}
           />
         </View>
         <View

@@ -31,6 +31,8 @@ export default function StatCard({
         paddingVertical: 5,
         borderRadius: 8,
         marginHorizontal: 5,
+        flexGrow: 1,
+        height: 55,
       }}>
       <View
         style={{

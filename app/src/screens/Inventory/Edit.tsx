@@ -40,7 +40,6 @@ const Edit = ({route, navigation}) => {
   const categories = ['ስልክ', 'እሌክትሮኒክስ', 'የህንጻ መሳርያ'];
 
   const populate = () => {
-    console.log(data);
     // setSupplierName(data.stock.supplier_name);
     // setItemName(data.item_name);
     // setQuantity(data.stock.quantity);
@@ -99,7 +98,7 @@ const Edit = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    populate();
+    // populate();
   }, []);
 
   return (

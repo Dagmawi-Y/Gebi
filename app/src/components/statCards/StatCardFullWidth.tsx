@@ -33,6 +33,7 @@ export default function StatCardFullWidth({
         marginHorizontal: 5,
         width: '60%',
         alignSelf: 'center',
+        height: 55,
       }}>
       <View
         style={{

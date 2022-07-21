@@ -41,8 +41,12 @@
   "Add_New_Item": "አዲስ አቃ መመዝጋቢያ",
   "Item_Name": "የእቃ ስም",
   "Amount": "ብዛት",
-  "Unit_Price": "የአንዱ ዋጋ",
-  "Category": "አይነት",
+  "Unit_Price": "የአንዱ የግዢ ዋጋ",
+  "Unit_Sale_Price": "የአንዱ የመሽጫ ዋጋ",
+  "Category": "ምድብ",
+  "Category_Name": "ምድብ ስም",
+  "Description": "ማብራሪያ",
+  "Characters_Left": "ፊደል ይቀራል",
   "Unit": "መለኪያ",
   "Supplier_Name": "የአከፋፋይ ስም",
 
@@ -88,6 +92,7 @@
   "Item_History": "የእቃ ታሪክ",
   "Supplier": "አቅራቢ",
   "Empty_Empty_Fields_Are_Not_Allowed": "ያልትሞላ ምረጃ አለ።",
+  "Add_New_Category": "አዲስ ምድብ ፍጠር",
 
   "Current": "ትክክለኛ"
 }

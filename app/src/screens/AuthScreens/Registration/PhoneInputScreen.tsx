@@ -57,8 +57,6 @@ const PhoneInputScreen = ({navigation}) => {
     try {
       const user = await confirm?.confirm(code);
       setIsNewUser(user!.additionalUserInfo?.isNewUser);
-      // console.log('phoneInput: ', user!.additionalUserInfo?.isNewUser);
-
       setLoading(false);
     } catch (error) {
       console.log(error);

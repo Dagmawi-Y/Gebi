@@ -76,9 +76,7 @@ const StateContextProvider = ({children}) => {
 
   const reset = async () => {
     try {
-      auth()
-        .signOut()
-        .then(() => console.log('User signed out!'));
+      auth().signOut();
       await AsyncStorage.removeItem('lang').catch(err => console.log(err));
       await AsyncStorage.removeItem('introDone').catch(err => console.log(err));
     } catch (error) {

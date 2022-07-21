@@ -16,7 +16,7 @@ import colors from '../../config/colors';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
@@ -26,21 +26,31 @@ const ItemDetails = ({route, navigation}) => {
   const {data, owner, itemId} = route.params;
   const {user} = useContext(StateContext);
   const {t} = useTranslation();
+  const [totalSaleCount, setTotalSaleCount] = useState(0);
 
   const [stockHistory, setStockHistory]: Array<any> = ([] = useState([]));
 
   const deleteStock = async () => {
     let batch = firestore().batch();
+    let totSaleCount: number = 0;
     const sales = await firestore()
       .collection('stock')
       .where('owner', '==', user.uid)
       .where('item_id', '==', itemId)
       .get();
-
+    sales.docs.map(i => (totSaleCount += parseInt(i.data().initialCount)));
+    setTotalSaleCount(totSaleCount);
     sales.forEach(sale => {
       batch.delete(sale.ref);
     });
-    return batch.commit();
+    return batch.commit().then(async () => [
+      await firestore()
+        .collection('categories')
+        .doc(data.categoryId)
+        .update({
+          count: firestore.FieldValue.increment(-totSaleCount),
+        }),
+    ]);
   };
 
   const deleteItem = async () => {
@@ -52,6 +62,7 @@ const ItemDetails = ({route, navigation}) => {
           pictureRef.delete().catch(err => console.log(err));
           await firestore().collection('inventory').doc(itemId).delete();
           deleteStock();
+          // decrementCatValue();
           navigation.replace(routes.inventoryHome);
         },
         style: 'default',

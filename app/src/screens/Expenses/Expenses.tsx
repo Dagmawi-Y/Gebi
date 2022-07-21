@@ -12,7 +12,7 @@ import {ListItem, Text} from '@rneui/themed';
 
 import {ExpenseTypes, getIconForExpenseType} from './expenseTypes';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import TopBar from '../../components/TopBar/TopBar';
+import TopScreen from '../../components/TopScreen/TopScreen';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import {StateContext} from '../../global/context';
@@ -22,14 +22,11 @@ import formatNumber from '../../utils/formatNumber';
 export default function Expenses({navigation}: any) {
   let dimensions = Dimensions.get('window');
   const {t} = useTranslation();
-  const {totalExpense, setTotalExpense} = useContext(StateContext);
-  const {totalProfit, SetTotalProfit} = useContext(StateContext);
-  const {totalIncome, SetTotalIncome} = useContext(StateContext);
 
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <TopBar />
+        <TopScreen />
         <View style={styles.contentContainer}>
           <View
             style={{

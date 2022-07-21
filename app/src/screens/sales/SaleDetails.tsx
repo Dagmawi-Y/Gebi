@@ -21,13 +21,16 @@ import Share from 'react-native-share';
 
 import receipt from './reciept';
 import {useTranslation} from 'react-i18next';
+import roundDecimal from '../../utils/roundDecimal';
 
 const SaleDetails = ({route, navigation}) => {
   const {t} = useTranslation();
   const {data} = route.params;
 
-  const [sum, setSum] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [sum, setSum] = useState('');
+  const [total, setTotal] = useState('');
+  const [TOTVal, setTOTVal] = useState('');
+  const [VATVal, setVATVal] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [menuvisible, setMenuvisible] = useState(false);
@@ -41,13 +44,26 @@ const SaleDetails = ({route, navigation}) => {
       sum = sum + data.items[i].quantity * data.items[i].unitPrice;
     });
 
-    if (data.vat && !data.tot) total = sum * 0.15 + sum;
-    if (!data.vat && data.tot) total = sum * 0.02 + sum;
-    if (data.vat && data.tot) total = sum * 0.15 + sum * 0.02 + sum;
-    if (!data.vat && !data.tot) total = sum;
+    if (data.vat && !data.tot) {
+      total = sum * 0.15 + sum;
+      setVATVal(formatNumber(sum * 0.15));
+    }
+    if (!data.vat && data.tot) {
+      setTOTVal(formatNumber(sum * 0.02));
+      total = sum * 0.02 + sum;
+    }
+    if (data.vat && data.tot) {
+      setVATVal(formatNumber(sum * 0.15));
+      total = sum * 0.15 + sum * 0.02 + sum;
+      setVATVal(formatNumber(sum * 0.15));
+      setTOTVal(formatNumber(sum * 0.02));
+    }
+    if (!data.vat && !data.tot) {
+      total = sum;
+    }
 
-    setSum(sum);
-    setTotal(total);
+    setSum(formatNumber(sum));
+    setTotal(formatNumber(total));
   };
 
   const capture = () => {
@@ -324,7 +340,7 @@ const SaleDetails = ({route, navigation}) => {
                         styles.textBold,
                         {textAlign: 'right', fontSize: 20},
                       ]}>
-                      {formatNumber(sum * 0.15)} {t('Birr')}
+                      {VATVal} {t('Birr')}
                     </Text>
                   </View>
                 ) : null}
@@ -344,7 +360,7 @@ const SaleDetails = ({route, navigation}) => {
                         styles.textBold,
                         {textAlign: 'right', fontSize: 20},
                       ]}>
-                      {formatNumber(sum * 0.02)} {t('Birr')}
+                      {TOTVal} {t('Birr')}
                     </Text>
                   </View>
                 ) : null}

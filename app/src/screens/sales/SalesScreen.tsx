@@ -10,15 +10,18 @@ import {
   Animated,
   Pressable,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 import {useTranslation} from 'react-i18next';
 
-import TopBar from '../../components/TopBar/TopBar';
+import TopScreen from '../../components/TopScreen/TopScreen';
 import Loading from '../../components/lotties/Loading';
 import EmptyBox from '../../components/lotties/EmptyBox';
 import colors from '../../config/colors';
@@ -36,6 +39,7 @@ export default function Items({navigation}) {
   const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
+  const [stockCount, setStockCount]: any = useState();
 
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
@@ -86,9 +90,22 @@ export default function Items({navigation}) {
     }
   };
 
+  const getStockCount = () => {
+    firestore()
+      .collection('inventory')
+      .where('owner', '==', user.uid)
+      .get()
+      .then(snap => {
+        setStockCount(snap.size);
+      });
+  };
+
   useEffect(() => {
     let mounted = true;
-    mounted && getSales();
+    if (mounted) {
+      getSales();
+      getStockCount();
+    }
 
     return () => {
       mounted = false;
@@ -98,7 +115,19 @@ export default function Items({navigation}) {
   return (
     <>
       <FloatingButton
-        action={() => navigation.navigate(routes.newSale)}
+        action={() => {
+          if (stockCount > 0) {
+            navigation.navigate(routes.newSale);
+          } else {
+            Alert.alert(t('Inventory_Empty'), ``, [
+              {
+                text: 'ተመለስ',
+                onPress: () => {},
+                style: 'default',
+              },
+            ]);
+          }
+        }}
         value={''}
       />
       <SafeAreaView style={styles.container}>
@@ -108,7 +137,7 @@ export default function Items({navigation}) {
         />
 
         <ScrollView>
-          <TopBar />
+          <TopScreen />
           {searchVisible && (
             <View
               style={{
@@ -162,6 +191,7 @@ export default function Items({navigation}) {
                   color: colors.faded_dark,
                 }}>
                 {t('Sales')}
+                {stockCount}
               </Text>
 
               {/* Filter button and filter Tag*/}

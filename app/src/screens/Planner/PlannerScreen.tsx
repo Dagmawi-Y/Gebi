@@ -24,6 +24,7 @@ import {StateContext} from '../../global/context';
 import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
+import TopScreen from '../../components/TopScreen/TopScreen';
 
 export default function PlanerScreen({navigation}: any) {
   const {t} = useTranslation();
@@ -62,7 +63,6 @@ export default function PlanerScreen({navigation}: any) {
   };
 
   useEffect(() => {
-    console.log(userData);
     getUserData();
   }, []);
 
@@ -71,6 +71,7 @@ export default function PlanerScreen({navigation}: any) {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <TopScreen />
         <View
           style={{
             backgroundColor: colors.primary,
@@ -156,7 +157,6 @@ export default function PlanerScreen({navigation}: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
   },
   contentContainer: {
     paddingHorizontal: 10,

@@ -45,12 +45,8 @@ const App = () => {
   };
   const setData = async () => {
     try {
-      await AsyncStorage.setItem('lang', 'Amharic').then(l => {
-        console.log(l);
-      });
-      await AsyncStorage.setItem('introDone', 'true').then(l => {
-        console.log(l);
-      });
+      await AsyncStorage.setItem('lang', 'Amharic').then(l => {});
+      await AsyncStorage.setItem('introDone', 'true').then(l => {});
     } catch (error) {
       console.log(error);
     }
