@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import PlanerScreen from '../../../screens/Planner/PlannerScreen';
@@ -19,11 +19,8 @@ import {StateContext} from '../../../global/context';
 
 const Tab = createBottomTabNavigator();
 
-const AppTabNavigator = () => {
-  const {isReady} = useContext(StateContext);
+const AppTabNavigator = ({navigation}) => {
   const {t} = useTranslation();
-
-  if (!isReady) return null;
 
   return (
     <Tab.Navigator
@@ -39,7 +36,7 @@ const AppTabNavigator = () => {
         },
       }}>
       <Tab.Screen
-        name={routes.salesNav}
+        name={t(routes.salesNav)}
         component={SalesNavigator}
         options={{
           tabBarIcon: ({color, size}) => (

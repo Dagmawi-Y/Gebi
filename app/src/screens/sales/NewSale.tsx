@@ -26,11 +26,13 @@ const NewSale = ({navigation, route}) => {
   const {t} = useTranslation();
   const {user} = useContext(StateContext);
 
+  const [searchVisible, setSearchVisible] = useState(false);
   const [error, setError] = useState('');
   const mountedRef = useRef(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [customer, setCustomer] = useState('');
+  const [customers, setCustomers]: Array<any> = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [isVatIncluded, setIsVatIncluded] = useState(false);
   const [isTotIncluded, setIsTotIncluded] = useState(false);
@@ -113,6 +115,16 @@ const NewSale = ({navigation, route}) => {
     return false;
   };
 
+  const getCustomers = async () => {
+    await firestore()
+      .collection('customers')
+      .where('owner', '==', user.uid)
+      .get()
+      .then(res => {
+        setCustomers(res.docs);
+      });
+  };
+
   const addNewSale = async () => {
     if (checkEmpty()) {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
@@ -131,6 +143,10 @@ const NewSale = ({navigation, route}) => {
               .collection('sales')
               .add(sale)
               .then(async res => {
+                await firestore().collection('customers').add({
+                  name: customer,
+                  owner: user.uid,
+                });
                 for (var i in addedItems) {
                   await firestore()
                     .collection('inventory')
@@ -152,7 +168,6 @@ const NewSale = ({navigation, route}) => {
               });
             setAddedItems([]);
             navigation.pop();
-            console.log('Adding Sale Complete!');
           } catch (error) {
             console.log(error);
           }
@@ -160,16 +175,13 @@ const NewSale = ({navigation, route}) => {
         style: 'default',
       },
       {
-        text: 'ተመለስ',
+        text: t('Cancel'),
         onPress: () => {},
         style: 'default',
       },
     ]);
   };
 
-  const handleSubmit = () => {
-    addNewSale();
-  };
 
   const calculate = () => {
     if (!mountedRef) return;
@@ -195,6 +207,7 @@ const NewSale = ({navigation, route}) => {
 
   useEffect(() => {
     calculate();
+    getCustomers();
     return () => {
       mountedRef.current = false;
     };
@@ -266,7 +279,7 @@ const NewSale = ({navigation, route}) => {
               height: 50,
               paddingHorizontal: 15,
               color: colors.black,
-              fontSize: 20,
+              fontSize: 18,
               flexDirection: 'row-reverse',
               justifyContent: 'flex-start',
               backgroundColor: colors.white,
@@ -274,12 +287,60 @@ const NewSale = ({navigation, route}) => {
             placeholder={t('Enter_Customer_Name')}
             onChangeText={val => {
               setCustomer(val);
+              setSearchVisible(true);
             }}
+            onEndEditing={() => setSearchVisible(false)}
             value={customer}
             keyboardType="default"
             placeholderTextColor={colors.faded_grey}
           />
+          {customers.length && searchVisible ? (
+            <View
+              style={{
+                zIndex: 10,
+              }}>
+              <View
+                style={{
+                  backgroundColor: colors.white,
+                  position: 'absolute',
+                  top: -18,
+                  width: '94%',
+                  elevation: 10,
+                  padding: 10,
+                  marginTop: 10,
+                  marginHorizontal: 12,
+                }}>
+                {customers
+                  .filter(i =>
+                    i
+                      .data()
+                      .name.toLowerCase()
+                      .includes(customer.toLowerCase()),
+                  )
+                  .map(i => (
+                    <TouchableOpacity
+                      key={i.id}
+                      onPress={() => {
+                        setSearchVisible(false);
+                        setCustomer(i.data().name);
+                      }}>
+                      <Text
+                        style={{
+                          color: colors.black,
+                          fontSize: 18,
+                          marginVertical: 5,
+                          borderBottomWidth: 0.4,
+                          borderColor: '#00000040',
+                        }}>
+                        {i.data().name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+              </View>
+            </View>
+          ) : null}
         </View>
+
         <View style={styles.ListItemContainer}>
           <Text
             style={[
@@ -391,7 +452,7 @@ const NewSale = ({navigation, route}) => {
               <Text
                 style={[
                   styles.textBold,
-                  {textAlign: 'right', fontSize: 20, marginBottom: 15},
+                  {textAlign: 'right', fontSize: 18, marginBottom: 15},
                 ]}>
                 {formatNumber(sum)} {t('Birr')}
               </Text>
@@ -437,7 +498,7 @@ const NewSale = ({navigation, route}) => {
                   styles.textBold,
                   {
                     textAlign: 'right',
-                    fontSize: 20,
+                    fontSize: 18,
                     textDecorationStyle: 'solid',
                     textDecorationLine: !isVatIncluded
                       ? 'line-through'
@@ -488,7 +549,7 @@ const NewSale = ({navigation, route}) => {
                   styles.textBold,
                   {
                     textAlign: 'right',
-                    fontSize: 20,
+                    fontSize: 18,
                     textDecorationStyle: 'solid',
                     textDecorationLine: !isTotIncluded
                       ? 'line-through'
@@ -507,7 +568,7 @@ const NewSale = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <Text
-                style={[styles.textBold, {fontSize: 20, fontWeight: '600'}]}>
+                style={[styles.textBold, {fontSize: 18, fontWeight: '600'}]}>
                 {t('Total')} {t('Sum')}
               </Text>
               <Text
@@ -515,7 +576,7 @@ const NewSale = ({navigation, route}) => {
                   styles.textBold,
                   {
                     textAlign: 'right',
-                    fontSize: 25,
+                    fontSize: 23,
                     textDecorationStyle: 'solid',
                     textDecorationLine: 'underline',
                   },
@@ -677,7 +738,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   pageTitle: {
-    fontSize: 25,
+    fontSize: 23,
     color: colors.black,
     fontWeight: 'bold',
     marginLeft: 10,
@@ -700,7 +761,7 @@ const styles = StyleSheet.create({
   textBold: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 10,
   },
   textLight: {

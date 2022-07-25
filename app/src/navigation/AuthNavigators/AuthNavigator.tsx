@@ -10,8 +10,7 @@ import {StateContext} from '../../global/context';
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => {
-  const {user, isReady} = useContext(StateContext);
-  if (!isReady) return null;
+  const {user} = useContext(StateContext);
 
   return (
     <>

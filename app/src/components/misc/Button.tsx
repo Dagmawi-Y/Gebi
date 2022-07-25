@@ -34,12 +34,12 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   buttonOutlinedTitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: colors.black,
   },
   buttonNormal: {backgroundColor: colors.primary},
   buttonNormalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: colors.white,
   },
 });

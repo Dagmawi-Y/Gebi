@@ -43,7 +43,7 @@ const LanguageSelector = () => {
       <Text
         style={{
           color: colors.black,
-          fontSize: 20,
+          fontSize: 18,
           textAlign: 'center',
           fontWeight: 'bold',
           marginVertical: 10,
@@ -75,7 +75,7 @@ const LanguageSelector = () => {
           shadowColor: '#00000040',
           elevation: 10,
         }}>
-        <Text style={{color: colors.black, fontSize: 25}}>{t('Language')}</Text>
+        <Text style={{color: colors.black, fontSize: 23}}>{t('Language')}</Text>
         <Icon name="caretdown" color={colors.black} size={20} />
       </TouchableOpacity>
 

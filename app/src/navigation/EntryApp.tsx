@@ -5,6 +5,7 @@ import {StateContext} from '../global/context';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import AppDrawerNavigator from './AppNavigators/AppDrawerNavigator';
 import AuthNavigator from './AuthNavigators/AuthNavigator';
 
@@ -13,13 +14,14 @@ import colors from '../config/colors';
 import firestore from '@react-native-firebase/firestore';
 import NewUserNavigator from './NewUserNavigator/NewUserNavigator';
 import LottieView from 'lottie-react-native';
+import routes from './routes';
 
-const EntryApp = () => {
-  const {user, initializing} = useContext(StateContext);
-  const {isNewUser} = useContext(StateContext);
-  const {isReady, setIsNewUser} = useContext(StateContext);
+const Stack = createStackNavigator();
 
-  if (initializing && !isReady) {
+const EntryApp = ({navigation}) => {
+  const {user, userInfo, initializing} = useContext(StateContext);
+
+  if (initializing) {
     return (
       <View
         style={{
@@ -43,10 +45,29 @@ const EntryApp = () => {
     );
   }
 
+  useEffect(() => {
+    if (!user) {
+      navigation.replace(routes.authNavigator, {
+        screen: routes.otp,
+      });
+    }
+  }, [user]);
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
-      {!user || isNewUser ? <AuthNavigator /> : <AppDrawerNavigator />}
+      <Stack.Navigator
+        initialRouteName={
+          !user || userInfo.length == 0
+            ? routes.authNavigator
+            : routes.mainNavigator
+        }
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name={routes.authNavigator} component={AuthNavigator} />
+        <Stack.Screen
+          name={routes.mainNavigator}
+          component={AppDrawerNavigator}
+        />
+      </Stack.Navigator>
     </SafeAreaProvider>
   );
 };

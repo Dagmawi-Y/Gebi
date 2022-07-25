@@ -88,7 +88,7 @@ export default function PlanerScreen({navigation}: any) {
             <View style={{flexDirection: 'row', marginBottom: 5}}>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: 'bold',
                 }}>
                 {t('Income')}
@@ -120,7 +120,7 @@ export default function PlanerScreen({navigation}: any) {
             <View style={{flexDirection: 'row', marginBottom: 5}}>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: 'bold',
                 }}>
                 {t('Expense')}

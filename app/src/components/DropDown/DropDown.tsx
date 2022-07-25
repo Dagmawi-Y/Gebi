@@ -49,7 +49,7 @@ const DropDown = () => {
             }}
             onPress={() => print()}>
             <Icon name={'pdffile1'} size={30} color={colors.primary} />
-            <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
+            <Text style={{marginLeft: 5, fontSize: 18, color: colors.black}}>
               PDF
             </Text>
           </TouchableOpacity>
@@ -60,7 +60,7 @@ const DropDown = () => {
             }}
             onPress={() => capture()}>
             <Icon name={'picture'} size={30} color={colors.primary} />
-            <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
+            <Text style={{marginLeft: 5, fontSize: 18, color: colors.black}}>
               Photo
             </Text>
           </TouchableOpacity>

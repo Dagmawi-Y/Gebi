@@ -24,7 +24,8 @@ const ImageSelector = ({photo, setPhoto}) => {
   return (
     <View
       style={{
-        marginBottom: 10,
+        // marginBottom: 10,
+        // backgroundColor: 'red',
         height: 150,
         width: '80%',
         alignSelf: 'center',
@@ -110,7 +111,7 @@ const ImageSelector = ({photo, setPhoto}) => {
             </TouchableOpacity>
           </View>
 
-          <Text style={{color: colors.black, fontSize: 20}}>ፎቶ ማያያዣ</Text>
+          <Text style={{color: colors.black, fontSize: 18}}>ፎቶ ማያያዣ</Text>
         </View>
       )}
     </View>

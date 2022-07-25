@@ -141,7 +141,7 @@ const ItemDetails = ({route, navigation}) => {
             <View style={styles.boardCol}>
               <Text style={styles.boardTopTitle}>{t('Total')}</Text>
               <Text style={[styles.boardSubTitle, {textAlign: 'right'}]}>
-                {formatNumber(data.currentCount)}
+                {formatNumber(data.currentCount).split('.')[0]}
               </Text>
             </View>
           </View>
@@ -168,7 +168,8 @@ const ItemDetails = ({route, navigation}) => {
                     {formatNumber(history.doc.unit_price)} {t('Birr')}
                   </Text>
                   <Text style={tableStyles.trowFont}>
-                    {formatNumber(history.doc.initialCount)} {history.doc.unit}
+                    {formatNumber(history.doc.initialCount).split('.')[0]}{' '}
+                    {history.doc.unit}
                   </Text>
                   <Text style={tableStyles.trowFont}>
                     {history.doc.supplier_name}

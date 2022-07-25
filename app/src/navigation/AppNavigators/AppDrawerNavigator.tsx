@@ -17,16 +17,17 @@ import CustomDrawer from './CustomDrawer';
 import {useNavigation} from '@react-navigation/native';
 const Drawer = createDrawerNavigator();
 
-function AppDrawerNavigator() {
+function AppDrawerNavigator({navigation}) {
   const {t} = useTranslation();
 
-  const {isReady} = useContext(StateContext);
-  const {initializing} = useContext(StateContext);
+  const {initializing, user} = useContext(StateContext);
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const route = useRoute();
 
-  if (!isReady || initializing) return null;
+  if (initializing) {
+    return null;
+  }
 
   return (
     <>

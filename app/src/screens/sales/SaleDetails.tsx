@@ -88,7 +88,7 @@ const SaleDetails = ({route, navigation}) => {
               setError('Item does not exist in stock!');
               Alert.alert(`Item does not exist in stock!`, ``, [
                 {
-                  text: 'ተመለስ',
+                  text: t('Cancel'),
                   onPress: () => {},
                   style: 'default',
                 },
@@ -192,7 +192,7 @@ const SaleDetails = ({route, navigation}) => {
               }}
               onPress={() => print()}>
               <Icon name={'pdffile1'} size={30} color={colors.primary} />
-              <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
+              <Text style={{marginLeft: 5, fontSize: 18, color: colors.black}}>
                 PDF
               </Text>
             </TouchableOpacity>
@@ -203,7 +203,7 @@ const SaleDetails = ({route, navigation}) => {
               }}
               onPress={() => capture()}>
               <Icon name={'picture'} size={30} color={colors.primary} />
-              <Text style={{marginLeft: 5, fontSize: 20, color: colors.black}}>
+              <Text style={{marginLeft: 5, fontSize: 18, color: colors.black}}>
                 Photo
               </Text>
             </TouchableOpacity>
@@ -253,7 +253,7 @@ const SaleDetails = ({route, navigation}) => {
                 {t('Customer')}
                 {':'}
               </Text>
-              <Text style={{fontSize: 20, color: colors.faded_dark}}>
+              <Text style={{fontSize: 18, color: colors.faded_dark}}>
                 {data.customerName}
               </Text>
             </View>
@@ -277,14 +277,18 @@ const SaleDetails = ({route, navigation}) => {
                           <Text
                             style={{
                               color: colors.black,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: 'bold',
                             }}>
                             {data.items[i].itemName}
                           </Text>
                           <View style={{flexDirection: 'row'}}>
                             <Text style={styles.textBold}>
-                              {formatNumber(data.items[i].quantity)}
+                              {
+                                formatNumber(data.items[i].quantity).split(
+                                  '.',
+                                )[0]
+                              }
                               <Text style={styles.textLight}>
                                 {' '}
                                 - {t('Amount')}
@@ -320,7 +324,7 @@ const SaleDetails = ({route, navigation}) => {
                   <Text
                     style={[
                       styles.textBold,
-                      {textAlign: 'right', fontSize: 20},
+                      {textAlign: 'right', fontSize: 18},
                     ]}>
                     {formatNumber(sum)} {t('Birr')}
                   </Text>
@@ -338,7 +342,7 @@ const SaleDetails = ({route, navigation}) => {
                     <Text
                       style={[
                         styles.textBold,
-                        {textAlign: 'right', fontSize: 20},
+                        {textAlign: 'right', fontSize: 18},
                       ]}>
                       {VATVal} {t('Birr')}
                     </Text>
@@ -358,7 +362,7 @@ const SaleDetails = ({route, navigation}) => {
                     <Text
                       style={[
                         styles.textBold,
-                        {textAlign: 'right', fontSize: 20},
+                        {textAlign: 'right', fontSize: 18},
                       ]}>
                       {TOTVal} {t('Birr')}
                     </Text>
@@ -375,7 +379,7 @@ const SaleDetails = ({route, navigation}) => {
                   <Text
                     style={[
                       styles.textBold,
-                      {fontSize: 20, fontWeight: '600'},
+                      {fontSize: 18, fontWeight: '600'},
                     ]}>
                     {t('Total')}
                   </Text>
@@ -384,7 +388,7 @@ const SaleDetails = ({route, navigation}) => {
                       styles.textBold,
                       {
                         textAlign: 'right',
-                        fontSize: 25,
+                        fontSize: 23,
                         textDecorationStyle: 'solid',
                         textDecorationLine: 'underline',
                       },
@@ -515,7 +519,7 @@ const styles = StyleSheet.create({
   textBold: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 10,
   },
   textLight: {
@@ -528,7 +532,7 @@ const styles = StyleSheet.create({
   textValue: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 10,
     backgroundColor: colors.white,
     paddingVertical: 15,

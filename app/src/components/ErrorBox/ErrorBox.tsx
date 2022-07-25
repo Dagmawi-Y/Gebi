@@ -50,7 +50,7 @@ const ErrorBox = ({setError, errorMessage}) => {
         />
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 18,
             textAlign: 'center',
             color: colors.red,
           }}>

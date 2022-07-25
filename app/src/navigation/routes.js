@@ -1,4 +1,7 @@
 export default Object.freeze({
+  authNavigator: 'authNavigator',
+  mainNavigator: 'mainNavigator',
+
   langSelect: 'Choose Language',
   intro: 'Introduction',
   inventoryHome: 'InventoryScreen',
@@ -15,6 +18,7 @@ export default Object.freeze({
   Gebi: 'Gebi',
   itemDetails: 'Item Details',
   EditItem: 'Edit Item',
+  addNewItem: 'Add New Item',
   inventoryNav: 'Inventory',
   login: 'Login',
   register: 'Register',

@@ -36,7 +36,7 @@ const ListItem = ({title, unitPrice, quantity, picture}) => {
       <View style={styles.listRight}>
         <View style={styles.listPriceContainer}>
           <Text style={[styles.listTextbold, {color: colors.black}]}>
-            {formatNumber(quantity)}
+            {formatNumber(quantity).split('.')[0]}
           </Text>
         </View>
         <View>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   listTextbold: {
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: 18,
     color: colors.black,
     marginRight: 5,
     // marginLeft: 5,

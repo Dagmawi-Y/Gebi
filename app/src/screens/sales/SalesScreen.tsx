@@ -102,7 +102,7 @@ export default function Items({navigation}) {
 
   useEffect(() => {
     let mounted = true;
-    if (mounted) {
+    if (mounted && user) {
       getSales();
       getStockCount();
     }
@@ -121,7 +121,7 @@ export default function Items({navigation}) {
           } else {
             Alert.alert(t('Inventory_Empty'), ``, [
               {
-                text: 'ተመለስ',
+                text: t('Cancel'),
                 onPress: () => {},
                 style: 'default',
               },
@@ -157,7 +157,7 @@ export default function Items({navigation}) {
                   backgroundColor: colors.white,
                   flexGrow: 1,
                   height: 40,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: colors.black,
                 }}
                 selectionColor="black"
@@ -186,12 +186,11 @@ export default function Items({navigation}) {
               <Text
                 style={{
                   fontWeight: 'bold',
-                  fontSize: 20,
+                  fontSize: 18,
                   paddingHorizontal: 5,
                   color: colors.faded_dark,
                 }}>
                 {t('Sales')}
-                {stockCount}
               </Text>
 
               {/* Filter button and filter Tag*/}
@@ -210,7 +209,7 @@ export default function Items({navigation}) {
                       style={{
                         textAlign: 'center',
                         color: colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                         alignItems: 'center',
                       }}>
                       {t(filterValue)}
@@ -234,7 +233,7 @@ export default function Items({navigation}) {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 20,
+                      fontSize: 18,
                       marginRight: 10,
                     }}>
                     {t('Filter')}
@@ -273,7 +272,7 @@ export default function Items({navigation}) {
                                 color: colors.white,
                                 marginVertical: 5,
                                 borderRadius: 10,
-                                fontSize: 20,
+                                fontSize: 18,
                                 marginRight: 10,
                               },
                             ]}>
@@ -370,7 +369,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 20,
   },
   boardTopTitle: {fontSize: 22, fontWeight: '900'},

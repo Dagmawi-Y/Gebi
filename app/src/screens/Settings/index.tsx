@@ -43,7 +43,7 @@ const LanguageSelector = () => {
       <Text
         style={{
           color: colors.black,
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: 'bold',
           marginVertical: 10,
         }}>
@@ -73,7 +73,7 @@ const LanguageSelector = () => {
           shadowColor: '#00000040',
           elevation: 10,
         }}>
-        <Text style={{color: colors.black, fontSize: 25}}>
+        <Text style={{color: colors.black, fontSize: 23}}>
           {t(availableLanguages.filter(l => l.code == i18n.language)[0].name)}
         </Text>
         <Icon

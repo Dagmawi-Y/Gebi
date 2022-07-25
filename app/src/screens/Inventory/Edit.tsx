@@ -207,7 +207,7 @@ const Edit = ({route, navigation}) => {
             />
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 textAlign: 'center',
               }}>
               {errorMessage}
@@ -227,7 +227,7 @@ const Edit = ({route, navigation}) => {
           <Text
             style={{
               color: colors.black,
-              fontSize: 20,
+              fontSize: 18,
               marginBottom: 5,
             }}>
             የአከፋፋይ ስም
@@ -244,7 +244,7 @@ const Edit = ({route, navigation}) => {
           <Text
             style={{
               color: colors.black,
-              fontSize: 20,
+              fontSize: 18,
               marginBottom: 5,
             }}>
             የእቃ ስም
@@ -271,7 +271,7 @@ const Edit = ({route, navigation}) => {
               <Text
                 style={{
                   color: colors.black,
-                  fontSize: 20,
+                  fontSize: 18,
                   marginBottom: 5,
                 }}>
                 ብዛት
@@ -295,7 +295,7 @@ const Edit = ({route, navigation}) => {
               <Text
                 style={{
                   color: colors.black,
-                  fontSize: 20,
+                  fontSize: 18,
                   marginBottom: 5,
                 }}>
                 የአንዱ ዋጋ
@@ -319,7 +319,7 @@ const Edit = ({route, navigation}) => {
             <Text
               style={{
                 color: colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 marginBottom: 5,
               }}>
               አይነት
@@ -349,7 +349,7 @@ const Edit = ({route, navigation}) => {
             <Text
               style={{
                 color: colors.black,
-                fontSize: 20,
+                fontSize: 18,
                 marginBottom: 5,
               }}>
               መለኪያ
@@ -387,7 +387,7 @@ const Edit = ({route, navigation}) => {
               borderRadius: 10,
               backgroundColor: colors.primary,
             }}>
-            <Text style={{color: colors.white, fontSize: 25}}>Update</Text>
+            <Text style={{color: colors.white, fontSize: 23}}>Update</Text>
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 20,
   },
   dropDown: {

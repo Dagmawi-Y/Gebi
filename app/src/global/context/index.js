@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 
 const StateContext = React.createContext();
@@ -8,8 +9,9 @@ const StateContext = React.createContext();
 const StateContextProvider = ({children}) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [userInfo, setUserInfo] = useState([]);
+  const [loadingUserData, setLoadingUserData] = useState(null);
   const [headerVisible, setHeaderVisible] = useState(true);
-  const [isNewUser, setIsNewUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
   const [addNewModalVisible, setAdNewModalVisible] = useState(false);
@@ -25,26 +27,28 @@ const StateContextProvider = ({children}) => {
   const value = {
     user,
     curlang,
+    isReady,
+    userInfo,
     introDone,
-    initializing,
-    headerVisible,
-    addNewModalVisible,
-    totalExpense,
     totalProfit,
     totalIncome,
-    isNewUser,
-    isReady,
-    setIsReady,
-    setIsNewUser,
-    SetTotalProfit,
-    SetTotalIncome,
-    setTotalExpense,
-    setAdNewModalVisible,
-    setHeaderVisible,
-    setInitializing,
-    setIntroDone,
-    setCurlang,
+    totalExpense,
+    initializing,
+    headerVisible,
+    loadingUserData,
+    addNewModalVisible,
     setUser,
+    setIsReady,
+    setCurlang,
+    setUserInfo,
+    setIntroDone,
+    SetTotalIncome,
+    SetTotalProfit,
+    setInitializing,
+    setTotalExpense,
+    setHeaderVisible,
+    setLoadingUserData,
+    setAdNewModalVisible,
   };
 
   // Auth

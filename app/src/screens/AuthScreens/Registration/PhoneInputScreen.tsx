@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   KeyboardAvoidingView,
+  StatusBar,
 } from 'react-native';
 import {Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
@@ -28,7 +29,7 @@ const PhoneInputScreen = ({navigation}) => {
   const [phoneNumber, setphoneNumber] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const {isNewUser, user, setIsNewUser} = useContext(StateContext);
+  const {user} = useContext(StateContext);
 
   // OTP Section
   const [confirm, setConfirm] =
@@ -56,7 +57,6 @@ const PhoneInputScreen = ({navigation}) => {
     setLoading(true);
     try {
       const user = await confirm?.confirm(code);
-      setIsNewUser(user!.additionalUserInfo?.isNewUser);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -69,8 +69,10 @@ const PhoneInputScreen = ({navigation}) => {
 
   useEffect(() => {
     user ? navigation.navigate(routes.register) : null;
+    console.log('user: ', user);
+
     SystemNavigationBar.setNavigationColor(colors.light);
-  }, []);
+  }, [user]);
 
   let dimensions = Dimensions.get('window');
 
@@ -104,7 +106,7 @@ const PhoneInputScreen = ({navigation}) => {
               </View>
               <View style={{marginBottom: dimensions.height * 0.1}}>
                 <Text
-                  style={{fontSize: 25, marginBottom: 5, fontWeight: 'bold'}}>
+                  style={{fontSize: 23, marginBottom: 5, fontWeight: 'bold'}}>
                   {t('Enter_Your_Phone_Number')}
                 </Text>
                 <View
@@ -125,7 +127,7 @@ const PhoneInputScreen = ({navigation}) => {
                     }}
                   />
                   <Text
-                    style={{fontSize: 25, marginLeft: 5, fontWeight: 'bold'}}>
+                    style={{fontSize: 23, marginLeft: 5, fontWeight: 'bold'}}>
                     +251
                   </Text>
                   <TextInput
@@ -142,7 +144,7 @@ const PhoneInputScreen = ({navigation}) => {
                 </View>
                 <Text
                   style={{
-                    fontSize: 20,
+                    fontSize: 18,
                     color: 'red',
                     marginVertical: 15,
                     paddingHorizontal: 10,
@@ -170,7 +172,7 @@ const PhoneInputScreen = ({navigation}) => {
                     }}>
                     <Text
                       style={{
-                        fontSize: 25,
+                        fontSize: 23,
                         color: colors.white,
                       }}>
                       {t('Submit')}
@@ -211,7 +213,7 @@ const PhoneInputScreen = ({navigation}) => {
                 {phoneNumber ? (
                   <Text
                     style={{
-                      fontSize: 25,
+                      fontSize: 23,
                       width: '100%',
                       textAlign: 'center',
                     }}>
@@ -308,7 +310,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.transWhite,
     padding: 10,
     borderRadius: 10,
-    fontSize: 25,
+    fontSize: 23,
     marginVertical: 10,
     flexGrow: 1,
     width: '80%',
@@ -319,7 +321,7 @@ const styles = StyleSheet.create({
     margin: 12,
     color: colors.black,
     padding: 5,
-    fontSize: 25,
+    fontSize: 23,
   },
 });
 

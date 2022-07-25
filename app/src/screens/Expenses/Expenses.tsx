@@ -22,91 +22,93 @@ import formatNumber from '../../utils/formatNumber';
 export default function Expenses({navigation}: any) {
   let dimensions = Dimensions.get('window');
   const {t} = useTranslation();
+    const {user, totalExpense, totalProfit, totalIncome} =
+      useContext(StateContext);
 
-  return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <TopScreen />
-        <View style={styles.contentContainer}>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginVertical: 5,
-            }}>
-            <Text
+    return (
+      <>
+        <SafeAreaView style={styles.container}>
+          <TopScreen />
+          <View style={styles.contentContainer}>
+            <View
               style={{
-                fontWeight: 'bold',
-                fontSize: 20,
-                color: colors.faded_dark,
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginVertical: 5,
               }}>
-              ወጪዎች
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={{
-              position: 'absolute',
-              width: 50,
-              height: 50,
-              justifyContent: 'center',
-              bottom: 20,
-              right: 10,
-              backgroundColor: colors.primary,
-              alignItems: 'center',
-              borderRadius: 30,
-            }}>
-            <MaterialIcon name="plus" size={25} color={colors.white} />
-          </TouchableOpacity>
-          <ScrollView>
-            {[
-              {type: ExpenseTypes.TYPE1, name: 'የሲሚንቶ ግዢ'},
-              {type: ExpenseTypes.TYPE2, name: 'የጽህፈት መሳሪያዎች ግዢ'},
-              {type: ExpenseTypes.TYPE3, name: 'ሰራተኛ ደሞዝ'},
-            ].map(e => {
-              return (
-                <TouchableOpacity
-                  style={{marginVertical: 5}}
-                  key={e.name}
-                  //   onPress={() => navigation.navigate(SCREENS.UpdateSales)}
-                >
-                  <ListItem
-                    bottomDivider
-                    // key={i}
-                    containerStyle={{borderRadius: 5}}>
-                    {getIconForExpenseType(e.type)}
-                    <ListItem.Content>
-                      <ListItem.Title
-                        style={{
-                          fontWeight: 'bold',
-                          color: colors.faded_dark,
-                        }}>
-                        {e.name}
-                      </ListItem.Title>
-                    </ListItem.Content>
-                    <View style={{alignItems: 'flex-end'}}>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  color: colors.faded_dark,
+                }}>
+                ወጪዎች
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                width: 50,
+                height: 50,
+                justifyContent: 'center',
+                bottom: 20,
+                right: 10,
+                backgroundColor: colors.primary,
+                alignItems: 'center',
+                borderRadius: 30,
+              }}>
+              <MaterialIcon name="plus" size={25} color={colors.white} />
+            </TouchableOpacity>
+            <ScrollView>
+              {[
+                {type: ExpenseTypes.TYPE1, name: 'የሽያጭ ወጪ'},
+                // {type: ExpenseTypes.TYPE2, name: 'የጽህፈት መሳሪያዎች ግዢ'},
+                // {type: ExpenseTypes.TYPE3, name: 'ሰራተኛ ደሞዝ'},
+              ].map(e => {
+                return (
+                  <TouchableOpacity
+                    style={{marginVertical: 5}}
+                    key={e.name}
+                    //   onPress={() => navigation.navigate(SCREENS.UpdateSales)}
+                  >
+                    <ListItem
+                      bottomDivider
+                      // key={i}
+                      containerStyle={{borderRadius: 5}}>
+                      {getIconForExpenseType(e.type)}
+                      <ListItem.Content>
+                        <ListItem.Title
                           style={{
                             fontWeight: 'bold',
-                            fontSize: 16,
-                            color: 'red',
+                            color: colors.faded_dark,
                           }}>
-                          750.45 ብር
-                        </Text>
+                          {e.name}
+                        </ListItem.Title>
+                      </ListItem.Content>
+                      <View style={{alignItems: 'flex-end'}}>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
+                            style={{
+                              fontWeight: 'bold',
+                              fontSize: 16,
+                              color: 'red',
+                            }}>
+                            {totalExpense} {t('Birr')}
+                          </Text>
+                        </View>
+                        {/* <Text>22 Sep 2021</Text> */}
                       </View>
-                      <Text>22 Sep 2021</Text>
-                    </View>
-                  </ListItem>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    </>
-  );
+                    </ListItem>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </SafeAreaView>
+      </>
+    );
 }
 
 const styles = StyleSheet.create({

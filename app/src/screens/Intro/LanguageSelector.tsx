@@ -28,9 +28,7 @@ const LanguageSelector = ({navigation}) => {
       });
 
       setCurlang(ln);
-      introDone
-        ? navigation.replace(routes.Gebi, {screen: routes.inventoryHome})
-        : navigation.navigate(routes.intro);
+      navigation.navigate(routes.intro);
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +51,7 @@ const LanguageSelector = ({navigation}) => {
         <Text style={styles.logoTextStyle}>ገቢ</Text>
       </View>
       <View style={{flex: 2, alignItems: 'center'}}>
-        <Text style={{color: 'white', fontSize: 25, marginBottom: 20}}>
+        <Text style={{color: 'white', fontSize: 23, marginBottom: 20}}>
           {t('Choose_Language_To_Start')}
         </Text>
         <View
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 

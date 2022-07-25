@@ -26,7 +26,7 @@ const CustomMenu = ({navigation}) => {
       <Text
         style={{
           color: colors.white,
-          fontSize: 25,
+          fontSize: 23,
           marginHorizontal: 20,
           fontWeight: 'bold',
         }}>

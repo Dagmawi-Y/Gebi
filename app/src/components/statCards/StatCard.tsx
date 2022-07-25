@@ -32,7 +32,7 @@ export default function StatCard({
         borderRadius: 8,
         marginHorizontal: 5,
         flexGrow: 1,
-        height: 55,
+        height: 60,
       }}>
       <View
         style={{
@@ -59,8 +59,8 @@ export default function StatCard({
           style={{
             color: trend == 'positive' ? colors.green : colors.red,
             marginLeft: 5,
-            fontSize: 20,
-            fontWeight: '600',
+            fontSize: 15,
+            fontWeight: '500',
           }}>
           {label}
         </Text>
@@ -77,8 +77,8 @@ export default function StatCard({
         }}>
         <Text
           style={{
-            fontWeight: 'bold',
-            fontSize: 20,
+            fontWeight: '500',
+            fontSize: 15,
             textAlign: 'center',
             color: trend == 'positive' ? colors.green : colors.red,
           }}>

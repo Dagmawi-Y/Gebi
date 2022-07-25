@@ -49,9 +49,10 @@ const CustomDrawer = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    // getUserInfo();
+    getUserInfo();
   }, []);
-  // if (loading) return null;
+
+  if (loading) return null;
 
   return (
     <View
@@ -69,12 +70,12 @@ const CustomDrawer = ({route, navigation}) => {
           paddingTop: 15,
           paddingBottom: 5,
         }}>
-        <Image
+        {/* <Image
           source={require('../../assets/images/avatar.jpg')}
           style={{width: 150, height: 150, borderRadius: 180}}
-        />
+        /> */}
 
-        {/* <View
+        <View
           style={{
             backgroundColor: 'white',
             width: 150,
@@ -85,22 +86,20 @@ const CustomDrawer = ({route, navigation}) => {
           }}>
           <Text
             style={{
-              fontSize: 150,
+              fontSize: 100,
               padding: 0,
               color: colors.black,
               fontWeight: 'bold',
             }}>
             {userData[0].doc.orgName.substring(0, 1)}
           </Text>
-        </View> */}
-        <View style={{marginVertical: 15}}>
-          <Text style={{fontSize: 30, color: colors.white}}>
-            {/* {userData[0].doc.orgName} */}
-            Eldix.
+        </View>
+        <View style={{marginVertical: 15, alignItems: 'center'}}>
+          <Text style={{fontSize: 25, color: colors.white}}>
+            {userData[0].doc.orgName}
           </Text>
-          <Text style={{fontSize: 18, color: colors.white, fontWeight: '300'}}>
-            {/* {userData[0].doc.name} */}
-            Lorem Ipsum
+          <Text style={{fontSize: 15, color: colors.white, fontWeight: '300'}}>
+            {userData[0].doc.name}
           </Text>
         </View>
       </View>
@@ -156,14 +155,14 @@ const CustomDrawer = ({route, navigation}) => {
           icon="clipboard-pencil"
           iconType="2"
         />
-        <DrawerButton
+        {/* <DrawerButton
           active={active}
           setActive={setActive}
           navigation={navigation}
           route={routes.plan}
           title={'Calculator'}
           icon="point-of-sale"
-        />
+        /> */}
         <DrawerButton
           active={active}
           setActive={setActive}
@@ -185,7 +184,7 @@ const CustomDrawer = ({route, navigation}) => {
               style: 'default',
             },
             {
-              text: 'ተመለስ',
+              text: t('Cancel'),
               onPress: () => {},
               style: 'default',
             },
@@ -199,7 +198,7 @@ const CustomDrawer = ({route, navigation}) => {
         }}>
         <Text
           style={{
-            fontSize: 25,
+            fontSize: 23,
             fontWeight: '300',
             marginRight: 10,
             color: colors.white,
@@ -234,7 +233,7 @@ const DrawerButton = ({
         if (rootRoute) {
           navigation.navigate(route);
         } else {
-          navigation.navigate(routes.Gebi, {screen: route});
+          navigation.navigate(routes.Gebi, {screen: t(route)});
         }
       }}
       style={
@@ -251,7 +250,7 @@ const DrawerButton = ({
       </View>
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: '300',
           marginLeft: 10,
           color: colors.white,

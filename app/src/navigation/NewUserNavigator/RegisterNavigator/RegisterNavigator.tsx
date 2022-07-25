@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 
 const RegisterationNavigtor = () => (
   <>
-    <StatusBar barStyle="dark-content" backgroundColor={colors.lightBlue} />
+    <StatusBar barStyle="light-content" backgroundColor={colors.lightBlue} />
 
     <Stack.Navigator>
       <Stack.Screen

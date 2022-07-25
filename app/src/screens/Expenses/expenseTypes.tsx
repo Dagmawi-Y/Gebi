@@ -9,7 +9,13 @@ const ExpenseTypes = {
 const getIconForExpenseType = (type: string) => {
   switch (type) {
     case ExpenseTypes.TYPE1:
-      return <MaterialCommunityIcons name={'gas-station'} color={'green'} size={20} />;
+      return (
+        <MaterialCommunityIcons
+          name={'arrow-up-bold-circle'}
+          color={'green'}
+          size={20}
+        />
+      );
       break;
     case ExpenseTypes.TYPE2:
       return <MaterialCommunityIcons name={'cart'} color={'red'} size={20} />;

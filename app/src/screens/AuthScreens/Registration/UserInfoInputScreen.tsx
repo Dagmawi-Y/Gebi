@@ -17,16 +17,16 @@ import routes from '../../../navigation/routes';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../../global/context';
+import {useTranslation} from 'react-i18next';
 
 const UserInfoInputScreen = ({navigation}) => {
+  const {t} = useTranslation();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const {user} = useContext(StateContext);
-  const {isNewUser, setIsNewUser, isReady} = useContext(StateContext);
+  const {setIsNewUser, isReady} = useContext(StateContext);
 
-  if (!isReady) return null;
-
-  useEffect(() => {}, []);
+  const [userInfo, setUserInfo] = useState([]);
 
   // OTP
   const [confirm, setConfirm] =
@@ -48,7 +48,7 @@ const UserInfoInputScreen = ({navigation}) => {
 
   const handleSubmit = async () => {
     if (checkEmpty()) {
-      setError('Empty fields are not allowed!');
+      setError('Empty_Empty_Fields_Are_Not_Allowed');
       return;
     }
     setLoading(true);
@@ -59,18 +59,72 @@ const UserInfoInputScreen = ({navigation}) => {
       plan: plan,
       financial: financial,
     };
+
     try {
-      await firestore().collection('users').add(userData);
-      setLoading(false);
-      setIsNewUser(false);
+      await firestore()
+        .collection('users')
+        .where('userId', '==', user?.uid)
+        .get()
+        .then(async res => {
+          if (!res.docs.length) {
+            await firestore().collection('users').add(userData);
+            navigation.navigate(routes.mainNavigator);
+            setLoading(false);
+          }
+          if (res.docs.length) navigation.navigate(routes.mainNavigator);
+          setLoading(false);
+        });
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {}, []);
+  const getUserInfo = async () => {
+    setLoading(true);
+    try {
+      if (user)
+        firestore()
+          .collection('users')
+          .where('userId', '==', user?.uid)
+          .get()
+          .then(res => {
+            console.log();
+            if (res.docs.length > 0) {
+              navigation.replace(routes.mainNavigator, {
+                screen: routes.salesNav,
+              });
+            } else {
+              setLoading(false);
+            }
+          });
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
 
-  const dropDownOptions = ['ዕለታዊ ግብ', 'ወርሃዊ ግብ', 'የስድስት ወር ግብ', 'አመታዊ ግብ'];
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  if (loading)
+    return (
+      <StatusBox
+        msg={'Please wait...'}
+        onPress={() => {}}
+        overlay={false}
+        type="loading"
+      />
+    );
+
+  const dropDownOptions = [
+    t('Daily'),
+    t('Monthly'),
+    t('Six_Months'),
+    t('Yearly'),
+  ];
+
+  if (!isReady) return null;
 
   return (
     <>
@@ -79,17 +133,23 @@ const UserInfoInputScreen = ({navigation}) => {
       ) : (
         <>
           {error ? (
-            <StatusBox msg={error} type={'warn'} onPress={() => setError('')} />
+            <StatusBox
+              msg={t(error)}
+              type={'warn'}
+              onPress={() => setError('')}
+            />
           ) : null}
           <SafeAreaView style={[styles.container]}>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <Text style={styles.pageTitle}>የግል እና የንግድ መረጃ</Text>
+              <Text style={styles.pageTitle}>
+                {t('Personal_And_Bussiness_Information')}
+              </Text>
               <Text style={styles.pageDescription}>
-                ይህ መረጃ የእርስዎን መለያ ለማዘጋጀት ጥቅም ላይ ይውላል
+                {t('This_information_will_be_used_to_set_up_your_profile')}
               </Text>
 
               <View>
-                <Text style={styles.inputLable}>ሙሉ ስም</Text>
+                <Text style={styles.inputLable}>{t('Full_Name')}</Text>
                 <View style={styles.inputContiner}>
                   <TextInput
                     style={[styles.input]}
@@ -98,7 +158,7 @@ const UserInfoInputScreen = ({navigation}) => {
                       setName(val);
                     }}
                     value={name}
-                    placeholder="ሙሉ ስም"
+                    placeholder={t('Full_Name')}
                     keyboardType="default"
                     placeholderTextColor={colors.faded_grey}
                   />
@@ -106,7 +166,7 @@ const UserInfoInputScreen = ({navigation}) => {
               </View>
 
               <View>
-                <Text style={styles.inputLable}>የንግድ ስምዎ (ድርጅት ካሎት)?</Text>
+                <Text style={styles.inputLable}>{t('Organization_Name')}</Text>
                 <View style={styles.inputContiner}>
                   <TextInput
                     style={[styles.input]}
@@ -115,7 +175,7 @@ const UserInfoInputScreen = ({navigation}) => {
                       setOrgName(val);
                     }}
                     value={orgName}
-                    placeholder="የንግድ ስምዎ (ድርጅት ካሎት)?"
+                    placeholder={t('Organization_Name')}
                     keyboardType="default"
                     placeholderTextColor={colors.faded_grey}
                   />
@@ -124,7 +184,7 @@ const UserInfoInputScreen = ({navigation}) => {
 
               <View>
                 <Text style={styles.inputLable}>
-                  የትርፍ ግብዎን ለምን ያህል ግዜ ማቀድ ይፈልጋሉ?
+                  {t('Profit_Plan_Duration')}
                 </Text>
                 <View
                   style={[
@@ -146,6 +206,7 @@ const UserInfoInputScreen = ({navigation}) => {
                         />
                       </View>
                     )}
+                    defaultButtonText={t('Select_Option')}
                     buttonStyle={styles.dropDown}
                     onSelect={(selectedItem, index) => {
                       setPlan(selectedItem);
@@ -163,7 +224,7 @@ const UserInfoInputScreen = ({navigation}) => {
               {plan ? (
                 <View>
                   <Text style={styles.inputLable}>
-                    በ
+                    {t('Financial_Plan')}
                     <Text
                       style={[
                         styles.inputLable,
@@ -173,9 +234,8 @@ const UserInfoInputScreen = ({navigation}) => {
                           textDecorationStyle: 'solid',
                         },
                       ]}>
-                      {plan}
+                      {t('For')} {t(plan)}
                     </Text>
-                    ፣ ምን ያህል ብር መስራት ያስባሉ?
                   </Text>
                   <View style={styles.inputContiner}>
                     <TextInput
@@ -185,7 +245,7 @@ const UserInfoInputScreen = ({navigation}) => {
                         setFinancial(val.replace(/[^0-9]/g, ''));
                       }}
                       value={financial}
-                      placeholder="ምን ያህል ብር በቀን መስራት ያስባሉ?"
+                      placeholder={t('Financial_Plan')}
                       keyboardType="numeric"
                       placeholderTextColor={colors.faded_grey}
                     />
@@ -193,17 +253,22 @@ const UserInfoInputScreen = ({navigation}) => {
                 </View>
               ) : null}
 
-              <View>
-                <TouchableOpacity
-                  onPress={handleSubmit}
-                  activeOpacity={0.7}
-                  style={styles.buttonContainer}>
-                  <View style={styles.buttonInner}>
-                    <Text style={styles.buttonText}>ቀጥል</Text>
-                    <Icon name={'arrow-right'} color={'white'} size={35} />
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                onPress={handleSubmit}
+                activeOpacity={0.7}
+                style={[
+                  styles.buttonContainer,
+                  checkEmpty() ? {backgroundColor: colors.faded_grey} : null,
+                ]}>
+                <View style={styles.buttonInner}>
+                  <Text style={styles.buttonText}>{t('Submit')}</Text>
+                  <Icon
+                    name={checkEmpty() ? 'alert-circle-outline' : 'arrow-right'}
+                    color={'white'}
+                    size={35}
+                  />
+                </View>
+              </TouchableOpacity>
             </ScrollView>
           </SafeAreaView>
         </>
@@ -221,15 +286,15 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     marginTop: 30,
-    marginBottom: 10,
+    marginBottom: 15,
     textAlign: 'center',
     color: colors.primary,
-    fontSize: 40,
+    fontSize: 25,
     fontWeight: 'bold',
   },
   pageDescription: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: 15,
     marginBottom: 20,
   },
   inputContiner: {
@@ -243,7 +308,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   inputLable: {
-    fontSize: 25,
+    fontSize: 18,
     marginBottom: 5,
     color: colors.black,
   },
@@ -251,11 +316,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginRight: 0,
     backgroundColor: 'white',
-    height: 40,
+    height: 30,
     margin: 12,
     color: colors.black,
     padding: 5,
-    fontSize: 20,
+    fontSize: 15,
   },
   dropDown: {
     width: '100%',
@@ -265,10 +330,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   buttonContainer: {
+    marginTop: 30,
     width: '100%',
-    height: 70,
+    height: 60,
     justifyContent: 'center',
-    borderRadius: 30,
+    borderRadius: 20,
     backgroundColor: colors.primary,
     paddingHorizontal: 30,
     marginVertical: 20,
@@ -279,7 +345,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    fontSize: 25,
+    fontSize: 18,
     color: colors.white,
   },
 });

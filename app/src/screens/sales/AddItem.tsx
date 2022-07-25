@@ -150,7 +150,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     fontWeight: '600',
                     marginHorizontal: 5,
                     marginTop: 10,
-                    fontSize: 20,
+                    fontSize: 18,
                   }}>
                   {t('Amount')} {`(${t('Current_Amount')}: `}
                   {detailsItem!.quantity}
@@ -179,7 +179,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     fontWeight: '600',
                     marginHorizontal: 5,
                     marginTop: 10,
-                    fontSize: 20,
+                    fontSize: 18,
                   }}>
                   {t('Unit_Price')}
                   {` (${t('Current_Price')}: `}
@@ -258,7 +258,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                 {
                   textAlign: 'center',
                   paddingTop: 20,
-                  fontSize: 25,
+                  fontSize: 23,
                   width: '95%',
                   alignSelf: 'center',
                   paddingVertical: 10,
@@ -287,7 +287,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                   flexGrow: 1,
                   padding: 5,
                   paddingHorizontal: 10,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: colors.black,
                 }}
                 autoFocus={true}
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
   textBold: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 10,
   },
   textLight: {
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 20,
     borderRadius: 10,
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 10,
   },
 });

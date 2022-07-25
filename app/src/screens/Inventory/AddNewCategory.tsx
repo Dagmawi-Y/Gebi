@@ -23,50 +23,38 @@ import formatNumber from '../../utils/formatNumber';
 const AddNewCategory = ({navigation}) => {
   const {user} = useContext(StateContext);
   const {t} = useTranslation();
-  const [photo, setPhoto] = useState();
   const [error, setError] = useState('');
   const [writtingData, setWrittingData] = useState(false);
   const [categoryName, setCategoryName] = useState('');
-  const [categoryPrice, setCategoryPrice] = useState('');
   const [categoryDescription, setCategoryDescription] = useState('');
 
   const addCategory = () => {
-    if (!photo || !categoryName || !categoryPrice || !categoryDescription) {
+    if (!categoryName) {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
       return;
     }
 
-    Alert.alert(t('Are_You_Sure'), ``, [
+    Alert.alert(t('Are_You_Sure?'), ``, [
       {
         text: t('Yes'),
         onPress: async () => {
           try {
+            console.log('yes');
             setWrittingData(true);
-            const reference = storage().ref(`image_${Date.now()}`);
-            const pathToFile = photo;
-            const task = reference.putFile(pathToFile);
 
-            task.on('state_changed', taskSnapshot => {});
+            const category = {
+              name: categoryName,
+              description: categoryDescription ?? '',
+              owner: user.uid,
+              count: 0,
+            };
 
-            task.then(async () => {
-              const fileUrl = await reference.getDownloadURL();
-
-              const category = {
-                name: categoryName,
-                price: categoryPrice,
-                description: categoryDescription,
-                photo: fileUrl,
-                owner: user.uid,
-                count: 0,
-              };
-              firestore()
-                .collection('categories')
-                .add(category)
-                .then(() => {
-                  setWrittingData(false);
-                  navigation.pop();
-                });
-            });
+            firestore()
+              .collection('categories')
+              .add(category)
+              .then(res => {
+                navigation.pop();
+              });
           } catch (error) {
             setWrittingData(false);
             setError(`Something went wrong.\nTry again`);
@@ -128,22 +116,15 @@ const AddNewCategory = ({navigation}) => {
           paddingVertical: 20,
           borderRadius: 10,
         }}>
-        <ImageSelector photo={photo} setPhoto={setPhoto} />
+        <View>
+          <Text style={category.heading}>{t('Add_New_Category')}</Text>
+        </View>
         <View>
           <Text style={category.text}>{t('Category_Name')}</Text>
           <TextInput
             style={category.input}
             value={categoryName}
             onChangeText={val => setCategoryName(val)}
-          />
-        </View>
-        <View>
-          <Text style={category.text}>{t('Price')}</Text>
-          <TextInput
-            style={category.input}
-            value={categoryPrice}
-            onChangeText={val => setCategoryPrice(val)}
-            keyboardType="numeric"
           />
         </View>
         <View>
@@ -171,7 +152,6 @@ const AddNewCategory = ({navigation}) => {
             style={[category.input]}
             value={categoryDescription}
             onChangeText={val => {
-              console.log(categoryDescription.length);
               categoryDescription.length >= 50
                 ? setCategoryDescription(val.substring(0, 50))
                 : setCategoryDescription(val);
@@ -186,7 +166,7 @@ const AddNewCategory = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(t('Are_You_Sure'), ``, [
+              Alert.alert(t('Are_You_Sure??'), ``, [
                 {
                   text: t('Yes'),
                   onPress: () => {
@@ -272,6 +252,13 @@ const category = StyleSheet.create({
     borderRadius: 10,
     fontSize: 20,
     paddingHorizontal: 10,
+    color: colors.black,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: '600',
+    marginBottom: 40,
+    textAlign: 'center',
     color: colors.black,
   },
   text: {

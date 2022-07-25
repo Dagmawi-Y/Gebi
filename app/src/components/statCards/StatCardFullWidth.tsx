@@ -33,7 +33,7 @@ export default function StatCardFullWidth({
         marginHorizontal: 5,
         width: '60%',
         alignSelf: 'center',
-        height: 55,
+        height: 60,
       }}>
       <View
         style={{
@@ -45,22 +45,38 @@ export default function StatCardFullWidth({
           style={{
             width: 19,
             height: 19,
-            backgroundColor: positive ? colors.green : colors.red,
+            backgroundColor:
+              trend == 'positive'
+                ? colors.green
+                : trend == 'negative'
+                ? colors.red
+                : colors.warning,
             borderRadius: 5,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
           <Icon
-            name={positive ? 'long-arrow-up' : 'long-arrow-down'}
+            name={
+              trend == 'positive'
+                ? 'long-arrow-up'
+                : trend == 'negative'
+                ? 'long-arrow-down'
+                : 'minus'
+            }
             size={15}
             color={colors.white}
           />
         </View>
         <Text
           style={{
-            color: trend == 'positive' ? colors.green : colors.red,
+            color:
+              trend == 'positive'
+                ? colors.green
+                : trend == 'negative'
+                ? colors.red
+                : colors.black,
             marginLeft: 5,
-            fontSize: 20,
+            fontSize: 15,
             fontWeight: '600',
           }}>
           {label}
@@ -78,10 +94,15 @@ export default function StatCardFullWidth({
         }}>
         <Text
           style={{
-            fontWeight: 'bold',
-            fontSize: 20,
+            fontWeight: '500',
+            fontSize: 15,
             textAlign: 'center',
-            color: trend == 'positive' ? colors.green : colors.red,
+            color:
+              trend == 'positive'
+                ? colors.green
+                : trend == 'negative'
+                ? colors.red
+                : colors.warning,
           }}>
           {value} {`${t('Birr')}`}
         </Text>

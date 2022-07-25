@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   listTextbold: {
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: 18,
     color: colors.black,
   },
   listTextLight: {

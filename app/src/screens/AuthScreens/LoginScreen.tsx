@@ -65,7 +65,7 @@ const LoginScreen = ({navigation}) => {
           </View>
           <Text
             style={{
-              fontSize: 25,
+              fontSize: 23,
               color: colors.black,
               textAlign: 'center',
               paddingVertical: 30,

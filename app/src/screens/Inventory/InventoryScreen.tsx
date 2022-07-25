@@ -28,7 +28,6 @@ import InvetoryListItem from './InventoryListItem';
 import colors from '../../config/colors';
 import routes from '../../navigation/routes';
 
-import AddNew from './AddNew';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 import {useRef} from 'react';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
@@ -58,7 +57,7 @@ export default function Items({navigation}) {
     });
 
     if (mountedRef) {
-      setTotalItems(formatNumber(sumItem));
+      setTotalItems(formatNumber(sumItem).split('.')[0]);
       setSumPrice(formatNumber(sumItemPrice));
     }
   };
@@ -92,28 +91,29 @@ export default function Items({navigation}) {
   };
 
   const getCategories = () => {
-    firestore()
-      .collection('categories')
-      .where('owner', '==', user.uid)
-      .onSnapshot(qsn => {
-        let result: Array<any> = [];
-        if (qsn) {
-          qsn.forEach(sn => {
-            result.push({
-              id: sn.id,
-              count: sn.data().count,
-              name:
-                sn.data().name.substring(0, 1).toUpperCase() +
-                sn.data().name.substring(1),
+    if (user)
+      firestore()
+        .collection('categories')
+        .where('owner', '==', user.uid)
+        .onSnapshot(qsn => {
+          let result: Array<any> = [];
+          if (qsn) {
+            qsn.forEach(sn => {
+              result.push({
+                id: sn.id,
+                count: sn.data().count,
+                name:
+                  sn.data().name.substring(0, 1).toUpperCase() +
+                  sn.data().name.substring(1),
+              });
             });
-          });
-          setCategories(result);
-        }
-      });
+            setCategories(result);
+          }
+        });
   };
 
   useEffect(() => {
-    if (mountedRef) {
+    if (mountedRef && user) {
       getInventory();
       getCategories();
     }
@@ -125,7 +125,7 @@ export default function Items({navigation}) {
   return (
     <>
       <FloatingButton
-        action={setAddNewModalVisible}
+        action={() => navigation.navigate(routes.addNewItem)}
         value={addNewModalVisible}
       />
 
@@ -136,13 +136,6 @@ export default function Items({navigation}) {
         />
 
         <ScrollView>
-          {addNewModalVisible && (
-            <AddNew
-              data={data}
-              setAddNewModalVisible={setAddNewModalVisible}
-              addNewModalVisible={addNewModalVisible}
-            />
-          )}
           <View style={{backgroundColor: colors.primary, padding: 10}}>
             <View style={topCard.boardContainer}>
               <View style={topCard.boardCol}>
@@ -176,7 +169,7 @@ export default function Items({navigation}) {
                   backgroundColor: colors.white,
                   flexGrow: 1,
                   height: 40,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: colors.black,
                 }}
                 selectionColor="black"
@@ -206,7 +199,7 @@ export default function Items({navigation}) {
               <Text
                 style={{
                   fontWeight: 'bold',
-                  fontSize: 20,
+                  fontSize: 18,
                   color: colors.faded_dark,
                 }}>
                 {t('Total_Items')}
@@ -274,7 +267,7 @@ export default function Items({navigation}) {
                   categories.map(cat =>
                     cat.count > 0 ? (
                       <View key={cat.id}>
-                        <Text style={{color: colors.black, fontSize: 20}}>
+                        <Text style={{color: colors.black, fontSize: 18}}>
                           {cat.name} {`(${cat.count})`}
                         </Text>
                         {data
@@ -362,7 +355,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 20,
   },
   boardTopTitle: {fontSize: 22, fontWeight: '900'},

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 
