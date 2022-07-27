@@ -155,6 +155,16 @@ const CustomDrawer = ({route, navigation}) => {
           icon="clipboard-pencil"
           iconType="2"
         />
+        <DrawerButton
+          active={active}
+          setActive={setActive}
+          navigation={navigation}
+          route={routes.categories}
+          title={'Categories'}
+          rootRoute={true}
+          icon="clipboard-pencil"
+          iconType="2"
+        />
         {/* <DrawerButton
           active={active}
           setActive={setActive}
@@ -230,6 +240,13 @@ const DrawerButton = ({
       activeOpacity={0.7}
       onPress={() => {
         setActive(route);
+        if (route == routes.categories) {
+          navigation.navigate(routes.categoryNav, {
+            screen: route,
+          });
+          return;
+        }
+
         if (rootRoute) {
           navigation.navigate(route);
         } else {

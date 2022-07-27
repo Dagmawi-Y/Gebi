@@ -6,6 +6,7 @@ import PhoneInputScreen from '../../screens/AuthScreens/Registration/PhoneInputS
 import RegisterationNavigtor from '../NewUserNavigator/RegisterNavigator/RegisterNavigator';
 import UserInfoInputScreen from '../../screens/AuthScreens/Registration/UserInfoInputScreen';
 import {StateContext} from '../../global/context';
+import Confirmation from '../../screens/AuthScreens/Registration/Confirmation';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const AuthNavigator = () => {
         initialRouteName={user ? routes.register : routes.otp}
         screenOptions={{headerShown: false}}>
         <Stack.Screen name={routes.otp} component={PhoneInputScreen} />
+        <Stack.Screen name={routes.confirmation} component={Confirmation} />
         <Stack.Screen
           name={routes.register}
           component={UserInfoInputScreen}

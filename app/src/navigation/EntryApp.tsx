@@ -21,6 +21,14 @@ const Stack = createStackNavigator();
 const EntryApp = ({navigation}) => {
   const {user, userInfo, initializing} = useContext(StateContext);
 
+  useEffect(() => {
+    if (!user && !initializing) {
+      navigation.replace(routes.authNavigator, {
+        screen: routes.otp,
+      });
+    }
+  }, [user]);
+
   if (initializing) {
     return (
       <View
@@ -45,13 +53,6 @@ const EntryApp = ({navigation}) => {
     );
   }
 
-  useEffect(() => {
-    if (!user) {
-      navigation.replace(routes.authNavigator, {
-        screen: routes.otp,
-      });
-    }
-  }, [user]);
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
@@ -70,7 +71,7 @@ const EntryApp = ({navigation}) => {
       </Stack.Navigator>
     </SafeAreaProvider>
   );
-};
+};;
 
 export default EntryApp;
 

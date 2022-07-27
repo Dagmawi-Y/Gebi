@@ -31,25 +31,36 @@ const PhoneInputScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const {user} = useContext(StateContext);
 
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(59);
+  const [startCountDown, setStartCountDown] = useState(false);
+
   // OTP Section
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const [code, setCode] = useState('');
 
   // Handle the button press
-  async function signInWithPhoneNumber(n) {
+  async function signInWithPhoneNumber(number: string) {
+    console.log('sign in...');
+    setError('');
     try {
-      if (n.length > 9 || n.length < 9 || !n.startsWith('9')) {
-        setError(t('Wrong_Number'));
-        return;
+      const phone = checkPhone(number.toString());
+
+      if (phone) {
+        setLoading(true);
+        await auth()
+          .signInWithPhoneNumber('+251' + phone)
+          .then(confirmation => {
+            setConfirm(confirmation);
+            setLoading(false);
+            setStartCountDown(true);
+          });
       }
-      setLoading(true);
-      const confirmation = await auth().signInWithPhoneNumber('+251' + n);
-      setConfirm(confirmation);
-      setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      setError(t('Something_Went_Wrong'));
+      console.log(error);
     }
   }
 
@@ -60,16 +71,55 @@ const PhoneInputScreen = ({navigation}) => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      setError(t('Invalid_Code'));
       setLoading(false);
     }
   };
 
-  const checkPhone = (val: String) => {};
+  const checkPhone = (val: String) => {
+    let num = val;
+
+    if (val.startsWith('+251')) {
+      num = val.substring(4);
+    }
+    if (val.startsWith('251')) {
+      num = val.substring(3);
+    }
+    if (val.startsWith('0')) {
+      num = val.substring(1);
+    }
+    if (num.length > 9 || num.length < 9 || !num.startsWith('9')) {
+      setError(t('Wrong_Number'));
+      return null;
+    }
+    setphoneNumber(num.toString());
+    return num.toString();
+  };
   // END OTP Section
 
   useEffect(() => {
+    if (confirm) {
+      let myInterval = setInterval(() => {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
+        }
+        if (seconds === 0) {
+          if (minutes === 0) {
+            clearInterval(myInterval);
+          } else {
+            setMinutes(minutes - 1);
+            setSeconds(59);
+          }
+        }
+      }, 1000);
+      return () => {
+        clearInterval(myInterval);
+      };
+    }
+  }, [startCountDown, minutes, seconds]);
+
+  useEffect(() => {
     user ? navigation.navigate(routes.register) : null;
-    console.log('user: ', user);
 
     SystemNavigationBar.setNavigationColor(colors.light);
   }, [user]);
@@ -203,6 +253,49 @@ const PhoneInputScreen = ({navigation}) => {
                   source={require('../../../assets/logo-blue.png')}
                 />
               </View>
+              {minutes > 0 || seconds > 0 ? (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginBottom: 10,
+                    fontWeight: '500',
+                    textAlign: 'center',
+                    color: colors.primary,
+                  }}>
+                  {t('Send_Code_Again_In')}{' '}
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      marginBottom: 10,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      color: colors.primary,
+                    }}>
+                    {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                  </Text>
+                </Text>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => signInWithPhoneNumber(phoneNumber)}
+                  style={{
+                    backgroundColor: colors.primary,
+                    padding: 10,
+                    borderRadius: 10,
+                    alignSelf: 'center',
+                    marginBottom: 10,
+                    width: 100,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      color: colors.white,
+                    }}>
+                    Resend Code
+                  </Text>
+                </TouchableOpacity>
+              )}
               <Text
                 style={{
                   fontSize: 16,
@@ -248,6 +341,15 @@ const PhoneInputScreen = ({navigation}) => {
                   placeholderTextColor={colors.faded_grey}
                   keyboardType="numeric"
                 />
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: 'red',
+                    marginVertical: 15,
+                    paddingHorizontal: 10,
+                  }}>
+                  {error}
+                </Text>
               </View>
               <View
                 style={{

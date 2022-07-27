@@ -2,6 +2,20 @@
   "Wrong_Number": "Wrong Number",
   "Choose_Language_To_Start": "Choose Language To Start",
 
+  "There_Is_No_Item_In_Your_Stock": "There is no item in your stock",
+  "Please_Add_Stock_First": "Please add stock first",
+  "Add_Stock_Item": "Add stock item",
+  "Optional": "Optional",
+  "Categories": "Categories",
+
+  "No_Description": "No description",
+  "Add_One_First": "Add one first",
+  "No_Categories_Yet": "No categories yet",
+  "Include_Tax": "Include Tax",
+
+  "Send_Code_Again": "Send code again",
+  "Something_Went_Wrong": "Something went wrong",
+  "Invalid_Code": "ኮዱ ትክክል አይደለም",
   "This_information_will_be_used_to_set_up_your_profile": "This information will be used to set up your_profile",
   "Personal_And_Bussiness_Information": "የግል እና የንግድ መረጃ",
   "Full_Name": "Full Name",
@@ -92,6 +106,7 @@
   "Customer": "Customer",
   "Items_List": "Items List",
   "Tax": "Tax",
+  "TOT": "TOT",
   "Enter_Customer_Name": "Enter Customer Name",
   "Calculator": "Calculator",
 

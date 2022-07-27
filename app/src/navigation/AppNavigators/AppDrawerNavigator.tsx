@@ -15,6 +15,8 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import CustomDrawer from './CustomDrawer';
 
 import {useNavigation} from '@react-navigation/native';
+import Categories from '../../screens/Inventory/Categories';
+import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 const Drawer = createDrawerNavigator();
 
 function AppDrawerNavigator({navigation}) {
@@ -32,6 +34,7 @@ function AppDrawerNavigator({navigation}) {
   return (
     <>
       <Drawer.Navigator
+        initialRouteName={routes.Gebi}
         drawerContent={props => (
           <CustomDrawer navigation={navigation} route={route} />
         )}
@@ -57,11 +60,13 @@ function AppDrawerNavigator({navigation}) {
             </TouchableOpacity>
           ),
         })}>
+        <Drawer.Screen name={routes.homeScreen} component={HomeScreen} />
         <Drawer.Screen name={routes.Gebi} component={AppTabNavigator} />
         <Drawer.Screen
           name={routes.settingsNav}
           options={{
             headerTitle: t('Settings'),
+            headerShown: false,
           }}
           component={SettingsNavigator}
         />

@@ -16,6 +16,14 @@ import Icon2 from 'react-native-vector-icons/Foundation';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import ExpensesNavigator from './ExpensesNavigator';
 import {StateContext} from '../../../global/context';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+
+import {
+  InventoryIcon,
+  SalesIcon,
+  ExpensesIcon,
+  PlannerIcon,
+} from '../../../components/Icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +48,7 @@ const AppTabNavigator = ({navigation}) => {
         component={SalesNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
-            <Icon name="point-of-sale" color={color} size={size} />
+            <SalesIcon color={color} size={size} />
           ),
           tabBarLabel: t('Sales'),
           headerTitle: t('Sales'),
@@ -51,11 +59,7 @@ const AppTabNavigator = ({navigation}) => {
         component={ExpensesNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
-            <Icon3
-              name="clipboard-arrow-up-outline"
-              color={color}
-              size={size}
-            />
+            <ExpensesIcon color={color} size={size} />
           ),
           tabBarLabel: t('Expense'),
           headerTitle: t('Expense'),
@@ -67,7 +71,7 @@ const AppTabNavigator = ({navigation}) => {
         component={InventoryNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
-            <Icon3 name="warehouse" color={color} size={size} />
+            <InventoryIcon color={color} size={size} />
           ),
           tabBarLabel: t('Inventory'),
           headerTitle: t('Inventory'),
@@ -79,7 +83,7 @@ const AppTabNavigator = ({navigation}) => {
         component={PlanerScreen}
         options={{
           tabBarIcon: ({color, size}) => (
-            <Icon2 name="clipboard-pencil" color={color} size={size} />
+            <PlannerIcon color={color} size={size} />
           ),
           tabBarLabel: t('Plan'),
           headerTitle: t('Plan'),

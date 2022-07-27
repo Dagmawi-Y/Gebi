@@ -34,6 +34,7 @@ const NewSale = ({navigation, route}) => {
   const [customer, setCustomer] = useState('');
   const [customers, setCustomers]: Array<any> = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [isTaxTabVisible, setIsTaxTabVisible] = useState(false);
   const [isVatIncluded, setIsVatIncluded] = useState(false);
   const [isTotIncluded, setIsTotIncluded] = useState(false);
 
@@ -181,7 +182,6 @@ const NewSale = ({navigation, route}) => {
       },
     ]);
   };
-
 
   const calculate = () => {
     if (!mountedRef) return;
@@ -445,8 +445,7 @@ const NewSale = ({navigation, route}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text
-                style={[styles.textBold, {marginLeft: 30, marginBottom: 10}]}>
+              <Text style={[styles.textBold, {marginBottom: 10}]}>
                 {t('Sum')}
               </Text>
               <Text
@@ -457,108 +456,110 @@ const NewSale = ({navigation, route}) => {
                 {formatNumber(sum)} {t('Birr')}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}>
+            {isVatIncluded ? (
               <View
                 style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
                   flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                  marginLeft: 10,
                 }}>
-                <CheckboxButton
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                  }}>
+                  {/* <CheckboxButton
                   fillColor={colors.primary}
                   size={25}
                   isChecked={isVatIncluded}
                   onPress={(isChecked: boolean) => {
                     setIsVatIncluded(isChecked);
                   }}
-                />
+                /> */}
+                  <Text
+                    style={[
+                      styles.textLight,
+                      {
+                        paddingHorizontal: 0,
+                        textDecorationStyle: 'solid',
+                        textDecorationLine: !isVatIncluded
+                          ? 'line-through'
+                          : 'none',
+                      },
+                    ]}>
+                    {t('Tax')} (15% {t('Vat')})
+                  </Text>
+                </View>
+
                 <Text
                   style={[
-                    styles.textLight,
+                    styles.textBold,
                     {
-                      paddingHorizontal: 0,
-                      textDecorationStyle: 'solid',
-                      textDecorationLine: !isVatIncluded
-                        ? 'line-through'
-                        : 'none',
+                      textAlign: 'right',
+                      fontSize: 18,
                     },
                   ]}>
-                  {t('Tax')} (15% {t('Vat')})
+                  {formatNumber(sum * 0.15)} {t('Birr')}
                 </Text>
               </View>
-
-              <Text
-                style={[
-                  styles.textBold,
-                  {
-                    textAlign: 'right',
-                    fontSize: 18,
-                    textDecorationStyle: 'solid',
-                    textDecorationLine: !isVatIncluded
-                      ? 'line-through'
-                      : 'none',
-                  },
-                ]}>
-                {formatNumber(sum * 0.15)} {t('Birr')}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}>
+            ) : null}
+            {isTotIncluded ? (
               <View
                 style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
                   flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                  marginLeft: 10,
                 }}>
-                <CheckboxButton
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                  }}>
+                  {/* <CheckboxButton
                   fillColor={colors.primary}
                   size={25}
                   isChecked={isTotIncluded}
                   onPress={(isChecked: boolean) => {
                     setIsTotIncluded(isChecked);
                   }}
-                />
+                /> */}
+                  <Text
+                    style={[
+                      styles.textLight,
+                      {
+                        paddingHorizontal: 0,
+                        textDecorationStyle: 'solid',
+                        textDecorationLine: !isTotIncluded
+                          ? 'line-through'
+                          : 'none',
+                      },
+                    ]}>
+                    {t('TOT')} (2% {t('Tot')})
+                  </Text>
+                </View>
+
                 <Text
                   style={[
-                    styles.textLight,
+                    styles.textBold,
                     {
-                      paddingHorizontal: 0,
+                      textAlign: 'right',
+                      fontSize: 18,
                       textDecorationStyle: 'solid',
                       textDecorationLine: !isTotIncluded
                         ? 'line-through'
                         : 'none',
                     },
                   ]}>
-                  {t('TOT')} (2% {t('Tot')})
+                  {formatNumber(sum * 0.02)} {t('Birr')}
                 </Text>
               </View>
-
-              <Text
-                style={[
-                  styles.textBold,
-                  {
-                    textAlign: 'right',
-                    fontSize: 18,
-                    textDecorationStyle: 'solid',
-                    textDecorationLine: !isTotIncluded
-                      ? 'line-through'
-                      : 'none',
-                  },
-                ]}>
-                {formatNumber(sum * 0.02)} {t('Birr')}
-              </Text>
-            </View>
+            ) : null}
           </View>
           <View style={styles.summaryBottom}>
             <View
@@ -585,6 +586,23 @@ const NewSale = ({navigation, route}) => {
               </Text>
             </View>
           </View>
+          <TouchableOpacity onPress={() => setIsTaxTabVisible(true)}>
+            <Text
+              style={[
+                styles.textBold,
+                {
+                  marginBottom: 5,
+                  backgroundColor: colors.primary,
+                  color: colors.white,
+                  width: 120,
+                  textAlign: 'center',
+                  borderRadius: 10,
+                  paddingVertical: 3,
+                },
+              ]}>
+              {t('Include_Tax')}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.paymentTypeContainer}>
@@ -720,6 +738,93 @@ const NewSale = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {isTaxTabVisible ? (
+        <View
+          style={{
+            backgroundColor: colors.transBlack,
+            height: '100%',
+            width: '100%',
+            bottom: 0,
+            position: 'absolute',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{
+              width: '98%',
+              backgroundColor: colors.white,
+              borderRadius: 5,
+              marginBottom: 2,
+              paddingBottom: 10,
+            }}>
+            <View
+              style={{
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={() => setIsTaxTabVisible(false)}
+                style={{
+                  elevation: 5,
+                  shadowColor: colors.transBlack,
+                  backgroundColor: colors.white,
+                  borderRadius: 15,
+                  borderTopEndRadius: 0,
+                  borderTopStartRadius: 0,
+                  paddingHorizontal: 5,
+                }}>
+                <Icon
+                  name="down"
+                  color={colors.black}
+                  size={25}
+                  style={{marginBottom: -20}}
+                />
+                <Icon name="down" color={colors.black} size={25} />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={[
+                styles.textBold,
+                {textAlign: 'center', marginVertical: 15, fontSize: 20},
+              ]}>
+              {t('Include_Tax')}
+            </Text>
+
+            <View style={{paddingHorizontal: 20}}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  marginBottom: 20,
+                }}>
+                <CheckboxButton
+                  fillColor={colors.primary}
+                  size={30}
+                  isChecked={isVatIncluded}
+                  onPress={(isChecked: boolean) => {
+                    setIsVatIncluded(isChecked);
+                  }}
+                />
+                <Text style={[styles.textLight]}>{t('Vat')} (15%)</Text>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}>
+                <CheckboxButton
+                  fillColor={colors.primary}
+                  size={30}
+                  isChecked={isTotIncluded}
+                  onPress={(isChecked: boolean) => {
+                    setIsTotIncluded(isChecked);
+                  }}
+                />
+                <Text style={[styles.textLight]}>{t('TOT')} (2%)</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      ) : null}
     </>
   );
 };

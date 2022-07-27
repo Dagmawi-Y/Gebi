@@ -19,6 +19,7 @@ import ErrorBox from '../../components/ErrorBox/ErrorBox';
 import LottieView from 'lottie-react-native';
 import {StateContext} from '../../global/context';
 import formatNumber from '../../utils/formatNumber';
+import routes from '../../navigation/routes';
 
 const AddNewCategory = ({navigation}) => {
   const {user} = useContext(StateContext);
@@ -133,10 +134,12 @@ const AddNewCategory = ({navigation}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginTop: 5,
+              marginTop: 10,
               paddingRight: 5,
             }}>
-            <Text style={category.text}>{t('Description')}</Text>
+            <Text style={category.text}>
+              {t('Description')} {`(${t('Optional')})`}
+            </Text>
             <Text
               style={[
                 {color: colors.black, fontSize: 15},
@@ -150,6 +153,7 @@ const AddNewCategory = ({navigation}) => {
           </View>
           <TextInput
             style={[category.input]}
+            multiline
             value={categoryDescription}
             onChangeText={val => {
               categoryDescription.length >= 50
@@ -166,20 +170,25 @@ const AddNewCategory = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(t('Are_You_Sure??'), ``, [
-                {
-                  text: t('Yes'),
-                  onPress: () => {
-                    navigation.goBack();
+              if (categoryName.length) {
+                Alert.alert(t('Are_You_Sure?'), ``, [
+                  {
+                    text: t('Yes'),
+                    onPress: () => {
+                      navigation.goBack();
+                      return;
+                    },
+                    style: 'default',
                   },
-                  style: 'default',
-                },
-                {
-                  text: t('Cancel'),
-                  onPress: () => {},
-                  style: 'default',
-                },
-              ]);
+                  {
+                    text: t('Cancel'),
+                    onPress: () => {},
+                    style: 'default',
+                  },
+                ]);
+              } else {
+                navigation.goBack();
+              }
             }}
             style={{
               backgroundColor: colors.white,

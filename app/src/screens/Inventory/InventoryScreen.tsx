@@ -243,24 +243,52 @@ export default function Items({navigation}) {
               <Loading size={100} />
             ) : (
               <ScrollView>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate(routes.addNewCategory)}
-                  style={{
-                    backgroundColor: colors.primary,
-                    borderRadius: 10,
-                    padding: 10,
-                    flexDirection: 'row',
-                    width: 150,
-                    justifyContent: 'space-evenly',
-                    alignItems: 'center',
-                    marginVertical: 5,
-                  }}>
-                  <Icon name="plus" color={colors.white} size={15} />
-                  <Text style={{color: colors.white, fontSize: 15}}>
-                    {t('Add_New_Category')}
-                  </Text>
-                </TouchableOpacity>
-
+                <View
+                  style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                  {/* <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate(routes.categoryNav, {
+                        screen: routes.addNewCategory,
+                      })
+                    }
+                    style={{
+                      backgroundColor: colors.primary,
+                      borderRadius: 10,
+                      padding: 10,
+                      flexDirection: 'row',
+                      width: 150,
+                      justifyContent: 'space-evenly',
+                      alignItems: 'center',
+                      marginVertical: 5,
+                      marginRight: 10,
+                    }}>
+                    <Icon name="plus" color={colors.white} size={15} />
+                    <Text style={{color: colors.white, fontSize: 15}}>
+                      {t('Add_New_Category')}
+                    </Text>
+                  </TouchableOpacity> */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate(routes.categoryNav, {
+                        screen: routes.categories,
+                      })
+                    }
+                    style={{
+                      backgroundColor: colors.primary,
+                      borderRadius: 10,
+                      padding: 10,
+                      flexDirection: 'row',
+                      width: 100,
+                      justifyContent: 'space-evenly',
+                      alignItems: 'center',
+                      marginVertical: 5,
+                    }}>
+                    <Text style={{color: colors.white, fontSize: 15}}>
+                      {t('Categories')}
+                    </Text>
+                    <Icon name="arrowright" color={colors.white} size={15} />
+                  </TouchableOpacity>
+                </View>
                 {data.length == 0 ? (
                   <EmptyBox message={t('Inventory_Empty')} />
                 ) : data.length > 0 ? (

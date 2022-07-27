@@ -4,9 +4,13 @@ export default Object.freeze({
 
   langSelect: 'Choose Language',
   intro: 'Introduction',
+
+  homeScreen: 'homeScreen',
   inventoryHome: 'InventoryScreen',
   sales: 'SalesHome',
   addItem: 'Add Item',
+  categoryNav: 'CategoryNav',
+  categories: 'Categories',
   addNewCategory: 'Add Category',
   saleDetails: 'saleDetail',
   salesNav: 'Sales',
@@ -22,6 +26,7 @@ export default Object.freeze({
   inventoryNav: 'Inventory',
   login: 'Login',
   register: 'Register',
+  confirmation: 'Confirm',
   otp: 'OTP-Auth',
   register: 'Register',
   settingsNav: 'SettingsNav',

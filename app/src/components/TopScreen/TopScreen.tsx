@@ -30,34 +30,36 @@ export default function TopScreen() {
     let totalSaleIncome: number = 0;
     let totalSaleProfit: number = 0;
     let totalSaleExpense: number = 0;
+    if (data) {
+      data.forEach(i => {
+        Object.keys(i.items).map(key => {
+          totalSaleIncome =
+            totalSaleIncome +
+            parseFloat(i.items[key].unitPrice) *
+              parseFloat(i.items[key].quantity);
 
-    data.forEach(i => {
-      Object.keys(i.items).map(key => {
-        totalSaleIncome =
-          totalSaleIncome +
-          parseFloat(i.items[key].unitPrice) *
-            parseFloat(i.items[key].quantity);
-
-        totalSaleExpense =
-          totalSaleExpense +
-          parseFloat(i.items[key].originalPrice) *
-            parseFloat(i.items[key].quantity);
-        totalSaleProfit = totalSaleProfit + parseFloat(i.items[key].saleProfit);
+          totalSaleExpense =
+            totalSaleExpense +
+            parseFloat(i.items[key].originalPrice) *
+              parseFloat(i.items[key].quantity);
+          totalSaleProfit =
+            totalSaleProfit + parseFloat(i.items[key].saleProfit);
+        });
+        if (i.vat && !i.tot) {
+          totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.15;
+        }
+        if (i.tot && !i.vat) {
+          totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.02;
+        }
+        if (i.tot && i.vat) {
+          totalSaleIncome =
+            totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
+        }
       });
-      if (i.vat && !i.tot) {
-        totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.15;
-      }
-      if (i.tot && !i.vat) {
-        totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.02;
-      }
-      if (i.tot && i.vat) {
-        totalSaleIncome =
-          totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
-      }
-    });
-    setTotalExpense(formatNumber(totalSaleExpense));
-    SetTotalProfit(formatNumber(totalSaleProfit));
-    SetTotalIncome(formatNumber(totalSaleIncome));
+      setTotalExpense(formatNumber(totalSaleExpense));
+      SetTotalProfit(formatNumber(totalSaleProfit));
+      SetTotalIncome(formatNumber(totalSaleIncome));
+    }
   };
 
   const getSales = async () => {

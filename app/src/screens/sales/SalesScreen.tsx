@@ -119,13 +119,24 @@ export default function Items({navigation}) {
           if (stockCount > 0) {
             navigation.navigate(routes.newSale);
           } else {
-            Alert.alert(t('Inventory_Empty'), ``, [
-              {
-                text: t('Cancel'),
-                onPress: () => {},
-                style: 'default',
-              },
-            ]);
+            Alert.alert(
+              t('There_Is_No_Item_In_Your_Stock'),
+              t('Please_Add_Stock_First'),
+              [
+                {
+                  text: `+ ${t('Add_Stock_Item')}`,
+                  onPress: () => {
+                    navigation.navigate(t(routes.inventoryNav));
+                  },
+                  style: 'default',
+                },
+                {
+                  text: t('Cancel'),
+                  onPress: () => {},
+                  style: 'default',
+                },
+              ],
+            );
           }
         }}
         value={''}

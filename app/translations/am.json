@@ -2,6 +2,20 @@
   "Wrong_Number": "ቁጥሩ ትክክል አይደለም!",
   "Choose_Language_To_Start": "ለመጀመር ቋንቋ ይምረጡ",
 
+  "There_Is_No_Item_In_Your_Stock": "በእቃ ክፍሉ ምንም እቃ የለም",
+  "Please_Add_Stock_First": "በመጀመርያ እቃ ይመዝግቡ",
+  "Add_Stock_Item": "አዲስ እቃ መዝግብ",
+  "Optional": "Optional",
+  "Categories": "የቃ ምድብ",
+
+  "No_Description": "ማብራርያ የለውም",
+  "Add_One_First": "ቅድሚያ አዲስ ይፍጠሩ",
+  "No_Categories_Yet": "ምንም ምድብ አልፈጠሩም",
+  "Include_Tax": "ታክስ አካት",
+
+  "Send_Code_Again_In": "ኮድ ድጋሜ ለማስላክ",
+  "Something_Went_Wrong": "የሆነ ስህተት ተከስቷል",
+  "Invalid_Code": "ኮዱ ትክክል አይደለም",
   "This_information_will_be_used_to_set_up_your_profile": "ይህ መረጃ የእርስዎን መለያ ለማዘጋጀት ጥቅም ላይ ይውላል",
   "Personal_And_Bussiness_Information": "የግል እና የንግድ መረጃ",
   "Full_Name": "ሙሉ ስም",
@@ -92,6 +106,7 @@
   "Customer": "ደንበኛ",
   "Items_List": "የእቃዎች ዝርዝር",
   "Tax": "ታክስ",
+  "TOT": "TOT",
   "Enter_Customer_Name": "የ ደንብኛ ስም አስገባ",
   "Calculator": "ማስያ",
 
