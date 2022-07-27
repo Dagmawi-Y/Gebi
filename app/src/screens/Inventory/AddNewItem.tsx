@@ -135,21 +135,30 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     setFailedAnimation(true);
   };
 
-  const addNewInventory = async () => {
-    if (checkEmpty()) return raiseError('Empty_Empty_Fields_Are_Not_Allowed');
-    setWrittingData(true);
-
+  const uploadImage = async () => {
+    if (!photo) return null;
     try {
+      console.log(photo);
       const reference = storage().ref(`image_${Date.now()}`);
       const pathToFile = photo;
       const task = reference.putFile(pathToFile);
-      const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
 
       task.on('state_changed', taskSnapshot => {});
 
-      task
-        .then(async res => {
-          const fileUrl = await reference.getDownloadURL();
+      return task.then(() => {
+        return reference.getDownloadURL();
+      });
+    } catch (err) {}
+  };
+
+  const addNewInventory = async () => {
+    if (checkEmpty()) return raiseError('Empty_Empty_Fields_Are_Not_Allowed');
+    setWrittingData(true);
+    const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
+
+    try {
+      uploadImage()
+        .then(async fileUrl => {
           if (searchResult.length) {
             setWrittingData(false);
             raiseError('Item_Duplicate');
