@@ -69,9 +69,14 @@ const EntryApp = ({navigation}) => {
           component={AppDrawerNavigator}
         />
       </Stack.Navigator>
+      {/* {!user || userInfo.length == 0 ? (
+        <AuthNavigator />
+      ) : (
+        <AppDrawerNavigator />
+      )} */}
     </SafeAreaProvider>
   );
-};;
+};
 
 export default EntryApp;
 

@@ -58,11 +58,12 @@ const ItemDetails = ({route, navigation}) => {
       {
         text: t('Yes'),
         onPress: async () => {
-          let pictureRef = storage().refFromURL(data.picture);
-          pictureRef.delete().catch(err => console.log(err));
+          if (data.picture) {
+            let pictureRef = storage().refFromURL(data.picture);
+            pictureRef.delete().catch(err => console.log(err));
+          }
           await firestore().collection('inventory').doc(itemId).delete();
           deleteStock();
-          // decrementCatValue();
           navigation.replace(routes.inventoryHome);
         },
         style: 'default',

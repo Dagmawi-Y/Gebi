@@ -48,7 +48,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const [searchResult, setSearchResult]: Array<any> = useState([]);
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
-  const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር'];
+  const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር', 'ሜትር'];
   const [categories, setCategories]: Array<any> = useState([]);
 
   const searchItem = key => {

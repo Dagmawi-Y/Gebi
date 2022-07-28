@@ -185,9 +185,9 @@ const CustomDrawer = ({route, navigation}) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          Alert.alert(`እርግጠኛ ነዎት?`, ``, [
+          Alert.alert(t('Are_You_Sure?'), ``, [
             {
-              text: 'አዎ',
+              text: t('Yes'),
               onPress: () => {
                 auth().signOut();
               },

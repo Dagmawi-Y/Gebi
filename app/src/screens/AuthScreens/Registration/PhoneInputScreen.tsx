@@ -6,6 +6,7 @@ import {
   Image,
   KeyboardAvoidingView,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {Text} from '@rneui/themed';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
@@ -32,7 +33,8 @@ const PhoneInputScreen = ({navigation}) => {
   const {user} = useContext(StateContext);
 
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(59);
+  const [start, setStart] = useState(Date.now());
+  const [seconds, setSeconds] = useState(2);
   const [startCountDown, setStartCountDown] = useState(false);
 
   // OTP Section
@@ -42,7 +44,6 @@ const PhoneInputScreen = ({navigation}) => {
 
   // Handle the button press
   async function signInWithPhoneNumber(number: string) {
-    console.log('sign in...');
     setError('');
     try {
       const phone = checkPhone(number.toString());
@@ -55,7 +56,8 @@ const PhoneInputScreen = ({navigation}) => {
             setConfirm(confirmation);
             setLoading(false);
             setStartCountDown(true);
-          });
+          })
+          .catch(err => console.log(err));
       }
     } catch (error) {
       setLoading(false);
@@ -100,6 +102,9 @@ const PhoneInputScreen = ({navigation}) => {
   useEffect(() => {
     if (confirm) {
       let myInterval = setInterval(() => {
+        const millis = Date.now() - start;
+        const elapsed = Math.floor(millis / 1000);
+
         if (seconds > 0) {
           setSeconds(seconds - 1);
         }
@@ -151,12 +156,12 @@ const PhoneInputScreen = ({navigation}) => {
                   marginTop: dimensions.height * 0.2,
                 }}>
                 <Text h3 style={{marginBottom: 40, color: colors.primary}}>
-                  {t('Register_Here')}
+                  {t('Register_Here')} {}
                 </Text>
               </View>
               <View style={{marginBottom: dimensions.height * 0.1}}>
                 <Text
-                  style={{fontSize: 23, marginBottom: 5, fontWeight: 'bold'}}>
+                  style={{fontSize: 23, marginBottom: 5, fontWeight: '500'}}>
                   {t('Enter_Your_Phone_Number')}
                 </Text>
                 <View
@@ -177,7 +182,11 @@ const PhoneInputScreen = ({navigation}) => {
                     }}
                   />
                   <Text
-                    style={{fontSize: 23, marginLeft: 5, fontWeight: 'bold'}}>
+                    style={{
+                      fontSize: 23,
+                      marginLeft: 5,
+                      fontWeight: 'bold',
+                    }}>
                     +251
                   </Text>
                   <TextInput
@@ -187,7 +196,7 @@ const PhoneInputScreen = ({navigation}) => {
                       setphoneNumber(val);
                     }}
                     value={phoneNumber}
-                    placeholder="ስልክ ቁጥር ያስግቡ"
+                    placeholder={t('Enter_Phone_Number')}
                     keyboardType="numeric"
                     placeholderTextColor={colors.faded_grey}
                   />
@@ -262,7 +271,7 @@ const PhoneInputScreen = ({navigation}) => {
                     textAlign: 'center',
                     color: colors.primary,
                   }}>
-                  {t('Send_Code_Again_In')}{' '}
+                  {t('Send_Code_Again')}{' '}
                   <Text
                     style={{
                       fontSize: 20,
@@ -276,7 +285,30 @@ const PhoneInputScreen = ({navigation}) => {
                 </Text>
               ) : (
                 <TouchableOpacity
-                  onPress={() => signInWithPhoneNumber(phoneNumber)}
+                  onPress={() => {
+                    Alert.alert(t('Resend_Code'), t('Edit_Your_Phone_?'), [
+                      {
+                        text: t('Cancel'),
+                        onPress: () => {},
+                        style: 'default',
+                      },
+                      {
+                        text: t('Edit'),
+                        onPress: () => {
+                          setConfirm(null);
+                        },
+                        style: 'default',
+                      },
+                      {
+                        text: t('Resend_Code'),
+                        onPress: () => {
+                          signInWithPhoneNumber(phoneNumber);
+                          setConfirm(null);
+                        },
+                        style: 'default',
+                      },
+                    ]);
+                  }}
                   style={{
                     backgroundColor: colors.primary,
                     padding: 10,
@@ -292,7 +324,7 @@ const PhoneInputScreen = ({navigation}) => {
                       textAlign: 'center',
                       color: colors.white,
                     }}>
-                    Resend Code
+                    {t('Resend_Code')}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -337,7 +369,7 @@ const PhoneInputScreen = ({navigation}) => {
                   style={[styles.confirmInput]}
                   onChangeText={(code: any) => setCode(code)}
                   value={code}
-                  placeholder={'ምሳሌ፡ 123456'}
+                  placeholder={`${t('Example')}: 123456`}
                   placeholderTextColor={colors.faded_grey}
                   keyboardType="numeric"
                 />

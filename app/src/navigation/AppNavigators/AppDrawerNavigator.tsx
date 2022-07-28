@@ -19,8 +19,9 @@ import Categories from '../../screens/Inventory/Categories';
 import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 const Drawer = createDrawerNavigator();
 
-function AppDrawerNavigator({navigation}) {
+function AppDrawerNavigator() {
   const {t} = useTranslation();
+  const navigation = useNavigation();
 
   const {initializing, user} = useContext(StateContext);
 

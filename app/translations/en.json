@@ -1,6 +1,8 @@
 {
   "Wrong_Number": "Wrong Number",
   "Choose_Language_To_Start": "Choose Language To Start",
+  "Where_Do_You_Want_To_Go_?": "Where do you want to go? ",
+  "Enter_Phone_Number": "Enter phone number",
 
   "There_Is_No_Item_In_Your_Stock": "There is no item in your stock",
   "Please_Add_Stock_First": "Please add stock first",
@@ -14,6 +16,10 @@
   "Include_Tax": "Include Tax",
 
   "Send_Code_Again": "Send code again",
+  "Resend_Code": "Resend Code",
+  "Edit_Your_Phone_?": "Edit your phone?",
+  "Example": "Example",
+
   "Something_Went_Wrong": "Something went wrong",
   "Invalid_Code": "ኮዱ ትክክል አይደለም",
   "This_information_will_be_used_to_set_up_your_profile": "This information will be used to set up your_profile",
@@ -114,7 +120,7 @@
 
   "Please_Wait...": "እባክዎን ይጥብቁ...",
   "Enter_Your_Phone_Number": "Enter your phone Number",
-  "Register_Here": "Register Here.",
+  "Register_Here": "Register Here",
 
   "Item_Details": "Item details",
   "Item_History": "Stock history",

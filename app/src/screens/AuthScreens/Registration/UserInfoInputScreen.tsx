@@ -68,10 +68,10 @@ const UserInfoInputScreen = ({navigation}) => {
         .then(async res => {
           if (!res.docs.length) {
             await firestore().collection('users').add(userData);
-            navigation.navigate(routes.mainNavigator);
+            navigation.replace(routes.mainNavigator);
             setLoading(false);
           }
-          if (res.docs.length) navigation.navigate(routes.mainNavigator);
+          if (res.docs.length) navigation.replace(routes.mainNavigator);
           setLoading(false);
         });
     } catch (error) {

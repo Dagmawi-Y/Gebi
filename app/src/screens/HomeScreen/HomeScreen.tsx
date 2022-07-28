@@ -57,7 +57,7 @@ const HomeScreen = ({navigation}) => {
           }}
         />
       </View>
-      <Text style={styles.pageHeading}>የት መሄድ ይፈልጋሉ?</Text>
+      <Text style={styles.pageHeading}>{t('Where_Do_You_Want_To_Go_?')}</Text>
       <View
         style={{
           backgroundColor: colors.primary,
