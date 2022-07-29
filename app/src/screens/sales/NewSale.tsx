@@ -37,6 +37,7 @@ const NewSale = ({navigation, route}) => {
   const [isTaxTabVisible, setIsTaxTabVisible] = useState(false);
   const [isVatIncluded, setIsVatIncluded] = useState(false);
   const [isTotIncluded, setIsTotIncluded] = useState(false);
+  const [taxType, setTaxType] = useState('');
 
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
@@ -98,6 +99,60 @@ const NewSale = ({navigation, route}) => {
     },
   ];
 
+  const TaxTypes = [
+    // {
+    //   id: 0,
+    //   text: t('None'),
+    //   fillColor: colors.primary,
+    //   unfillColor: '#FFFFFF',
+    //   iconStyle: {
+    //     marginBottom: 10,
+    //     marginLeft: 30,
+    //     borderColor: colors.primary,
+    //     borderWidth: 3,
+    //   },
+    //   textStyle: {
+    //     marginBottom: 10,
+    //     marginRight: 30,
+    //     textDecorationLine: 'none',
+    //   },
+    // },
+    {
+      id: 1,
+      text: t('VAT'),
+      fillColor: colors.primary,
+      unfillColor: '#FFFFFF',
+      iconStyle: {
+        marginBottom: 10,
+        marginLeft: 30,
+        borderColor: colors.primary,
+        borderWidth: 3,
+      },
+      textStyle: {
+        marginBottom: 10,
+        marginRight: 30,
+        textDecorationLine: 'none',
+      },
+    },
+    {
+      id: 2,
+      text: t('TOT'),
+      fillColor: colors.primary,
+      unfillColor: '#FFFFFF',
+      iconStyle: {
+        marginBottom: 10,
+        marginLeft: 30,
+        borderColor: colors.primary,
+        borderWidth: 3,
+      },
+      textStyle: {
+        marginBottom: 10,
+        marginRight: 30,
+        textDecorationLine: 'none',
+      },
+    },
+  ];
+
   const sale = {
     owner: user.uid,
     customerName: customer,
@@ -105,8 +160,8 @@ const NewSale = ({navigation, route}) => {
     invoiceNumber: Math.random().toString().split('.')[1],
     paymentMethod: paymentMethod,
     items: {...addedItems},
-    vat: isVatIncluded,
-    tot: isTotIncluded,
+    vat: taxType == 'VAT' ? true : false,
+    tot: taxType == 'TOT' ? true : false,
   };
 
   const checkEmpty = () => {
@@ -135,6 +190,11 @@ const NewSale = ({navigation, route}) => {
       return;
     }
 
+    let totalExpense = 0.0;
+    addedItems.forEach(i => {
+      totalExpense += i.originalPrice * i.quantity;
+    });
+
     Alert.alert(`እርግጠኛ ነዎት?`, ``, [
       {
         text: 'አዎ',
@@ -144,6 +204,13 @@ const NewSale = ({navigation, route}) => {
               .collection('sales')
               .add(sale)
               .then(async res => {
+                // await firestore().collection('expenses').add({
+                //   amount: totalExpense,
+                //   date: customer,
+                //   expenseName: 'Item_Sale',
+                //   note: '',
+                //   owner: user.uid,
+                // });
                 await firestore().collection('customers').add({
                   name: customer,
                   owner: user.uid,
@@ -191,15 +258,15 @@ const NewSale = ({navigation, route}) => {
       sum = sum + i.quantity * i.unitPrice;
     });
     total = sum;
-    if (isVatIncluded && !isTotIncluded) {
+    if (taxType == 'VAT') {
       total = sum + sum * 0.15;
     }
-    if (isTotIncluded && !isVatIncluded) {
+    if (taxType == 'TOT') {
       total = sum + sum * 0.02;
     }
-    if (isTotIncluded && isVatIncluded) {
-      total = sum + sum * 0.02 + sum * 0.15;
-    }
+    // if (isTotIncluded && isVatIncluded) {
+    //   total = sum + sum * 0.02 + sum * 0.15;
+    // }
 
     setSum(sum);
     setTotal(total);
@@ -211,7 +278,7 @@ const NewSale = ({navigation, route}) => {
     return () => {
       mountedRef.current = false;
     };
-  }, [addedItems, isTotIncluded, isVatIncluded]);
+  }, [addedItems, taxType]);
 
   return (
     <>
@@ -289,7 +356,11 @@ const NewSale = ({navigation, route}) => {
               setCustomer(val);
               setSearchVisible(true);
             }}
-            onEndEditing={() => setSearchVisible(false)}
+            onEndEditing={() =>
+              setTimeout(() => {
+                setSearchVisible(false);
+              }, 500)
+            }
             value={customer}
             keyboardType="default"
             placeholderTextColor={colors.faded_grey}
@@ -350,7 +421,9 @@ const NewSale = ({navigation, route}) => {
             {t('Items_List')}
           </Text>
 
-          <ScrollView style={{maxHeight: 300, width: '100%'}}>
+          <ScrollView
+            contentContainerStyle={{paddingHorizontal: 10}}
+            style={{maxHeight: 300, width: '100%'}}>
             {addedItems.length ? (
               addedItems.map(item => {
                 return (
@@ -456,7 +529,7 @@ const NewSale = ({navigation, route}) => {
                 {formatNumber(sum)} {t('Birr')}
               </Text>
             </View>
-            {isVatIncluded ? (
+            {taxType == 'VAT' ? (
               <View
                 style={{
                   flexDirection: 'row',
@@ -471,26 +544,14 @@ const NewSale = ({navigation, route}) => {
                     alignItems: 'center',
                     flexDirection: 'row',
                   }}>
-                  {/* <CheckboxButton
-                  fillColor={colors.primary}
-                  size={25}
-                  isChecked={isVatIncluded}
-                  onPress={(isChecked: boolean) => {
-                    setIsVatIncluded(isChecked);
-                  }}
-                /> */}
                   <Text
                     style={[
                       styles.textLight,
                       {
                         paddingHorizontal: 0,
-                        textDecorationStyle: 'solid',
-                        textDecorationLine: !isVatIncluded
-                          ? 'line-through'
-                          : 'none',
                       },
                     ]}>
-                    {t('Tax')} (15% {t('Vat')})
+                    {t('TAX')} (15% {t('VAT')})
                   </Text>
                 </View>
 
@@ -506,7 +567,7 @@ const NewSale = ({navigation, route}) => {
                 </Text>
               </View>
             ) : null}
-            {isTotIncluded ? (
+            {taxType == 'TOT' ? (
               <View
                 style={{
                   flexDirection: 'row',
@@ -521,26 +582,14 @@ const NewSale = ({navigation, route}) => {
                     alignItems: 'center',
                     flexDirection: 'row',
                   }}>
-                  {/* <CheckboxButton
-                  fillColor={colors.primary}
-                  size={25}
-                  isChecked={isTotIncluded}
-                  onPress={(isChecked: boolean) => {
-                    setIsTotIncluded(isChecked);
-                  }}
-                /> */}
                   <Text
                     style={[
                       styles.textLight,
                       {
                         paddingHorizontal: 0,
-                        textDecorationStyle: 'solid',
-                        textDecorationLine: !isTotIncluded
-                          ? 'line-through'
-                          : 'none',
                       },
                     ]}>
-                    {t('TOT')} (2% {t('Tot')})
+                    {t('TOT')} (2% {t('TOT')})
                   </Text>
                 </View>
 
@@ -550,10 +599,6 @@ const NewSale = ({navigation, route}) => {
                     {
                       textAlign: 'right',
                       fontSize: 18,
-                      textDecorationStyle: 'solid',
-                      textDecorationLine: !isTotIncluded
-                        ? 'line-through'
-                        : 'none',
                     },
                   ]}>
                   {formatNumber(sum * 0.02)} {t('Birr')}
@@ -792,6 +837,76 @@ const NewSale = ({navigation, route}) => {
             <View style={{paddingHorizontal: 20}}>
               <View
                 style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {!taxType ? (
+                  <BouncyCheckboxGroup
+                    data={TaxTypes}
+                    onChange={(selectedItem: ICheckboxButton) => {
+                      const val = selectedItem.text;
+                      let option: string;
+                      console.log();
+
+                      switch (val!.toString()) {
+                        case 'VAT':
+                          setTaxType('VAT');
+                          break;
+                        case 'TOT':
+                          setTaxType('TOT');
+                          break;
+
+                        case 'ቫት':
+                          setTaxType('VAT');
+                          break;
+
+                        // case t('None'):
+                        //   setTaxType('');
+                        //   break;
+
+                        default:
+                          break;
+                      }
+                    }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      paddingVertical: 20,
+                      alignItems: 'center',
+                    }}>
+                    <Text style={[styles.textBold]}>{`${t(
+                      'TAX_Type',
+                    )}: `}</Text>
+                    <View
+                      style={{
+                        backgroundColor: colors.primary,
+                        flexDirection: 'row',
+                        padding: 5,
+                        borderRadius: 5,
+                      }}>
+                      <Text style={[styles.textBold, {color: colors.white}]}>
+                        {t(taxType)}
+                      </Text>
+                      <TouchableOpacity
+                        style={{
+                          position: 'absolute',
+                          right: -10,
+                          top: -10,
+                          backgroundColor: colors.red,
+                          borderRadius: 15,
+                        }}
+                        onPress={() => setTaxType('')}>
+                        <Icon name={'close'} size={20} color={colors.white} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+              </View>
+              {/* <View
+                style={{
                   alignItems: 'center',
                   flexDirection: 'row',
                   marginBottom: 20,
@@ -804,7 +919,7 @@ const NewSale = ({navigation, route}) => {
                     setIsVatIncluded(isChecked);
                   }}
                 />
-                <Text style={[styles.textLight]}>{t('Vat')} (15%)</Text>
+                <Text style={[styles.textLight]}>{t('VAT')} (15%)</Text>
               </View>
               <View
                 style={{
@@ -820,7 +935,7 @@ const NewSale = ({navigation, route}) => {
                   }}
                 />
                 <Text style={[styles.textLight]}>{t('TOT')} (2%)</Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
@@ -883,7 +998,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     marginTop: 5,
     marginBottom: 5,
-    elevation: 5,
+    elevation: 2,
     backgroundColor: colors.white,
     width: '100%',
     flexDirection: 'row',
@@ -893,6 +1008,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     alignSelf: 'center',
+    marginHorizontal: 10,
   },
   LeftContainer: {
     flexDirection: 'row',

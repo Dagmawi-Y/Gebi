@@ -38,6 +38,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
 
   const handleSubmit = () => {
     if (quantityInputError) return;
+    // if (!quantity) return setQuntityInputError(t('Item_Out_Of_Stock'));
     let q = parseFloat(selectedItem[0].quantity);
     let p = parseFloat(selectedItem[0].unitPrice);
 
@@ -72,7 +73,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
               id: sn.id,
               itemName: sn.data().item_name,
               quantity: sn.data().currentCount,
-              unitPrice: sn.data().unit_price,
+              unitPrice: sn.data().unit_SalePrice,
             };
             if (addedItems.length) {
               addedItems.map(i => {
@@ -181,10 +182,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 18,
                   }}>
-                  {t('Unit_Price')}
-                  {` (${t('Current_Price')}: `}
-                  {detailsItem!.unitPrice}
-                  {')'}
+                  {t('Sale_Price')}
+                  {` (${detailsItem!.unitPrice} ${t('Birr')})`}
                 </Text>
 
                 <TextInput
@@ -328,6 +327,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
               alignSelf: 'center',
             }}>
             {data
+              .filter(i => parseFloat(i.quantity) > 0)
               .filter(i =>
                 i.itemName.toLowerCase().includes(filterValue.toLowerCase()),
               )

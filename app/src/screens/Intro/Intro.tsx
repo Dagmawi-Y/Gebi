@@ -10,34 +10,60 @@ import routes from '../../navigation/routes';
 import {StateContext} from '../../global/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTranslation} from 'react-i18next';
-
-const slides = [
-  {
-    key: 1,
-    title: 'Manage Sales',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Iaculis quam et, tempor purus. Nullam quis ligula semper, euismod nibh ut, dictum purus. Suspendisse potenti. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec molestie quis orci in gravida',
-    image: require(`../../assets/intro/intro1.png`),
-    backgroundColor: '#59b2ab',
-  },
-  {
-    key: 2,
-    title: 'Inventory Management',
-    text: 'Quisque blandit fringilla molestie. Donec laoreet massa arcu, in hendrerit dui viverra venenatis. Nunc bibendum mauris ligula, sed sollicitudin elit faucibus et. In tincidunt elit at nibh vehicula, finibus pretium augue eleifend. Nunc posuere ante vitae lorem cursus posuere.',
-    image: require(`../../assets/intro/intro2.png`),
-    backgroundColor: '#febe29',
-  },
-  {
-    key: 3,
-    title: 'Data Analysis and Reports',
-    text: 'Praesent venenatis nisl quis felis elementum volutpat. Etiam id magna vel libero semper faucibus non vel elit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-    image: require(`../../assets/intro/intro3.png`),
-    backgroundColor: '#22bcb5',
-  },
-];
+import i18n from 'i18next';
 
 export default function Intro({navigation}: any) {
   const {t} = useTranslation();
   const {setIntroDone} = useContext(StateContext);
+
+  const slides =
+    i18n.language == 'en'
+      ? [
+          {
+            key: 1,
+            title: 'Manage Sales',
+            text: 'Produce invoices to share to your customers and keep a clean and organized record all your sales in one place.',
+            image: require(`../../assets/intro/intro1.png`),
+            backgroundColor: '#59b2ab',
+          },
+          {
+            key: 2,
+            title: 'Inventory Management',
+            text: 'Keep track of all the items going in and out of your inventory that is update with every transaction.',
+            image: require(`../../assets/intro/intro2.png`),
+            backgroundColor: '#febe29',
+          },
+          {
+            key: 3,
+            title: 'Data Analysis and Reports',
+            text: 'Track and record your income, expenses and profit in an organized and easy to manage process.',
+            image: require(`../../assets/intro/intro3.png`),
+            backgroundColor: '#22bcb5',
+          },
+        ]
+      : [
+          {
+            key: 1,
+            title: 'ሽያጮችን ያስተዳድሩ',
+            text: 'ለደንበኞችዎ ለማጋራት ደረሰኞችን ያዘጋጁ እ ሁሉንም ሽያጮችዎን በአንድ ቦታ  የተደራጀ መዝገብ ያስቀምጡ',
+            image: require(`../../assets/intro/intro1.png`),
+            backgroundColor: '#59b2ab',
+          },
+          {
+            key: 2,
+            title: 'የእቃ ክምችቶን ይስተዳድሩ',
+            text: 'ከእያንዳንዱ ግብይት ጋር የተዘመኑትን ወደ ውስጥ የሚገቡትን እና የሚወጡትን እቃዎች ሁሉ ይከታተሉ',
+            image: require(`../../assets/intro/intro2.png`),
+            backgroundColor: '#febe29',
+          },
+          {
+            key: 3,
+            title: 'ገቢና ወጪዎን ያስተዳድሩ',
+            text: 'ገቢዎን፣ ወጪዎችዎን እና ትርፍዎን በተደራጀ እና ለማስተዳደር ቀላል በሆነ ሂደት ይከታተሉ እና ይመዝግቡ',
+            image: require(`../../assets/intro/intro3.png`),
+            backgroundColor: '#22bcb5',
+          },
+        ];
 
   const _onDone = async () => {
     await AsyncStorage.setItem('introDone', 'true');
@@ -53,6 +79,7 @@ export default function Intro({navigation}: any) {
       </View>
     );
   }
+
   const renderText = (text: string, arrow: string, rowType: string) => {
     return (
       <View

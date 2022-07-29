@@ -34,7 +34,7 @@ const PhoneInputScreen = ({navigation}) => {
 
   const [minutes, setMinutes] = useState(0);
   const [start, setStart] = useState(Date.now());
-  const [seconds, setSeconds] = useState(2);
+  const [seconds, setSeconds] = useState(59);
   const [startCountDown, setStartCountDown] = useState(false);
 
   // OTP Section

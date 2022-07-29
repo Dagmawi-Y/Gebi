@@ -3,7 +3,12 @@ import {Text, StyleSheet, View, Pressable} from 'react-native';
 import LottieView from 'lottie-react-native';
 import colors from '../../config/colors';
 
-const ErrorBox = ({msg, onPress, type, overlay = true}) => {
+const StatusBox = ({
+  msg = '',
+  onPress = () => {},
+  type = 'loading',
+  overlay = true,
+}) => {
   const bg = overlay
     ? {backgroundColor: '#00000090'}
     : {backgroundColor: '#000000000'};
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     alignSelf: 'center',
-    zIndex: 1,
+    zIndex: 1000,
   },
 
   errorBox: {
@@ -61,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ErrorBox;
+export default StatusBox;

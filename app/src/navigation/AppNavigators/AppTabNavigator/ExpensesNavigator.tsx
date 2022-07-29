@@ -7,8 +7,10 @@ import {useRoute} from '@react-navigation/native';
 import routes from '../../routes';
 
 import Expenses from '../../../screens/Expenses/Expenses';
+import AddNewExpense from '../../../screens/Expenses/AddNewExpense';
 
 const Stack = createStackNavigator();
+const Stack2 = createStackNavigator();
 
 const ExpensesNavigator = ({navigation}) => {
   return (
@@ -43,6 +45,7 @@ const ExpensesNavigator = ({navigation}) => {
           },
         }}>
         <Stack.Screen name={routes.sales} component={Expenses} />
+        <Stack.Screen name={routes.addNewExpense} component={AddNewExpense} />
       </Stack.Navigator>
     </>
   );

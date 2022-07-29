@@ -7,7 +7,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,10 +22,12 @@ import Share from 'react-native-share';
 import receipt from './reciept';
 import {useTranslation} from 'react-i18next';
 import roundDecimal from '../../utils/roundDecimal';
+import {StateContext} from '../../global/context';
 
 const SaleDetails = ({route, navigation}) => {
   const {t} = useTranslation();
   const {data} = route.params;
+  const {user} = useContext(StateContext);
 
   const [sum, setSum] = useState('');
   const [total, setTotal] = useState('');
@@ -73,6 +75,45 @@ const SaleDetails = ({route, navigation}) => {
   };
 
   const rollBackSale = async () => {
+    // let prevExpense = 0.0;
+    // let saleExpense = 0.0;
+
+    // firestore()
+    //   .collection('sales')
+    //   .doc(data.id)
+    //   .get()
+    //   .then(res => {
+    //     const items = res.data()!.items;
+    //     Object.keys(items).map(key => {
+    //       const val =
+    //         parseFloat(items[key].originalPrice) *
+    //         parseFloat(items[key].quantity);
+
+    //       saleExpense += val;
+    //     });
+    //   });
+
+    // firestore()
+    //   .collection('expenses')
+    //   .where('owner', '==', user.uid)
+    //   .where('expenseName', '==', 'Item_Sale')
+    //   .get()
+    //   .then(res => {
+    //     res.docs.map(i => {
+    //       prevExpense = i.data().amount;
+    //     });
+    //   });
+    // firestore()
+    //   .collection('expenses')
+    //   .where('owner', '==', user.uid)
+    //   .where('expenseName', '==', 'Item_Sale')
+    //   .set()
+    //   .then(res => {
+    //     res.docs.map(i => {
+    //       prevExpense = i.data().amount;
+    //     });
+    //   });
+
     setLoading(true);
     let proceed = false;
     try {
@@ -110,7 +151,17 @@ const SaleDetails = ({route, navigation}) => {
             setLoading(false);
           });
       }
-      proceed && firestore().collection('sales').doc(data.id).delete();
+      if (proceed) {
+        // firestore().collection('sales').doc(data.id).delete();
+        firestore()
+          .collection('expenses')
+          .where('owner', '==', user.uid)
+          .where('expense_Name', '==', 'Item_Sale')
+          .get()
+          .then(res => {
+            console.log(res.docs);
+          });
+      }
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -144,7 +195,7 @@ const SaleDetails = ({route, navigation}) => {
     <>
       {loading && (
         <StatusBox
-          msg={'Please wait...'}
+          msg={t('Please_Wait...')}
           type="loading"
           overlay={true}
           onPress={() => {}}
@@ -337,7 +388,7 @@ const SaleDetails = ({route, navigation}) => {
                       alignItems: 'center',
                     }}>
                     <Text style={styles.textLight}>
-                      {t('Tax')} (15% {t('Vat')})
+                      {t('TAX')} (15% {t('VAT')})
                     </Text>
                     <Text
                       style={[

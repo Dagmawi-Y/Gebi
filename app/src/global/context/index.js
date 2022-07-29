@@ -60,6 +60,7 @@ const StateContextProvider = ({children}) => {
   }
   // End  Auth
 
+
   const init = async () => {
     try {
       await AsyncStorage.getItem('lang')
@@ -91,6 +92,7 @@ const StateContextProvider = ({children}) => {
   useEffect(() => {
     // reset();
     init();
+
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
 
     return subscriber; // unsubscribe on unmount

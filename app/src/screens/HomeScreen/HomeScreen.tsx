@@ -88,7 +88,9 @@ const HomeScreen = ({navigation}) => {
             <Box
               Icon={<ExpensesIcon color={colors.black} size={25} />}
               onpress={() =>
-                navigation.navigate(routes.Gebi, {screen: routes.expensesNav})
+                navigation.navigate(routes.Gebi, {
+                  screen: t(routes.expensesNav),
+                })
               }
               title={t('Expense')}
             />

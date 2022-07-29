@@ -29,7 +29,7 @@ export default function TopScreen() {
   const totalCalc = data => {
     let totalSaleIncome: number = 0;
     let totalSaleProfit: number = 0;
-    let totalSaleExpense: number = 0;
+    // let tsaleExp: number = 0;
     if (data) {
       data.forEach(i => {
         Object.keys(i.items).map(key => {
@@ -38,10 +38,10 @@ export default function TopScreen() {
             parseFloat(i.items[key].unitPrice) *
               parseFloat(i.items[key].quantity);
 
-          totalSaleExpense =
-            totalSaleExpense +
-            parseFloat(i.items[key].originalPrice) *
-              parseFloat(i.items[key].quantity);
+          // tsaleExp =
+          //   tsaleExp +
+          //   parseFloat(i.items[key].originalPrice) *
+          //     parseFloat(i.items[key].quantity);
           totalSaleProfit =
             totalSaleProfit + parseFloat(i.items[key].saleProfit);
         });
@@ -56,7 +56,7 @@ export default function TopScreen() {
             totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
         }
       });
-      setTotalExpense(formatNumber(totalSaleExpense));
+      // setTotalExpense(formatNumber(tsaleExp));
       SetTotalProfit(formatNumber(totalSaleProfit));
       SetTotalIncome(formatNumber(totalSaleIncome));
     }

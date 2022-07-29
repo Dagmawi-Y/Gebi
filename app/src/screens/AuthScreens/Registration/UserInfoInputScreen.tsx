@@ -110,7 +110,7 @@ const UserInfoInputScreen = ({navigation}) => {
   if (loading)
     return (
       <StatusBox
-        msg={'Please wait...'}
+        msg={t('Please_Wait...')}
         onPress={() => {}}
         overlay={false}
         type="loading"
