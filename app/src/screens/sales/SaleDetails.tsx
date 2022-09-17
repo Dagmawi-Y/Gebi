@@ -152,15 +152,7 @@ const SaleDetails = ({route, navigation}) => {
           });
       }
       if (proceed) {
-        // firestore().collection('sales').doc(data.id).delete();
-        firestore()
-          .collection('expenses')
-          .where('owner', '==', user.uid)
-          .where('expense_Name', '==', 'Item_Sale')
-          .get()
-          .then(res => {
-            console.log(res.docs);
-          });
+        firestore().collection('sales').doc(data.id).delete();
       }
       navigation.goBack();
     } catch (error) {
@@ -264,7 +256,10 @@ const SaleDetails = ({route, navigation}) => {
         <ViewShot
           ref={imageRef}
           options={{format: 'jpg', quality: 0.9}}
-          style={{backgroundColor: colors.white, paddingHorizontal: 10}}>
+          style={{
+            backgroundColor: colors.white,
+            paddingHorizontal: 10,
+          }}>
           <ScrollView
             contentContainerStyle={{
               justifyContent: 'center',
@@ -377,7 +372,7 @@ const SaleDetails = ({route, navigation}) => {
                       styles.textBold,
                       {textAlign: 'right', fontSize: 18},
                     ]}>
-                    {formatNumber(sum)} {t('Birr')}
+                    {sum} {t('Birr')}
                   </Text>
                 </View>
                 {data.vat ? (
@@ -444,7 +439,7 @@ const SaleDetails = ({route, navigation}) => {
                         textDecorationLine: 'underline',
                       },
                     ]}>
-                    {formatNumber(total)} {t('Birr')}
+                    {total} {t('Birr')}
                   </Text>
                 </View>
               </View>
@@ -480,54 +475,52 @@ const SaleDetails = ({route, navigation}) => {
           </ScrollView>
         </ViewShot>
 
-        <View
+        {/* <View
           style={{
             paddingHorizontal: 10,
-            marginTop: 20,
+            marginBottom: 'auto',
+            paddingTop: 'auto',
+          }}> */}
+
+        {/* </View> */}
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert(t('Are_You_Sure?'), ``, [
+              {
+                text: t('Yes'),
+                onPress: () => {
+                  rollBackSale();
+                },
+                style: 'default',
+              },
+              {
+                text: t('Cancel'),
+                onPress: () => {},
+                style: 'default',
+              },
+            ]);
+          }}
+          style={{
+            backgroundColor: colors.red,
+            height: 60,
+            marginTop: 'auto',
+
+            paddingHorizontal: 20,
+            justifyContent: 'space-between',
+            width: 'auto',
+            alignItems: 'center',
+            borderRadius: 30,
+            flexDirection: 'row',
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert(t('Are_You_Sure?'), ``, [
-                {
-                  text: t('Yes'),
-                  onPress: () => {
-                    rollBackSale();
-                  },
-                  style: 'default',
-                },
-                {
-                  text: t('Cancel'),
-                  onPress: () => {},
-                  style: 'default',
-                },
-              ]);
-            }}
-            style={{
-              backgroundColor: colors.red,
-              height: 60,
-              marginBottom: 5,
-              paddingHorizontal: 20,
-              justifyContent: 'space-between',
-              width: 'auto',
-              alignItems: 'center',
-              borderRadius: 30,
-              flexDirection: 'row',
-            }}>
-            <Text
-              style={[
-                styles.textBold,
-                {color: colors.white, textAlign: 'center'},
-              ]}>
-              {t('Roll_Back')}
-            </Text>
-            <Icon2 name="backup-restore" size={25} color={colors.white} />
-            {/* <Image
-            resizeMethod="auto"
-            source={require('../../assets/icons/arrow-right.png')}
-            style={{width: 20, height: 20}}
-          /> */}
-          </TouchableOpacity>
-        </View>
+          <Text
+            style={[
+              styles.textBold,
+              {color: colors.white, textAlign: 'center'},
+            ]}>
+            {t('Roll_Back')}
+          </Text>
+          <Icon2 name="backup-restore" size={25} color={colors.white} />
+        </TouchableOpacity>
       </ScrollView>
     </>
   );

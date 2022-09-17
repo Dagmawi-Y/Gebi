@@ -40,7 +40,6 @@ export default function Expenses({navigation}: any) {
       firestore()
         .collection('expenses')
         .where('owner', '==', user.uid)
-        .orderBy('date', 'desc')
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           let dates: Array<Object> = [];
@@ -54,7 +53,6 @@ export default function Expenses({navigation}: any) {
             });
             setDates(dates);
             setExpenses(result);
-            console.log(dates);
           }
         });
 

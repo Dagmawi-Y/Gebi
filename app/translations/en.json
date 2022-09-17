@@ -3,6 +3,7 @@
   "Choose_Language_To_Start": "Choose Language To Start",
   "Where_Do_You_Want_To_Go_?": "Where do you want to go? ",
   "Enter_Phone_Number": "Enter phone number",
+  "Edit": "Edit",
 
   "There_Is_No_Item_In_Your_Stock": "There is no item in your stock",
   "Please_Add_Stock_First": "Please add stock first",
@@ -74,7 +75,7 @@
   "Plan": "Plan",
   "Profit": "Profit",
 
-  "Supplier_Name": "የአከፋፋይ ስም",
+  "Supplier_Name": "Supplier name",
   "Item_Name": "Item Name",
   "Amount": "Amount",
   "Amount2": "Amount",
@@ -102,12 +103,12 @@
   "Submit": "Submit",
   "Add_Item": "Add Item",
   "Delete": "Delete",
-  "Roll_Back": "Roll Back",
+  "Roll_Back": "Rollback",
 
   "Current_Price": "Current price",
   "Current_Amount": "Current amount",
 
-  "Enter_Unit_Price": "የአንዱን ዋጋ ያስግቡ",
+  "Enter_Unit_Price": "Enter Unit price",
   "Enter_Amount": "Enter Amount",
 
   "Sales_Receipt": "የሽያጭ ደረሰኝ",
@@ -122,7 +123,7 @@
 
   "Are_You_Sure?": "Are You Sure?",
 
-  "Please_Wait...": "እባክዎን ይጥብቁ...",
+  "Please_Wait...": "Please wait...",
   "Enter_Your_Phone_Number": "Enter your phone Number",
   "Register_Here": "Register Here",
 
@@ -153,10 +154,37 @@
   "Current": "Current",
   "Expense_Type": "Expense type",
   "Please_Wait": "Please Wait",
-  "Add_New_Expense": "አዲስ የወጪ አይነት መመዝግብያ",
+  "Add_New_Expense": "Add New Expense",
   "New_Expense_Type": "New expense type",
   "Expense_Type_Names_Must_Be_Unique": "Expense type name must be unique",
 
   "Unique_Name": "Unique name",
-  "Item_Out_Of_Stock": "Item out of stock"
+  "Item_Out_Of_Stock": "Item out of stock",
+
+  "langSelect": "Choose Language",
+  "intro": "Introduction",
+  "homeScreen": "Gebi",
+  "inventoryHome": "Inventory",
+  "InventoryScreen": "Inventory",
+  "addNewExpense": "New Expense",
+  "addItem": "Add Item",
+  "categories": "Categories",
+  "addNewCategory": "Add Category",
+  "saleDetails": "Sale Details",
+  "NewSale": "New sale",
+  "expenses": "Expenses",
+  "plan": "Plan",
+  "categoryNav": "Categories",
+  "itemDetails": "Item Details",
+  "Item Details": "Item Details",
+  "EditItem": "Edit Item",
+  "addNewItem": "Add New Item",
+  "inventoryNav": "Inventory",
+  "login": "Login",
+  "register": "Register",
+  "confirmation": "Confirm",
+  "otp": "SMS Authentication",
+  "settingsNav": "Settings",
+  "settings": "Settings",
+  "selectLanguage": "Select Language"
 }

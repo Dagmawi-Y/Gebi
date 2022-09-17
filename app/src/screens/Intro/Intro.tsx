@@ -14,7 +14,7 @@ import i18n from 'i18next';
 
 export default function Intro({navigation}: any) {
   const {t} = useTranslation();
-  const {setIntroDone} = useContext(StateContext);
+  const {setIntroDone, introDone} = useContext(StateContext);
 
   const slides =
     i18n.language == 'en'
@@ -68,7 +68,7 @@ export default function Intro({navigation}: any) {
   const _onDone = async () => {
     await AsyncStorage.setItem('introDone', 'true');
     setIntroDone(Boolean(true));
-    navigation.navigate('app');
+    navigation.replace('app');
   };
   function _renderItem({item}: any) {
     return (
@@ -79,6 +79,10 @@ export default function Intro({navigation}: any) {
       </View>
     );
   }
+
+  useEffect(() => {
+    introDone && navigation.replace('app');
+  }, []);
 
   const renderText = (text: string, arrow: string, rowType: string) => {
     return (

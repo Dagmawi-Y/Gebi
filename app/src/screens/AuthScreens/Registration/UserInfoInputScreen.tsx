@@ -88,7 +88,6 @@ const UserInfoInputScreen = ({navigation}) => {
           .where('userId', '==', user?.uid)
           .get()
           .then(res => {
-            console.log();
             if (res.docs.length > 0) {
               navigation.replace(routes.mainNavigator, {
                 screen: routes.salesNav,

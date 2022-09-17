@@ -165,6 +165,7 @@ const NewSale = ({navigation, route}) => {
   };
 
   const checkEmpty = () => {
+    console.log(!paymentMethod);
     if (!customer) return true;
     if (addedItems.length == 0) return true;
     if (!paymentMethod) return true;
@@ -458,7 +459,7 @@ const NewSale = ({navigation, route}) => {
                     <View style={styles.RightContainer}>
                       <Text style={styles.textLight}>
                         <Text style={styles.textBold}>
-                          {formatNumber(item.unitPrice)}
+                          {formatNumber(item.unitSalePrice)}
                           {t('Birr')}
                         </Text>
                         /{t('Single')}
@@ -682,7 +683,7 @@ const NewSale = ({navigation, route}) => {
                       setPaymentMethod('Check');
                       break;
 
-                    case 'ካሽ':
+                    case 'ጥሬ ገንዘብ':
                       setPaymentMethod('Cash');
                       break;
                     case 'ዱቤ':
@@ -709,7 +710,7 @@ const NewSale = ({navigation, route}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(t('Are_You_Sure'), ``, [
+              Alert.alert(t('Are_You_Sure?'), ``, [
                 {
                   text: t('Yes'),
                   onPress: () => {
@@ -847,7 +848,6 @@ const NewSale = ({navigation, route}) => {
                     onChange={(selectedItem: ICheckboxButton) => {
                       const val = selectedItem.text;
                       let option: string;
-                      console.log();
 
                       switch (val!.toString()) {
                         case 'VAT':

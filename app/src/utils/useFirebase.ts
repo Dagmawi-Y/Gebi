@@ -20,7 +20,6 @@ const useFirebase = (user, collection) => {
         });
 
         setData(result);
-        console.log(result);
       });
     setLoading(false);
     // Stop listening for updates when no longer required

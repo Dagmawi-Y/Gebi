@@ -23,6 +23,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
+import routes from '../../navigation/routes';
 
 const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const {t} = useTranslation();
@@ -36,7 +37,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const [itemId, setItemId]: Array<any> = useState('');
   const [itemCategory, setItemCategory] = useState('');
   const [itemName, setItemName] = useState('');
-  const [quantity, setAmount]: any = useState();
+  const [quantity, setQuantity]: any = useState();
   const [unitPrice, setUnitPrice] = useState('');
   const [unitSalePrice, setUnitSalePrice] = useState('');
   const [supplierName, setSupplierName] = useState('');
@@ -80,6 +81,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
         }
       });
   };
+
   const getSuppliers = () => {
     firestore()
       .collection('suppliers')
@@ -122,9 +124,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const checkEmpty = () => {
     if (!supplierName) return true;
     if (!itemName) return true;
+    if (!itemCategory) return true;
     if (!quantity) return true;
     if (!unit) return true;
-    // if (!photo) return true;
     if (!unitPrice) return true;
     if (!unitSalePrice) return true;
     return false;
@@ -138,7 +140,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const uploadImage = async () => {
     if (!photo) return null;
     try {
-      console.log(photo);
       const reference = storage().ref(`image_${Date.now()}`);
       const pathToFile = photo;
       const task = reference.putFile(pathToFile);
@@ -197,7 +198,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       owner: user.uid,
                     });
                   });
-                navigation.pop();
+                navigation.goBack();
               })
               .catch(err => console.log(err));
           } else {
@@ -238,7 +239,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       owner: user.uid,
                     });
                   });
-                navigation.pop();
+
+                navigation.goBack();
               });
           }
         })
@@ -250,10 +252,29 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     }
   };
 
+  const reset = () => {
+    setWrittingData(false);
+    setSupplierName('');
+    setItemName('');
+    setItemCategory('');
+    setQuantity('');
+    setUnit('');
+    setUnitPrice('');
+    setUnitSalePrice('');
+    setWrittingData(false);
+  };
+
   useEffect(() => {
-    getItems();
-    getSuppliers();
-    getCategories();
+    let mounted = true;
+    if (mounted) {
+      getItems();
+      getSuppliers();
+      getCategories();
+      reset();
+    }
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -579,7 +600,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   <TextInput
                     style={[styles.Input]}
                     onChangeText={val => {
-                      setAmount(
+                      setQuantity(
                         val ? parseInt(val.replace(/[^0-9\.?]/g, '')) : null,
                       );
                     }}

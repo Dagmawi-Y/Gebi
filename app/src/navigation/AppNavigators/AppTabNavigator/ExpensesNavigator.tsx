@@ -45,7 +45,7 @@ const ExpensesNavigator = ({navigation}) => {
           },
         }}>
         <Stack.Screen name={routes.sales} component={Expenses} />
-        <Stack.Screen name={routes.addNewExpense} component={AddNewExpense} />
+        {/* <Stack.Screen name={routes.addNewExpense} component={AddNewExpense} /> */}
       </Stack.Navigator>
     </>
   );

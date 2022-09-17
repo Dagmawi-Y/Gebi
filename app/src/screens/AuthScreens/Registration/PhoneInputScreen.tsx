@@ -56,8 +56,7 @@ const PhoneInputScreen = ({navigation}) => {
             setConfirm(confirmation);
             setLoading(false);
             setStartCountDown(true);
-          })
-          .catch(err => console.log(err));
+          });
       }
     } catch (error) {
       setLoading(false);
@@ -213,7 +212,9 @@ const PhoneInputScreen = ({navigation}) => {
               </View>
               <View>
                 <TouchableOpacity
-                  onPress={() => signInWithPhoneNumber(phoneNumber)}
+                  onPress={() => {
+                    signInWithPhoneNumber(phoneNumber);
+                  }}
                   activeOpacity={0.7}
                   style={{
                     width: '100%',
@@ -328,38 +329,44 @@ const PhoneInputScreen = ({navigation}) => {
                   </Text>
                 </TouchableOpacity>
               )}
-              <Text
-                style={{
-                  fontSize: 16,
-                  marginBottom: 10,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
-                {phoneNumber ? (
+              {phoneNumber ? (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    flexDirection: 'row',
+                  }}>
                   <Text
                     style={{
                       fontSize: 23,
-                      width: '100%',
                       textAlign: 'center',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}>
-                    {' '}
-                    ወደ
-                    <Text
-                      style={{
-                        color: colors.primary,
-                        fontStyle: 'italic',
-                        fontWeight: '600',
-                      }}>
-                      {' +251'}
-                      {phoneNumber}
-                      {'  '}
-                    </Text>
-                    የተላከውን ኮድ ያስገቡ
+                    ኮድ የተላከው ወደ
                   </Text>
-                ) : (
-                  ''
-                )}
-              </Text>
+                  <Text
+                    style={{
+                      fontSize: 23,
+                      color: colors.primary,
+                      fontStyle: 'italic',
+                      fontWeight: '600',
+                    }}>
+                    {' +251'}
+                    {phoneNumber}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setConfirm(null)}
+                    style={{
+                      borderRadius: 5,
+                      padding: 5,
+                      marginLeft: 5,
+                    }}>
+                    <Icon name="lead-pencil" size={25} color={colors.primary} />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
               <View
                 style={{
                   justifyContent: 'center',

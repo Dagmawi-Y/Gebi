@@ -40,7 +40,6 @@ const AddNewCategory = ({navigation}) => {
         text: t('Yes'),
         onPress: async () => {
           try {
-            console.log('yes');
             setWrittingData(true);
 
             const category = {

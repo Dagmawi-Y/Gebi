@@ -37,14 +37,18 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
   let unmounted = false;
 
   const handleSubmit = () => {
+    // console.log(selectedItem);
+    // return;
+
     if (quantityInputError) return;
     // if (!quantity) return setQuntityInputError(t('Item_Out_Of_Stock'));
     let q = parseFloat(selectedItem[0].quantity);
-    let p = parseFloat(selectedItem[0].unitPrice);
+    let p = parseFloat(selectedItem[0].unitSalePrice);
+    let op = parseFloat(selectedItem[0].unitPrice);
 
     let totalItems = quantity ? parseFloat(quantity) : q;
     let unitSalePrice = price ? parseFloat(price) : p;
-    let saleProfit = totalItems * unitSalePrice - totalItems * p;
+    let saleProfit = totalItems * unitSalePrice - totalItems * op;
 
     const newItem = {
       listId: new Date(),
@@ -52,7 +56,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
       itemName: selectedItem[0].itemName,
       saleProfit: saleProfit,
       originalPrice: p,
-      unitPrice: unitSalePrice,
+      unitPrice: p,
+      unitSalePrice: unitSalePrice,
       quantity: totalItems,
     };
     setAddedItems([...addedItems, newItem]);
@@ -73,7 +78,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
               id: sn.id,
               itemName: sn.data().item_name,
               quantity: sn.data().currentCount,
-              unitPrice: sn.data().unit_SalePrice,
+              unitPrice: sn.data().unit_price,
+              unitSalePrice: sn.data().unit_SalePrice,
             };
             if (addedItems.length) {
               addedItems.map(i => {
@@ -182,8 +188,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 18,
                   }}>
-                  {t('Sale_Price')}
-                  {` (${detailsItem!.unitPrice} ${t('Birr')})`}
+                  {t('Unit_Sale_Price')}
+                  {` (${detailsItem!.unitSalePrice} ${t('Birr')})`}
                 </Text>
 
                 <TextInput
@@ -347,7 +353,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                         <Text style={styles.textBold}>{item.itemName}</Text>
                         <Text style={styles.textLight}>
                           <Text style={styles.textBold}>
-                            {item.unitPrice}
+                            {item.unitSalePrice}
                             {t('Birr')}
                           </Text>
                           /{t('Single')}

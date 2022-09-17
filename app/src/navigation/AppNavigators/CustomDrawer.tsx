@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Image, StyleSheet} from 'react-native';
+import {Alert, Image, StyleSheet, ScrollView} from 'react-native';
 
 import {View, Text} from 'react-native';
 import colors from '../../config/colors';
@@ -21,7 +21,7 @@ import {StateContext} from '../../global/context';
 const CustomDrawer = ({route, navigation}) => {
   const {t} = useTranslation();
   const [active, setActive] = useState(routes.salesNav);
-  const {user} = useContext(StateContext);
+  const {user, setUserInfo, userInfo} = useContext(StateContext);
   const [userData, setUserData]: Array<any> = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,6 +41,7 @@ const CustomDrawer = ({route, navigation}) => {
           });
 
           setUserData(result);
+          setUserInfo(result);
           setLoading(false);
         });
     } catch (error) {
@@ -55,9 +56,9 @@ const CustomDrawer = ({route, navigation}) => {
   if (loading) return null;
 
   return (
-    <View
+    <ScrollView
       style={{
-        paddingVertical: 25,
+        // paddingVertical: 25,
         backgroundColor: colors.primary,
         flex: 1,
       }}>
@@ -70,11 +71,6 @@ const CustomDrawer = ({route, navigation}) => {
           paddingTop: 15,
           paddingBottom: 5,
         }}>
-        {/* <Image
-          source={require('../../assets/images/avatar.jpg')}
-          style={{width: 150, height: 150, borderRadius: 180}}
-        /> */}
-
         <View
           style={{
             backgroundColor: 'white',
@@ -91,15 +87,15 @@ const CustomDrawer = ({route, navigation}) => {
               color: colors.black,
               fontWeight: 'bold',
             }}>
-            {userData[0].doc.orgName.substring(0, 1)}
+            {userInfo[0].doc.orgName.substring(0, 1)}
           </Text>
         </View>
         <View style={{marginVertical: 15, alignItems: 'center'}}>
           <Text style={{fontSize: 25, color: colors.white}}>
-            {userData[0].doc.orgName}
+            {userInfo[0].doc.orgName}
           </Text>
           <Text style={{fontSize: 15, color: colors.white, fontWeight: '300'}}>
-            {userData[0].doc.name}
+            {userInfo[0].doc.name}
           </Text>
         </View>
       </View>
@@ -142,7 +138,7 @@ const CustomDrawer = ({route, navigation}) => {
           active={active}
           setActive={setActive}
           navigation={navigation}
-          route={routes.inventoryNav}
+          route={routes.inventoryHome}
           title={'Items'}
           icon="home-work"
         />
@@ -205,19 +201,21 @@ const CustomDrawer = ({route, navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
+          backgroundColor: colors.red,
+          paddingVertical: 5,
         }}>
         <Text
           style={{
             fontSize: 23,
             fontWeight: '300',
-            marginRight: 10,
+            // marginRight: 10,
             color: colors.white,
           }}>
           {t('Logout')}{' '}
         </Text>
         <Icon name="logout" size={20} color={colors.white} />
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -241,9 +239,7 @@ const DrawerButton = ({
       onPress={() => {
         setActive(route);
         if (route == routes.categories) {
-          navigation.navigate(routes.categoryNav, {
-            screen: route,
-          });
+          navigation.navigate(routes.categoryNav);
           return;
         }
 

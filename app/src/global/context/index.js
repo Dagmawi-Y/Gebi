@@ -11,8 +11,14 @@ const StateContextProvider = ({children}) => {
   const [user, setUser] = useState();
   const [userInfo, setUserInfo] = useState([]);
   const [loadingUserData, setLoadingUserData] = useState(null);
-  const [headerVisible, setHeaderVisible] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
+
+  const [headerTitle, setHeaderTitle] = useState('');
+  const [headerBack, setHeaderBack] = useState(false);
+  const [onBack, setOnBack] = useState(null);
+
+  const [bottomNavVisible, setBottomNavVisible] = useState(false);
 
   const [addNewModalVisible, setAdNewModalVisible] = useState(false);
   const {i18n} = useTranslation();
@@ -24,7 +30,12 @@ const StateContextProvider = ({children}) => {
   const [curlang, setCurlang] = useState('');
   const [introDone, setIntroDone] = useState(false);
 
+  const test = () => {
+    onBack();
+  };
+
   const value = {
+    test,
     user,
     curlang,
     isReady,
@@ -37,6 +48,14 @@ const StateContextProvider = ({children}) => {
     headerVisible,
     loadingUserData,
     addNewModalVisible,
+    headerTitle,
+    bottomNavVisible,
+    headerBack,
+    onBack,
+    setOnBack,
+    setBottomNavVisible,
+    setHeaderBack,
+    setHeaderTitle,
     setUser,
     setIsReady,
     setCurlang,
@@ -59,7 +78,6 @@ const StateContextProvider = ({children}) => {
     setIsReady(true);
   }
   // End  Auth
-
 
   const init = async () => {
     try {

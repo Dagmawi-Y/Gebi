@@ -3,6 +3,7 @@ import React, {CSSProperties} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
+import formatNumber from '../../utils/formatNumber';
 type Props = {
   containerStyle?: ViewStyle;
   label: string;
@@ -82,7 +83,7 @@ export default function StatCard({
             textAlign: 'center',
             color: trend == 'positive' ? colors.green : colors.red,
           }}>
-          {value} {`${t('Birr')}`}
+          {formatNumber(value)} {`${t('Birr')}`}
         </Text>
       </View>
     </View>

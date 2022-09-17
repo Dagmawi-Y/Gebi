@@ -316,8 +316,7 @@ export default function Items({navigation}) {
                               key={sale.id}
                               onPress={() => {
                                 const id = sale.id;
-
-                                navigation.navigate(routes.saleDetails, {
+                                navigation.navigate (routes.saleDetails, {
                                   data: sale,
                                 });
                               }}>

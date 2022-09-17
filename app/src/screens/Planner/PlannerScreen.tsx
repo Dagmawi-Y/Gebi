@@ -109,7 +109,7 @@ export default function PlanerScreen({navigation}: any) {
                 />
                 <PlanStatCard
                   label={t('Current')}
-                  value={formatNumber(totalIncome)}
+                  value={totalIncome}
                   trend="negative"
                   labelStyle={{color: 'black'}}
                 />
@@ -141,7 +141,7 @@ export default function PlanerScreen({navigation}: any) {
                 />
                 <PlanStatCard
                   label={t('Current')}
-                  value={formatNumber(totalExpense)}
+                  value={totalExpense}
                   trend="negative"
                   labelStyle={{color: 'black'}}
                 />

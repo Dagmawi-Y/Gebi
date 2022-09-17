@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 import routes from '../../navigation/routes';
@@ -16,37 +16,45 @@ import {
   ExpensesIcon,
   PlannerIcon,
 } from '../../components/Icons';
+import {StateContext} from '../../global/context';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
+  const {user, userInfo} = useContext(StateContext);
+
   return (
     <View style={styles.screenContainer}>
       <View style={{}}>
-        <View
-          style={{
-            borderRadius: 100,
-            marginVertical: 10,
-            backgroundColor: colors.white,
-            elevation: 10,
-            width: 100,
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-            aspectRatio: 1,
-          }}>
-          <Text style={{fontSize: 90, color: colors.black, fontWeight: '600'}}>
-            E
-          </Text>
-        </View>
-        <Text
-          style={{
-            fontSize: 20,
-            textAlign: 'center',
-            color: colors.white,
-            fontWeight: '400',
-          }}>
-          Eldix
-        </Text>
+        {userInfo.length ? (
+          <>
+            <View
+              style={{
+                borderRadius: 100,
+                marginVertical: 10,
+                backgroundColor: colors.white,
+                elevation: 10,
+                width: 100,
+                alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+                aspectRatio: 1,
+              }}>
+              <Text
+                style={{fontSize: 70, color: colors.black, fontWeight: '600'}}>
+                {userInfo[0].doc.orgName.substring(0, 1)}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: 20,
+                textAlign: 'center',
+                color: colors.white,
+                fontWeight: '400',
+              }}>
+              {userInfo[0].doc.orgName}
+            </Text>
+          </>
+        ) : null}
         <View
           style={{
             backgroundColor: colors.transWhite,
@@ -69,9 +77,7 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.row}>
             <Box
               Icon={<SalesIcon color={colors.black} size={25} />}
-              onpress={() =>
-                navigation.navigate(routes.Gebi, {screen: routes.sales})
-              }
+              onpress={() => navigation.navigate(t(routes.salesNav))}
               title={t('Sales')}
             />
             <Box

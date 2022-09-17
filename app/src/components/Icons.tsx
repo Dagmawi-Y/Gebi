@@ -11,6 +11,9 @@ const ICON_COLOR = colors.primary;
 const SalesIcon = ({color = ICON_COLOR, size = ICON_SIZE}) => {
   return <Icon3 name="point-of-sale" color={color} size={size} />;
 };
+const HomeIcon = ({color = ICON_COLOR, size = ICON_SIZE}) => {
+  return <Icon3 name="home" color={color} size={size} />;
+};
 
 const ExpensesIcon = ({color = ICON_COLOR, size = ICON_SIZE}) => {
   return <Icon1 name="clipboard-arrow-up-outline" color={color} size={size} />;
@@ -25,4 +28,4 @@ const PlannerIcon = ({color = ICON_COLOR, size = ICON_SIZE}) => {
 
 const styles = StyleSheet.create({});
 
-export {InventoryIcon, SalesIcon, ExpensesIcon, PlannerIcon};
+export {InventoryIcon, SalesIcon, ExpensesIcon, PlannerIcon, HomeIcon};

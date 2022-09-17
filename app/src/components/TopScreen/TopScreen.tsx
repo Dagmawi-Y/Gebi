@@ -25,11 +25,13 @@ export default function TopScreen() {
 
   const [data, setData]: Array<any> = useState(false);
   const [loading, setLoading] = useState(false);
+  const [totalSaleExpense, setTotalSaleExpense] = useState(0);
+  const [expenses, setExpenses] = useState(0);
 
   const totalCalc = data => {
     let totalSaleIncome: number = 0;
     let totalSaleProfit: number = 0;
-    // let tsaleExp: number = 0;
+    let tsaleExp: number = 0;
     if (data) {
       data.forEach(i => {
         Object.keys(i.items).map(key => {
@@ -38,10 +40,10 @@ export default function TopScreen() {
             parseFloat(i.items[key].unitPrice) *
               parseFloat(i.items[key].quantity);
 
-          // tsaleExp =
-          //   tsaleExp +
-          //   parseFloat(i.items[key].originalPrice) *
-          //     parseFloat(i.items[key].quantity);
+          tsaleExp =
+            tsaleExp +
+            parseFloat(i.items[key].originalPrice) *
+              parseFloat(i.items[key].quantity);
           totalSaleProfit =
             totalSaleProfit + parseFloat(i.items[key].saleProfit);
         });
@@ -56,14 +58,36 @@ export default function TopScreen() {
             totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
         }
       });
-      // setTotalExpense(formatNumber(tsaleExp));
-      SetTotalProfit(formatNumber(totalSaleProfit));
-      SetTotalIncome(formatNumber(totalSaleIncome));
+      setTotalSaleExpense(tsaleExp);
+      SetTotalProfit(totalSaleProfit);
+      SetTotalIncome(totalSaleIncome);
+    }
+  };
+
+  const getExpenses = async () => {
+    setLoading(true);
+    try {
+      firestore()
+        .collection('expenses')
+        .where('owner', '==', user.uid)
+        .onSnapshot(qsn => {
+          let expAmount = 0;
+          if (qsn) {
+            qsn.forEach(i => (expAmount += parseFloat(i.data().amount)));
+          }
+          setExpenses(expAmount);
+        });
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   };
 
   const getSales = async () => {
     setLoading(true);
+    if (!user) return;
     try {
       firestore()
         .collection('sales')
@@ -100,6 +124,7 @@ export default function TopScreen() {
 
   useEffect(() => {
     getSales();
+    getExpenses();
   }, []);
 
   if (loading) return null;
@@ -117,7 +142,7 @@ export default function TopScreen() {
 
             <StatCard
               label={t('Expense')}
-              value={totalExpense}
+              value={(expenses + totalSaleExpense).toString()}
               trend="negative"
             />
           </View>

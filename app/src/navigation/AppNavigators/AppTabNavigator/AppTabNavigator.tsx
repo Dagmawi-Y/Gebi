@@ -1,29 +1,24 @@
-import React, {useContext, useEffect} from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import PlanerScreen from '../../../screens/Planner/PlannerScreen';
 import {useTranslation} from 'react-i18next';
 
-import {View} from 'react-native';
-
 import routes from './../../routes';
-import InventoryNavigator from './InventoryNavigator';
 import colors from '../../../config/colors';
-import SalesNavigator from './SalesNavigator';
 
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/Foundation';
-import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
-import ExpensesNavigator from './ExpensesNavigator';
-import {StateContext} from '../../../global/context';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 import {
   InventoryIcon,
   SalesIcon,
   ExpensesIcon,
   PlannerIcon,
+  HomeIcon
 } from '../../../components/Icons';
+import SalesScreen from '../../../screens/sales/SalesScreen';
+import Expenses from '../../../screens/Expenses/Expenses';
+import InventoryScreen from '../../../screens/Inventory/InventoryScreen';
+import HomeScreen from '../../../screens/HomeScreen/HomeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,8 +39,19 @@ const AppTabNavigator = ({navigation}) => {
         },
       }}>
       <Tab.Screen
+        name={t(routes.homeScreen)}
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <HomeIcon color={color} size={size+8} />
+          ),
+          tabBarLabel: t('Home'),
+          headerTitle: t('Home'),
+        }}
+      />
+      <Tab.Screen
         name={t(routes.salesNav)}
-        component={SalesNavigator}
+        component={SalesScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <SalesIcon color={color} size={size} />
@@ -56,7 +62,7 @@ const AppTabNavigator = ({navigation}) => {
       />
       <Tab.Screen
         name={t(routes.expensesNav)}
-        component={ExpensesNavigator}
+        component={Expenses}
         options={{
           tabBarIcon: ({color, size}) => (
             <ExpensesIcon color={color} size={size} />
@@ -67,8 +73,8 @@ const AppTabNavigator = ({navigation}) => {
       />
 
       <Tab.Screen
-        name={t(routes.inventoryNav)}
-        component={InventoryNavigator}
+        name={t(routes.inventoryHome)}
+        component={InventoryScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <InventoryIcon color={color} size={size} />
