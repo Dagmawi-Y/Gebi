@@ -30,4 +30,5 @@ export default Object.freeze({
   settingsNav: 'SettingsNav',
   settings: 'Settings Home',
   selectLanguage: 'Select Language',
+  addEmployee: 'New Employee',
 });

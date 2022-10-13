@@ -10,6 +10,7 @@ const StateContextProvider = ({children}) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [userInfo, setUserInfo] = useState([]);
+  const [userRole, setUserRole] = useState('');
   const [loadingUserData, setLoadingUserData] = useState(null);
   const [isReady, setIsReady] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
@@ -52,6 +53,8 @@ const StateContextProvider = ({children}) => {
     bottomNavVisible,
     headerBack,
     onBack,
+    userRole,
+    setUserRole,
     setOnBack,
     setBottomNavVisible,
     setHeaderBack,

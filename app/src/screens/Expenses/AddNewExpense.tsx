@@ -211,10 +211,11 @@ const AddNewExpense = ({navigation}) => {
   };
 
   useEffect(() => {
-    getDefaultTypes();
-    getCustomTypes();
+    // getDefaultTypes();
+    // getCustomTypes();
+    populateTypes();
   }, []);
-
+  return <></>;
   return (
     <>
       {error ? (

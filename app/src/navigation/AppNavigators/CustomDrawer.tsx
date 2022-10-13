@@ -21,7 +21,7 @@ import {StateContext} from '../../global/context';
 const CustomDrawer = ({route, navigation}) => {
   const {t} = useTranslation();
   const [active, setActive] = useState(routes.salesNav);
-  const {user, setUserInfo, userInfo} = useContext(StateContext);
+  const {user, setUserInfo, userInfo, setUserRole} = useContext(StateContext);
   const [userData, setUserData]: Array<any> = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,7 @@ const CustomDrawer = ({route, navigation}) => {
       setLoading(true);
       firestore()
         .collection('users')
-        .where('userId', '==', user.uid)
+        .where('companyId', '==', user.uid)
         .onSnapshot(querySnapshot => {
           let result: Array<any> = [];
           querySnapshot.forEach(documentSnapshot => {
@@ -42,6 +42,7 @@ const CustomDrawer = ({route, navigation}) => {
 
           setUserData(result);
           setUserInfo(result);
+          setUserRole(result[0].doc.role);
           setLoading(false);
         });
     } catch (error) {

@@ -40,7 +40,7 @@ export default function PlanerScreen({navigation}: any) {
     try {
       firestore()
         .collection('users')
-        .where('userId', '==', user.uid)
+        .where('companyId', '==', user.uid)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {

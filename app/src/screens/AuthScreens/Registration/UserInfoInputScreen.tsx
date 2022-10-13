@@ -53,17 +53,19 @@ const UserInfoInputScreen = ({navigation}) => {
     }
     setLoading(true);
     const userData = {
-      userId: user.uid,
+      companyId: user.uid,
       name: name,
       orgName: orgName,
+      phone: user.phoneNumber,
       plan: plan,
+      role: 'admin',
       financial: financial,
     };
 
     try {
       await firestore()
         .collection('users')
-        .where('userId', '==', user?.uid)
+        .where('companyId', '==', user?.uid)
         .get()
         .then(async res => {
           if (!res.docs.length) {
@@ -85,10 +87,16 @@ const UserInfoInputScreen = ({navigation}) => {
       if (user)
         firestore()
           .collection('users')
-          .where('userId', '==', user?.uid)
+          // .where('companyId', '==', user?.uid)
+          .where('phone', '==', user?.phoneNumber)
           .get()
+
           .then(res => {
+            console.log(res.docs);
+            // console.log(res.docs[0].data());
+            // setLoading(false);
             if (res.docs.length > 0) {
+              setLoading(false);
               navigation.replace(routes.mainNavigator, {
                 screen: routes.salesNav,
               });

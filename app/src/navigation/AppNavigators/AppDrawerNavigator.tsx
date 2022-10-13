@@ -26,6 +26,7 @@ import ItemDetails from '../../screens/Inventory/ItemDetails';
 import AddNewItem from '../../screens/Inventory/AddNewItem';
 import CategoryNav from './AppTabNavigator/InventoryNavigation/CategoriesNav';
 import Edit from '../../screens/Inventory/Edit';
+import AddEmployee from '../../screens/Settings/SubSettings/AddEmployee';
 const Drawer = createDrawerNavigator();
 
 function headerBackKey(navigation) {
@@ -43,16 +44,7 @@ function AppDrawerNavigator({}) {
   const {t} = useTranslation();
   const navigation = useNavigation();
 
-  const {
-    initializing,
-    headerVisible,
-    headerTitle,
-    setHeaderTitle,
-    headerBack,
-    setHeaderBack,
-    backRoute,
-    setBackRoute,
-  } = useContext(StateContext);
+  const {initializing} = useContext(StateContext);
 
   const route = useRoute();
 
@@ -159,7 +151,7 @@ function AppDrawerNavigator({}) {
           name={routes.categoryNav}
           component={CategoryNav}
           options={{
-            headerTitle: t("categoryNav"),
+            headerTitle: t('categoryNav'),
             headerLeft: () => headerBackKey(navigation),
           }}
         />
@@ -169,7 +161,7 @@ function AppDrawerNavigator({}) {
           name={routes.settingsNav}
           options={{
             headerTitle: t('Settings'),
-            headerShown: true,
+            headerShown: false,
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => {

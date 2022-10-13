@@ -9,14 +9,29 @@ import routes from '../../routes';
 import Expenses from '../../../screens/Expenses/Expenses';
 import Settings from '../../../screens/Settings';
 import SelectLanguage from '../../../screens/Settings/SubSettings/SelectLanguage';
+import AddEmployee from '../../../screens/Settings/SubSettings/AddEmployee';
+import {useTranslation} from 'react-i18next';
+import colors from '../../../config/colors';
 
 const Stack = createStackNavigator();
 
 const SettingsNavigator = ({navigation}) => {
+  const {t} = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerTitle: `${t('Settings')}`,
+        headerTintColor: colors.white,
+        headerStyle: {
+          backgroundColor: colors.primary,
+          borderBottomColor: colors.primary,
+          elevation: 0,
+        },
+        headerTitleStyle: {
+          fontSize: 30,
+          fontWeight: 'bold',
+        },
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         transitionSpec: {
           open: {
@@ -44,7 +59,13 @@ const SettingsNavigator = ({navigation}) => {
         },
       }}>
       <Stack.Screen name={routes.settings} component={Settings} />
-      <Stack.Screen name={routes.selectLanguage} component={SelectLanguage} />
+      <Stack.Screen
+        options={{
+          headerTitle: `${t('Add_New_Employee')}`,
+        }}
+        name={routes.addEmployee}
+        component={AddEmployee}
+      />
     </Stack.Navigator>
   );
 };

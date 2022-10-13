@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import PlanerScreen from '../../../screens/Planner/PlannerScreen';
@@ -7,22 +7,106 @@ import {useTranslation} from 'react-i18next';
 import routes from './../../routes';
 import colors from '../../../config/colors';
 
-
 import {
   InventoryIcon,
   SalesIcon,
   ExpensesIcon,
   PlannerIcon,
-  HomeIcon
+  HomeIcon,
 } from '../../../components/Icons';
 import SalesScreen from '../../../screens/sales/SalesScreen';
 import Expenses from '../../../screens/Expenses/Expenses';
 import InventoryScreen from '../../../screens/Inventory/InventoryScreen';
 import HomeScreen from '../../../screens/HomeScreen/HomeScreen';
+import {StateContext} from '../../../global/context';
 
 const Tab = createBottomTabNavigator();
 
 const AppTabNavigator = ({navigation}) => {
+  const {t} = useTranslation();
+  const {userRole} = useContext(StateContext);
+
+  return (
+    <>
+      {userRole === 'sales' ? (
+        <SalesTab />
+      ) : (
+        <Tab.Navigator
+          screenOptions={{
+            unmountOnBlur: true,
+            headerShown: false,
+            headerTintColor: colors.white,
+            tabBarLabelStyle: {fontSize: 14},
+            headerStyle: {
+              backgroundColor: colors.primary,
+              borderBottomColor: colors.primary,
+              elevation: 0,
+            },
+          }}>
+          <Tab.Screen
+            name={t(routes.homeScreen)}
+            component={HomeScreen}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <HomeIcon color={color} size={size + 8} />
+              ),
+              tabBarLabel: t('Home'),
+              headerTitle: t('Home'),
+            }}
+          />
+          <Tab.Screen
+            name={t(routes.salesNav)}
+            component={SalesScreen}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <SalesIcon color={color} size={size} />
+              ),
+              tabBarLabel: t('Sales'),
+              headerTitle: t('Sales'),
+            }}
+          />
+          <Tab.Screen
+            name={t(routes.expensesNav)}
+            component={Expenses}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <ExpensesIcon color={color} size={size} />
+              ),
+              tabBarLabel: t('Expense'),
+              headerTitle: t('Expense'),
+            }}
+          />
+
+          <Tab.Screen
+            name={t(routes.inventoryHome)}
+            component={InventoryScreen}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <InventoryIcon color={color} size={size} />
+              ),
+              tabBarLabel: t('Inventory'),
+              headerTitle: t('Inventory'),
+            }}
+          />
+
+          <Tab.Screen
+            name={t(routes.plan)}
+            component={PlanerScreen}
+            options={{
+              tabBarIcon: ({color, size}) => (
+                <PlannerIcon color={color} size={size} />
+              ),
+              tabBarLabel: t('Plan'),
+              headerTitle: t('Plan'),
+            }}
+          />
+        </Tab.Navigator>
+      )}
+    </>
+  );
+};
+
+const SalesTab = () => {
   const {t} = useTranslation();
 
   return (
@@ -31,7 +115,7 @@ const AppTabNavigator = ({navigation}) => {
         unmountOnBlur: true,
         headerShown: false,
         headerTintColor: colors.white,
-
+        tabBarLabelStyle: {fontSize: 14},
         headerStyle: {
           backgroundColor: colors.primary,
           borderBottomColor: colors.primary,
@@ -43,7 +127,7 @@ const AppTabNavigator = ({navigation}) => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({color, size}) => (
-            <HomeIcon color={color} size={size+8} />
+            <HomeIcon color={color} size={size + 8} />
           ),
           tabBarLabel: t('Home'),
           headerTitle: t('Home'),
@@ -58,41 +142,6 @@ const AppTabNavigator = ({navigation}) => {
           ),
           tabBarLabel: t('Sales'),
           headerTitle: t('Sales'),
-        }}
-      />
-      <Tab.Screen
-        name={t(routes.expensesNav)}
-        component={Expenses}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <ExpensesIcon color={color} size={size} />
-          ),
-          tabBarLabel: t('Expense'),
-          headerTitle: t('Expense'),
-        }}
-      />
-
-      <Tab.Screen
-        name={t(routes.inventoryHome)}
-        component={InventoryScreen}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <InventoryIcon color={color} size={size} />
-          ),
-          tabBarLabel: t('Inventory'),
-          headerTitle: t('Inventory'),
-        }}
-      />
-
-      <Tab.Screen
-        name={t(routes.plan)}
-        component={PlanerScreen}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <PlannerIcon color={color} size={size} />
-          ),
-          tabBarLabel: t('Plan'),
-          headerTitle: t('Plan'),
         }}
       />
     </Tab.Navigator>

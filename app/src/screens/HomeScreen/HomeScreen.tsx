@@ -9,6 +9,7 @@ import React, {useContext, useEffect} from 'react';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 import routes from '../../navigation/routes';
+import firestore from '@react-native-firebase/firestore';
 
 import {
   InventoryIcon,
@@ -21,6 +22,22 @@ import {StateContext} from '../../global/context';
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
   const {user, userInfo} = useContext(StateContext);
+
+  const createUser = () => {
+    firestore().collection('users').add({});
+  };
+
+  const getUser = async () => {
+    const info = await firestore()
+      .collection('users')
+      .where('phone', '==', user?.phoneNumber)
+      .get();
+    console.log(info.docs[0].data());
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <View style={styles.screenContainer}>
@@ -76,12 +93,12 @@ const HomeScreen = ({navigation}) => {
         <ScrollView>
           <View style={styles.row}>
             <Box
-              Icon={<SalesIcon color={colors.black} size={25} />}
+              Icon={<SalesIcon color={colors.black} size={40} />}
               onpress={() => navigation.navigate(t(routes.salesNav))}
               title={t('Sales')}
             />
             <Box
-              Icon={<InventoryIcon color={colors.black} size={25} />}
+              Icon={<InventoryIcon color={colors.black} size={40} />}
               onpress={() =>
                 navigation.navigate(routes.Gebi, {
                   screen: t(routes.inventoryNav),
@@ -92,7 +109,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View style={styles.row}>
             <Box
-              Icon={<ExpensesIcon color={colors.black} size={25} />}
+              Icon={<ExpensesIcon color={colors.black} size={40} />}
               onpress={() =>
                 navigation.navigate(routes.Gebi, {
                   screen: t(routes.expensesNav),
@@ -101,7 +118,7 @@ const HomeScreen = ({navigation}) => {
               title={t('Expense')}
             />
             <Box
-              Icon={<PlannerIcon color={colors.black} size={25} />}
+              Icon={<PlannerIcon color={colors.black} size={40} />}
               onpress={() =>
                 navigation.navigate(routes.Gebi, {
                   screen: t(routes.plan),

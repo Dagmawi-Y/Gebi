@@ -50,9 +50,11 @@ const PhoneInputScreen = ({navigation}) => {
 
       if (phone) {
         setLoading(true);
+        console.log('OTP', '+251' + phone);
         await auth()
           .signInWithPhoneNumber('+251' + phone)
           .then(confirmation => {
+            console.log('SENT');
             setConfirm(confirmation);
             setLoading(false);
             setStartCountDown(true);
