@@ -18,11 +18,12 @@ import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../../global/context';
 import {useTranslation} from 'react-i18next';
+import LottieView from 'lottie-react-native';
 
 const UserInfoInputScreen = ({navigation}) => {
   const {t} = useTranslation();
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const {user} = useContext(StateContext);
   const {setIsNewUser, isReady} = useContext(StateContext);
 
@@ -58,7 +59,7 @@ const UserInfoInputScreen = ({navigation}) => {
       orgName: orgName,
       phone: user.phoneNumber,
       plan: plan,
-      role: 'admin',
+      roles: ['admin'],
       financial: financial,
     };
 
@@ -87,16 +88,10 @@ const UserInfoInputScreen = ({navigation}) => {
       if (user)
         firestore()
           .collection('users')
-          // .where('companyId', '==', user?.uid)
           .where('phone', '==', user?.phoneNumber)
           .get()
-
           .then(res => {
-            console.log(res.docs);
-            // console.log(res.docs[0].data());
-            // setLoading(false);
             if (res.docs.length > 0) {
-              setLoading(false);
               navigation.replace(routes.mainNavigator, {
                 screen: routes.salesNav,
               });
@@ -113,16 +108,29 @@ const UserInfoInputScreen = ({navigation}) => {
   useEffect(() => {
     getUserInfo();
   }, []);
-
-  if (loading)
+  if (loading) {
     return (
-      <StatusBox
-        msg={t('Please_Wait...')}
-        onPress={() => {}}
-        overlay={false}
-        type="loading"
-      />
+      <View
+        style={{
+          flex: 1,
+          zIndex: 12,
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <LottieView
+          style={{
+            height: 100,
+          }}
+          source={require('../../../assets/loading.json')}
+          speed={1.3}
+          autoPlay
+          loop={true}
+        />
+      </View>
     );
+  }
 
   const dropDownOptions = [
     t('Daily'),

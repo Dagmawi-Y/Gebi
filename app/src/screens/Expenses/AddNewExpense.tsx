@@ -135,7 +135,7 @@ const AddNewExpense = ({navigation}) => {
           name: newName.trim(),
           description: newDescription.trim() ?? '',
           date: new Date().toLocaleDateString(),
-          owner: user.uid,
+          owner: userInfo[0].doc.companyId,
         })
         .then(() => {
           setLoading(false);
@@ -166,7 +166,7 @@ const AddNewExpense = ({navigation}) => {
           amount: amount ?? '',
           note: note ?? '',
           date: new Date().toLocaleDateString(),
-          owner: user.uid,
+          owner: userInfo[0].doc.companyId,
         })
         .then(() => {
           setLoading(false);
@@ -211,11 +211,11 @@ const AddNewExpense = ({navigation}) => {
   };
 
   useEffect(() => {
-    // getDefaultTypes();
-    // getCustomTypes();
-    populateTypes();
+    getDefaultTypes();
+    getCustomTypes();
+    // populateTypes();
   }, []);
-  return <></>;
+ 
   return (
     <>
       {error ? (

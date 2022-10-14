@@ -12,6 +12,8 @@ import SelectLanguage from '../../../screens/Settings/SubSettings/SelectLanguage
 import AddEmployee from '../../../screens/Settings/SubSettings/AddEmployee';
 import {useTranslation} from 'react-i18next';
 import colors from '../../../config/colors';
+import EditProfile from '../../../screens/Settings/SubSettings/EditProfile';
+import EditEmployee from '../../../screens/Settings/SubSettings/EditEmployee';
 
 const Stack = createStackNavigator();
 
@@ -65,6 +67,20 @@ const SettingsNavigator = ({navigation}) => {
         }}
         name={routes.addEmployee}
         component={AddEmployee}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: `${t('Edit_Profile')}`,
+        }}
+        name={routes.editProfile}
+        component={EditProfile}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: `${t('Edit_Employee')}`,
+        }}
+        name={routes.editEmployee}
+        component={EditEmployee}
       />
     </Stack.Navigator>
   );

@@ -28,7 +28,7 @@ import TopScreen from '../../components/TopScreen/TopScreen';
 
 export default function PlanerScreen({navigation}: any) {
   const {t} = useTranslation();
-  const {user} = useContext(StateContext);
+  const {user, userInfo} = useContext(StateContext);
   const [userData, setUserData]: Array<any> = useState([]);
   const [loading, setLoading] = useState(false);
   const {totalExpense, setTotalExpense} = useContext(StateContext);

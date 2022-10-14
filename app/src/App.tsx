@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Pressable, StatusBar} from 'react-native';
-import {StateContextProvider} from './global/context';
+import {StateContext, StateContextProvider} from './global/context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import SplashScreen from 'react-native-splash-screen';
 import IntroNavigator from './navigation/NewUserNavigator/IntroNavigators/IntroNavigator';
 import LottieView from 'lottie-react-native';
 import colors from './config/colors';
+import firestore from '@react-native-firebase/firestore';
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => SplashScreen.hide(), 1500);
     initialize();
+
     // reset();
   }, []);
 

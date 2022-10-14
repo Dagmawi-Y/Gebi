@@ -25,7 +25,7 @@ import StatusBox from '../../components/misc/StatusBox';
 
 export default function Expenses({navigation}: any) {
   const mountedRef = useRef(true);
-  const {setTotalExpense} = useContext(StateContext);
+  const {setTotalExpense, userInfo} = useContext(StateContext);
   const {t} = useTranslation();
   const {user, totalExpense, totalProfit, totalIncome} =
     useContext(StateContext);
@@ -39,7 +39,7 @@ export default function Expenses({navigation}: any) {
     try {
       firestore()
         .collection('expenses')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           let dates: Array<Object> = [];
@@ -69,7 +69,7 @@ export default function Expenses({navigation}: any) {
       setTotalExpense(total);
       firestore()
         .collection('expenses')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(qsn => {
           qsn.forEach(sn => {
             total += parseFloat(sn.data().amount);

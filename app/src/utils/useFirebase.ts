@@ -1,7 +1,7 @@
 import {useEffect, useReducer, useState, useContext} from 'react';
 import firestore from '@react-native-firebase/firestore';
 
-const useFirebase = (user, collection) => {
+const useFirebase = (user, userInfo, collection) => {
   const [data, setData]: Array<any> = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -9,7 +9,7 @@ const useFirebase = (user, collection) => {
     setLoading(true);
     const subscriber = firestore()
       .collection(collection)
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .onSnapshot(querySnapshot => {
         let result: Array<Object> = [];
         querySnapshot.forEach(sn => {

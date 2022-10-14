@@ -20,12 +20,12 @@ import {useTranslation} from 'react-i18next';
 
 const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
   const {t} = useTranslation();
-  const {user} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
   const [loading, setLoading] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(false);
 
   const [selectedItem, setSelectedItem]: Array<any> = useState([]);
-  const [detailsItem, setDetailsItem] = useState(null);
+  const [detailsItem, setDetailsItem] = useState<any>(null);
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
   const [quantityInputError, setQuntityInputError] = useState('');
@@ -70,7 +70,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
     try {
       firestore()
         .collection('inventory')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {

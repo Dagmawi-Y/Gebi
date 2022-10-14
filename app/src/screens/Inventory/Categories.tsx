@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import routes from '../../navigation/routes';
 
 const Categories = ({navigation}) => {
-  const {user} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories]: any = useState([]);
   const {t} = useTranslation();
@@ -21,7 +21,7 @@ const Categories = ({navigation}) => {
       setLoading(true);
       await firestore()
         .collection('categories')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(qsn => {
           let result: Array<any> = [];
           qsn.forEach(i => {

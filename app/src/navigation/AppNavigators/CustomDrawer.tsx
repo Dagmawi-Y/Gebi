@@ -21,45 +21,13 @@ import {StateContext} from '../../global/context';
 const CustomDrawer = ({route, navigation}) => {
   const {t} = useTranslation();
   const [active, setActive] = useState(routes.salesNav);
-  const {user, setUserInfo, userInfo, setUserRole} = useContext(StateContext);
-  const [userData, setUserData]: Array<any> = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  const getUserInfo = async () => {
-    try {
-      setLoading(true);
-      firestore()
-        .collection('users')
-        .where('companyId', '==', user.uid)
-        .onSnapshot(querySnapshot => {
-          let result: Array<any> = [];
-          querySnapshot.forEach(documentSnapshot => {
-            result.push({
-              id: documentSnapshot.id,
-              doc: documentSnapshot.data(),
-            });
-          });
-
-          setUserData(result);
-          setUserInfo(result);
-          setUserRole(result[0].doc.role);
-          setLoading(false);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
-  if (loading) return null;
+  const {user, userInfo, sales, expense, plan, inventory, isAdmin} =
+    useContext(StateContext);
 
   return (
     <ScrollView
       style={{
-        // paddingVertical: 25,
         backgroundColor: colors.primary,
         flex: 1,
       }}>
@@ -119,49 +87,60 @@ const CustomDrawer = ({route, navigation}) => {
           marginTop: 20,
           flex: 1,
         }}>
-        <DrawerButton
-          active={active}
-          setActive={setActive}
-          navigation={navigation}
-          route={routes.salesNav}
-          title={'Sales'}
-          icon="point-of-sale"
-        />
-        <DrawerButton
-          active={active}
-          setActive={setActive}
-          navigation={navigation}
-          route={routes.expensesNav}
-          title={'Expense'}
-          icon="point-of-sale"
-        />
-        <DrawerButton
-          active={active}
-          setActive={setActive}
-          navigation={navigation}
-          route={routes.inventoryHome}
-          title={'Items'}
-          icon="home-work"
-        />
-        <DrawerButton
-          active={active}
-          setActive={setActive}
-          navigation={navigation}
-          route={routes.plan}
-          title={'Plan'}
-          icon="clipboard-pencil"
-          iconType="2"
-        />
-        <DrawerButton
-          active={active}
-          setActive={setActive}
-          navigation={navigation}
-          route={routes.categories}
-          title={'Categories'}
-          rootRoute={true}
-          icon="clipboard-pencil"
-          iconType="2"
-        />
+        {sales || isAdmin ? (
+          <DrawerButton
+            active={active}
+            setActive={setActive}
+            navigation={navigation}
+            route={routes.salesNav}
+            title={'Sales'}
+            icon="point-of-sale"
+          />
+        ) : null}
+        {expense || isAdmin ? (
+          <DrawerButton
+            active={active}
+            setActive={setActive}
+            navigation={navigation}
+            route={routes.expensesNav}
+            title={'Expense'}
+            icon="point-of-sale"
+          />
+        ) : null}
+        {inventory || isAdmin ? (
+          <DrawerButton
+            active={active}
+            setActive={setActive}
+            navigation={navigation}
+            route={routes.inventoryHome}
+            title={'Items'}
+            icon="home-work"
+          />
+        ) : null}
+        {plan || isAdmin ? (
+          <DrawerButton
+            active={active}
+            setActive={setActive}
+            navigation={navigation}
+            route={routes.plan}
+            title={'Plan'}
+            icon="clipboard-pencil"
+            iconType="2"
+          />
+        ) : null}
+        {/* {inventory || isAdmin ? (
+          <DrawerButton
+            active={active}
+            setActive={setActive}
+            navigation={navigation}
+            route={routes.categories}
+            title={'Categories'}
+            rootRoute={true}
+            icon="clipboard-pencil"
+            iconType="2"
+          />
+        ) : null} */}
+
         {/* <DrawerButton
           active={active}
           setActive={setActive}
@@ -179,43 +158,42 @@ const CustomDrawer = ({route, navigation}) => {
           rootRoute={true}
           icon="settings"
         />
-      </View>
-      <TouchableOpacity
-        onPress={() => {
-          Alert.alert(t('Are_You_Sure?'), ``, [
-            {
-              text: t('Yes'),
-              onPress: () => {
-                auth().signOut();
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert(t('Are_You_Sure?'), ``, [
+              {
+                text: t('Yes'),
+                onPress: () => {
+                  auth().signOut();
+                },
+                style: 'default',
               },
-              style: 'default',
-            },
-            {
-              text: t('Cancel'),
-              onPress: () => {},
-              style: 'default',
-            },
-          ]);
-        }}
-        style={{
-          marginTop: 30,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          backgroundColor: colors.red,
-          paddingVertical: 5,
-        }}>
-        <Text
+              {
+                text: t('Cancel'),
+                onPress: () => {},
+                style: 'default',
+              },
+            ]);
+          }}
           style={{
-            fontSize: 23,
-            fontWeight: '300',
-            // marginRight: 10,
-            color: colors.white,
+            marginTop: 20,
+            // justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 25,
+            flexDirection: 'row',
+            paddingVertical: 5,
           }}>
-          {t('Logout')}{' '}
-        </Text>
-        <Icon name="logout" size={20} color={colors.white} />
-      </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 23,
+              fontWeight: '300',
+              color: colors.white,
+            }}>
+            {t('Logout')}{' '}
+          </Text>
+          <Icon name="logout" size={20} color={colors.white} />
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };

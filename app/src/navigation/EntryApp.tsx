@@ -1,5 +1,5 @@
-import React, {useContext, useEffect} from 'react';
-import {StatusBar, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {StatusBar, View, Text} from 'react-native';
 
 import {StateContext} from '../global/context';
 
@@ -19,17 +19,51 @@ import routes from './routes';
 const Stack = createStackNavigator();
 
 const EntryApp = ({navigation}) => {
-  const {user, userInfo, initializing} = useContext(StateContext);
+  const {user, setUserInfo, userInfo, initializing, setIsAdmin} =
+    useContext(StateContext);
+  const [loading, setLoading] = useState(true);
+
+  const getUserInfo = async () => {
+    try {
+      if (user) {
+        setLoading(true);
+        firestore()
+          .collection('users')
+          .where('phone', '==', user.phoneNumber)
+          .onSnapshot(querySnapshot => {
+            let result: Array<any> = [];
+            querySnapshot.forEach(documentSnapshot => {
+              result.push({
+                id: documentSnapshot.id,
+                doc: documentSnapshot.data(),
+              });
+            });
+
+            setUserInfo(result);
+
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    if (!user && !initializing) {
+    setIsAdmin(false);
+    if (!user && !initializing && !loading) {
       navigation.replace(routes.authNavigator, {
         screen: routes.otp,
       });
     }
-  }, [user]);
+    if (!initializing) {
+      getUserInfo();
+    }
+  }, [user, initializing]);
 
-  if (initializing) {
+  if (initializing || loading) {
     return (
       <View
         style={{
@@ -69,11 +103,6 @@ const EntryApp = ({navigation}) => {
           component={AppDrawerNavigator}
         />
       </Stack.Navigator>
-      {/* {!user || userInfo.length == 0 ? (
-        <AuthNavigator />
-      ) : (
-        <AppDrawerNavigator />
-      )} */}
     </SafeAreaProvider>
   );
 };

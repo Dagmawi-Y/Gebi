@@ -19,6 +19,7 @@ export default function TopScreen() {
     totalProfit,
     totalIncome,
     setTotalExpense,
+    userInfo,
     SetTotalProfit,
     SetTotalIncome,
   } = useContext(StateContext);
@@ -69,7 +70,7 @@ export default function TopScreen() {
     try {
       firestore()
         .collection('expenses')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(qsn => {
           let expAmount = 0;
           if (qsn) {
@@ -91,7 +92,7 @@ export default function TopScreen() {
     try {
       firestore()
         .collection('sales')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {

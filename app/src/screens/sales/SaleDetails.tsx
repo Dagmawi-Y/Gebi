@@ -75,45 +75,6 @@ const SaleDetails = ({route, navigation}) => {
   };
 
   const rollBackSale = async () => {
-    // let prevExpense = 0.0;
-    // let saleExpense = 0.0;
-
-    // firestore()
-    //   .collection('sales')
-    //   .doc(data.id)
-    //   .get()
-    //   .then(res => {
-    //     const items = res.data()!.items;
-    //     Object.keys(items).map(key => {
-    //       const val =
-    //         parseFloat(items[key].originalPrice) *
-    //         parseFloat(items[key].quantity);
-
-    //       saleExpense += val;
-    //     });
-    //   });
-
-    // firestore()
-    //   .collection('expenses')
-    //   .where('owner', '==', user.uid)
-    //   .where('expenseName', '==', 'Item_Sale')
-    //   .get()
-    //   .then(res => {
-    //     res.docs.map(i => {
-    //       prevExpense = i.data().amount;
-    //     });
-    //   });
-    // firestore()
-    //   .collection('expenses')
-    //   .where('owner', '==', user.uid)
-    //   .where('expenseName', '==', 'Item_Sale')
-    //   .set()
-    //   .then(res => {
-    //     res.docs.map(i => {
-    //       prevExpense = i.data().amount;
-    //     });
-    //   });
-
     setLoading(true);
     let proceed = false;
     try {

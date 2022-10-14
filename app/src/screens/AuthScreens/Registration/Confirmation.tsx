@@ -46,7 +46,6 @@ const PhoneInputScreen = ({navigation, route}) => {
     setLoading(true);
     try {
       confirm?.confirm(code);
-      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -55,7 +54,6 @@ const PhoneInputScreen = ({navigation, route}) => {
 
   useEffect(() => {
     user ? navigation.navigate(routes.register) : null;
-
     SystemNavigationBar.setNavigationColor(colors.light);
   }, [user]);
 
@@ -78,144 +76,143 @@ const PhoneInputScreen = ({navigation, route}) => {
     };
   });
 
-  let dimensions = Dimensions.get('window');
-
+  if (loading) {
+    return (
+      <StatusBox
+        msg={t('Please_Wait...')}
+        type={'loading'}
+        overlay={false}
+        onPress={() => {}}
+      />
+    );
+  }
   return (
     <SafeAreaView style={[styles.container]}>
-      {loading ? (
-        <StatusBox
-          msg={t('Please_Wait...')}
-          type={'loading'}
-          overlay={false}
-          onPress={() => {}}
-        />
-      ) : (
+      <View
+        style={{
+          paddingVertical: 10,
+          justifyContent: 'space-evenly',
+          display: 'flex',
+          flexGrow: 1,
+        }}>
         <View
           style={{
-            paddingVertical: 10,
-            justifyContent: 'space-evenly',
-            display: 'flex',
-            flexGrow: 1,
+            flex: 1,
+            paddingTop: 150,
           }}>
           <View
             style={{
-              flex: 1,
-              paddingTop: 150,
+              marginHorizontal: 'auto',
+              width: '100%',
+              marginBottom: 50,
+              maxHeight: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
             }}>
-            <View
-              style={{
-                marginHorizontal: 'auto',
-                width: '100%',
-                marginBottom: 50,
-                maxHeight: 100,
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0,
-              }}>
-              <Image
-                style={{resizeMode: 'center'}}
-                source={require('../../../assets/logo-blue.png')}
-              />
-            </View>
+            <Image
+              style={{resizeMode: 'center'}}
+              source={require('../../../assets/logo-blue.png')}
+            />
+          </View>
 
-            {minutes > 0 || seconds > 0 ? (
+          {minutes > 0 || seconds > 0 ? (
+            <Text
+              style={{
+                fontSize: 18,
+                marginBottom: 10,
+                fontWeight: '500',
+                textAlign: 'center',
+                color: colors.primary,
+              }}>
+              {t('Send_Code_Again_In')}{' '}
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 20,
                   marginBottom: 10,
-                  fontWeight: '500',
+                  fontWeight: 'bold',
                   textAlign: 'center',
                   color: colors.primary,
                 }}>
-                {t('Send_Code_Again_In')}{' '}
+                {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+              </Text>
+            </Text>
+          ) : (
+            <TouchableOpacity onPress={() => resendCode()}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  marginBottom: 10,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}>
+                Resend Code
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          <Text
+            style={{
+              fontSize: 16,
+              marginBottom: 10,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
+            {phoneNumber ? (
+              <Text
+                style={{
+                  fontSize: 20,
+                  width: '100%',
+                  textAlign: 'center',
+                }}>
+                {' '}
+                ወደ
                 <Text
                   style={{
-                    fontSize: 20,
-                    marginBottom: 10,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
                     color: colors.primary,
+                    fontStyle: 'italic',
+                    fontWeight: '600',
                   }}>
-                  {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                  {' +251'}
+                  {phoneNumber}
+                  {'  '}
                 </Text>
+                የተላከውን ኮድ ያስገቡ
               </Text>
             ) : (
-              <TouchableOpacity onPress={() => resendCode()}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    marginBottom: 10,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                  }}>
-                  Resend Code
-                </Text>
-              </TouchableOpacity>
+              ''
             )}
-
-            <Text
-              style={{
-                fontSize: 16,
-                marginBottom: 10,
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}>
-              {phoneNumber ? (
-                <Text
-                  style={{
-                    fontSize: 23,
-                    width: '100%',
-                    textAlign: 'center',
-                  }}>
-                  {' '}
-                  ወደ
-                  <Text
-                    style={{
-                      color: colors.primary,
-                      fontStyle: 'italic',
-                      fontWeight: '600',
-                    }}>
-                    {' +251'}
-                    {phoneNumber}
-                    {'  '}
-                  </Text>
-                  የተላከውን ኮድ ያስገቡ
-                </Text>
-              ) : (
-                ''
-              )}
-            </Text>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TextInput
-                style={[styles.confirmInput]}
-                onChangeText={(code: any) => setCode(code)}
-                value={code}
-                placeholder={'ምሳሌ፡ 123456'}
-                placeholderTextColor={colors.faded_grey}
-                keyboardType="numeric"
-              />
-            </View>
-            <View
-              style={{
-                flex: 0.2,
-                marginTop: 20,
-                justifyContent: 'space-around',
-                width: '80%',
-                alignSelf: 'center',
-              }}>
-              <Button
-                btnStyle={'normal'}
-                title={'አረጋግጥ'}
-                onPress={() => confirmCode()}
-              />
-            </View>
+          </Text>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              style={[styles.confirmInput]}
+              onChangeText={(code: any) => setCode(code)}
+              value={code}
+              placeholder={'ምሳሌ፡ 123456'}
+              placeholderTextColor={colors.faded_grey}
+              keyboardType="numeric"
+            />
+          </View>
+          <View
+            style={{
+              flex: 0.2,
+              marginTop: 20,
+              justifyContent: 'space-around',
+              width: '80%',
+              alignSelf: 'center',
+            }}>
+            <Button
+              btnStyle={'normal'}
+              title={'አረጋግጥ'}
+              onPress={() => confirmCode()}
+            />
           </View>
         </View>
-      )}
+      </View>
     </SafeAreaView>
   );
 };

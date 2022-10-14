@@ -21,18 +21,15 @@ import {StateContext} from '../../global/context';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
-  const {user, userInfo} = useContext(StateContext);
 
-  const createUser = () => {
-    firestore().collection('users').add({});
-  };
+  const {user, userInfo, sales, expense, plan, inventory, isAdmin} =
+    useContext(StateContext);
 
   const getUser = async () => {
     const info = await firestore()
       .collection('users')
       .where('phone', '==', user?.phoneNumber)
       .get();
-    console.log(info.docs[0].data());
   };
 
   useEffect(() => {
@@ -92,40 +89,48 @@ const HomeScreen = ({navigation}) => {
         }}>
         <ScrollView>
           <View style={styles.row}>
-            <Box
-              Icon={<SalesIcon color={colors.black} size={40} />}
-              onpress={() => navigation.navigate(t(routes.salesNav))}
-              title={t('Sales')}
-            />
-            <Box
-              Icon={<InventoryIcon color={colors.black} size={40} />}
-              onpress={() =>
-                navigation.navigate(routes.Gebi, {
-                  screen: t(routes.inventoryNav),
-                })
-              }
-              title={t('Inventory')}
-            />
+            {sales || isAdmin ? (
+              <Box
+                Icon={<SalesIcon color={colors.black} size={40} />}
+                onpress={() => navigation.navigate(t(routes.salesNav))}
+                title={t('Sales')}
+              />
+            ) : null}
+            {inventory || isAdmin ? (
+              <Box
+                Icon={<InventoryIcon color={colors.black} size={40} />}
+                onpress={() =>
+                  navigation.navigate(routes.Gebi, {
+                    screen: t(routes.inventoryNav),
+                  })
+                }
+                title={t('Inventory')}
+              />
+            ) : null}
           </View>
           <View style={styles.row}>
-            <Box
-              Icon={<ExpensesIcon color={colors.black} size={40} />}
-              onpress={() =>
-                navigation.navigate(routes.Gebi, {
-                  screen: t(routes.expensesNav),
-                })
-              }
-              title={t('Expense')}
-            />
-            <Box
-              Icon={<PlannerIcon color={colors.black} size={40} />}
-              onpress={() =>
-                navigation.navigate(routes.Gebi, {
-                  screen: t(routes.plan),
-                })
-              }
-              title={t('Plan')}
-            />
+            {expense || isAdmin ? (
+              <Box
+                Icon={<ExpensesIcon color={colors.black} size={40} />}
+                onpress={() =>
+                  navigation.navigate(routes.Gebi, {
+                    screen: t(routes.expensesNav),
+                  })
+                }
+                title={t('Expense')}
+              />
+            ) : null}
+            {plan || isAdmin ? (
+              <Box
+                Icon={<PlannerIcon color={colors.black} size={40} />}
+                onpress={() =>
+                  navigation.navigate(routes.Gebi, {
+                    screen: t(routes.plan),
+                  })
+                }
+                title={t('Plan')}
+              />
+            ) : null}
           </View>
         </ScrollView>
       </View>

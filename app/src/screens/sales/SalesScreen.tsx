@@ -35,7 +35,7 @@ import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 
 export default function Items({navigation}) {
-  const {user} = useContext(StateContext);
+  const {user, userInfo} = useContext(StateContext);
   const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
@@ -63,7 +63,7 @@ export default function Items({navigation}) {
     try {
       firestore()
         .collection('sales')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {
@@ -93,7 +93,7 @@ export default function Items({navigation}) {
   const getStockCount = () => {
     firestore()
       .collection('inventory')
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .get()
       .then(snap => {
         setStockCount(snap.size);
@@ -102,7 +102,7 @@ export default function Items({navigation}) {
 
   useEffect(() => {
     let mounted = true;
-    if (mounted && user) {
+    if (mounted && userInfo) {
       getSales();
       getStockCount();
     }
@@ -194,15 +194,17 @@ export default function Items({navigation}) {
                 borderBottomColor: '#00000040',
                 zIndex: 10,
               }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  paddingHorizontal: 5,
-                  color: colors.faded_dark,
-                }}>
-                {t('Sales')}
-              </Text>
+              <TouchableOpacity onPress={() => {}}>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 18,
+                    paddingHorizontal: 5,
+                    color: colors.faded_dark,
+                  }}>
+                  {t('Sales')}
+                </Text>
+              </TouchableOpacity>
 
               {/* Filter button and filter Tag*/}
               <View style={{flexDirection: 'row', marginRight: 10}}>
@@ -316,7 +318,7 @@ export default function Items({navigation}) {
                               key={sale.id}
                               onPress={() => {
                                 const id = sale.id;
-                                navigation.navigate (routes.saleDetails, {
+                                navigation.navigate(routes.saleDetails, {
                                   data: sale,
                                 });
                               }}>

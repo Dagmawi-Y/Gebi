@@ -46,6 +46,7 @@ export default function Items({navigation}) {
   const [totalItems, setTotalItems] = useState('0');
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
   const [categories, setCategories]: Array<any> = useState([]);
+  const {userInfo} = useContext(StateContext);
 
   const reCalculate = dt => {
     let sumItem = 0;
@@ -67,7 +68,7 @@ export default function Items({navigation}) {
     try {
       firestore()
         .collection('inventory')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(documentSnapshot => {
@@ -94,7 +95,7 @@ export default function Items({navigation}) {
     if (user)
       firestore()
         .collection('categories')
-        .where('owner', '==', user.uid)
+        .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(qsn => {
           let result: Array<any> = [];
           if (qsn) {

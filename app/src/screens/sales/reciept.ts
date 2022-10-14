@@ -1,5 +1,4 @@
 module.exports = arg => {
-  console.log(arg);
   const {customerName, date, paymentMethod, invoiceNumber} = arg.data;
   const {sum, tax, total} = arg;
   const items = arg.data.items;

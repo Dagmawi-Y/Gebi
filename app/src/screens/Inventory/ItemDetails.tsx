@@ -24,7 +24,7 @@ import {StateContext} from '../../global/context';
 
 const ItemDetails = ({route, navigation}) => {
   const {data, owner, itemId} = route.params;
-  const {user} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
   const {t} = useTranslation();
   const [totalSaleCount, setTotalSaleCount] = useState(0);
 
@@ -35,7 +35,7 @@ const ItemDetails = ({route, navigation}) => {
     let totSaleCount: number = 0;
     const sales = await firestore()
       .collection('stock')
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .where('item_id', '==', itemId)
       .get();
     sales.docs.map(i => (totSaleCount += parseInt(i.data().initialCount)));

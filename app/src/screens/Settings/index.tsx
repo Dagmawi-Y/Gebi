@@ -1,5 +1,12 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {TouchableOpacity, View, Text, StyleSheet, Animated} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  ScrollView,
+} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,7 +20,7 @@ const Settings = ({navigation}) => {
   const {t, i18n} = useTranslation();
   const [langDropDownVisible, setLangDropDownVisible] = useState(false);
   const [accountsVisible, setAccountsVisible] = useState(false);
-  const {userInfo} = useContext(StateContext);
+  const {userInfo, isAdmin} = useContext(StateContext);
   const [employes, setEmployees] = useState<any>([]);
 
   const progress = useRef(new Animated.Value(0)).current;
@@ -60,8 +67,13 @@ const Settings = ({navigation}) => {
     firestore()
       .collection('users')
       .where('companyId', '==', userInfo[0].doc.companyId)
-      .get()
-      .then(res => setEmployees(res.docs));
+      .onSnapshot(qsn => {
+        let arr: any = [];
+        qsn.forEach(u => {
+          arr.push(u.data());
+        });
+        setEmployees(arr);
+      });
   };
 
   const changeLang = async (lang: string) => {
@@ -95,6 +107,7 @@ const Settings = ({navigation}) => {
             {userInfo[0].doc.orgName.substring(0, 1)}
           </Text>
           <TouchableOpacity
+            onPress={() => navigation.navigate(routes.editProfile)}
             style={{
               position: 'absolute',
               bottom: 0,
@@ -136,112 +149,133 @@ const Settings = ({navigation}) => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          if (!accountsVisible) {
-            setAccountsVisible(!accountsVisible);
-            animateAccountsOpen();
-          } else {
-            setAccountsVisible(!accountsVisible);
-            animateAccountsClose();
-          }
-        }}
-        activeOpacity={0.6}
-        style={{
-          backgroundColor: colors.white,
-          paddingVertical: 10,
-          paddingHorizontal: 20,
-          borderRadius: 10,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderWidth: 0.4,
-          borderColor: '#00000040',
-          shadowColor: '#00000040',
-          elevation: 10,
-        }}>
-        <Icon2
-          name="account-circle-outline"
-          color={colors.black}
-          size={25}
-          style={{}}
-        />
-        <Text
+      {isAdmin ? (
+        <TouchableOpacity
+          onPress={() => {
+            if (!accountsVisible) {
+              setAccountsVisible(!accountsVisible);
+              animateAccountsOpen();
+            } else {
+              setAccountsVisible(!accountsVisible);
+              animateAccountsClose();
+            }
+          }}
+          activeOpacity={0.6}
           style={{
-            color: colors.black,
-            fontSize: 23,
-            marginRight: 'auto',
-            marginLeft: 10,
+            backgroundColor: colors.white,
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderWidth: 0.4,
+            borderColor: '#00000040',
+            shadowColor: '#00000040',
+            elevation: 10,
           }}>
-          {t('Accounts')}
-        </Text>
-        <Icon
-          name={accountsVisible ? 'up' : 'down'}
-          color={colors.primary}
-          size={20}
-        />
-      </TouchableOpacity>
+          <Icon2
+            name="account-circle-outline"
+            color={colors.black}
+            size={25}
+            style={{}}
+          />
+          <Text
+            style={{
+              color: colors.black,
+              fontSize: 23,
+              marginRight: 'auto',
+              marginLeft: 10,
+            }}>
+            {t('Accounts')}
+          </Text>
+          <Icon
+            name={accountsVisible ? 'up' : 'down'}
+            color={colors.primary}
+            size={20}
+          />
+        </TouchableOpacity>
+      ) : null}
 
       {accountsVisible ? (
-        <View
+        <ScrollView
           style={{
             backgroundColor: colors.white,
             marginTop: 5,
             padding: 10,
             borderRadius: 10,
+            maxHeight: 200,
           }}>
-          {employes.map(i => {
-            return (
-              <View
-                key={i.data().phone}
-                style={[
-                  {
-                    padding: 10,
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    marginVertical: 5,
-                    width: '90%',
-                    borderBottomColor: colors.grey,
-                    borderBottomWidth: 0.2,
-                    alignSelf: 'center',
-                  },
-                ]}>
-                <Icon2
-                  name={'account'}
-                  color={colors.black}
-                  size={25}
-                  style={{marginRight: 5}}
-                />
-                <Text
-                  style={{
-                    color: colors.black,
-                    fontSize: 22,
-                    marginRight: 'auto',
-                  }}>
-                  {i.data().name}
-                </Text>
-                <TouchableOpacity>
-                  <Icon2
-                    name="eye-outline"
-                    color={colors.black}
-                    size={25}
-                    style={{marginRight: 10}}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Icon2 name="account-edit" color={colors.black} size={25} />
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+          {employes.length
+            ? employes
+                .filter(j => j.phone !== userInfo[0].doc.phone)
+                .map(i => {
+                  return (
+                    <View
+                      key={i.phone}
+                      style={[
+                        {
+                          padding: 10,
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                          marginVertical: 5,
+                          width: '90%',
+                          borderBottomColor: colors.grey,
+                          borderBottomWidth: 0.2,
+                          alignSelf: 'center',
+                        },
+                      ]}>
+                      <Icon2
+                        name={'account'}
+                        color={colors.black}
+                        size={25}
+                        style={{marginRight: 5}}
+                      />
+                      <Text
+                        style={{
+                          color: colors.black,
+                          fontSize: 22,
+                          marginRight: 'auto',
+                        }}>
+                        {i.name}
+                      </Text>
+                      {/* <TouchableOpacity>
+                      <Icon2
+                        name="eye-outline"
+                        color={colors.black}
+                        size={25}
+                        style={{marginRight: 10}}
+                      />
+                    </TouchableOpacity> */}
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(routes.editEmployee, {
+                            id: i.phone,
+                          })
+                        }>
+                        <Icon2
+                          name="account-edit"
+                          color={colors.black}
+                          size={25}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })
+            : null}
           <TouchableOpacity
             onPress={() => navigation.navigate(routes.addEmployee)}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               backgroundColor: colors.white,
+              borderWidth: 1,
+              borderRadius: 5,
+              borderColor: colors.lightBlue,
+              padding: 5,
               marginVertical: 5,
               marginTop: 10,
+              marginBottom: 30,
               alignSelf: 'center',
               width: '90%',
             }}>
@@ -254,7 +288,7 @@ const Settings = ({navigation}) => {
               Add Account
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       ) : null}
 
       <Text

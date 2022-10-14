@@ -9,8 +9,13 @@ const StateContext = React.createContext();
 const StateContextProvider = ({children}) => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
-  const [userRole, setUserRole] = useState('');
+  const [sales, setSales] = useState(false);
+  const [expense, setExpense] = useState(false);
+  const [plan, setPlan] = useState(false);
+  const [inventory, setInventory] = useState(false);
+
   const [loadingUserData, setLoadingUserData] = useState(null);
   const [isReady, setIsReady] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
@@ -53,8 +58,16 @@ const StateContextProvider = ({children}) => {
     bottomNavVisible,
     headerBack,
     onBack,
-    userRole,
-    setUserRole,
+    isAdmin,
+    sales,
+    setSales,
+    expense,
+    setExpense,
+    plan,
+    setPlan,
+    inventory,
+    setInventory,
+    setIsAdmin,
     setOnBack,
     setBottomNavVisible,
     setHeaderBack,

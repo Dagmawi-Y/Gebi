@@ -27,7 +27,7 @@ import routes from '../../navigation/routes';
 
 const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const {t} = useTranslation();
-  const {user} = useContext(StateContext);
+  const {user, userInfo} = useContext(StateContext);
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [suppliers, setSuppliers]: Array<any> = useState([]);
@@ -66,7 +66,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const getItems = () => {
     firestore()
       .collection('inventory')
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -85,7 +85,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const getSuppliers = () => {
     firestore()
       .collection('suppliers')
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -104,7 +104,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const getCategories = () => {
     firestore()
       .collection('categories')
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -183,7 +183,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     unit_price: unitPrice,
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
-                    owner: user.uid,
+                    owner: userInfo[0].doc.companyId,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(async () => {
@@ -195,7 +195,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       });
                     await firestore().collection('suppliers').add({
                       name: supplierName,
-                      owner: user.uid,
+                      owner: userInfo[0].doc.companyId,
                     });
                   });
                 navigation.goBack();
@@ -205,7 +205,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
             await firestore()
               .collection('inventory')
               .add({
-                owner: user.uid,
+                owner: userInfo[0].doc.companyId,
                 item_name: itemName,
                 unit_price: unitPrice,
                 unit_SalePrice: unitSalePrice,
@@ -224,7 +224,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     initialCount: quantity,
                     unit_price: unitPrice,
                     unit: unit,
-                    owner: user.uid,
+                    owner: userInfo[0].doc.companyId,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(() => {
@@ -236,7 +236,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       });
                     firestore().collection('suppliers').add({
                       name: supplierName,
-                      owner: user.uid,
+                      owner: userInfo[0].doc.companyId,
                     });
                   });
 

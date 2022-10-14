@@ -55,7 +55,6 @@ function AppDrawerNavigator({}) {
   return (
     <>
       <Drawer.Navigator
-        // initialRouteName={routes.homeScreen}
         drawerContent={props => (
           <CustomDrawer navigation={navigation} route={route} />
         )}

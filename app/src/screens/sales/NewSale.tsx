@@ -24,7 +24,7 @@ import formatNumber from '../../utils/formatNumber';
 
 const NewSale = ({navigation, route}) => {
   const {t} = useTranslation();
-  const {user} = useContext(StateContext);
+  const {user, userInfo} = useContext(StateContext);
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [error, setError] = useState('');
@@ -154,7 +154,7 @@ const NewSale = ({navigation, route}) => {
   ];
 
   const sale = {
-    owner: user.uid,
+    owner: userInfo[0].doc.companyId,
     customerName: customer,
     date: new Date().toLocaleDateString(),
     invoiceNumber: Math.random().toString().split('.')[1],
@@ -165,7 +165,6 @@ const NewSale = ({navigation, route}) => {
   };
 
   const checkEmpty = () => {
-    console.log(!paymentMethod);
     if (!customer) return true;
     if (addedItems.length == 0) return true;
     if (!paymentMethod) return true;
@@ -175,7 +174,7 @@ const NewSale = ({navigation, route}) => {
   const getCustomers = async () => {
     await firestore()
       .collection('customers')
-      .where('owner', '==', user.uid)
+      .where('owner', '==', userInfo[0].doc.companyId)
       .get()
       .then(res => {
         setCustomers(res.docs);
@@ -205,16 +204,9 @@ const NewSale = ({navigation, route}) => {
               .collection('sales')
               .add(sale)
               .then(async res => {
-                // await firestore().collection('expenses').add({
-                //   amount: totalExpense,
-                //   date: customer,
-                //   expenseName: 'Item_Sale',
-                //   note: '',
-                //   owner: user.uid,
-                // });
                 await firestore().collection('customers').add({
                   name: customer,
-                  owner: user.uid,
+                  owner: userInfo[0].doc.uid,
                 });
                 for (var i in addedItems) {
                   await firestore()
@@ -236,7 +228,7 @@ const NewSale = ({navigation, route}) => {
                 }
               });
             setAddedItems([]);
-            navigation.pop();
+            navigation.goBack();
           } catch (error) {
             console.log(error);
           }
