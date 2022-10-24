@@ -15,16 +15,15 @@ import {useTranslation} from 'react-i18next';
 import BouncyCheckboxGroup, {
   ICheckboxButton,
 } from 'react-native-bouncy-checkbox-group';
-import CheckboxButton from 'react-native-bouncy-checkbox';
 
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 import AddItem from './AddItem';
 import formatNumber from '../../utils/formatNumber';
 
-const NewSale = ({navigation, route}) => {
+const NewSale = ({navigation}) => {
   const {t} = useTranslation();
-  const {user, userInfo} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [error, setError] = useState('');
@@ -39,8 +38,6 @@ const NewSale = ({navigation, route}) => {
 
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
-
-  const categories = ['ABC Bldg', 'Another Building', 'Category two'];
 
   const paymentTypes = [
     {
@@ -263,10 +260,6 @@ const NewSale = ({navigation, route}) => {
     if (taxType == 'TOT') {
       total = sum + sum * 0.02;
     }
-    // if (isTotIncluded && isVatIncluded) {
-    //   total = sum + sum * 0.02 + sum * 0.15;
-    // }
-
     setSum(sum);
     setTotal(total);
   };
@@ -665,7 +658,7 @@ const NewSale = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <BouncyCheckboxGroup
-                data={paymentTypes}
+                data={paymentTypes as any}
                 onChange={(selectedItem: ICheckboxButton) => {
                   const val = selectedItem.text;
                   let option: string;
@@ -842,7 +835,7 @@ const NewSale = ({navigation, route}) => {
                 }}>
                 {!taxType ? (
                   <BouncyCheckboxGroup
-                    data={TaxTypes}
+                    data={TaxTypes as any}
                     onChange={(selectedItem: ICheckboxButton) => {
                       const val = selectedItem.text;
                       let option: string;

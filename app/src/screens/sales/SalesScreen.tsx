@@ -58,6 +58,27 @@ export default function Items({navigation}) {
     }).start();
   };
 
+  const dateConverter: any = d => {
+    const dateMonth = new Date(d).getMonth();
+    const thisMonth = new Date().getMonth();
+    if (
+      new Date(d).getDate() - new Date().getDate() == 0 &&
+      dateMonth == thisMonth
+    )
+      return 'Today';
+    if (
+      new Date(d).getDate() - new Date().getDate() < 7 &&
+      dateMonth == thisMonth
+    )
+      return 'This week';
+    if (
+      new Date(d).getDate() - new Date().getDate() > 7 &&
+      dateMonth == thisMonth
+    )
+      return 'Last week';
+
+    return new Date(d).toDateString();
+  };
   const getSales = async () => {
     setLoading(true);
     try {
@@ -65,7 +86,7 @@ export default function Items({navigation}) {
         .collection('sales')
         .where('owner', '==', userInfo[0].doc.companyId)
         .onSnapshot(querySnapshot => {
-          let result: Array<Object> = [];
+          let result: any = [];
           querySnapshot.forEach(sn => {
             const item = {
               id: sn.id,
@@ -80,7 +101,14 @@ export default function Items({navigation}) {
             };
             result.push(item);
           });
-          setData(result);
+
+          const grouped = result.reduce(function (r, a) {
+            r[a.date] = r[a.date] || [];
+            r[a.date].push(a);
+            return r;
+          }, Object.create(null));
+
+          setData(grouped);
         });
 
       setLoading(false);
@@ -297,40 +325,51 @@ export default function Items({navigation}) {
                   </View>
                 ) : null}
 
-                <ScrollView style={{zIndex: -1}}>
+                <ScrollView style={{flex: 1}}>
                   {data.length == 0 ? (
                     <EmptyBox message={t('No_Sales_Yet')} />
-                  ) : data.length > 0 ? (
-                    <View
-                      style={{backgroundColor: colors.white, elevation: 10}}>
-                      {data
-                        .filter(saleItem => {
-                          if (!filterValue) return saleItem;
-                          return (
-                            saleItem.paymentMethod.toLowerCase() ===
-                            filterValue.toLowerCase()
-                          );
-                        })
-                        .map(sale => {
-                          return (
-                            <TouchableOpacity
-                              activeOpacity={0.5}
-                              key={sale.id}
-                              onPress={() => {
-                                const id = sale.id;
-                                navigation.navigate(routes.saleDetails, {
-                                  data: sale,
-                                });
+                  ) : (
+                    <View style={{flex: 1}}>
+                      {Object.keys(data).map(i => {
+                        return (
+                          <View>
+                            <Text
+                              style={{
+                                color: colors.primary,
+                                marginVertical: 5,
                               }}>
-                              <SalesListItem
-                                sale={sale}
-                                navigation={navigation}
-                              />
-                            </TouchableOpacity>
-                          );
-                        })}
+                              {dateConverter(i)}
+                            </Text>
+                            {data[i]
+                              .filter(saleItem => {
+                                if (!filterValue) return saleItem;
+                                return (
+                                  saleItem.paymentMethod.toLowerCase() ===
+                                  filterValue.toLowerCase()
+                                );
+                              })
+                              .map(sale => {
+                                return (
+                                  <TouchableOpacity
+                                    activeOpacity={0.5}
+                                    key={sale.id}
+                                    onPress={() => {
+                                      navigation.navigate(routes.saleDetails, {
+                                        data: sale,
+                                      });
+                                    }}>
+                                    <SalesListItem
+                                      sale={sale}
+                                      navigation={navigation}
+                                    />
+                                  </TouchableOpacity>
+                                );
+                              })}
+                          </View>
+                        );
+                      })}
                     </View>
-                  ) : null}
+                  )}
                 </ScrollView>
               </>
             )}

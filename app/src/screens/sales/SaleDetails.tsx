@@ -125,7 +125,7 @@ const SaleDetails = ({route, navigation}) => {
     const printData = {
       data: data,
       sum: sum,
-      tax: sum * 0.15,
+      tax: parseFloat(sum) * 0.15,
       total: total,
     };
 
