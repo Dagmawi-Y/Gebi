@@ -30,13 +30,11 @@ const NewSale = ({navigation, route}) => {
   const [error, setError] = useState('');
   const mountedRef = useRef(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [addedItems, setAddedItems] = useState([]);
+  const [addedItems, setAddedItems] = useState<any>([]);
   const [customer, setCustomer] = useState('');
   const [customers, setCustomers]: Array<any> = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [isTaxTabVisible, setIsTaxTabVisible] = useState(false);
-  const [isVatIncluded, setIsVatIncluded] = useState(false);
-  const [isTotIncluded, setIsTotIncluded] = useState(false);
   const [taxType, setTaxType] = useState('');
 
   const [sum, setSum] = useState(0);
@@ -204,10 +202,14 @@ const NewSale = ({navigation, route}) => {
               .collection('sales')
               .add(sale)
               .then(async res => {
-                await firestore().collection('customers').add({
-                  name: customer,
-                  owner: userInfo[0].doc.uid,
-                });
+                await firestore()
+                  .collection('customers')
+                  .add({
+                    name: customer,
+                    owner: userInfo[0].doc.companyId,
+                  })
+                  .catch(err => console.log(err));
+
                 for (var i in addedItems) {
                   await firestore()
                     .collection('inventory')
@@ -219,13 +221,17 @@ const NewSale = ({navigation, route}) => {
                         .doc(addedItems[i].id)
                         .update({
                           currentCount:
-                            res.data()!.currentCount - addedItems[i].quantity,
+                            parseFloat(res.data()!.currentCount) -
+                            parseFloat(addedItems[i].quantity),
                         })
                         .catch(err => {
                           console.log(err);
                         });
                     });
                 }
+              })
+              .catch(err => {
+                console.log(err);
               });
             setAddedItems([]);
             navigation.goBack();

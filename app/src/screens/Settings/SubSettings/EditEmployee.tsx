@@ -145,6 +145,7 @@ const AddEmployee = ({route, navigation}) => {
       .where('phone', '==', id)
       .get()
       .then(res => {
+        // console.log(res.docs[0].id);
         const user = res.docs[0].data();
         setDocid(res.docs[0].id);
         setName(user.name);

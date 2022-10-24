@@ -17,6 +17,7 @@ import firestore from '@react-native-firebase/firestore';
 import routes from '../routes';
 import {useTranslation} from 'react-i18next';
 import {StateContext} from '../../global/context';
+import Loading from '../../components/lotties/Loading';
 
 const CustomDrawer = ({route, navigation}) => {
   const {t} = useTranslation();
@@ -24,6 +25,8 @@ const CustomDrawer = ({route, navigation}) => {
 
   const {user, userInfo, sales, expense, plan, inventory, isAdmin} =
     useContext(StateContext);
+
+  if (!userInfo || !user) return <Loading size={50} />;
 
   return (
     <ScrollView

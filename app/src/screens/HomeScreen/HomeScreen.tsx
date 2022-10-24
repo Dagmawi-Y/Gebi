@@ -18,6 +18,7 @@ import {
   PlannerIcon,
 } from '../../components/Icons';
 import {StateContext} from '../../global/context';
+import Loading from '../../components/lotties/Loading';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
@@ -35,6 +36,8 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     getUser();
   }, []);
+
+  if (!userInfo || !user) return <Loading size={50} />;
 
   return (
     <View style={styles.screenContainer}>

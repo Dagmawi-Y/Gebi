@@ -22,7 +22,7 @@ import formatNumber from '../../utils/formatNumber';
 import routes from '../../navigation/routes';
 
 const AddNewCategory = ({navigation}) => {
-  const {user} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
   const {t} = useTranslation();
   const [error, setError] = useState('');
   const [writtingData, setWrittingData] = useState(false);

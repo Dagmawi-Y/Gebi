@@ -34,7 +34,7 @@ import ImageSelector from '../../components/ImageSelector/ImageSelector';
 
 export default function Items({navigation}) {
   const {t} = useTranslation();
-  const {user} = useContext(StateContext);
+  const {user, userInfo} = useContext(StateContext);
   const mountedRef = useRef(true);
 
   const [data, setData]: Array<any> = useState([]);
@@ -46,7 +46,6 @@ export default function Items({navigation}) {
   const [totalItems, setTotalItems] = useState('0');
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
   const [categories, setCategories]: Array<any> = useState([]);
-  const {userInfo} = useContext(StateContext);
 
   const reCalculate = dt => {
     let sumItem = 0;

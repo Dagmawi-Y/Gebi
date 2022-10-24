@@ -52,6 +52,7 @@ const UserInfoInputScreen = ({navigation}) => {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
       return;
     }
+
     setLoading(true);
     const userData = {
       companyId: user.uid,
@@ -64,18 +65,13 @@ const UserInfoInputScreen = ({navigation}) => {
     };
 
     try {
-      await firestore()
+      firestore()
         .collection('users')
-        .where('companyId', '==', user?.uid)
-        .get()
-        .then(async res => {
-          if (!res.docs.length) {
-            await firestore().collection('users').add(userData);
-            navigation.replace(routes.mainNavigator);
-            setLoading(false);
-          }
-          if (res.docs.length) navigation.replace(routes.mainNavigator);
-          setLoading(false);
+        .add(userData)
+        .then(res => {
+          getUserInfo();
+          // navigation.replace(routes.mainNavigator);
+          // setLoading(false);
         });
     } catch (error) {
       console.log(error);
@@ -90,8 +86,9 @@ const UserInfoInputScreen = ({navigation}) => {
           .collection('users')
           .where('phone', '==', user?.phoneNumber)
           .get()
-          .then(res => {
+          .then((res: any) => {
             if (res.docs.length > 0) {
+              setUserInfo(res);
               navigation.replace(routes.mainNavigator, {
                 screen: routes.salesNav,
               });
@@ -107,7 +104,8 @@ const UserInfoInputScreen = ({navigation}) => {
 
   useEffect(() => {
     getUserInfo();
-  }, []);
+  }, [userInfo]);
+
   if (loading) {
     return (
       <View

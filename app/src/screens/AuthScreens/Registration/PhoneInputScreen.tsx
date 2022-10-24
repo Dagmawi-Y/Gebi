@@ -234,7 +234,8 @@ const PhoneInputScreen = ({navigation}) => {
                     }}>
                     <Text
                       style={{
-                        fontSize: 23,
+                        fontSize: 26,
+                        fontWeight: 'bold',
                         color: colors.white,
                       }}>
                       {t('Submit')}
@@ -428,7 +429,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: 'green',
     borderColor: 'transparent',
-    borderRadius: 25,
+    borderRadius: 10,
     justifyContent: 'space-between',
     paddingVertical: 10,
     paddingRight: 15,
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     margin: 12,
     color: colors.black,
     padding: 5,
-    fontSize: 23,
+    fontSize: 20,
   },
 });
 

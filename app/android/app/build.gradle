@@ -231,7 +231,7 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('releaseKey.keystore')
+            storeFile file('debug.keystore')
             storePassword 'kalubekalu'
             keyAlias 'releaseKey'
             keyPassword 'kalubekalu'

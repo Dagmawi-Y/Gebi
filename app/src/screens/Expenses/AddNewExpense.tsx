@@ -16,10 +16,11 @@ import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 import StatusBox from '../../components/misc/StatusBox';
 import {StateContext} from '../../global/context';
+import routes from '../../navigation/routes';
 
 const AddNewExpense = ({navigation}) => {
   const {t} = useTranslation();
-  const {user} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
   const [resultVisible, setResultVisible] = useState(false);
   const [expTypes, setExpTypes]: Array<any> = useState([]);
   const [customExpTypes, setCustomExpTypes]: Array<any> = useState([]);
@@ -137,9 +138,12 @@ const AddNewExpense = ({navigation}) => {
           date: new Date().toLocaleDateString(),
           owner: userInfo[0].doc.companyId,
         })
-        .then(() => {
+        .then(res => {
+          console.log(res);
           setLoading(false);
-          navigation.pop();
+          setModalVisible(false);
+          setNewDecription('');
+          setNewName('');
         });
     } catch (error) {
       setLoading(false);
@@ -170,7 +174,13 @@ const AddNewExpense = ({navigation}) => {
         })
         .then(() => {
           setLoading(false);
-          navigation.pop();
+
+          setExpenseName('');
+          setAmount('');
+          setNote('');
+          setTimeout(() => {
+            navigation.goBack();
+          }, 400);
         });
     } catch (error) {
       setLoading(false);
@@ -179,7 +189,7 @@ const AddNewExpense = ({navigation}) => {
   };
 
   const getDefaultTypes = async () => {
-    let result: Array<Object> = [];
+    let result: Array<any> = [];
     firestore()
       .collection('defaultExpenseTypes')
       .orderBy('name')
@@ -190,6 +200,7 @@ const AddNewExpense = ({navigation}) => {
             data: sn.data(),
           });
         });
+        setExpTypes([]);
         setExpTypes(result);
       });
   };
@@ -205,6 +216,7 @@ const AddNewExpense = ({navigation}) => {
             id: sn.id,
             data: sn.data(),
           });
+          setCustomExpTypes([]);
           setCustomExpTypes(result);
         });
       });
@@ -215,7 +227,7 @@ const AddNewExpense = ({navigation}) => {
     getCustomTypes();
     // populateTypes();
   }, []);
- 
+
   return (
     <>
       {error ? (
