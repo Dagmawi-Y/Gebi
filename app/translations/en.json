@@ -186,5 +186,9 @@
   "otp": "SMS Authentication",
   "settingsNav": "Settings",
   "settings": "Settings",
-  "selectLanguage": "Select Language"
+  "selectLanguage": "Select Language",
+  "Piece": "Piece",
+  "Kg": "Kg",
+  "Litre": "Litre",
+  "Metre": "Metre"
 }

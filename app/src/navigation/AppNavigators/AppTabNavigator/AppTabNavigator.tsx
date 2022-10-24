@@ -84,7 +84,7 @@ const AppTabNavigator = ({navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text>loading....</Text>
+       
         <LottieView
           style={{
             height: 100,

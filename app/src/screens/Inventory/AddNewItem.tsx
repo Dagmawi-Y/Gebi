@@ -49,7 +49,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const [searchResult, setSearchResult]: Array<any> = useState([]);
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
-  const quantifiers = ['ፍሬ', 'ኪሎ', 'ሊትር', 'ሜትር'];
+  const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre')];
   const [categories, setCategories]: Array<any> = useState([]);
 
   const searchItem = key => {
@@ -198,6 +198,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       owner: userInfo[0].doc.companyId,
                     });
                   });
+                setWrittingData(false);
+                setPhoto('');
                 navigation.goBack();
               })
               .catch(err => console.log(err));
@@ -384,7 +386,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
               />
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 15,
                   textAlign: 'center',
                 }}>
                 {t(errorMessage)}
@@ -445,7 +447,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
               <Text
                 style={{
                   color: colors.black,
-                  fontSize: 18,
+                  fontSize: 15,
                   marginBottom: 5,
                 }}>
                 {t('Supplier_Name')}
@@ -495,7 +497,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                           <Text
                             style={{
                               color: colors.black,
-                              fontSize: 18,
+                              fontSize: 15,
                               marginVertical: 5,
                               borderBottomWidth: 0.4,
                               borderColor: '#00000040',
@@ -511,7 +513,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 <Text
                   style={{
                     color: colors.black,
-                    fontSize: 18,
+                    fontSize: 15,
                     marginBottom: 5,
                   }}>
                   {t('Item_Name')}
@@ -564,7 +566,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                           <Text
                             style={{
                               color: colors.black,
-                              fontSize: 18,
+                              fontSize: 15,
                               marginVertical: 5,
                               borderBottomWidth: 0.4,
                               borderColor: '#00000040',
@@ -592,7 +594,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
                       marginBottom: 5,
                     }}>
                     {t('Amount')}
@@ -618,7 +620,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
                       marginBottom: 5,
                     }}>
                     {t('Unit')}
@@ -662,7 +664,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
                       marginBottom: 5,
                     }}>
                     {t('Unit_Price')} {`(${t('Birr')})`}
@@ -691,7 +693,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
 
                       marginBottom: 5,
                     }}>
@@ -720,7 +722,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 <Text
                   style={{
                     color: colors.black,
-                    fontSize: 18,
+                    fontSize: 15,
                     marginBottom: 5,
                   }}>
                   {t('Category')}
@@ -846,7 +848,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 20,
   },
   dropDown: {
@@ -861,7 +863,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
   },
-  boardTopTitle: {fontSize: 18, fontWeight: '900'},
+  boardTopTitle: {fontSize: 15, fontWeight: '900'},
   boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
 });
 
