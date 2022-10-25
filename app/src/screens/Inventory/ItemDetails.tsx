@@ -195,7 +195,12 @@ const ItemDetails = ({route, navigation}) => {
                           top: 10,
                           zIndex: 10,
                         }}>
-                        <Icon name="pencil" size={20} color={colors.primary} />
+                        <Icon
+                          name="camera"
+                          size={20}
+                          color={colors.white}
+                          style={{elevation: 15, shadowColor: 'black'}}
+                        />
                       </TouchableOpacity>
                       <Image
                         style={{width: 250, height: 150, borderRadius: 10}}
@@ -599,6 +604,23 @@ const ImageUpdatePicker = ({
                 <Icon name="camera" size={65} color={colors.black} />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={{
+                marginRight: 10,
+                backgroundColor: colors.white,
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                marginTop: 30,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: colors.primary,
+              }}
+              onPress={() => {
+                if (!updating) setPickerVisible(false);
+              }}>
+              <Text style={{color: colors.black}}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>

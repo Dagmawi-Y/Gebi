@@ -200,9 +200,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   });
                 setWrittingData(false);
                 setPhoto('');
+                setUnit('');
                 navigation.goBack();
               })
-              .catch(err => console.log(err));
+              .catch(err => {
+                setWrittingData(false);
+                console.log(err);
+              });
           } else {
             await firestore()
               .collection('inventory')
@@ -241,12 +245,17 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       owner: userInfo[0].doc.companyId,
                     });
                   });
-
+                setWrittingData(false);
+                setPhoto('');
+                setUnit('');
                 navigation.goBack();
               });
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          setWrittingData(false);
+          console.log(err);
+        });
     } catch (error) {
       setWrittingData(false);
       raiseError(`Something went wrong.\nTry again.`);

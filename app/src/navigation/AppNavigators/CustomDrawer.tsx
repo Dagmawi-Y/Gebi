@@ -26,7 +26,7 @@ const CustomDrawer = ({route, navigation}) => {
   const {user, userInfo, sales, expense, plan, inventory, isAdmin} =
     useContext(StateContext);
 
-  if (!userInfo || !user) return <Loading size={50} />;
+  if (userInfo.length == 0 || !user) return <Loading size={50} />;
 
   return (
     <ScrollView
