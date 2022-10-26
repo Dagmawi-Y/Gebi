@@ -61,7 +61,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     if (key) {
       setSupplierSearchResult(
         suppliers.filter(i => {
-          return i.doc.item_name.toLowerCase().includes(key.toLowerCase());
+          return i.doc.name.toLowerCase().includes(key.toLowerCase());
         }),
       );
     }
@@ -167,25 +167,22 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   };
 
   const addNewInventory = async () => {
-    if (
-      suppliers.filter(i =>
-        i.doc.name.toLowerCase().includes(supplierName.toLowerCase()),
-      ).length > 0
-    )
-      return raiseError('Supplier already exists');
-
     if (checkEmpty()) return raiseError('Empty_Empty_Fields_Are_Not_Allowed');
     setWrittingData(true);
     const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
 
+    if (searchResult.length) {
+      setWrittingData(false);
+      return raiseError('Item_Duplicate');
+    }
+    if (supplierSearchResult.length) {
+      setWrittingData(false);
+      return raiseError('Supplier already exists');
+    }
+
     try {
       uploadImage()
         .then(async fileUrl => {
-          if (searchResult.length) {
-            setWrittingData(false);
-            raiseError('Item_Duplicate');
-            return;
-          }
           if (itemId) {
             await firestore()
               .collection('inventory')
@@ -221,13 +218,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   });
                 setWrittingData(false);
                 setPhoto('');
-                setUnit('');
                 navigation.goBack();
               })
-              .catch(err => {
-                setWrittingData(false);
-                console.log(err);
-              });
+              .catch(err => console.log(err));
           } else {
             await firestore()
               .collection('inventory')
@@ -266,17 +259,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       owner: userInfo[0].doc.companyId,
                     });
                   });
-                setWrittingData(false);
-                setPhoto('');
-                setUnit('');
+                reset();
                 navigation.goBack();
-              });
+              })
+              .catch(err => console.log(err));
           }
         })
-        .catch(err => {
-          setWrittingData(false);
-          console.log(err);
-        });
+        .catch(err => console.log(err));
     } catch (error) {
       setWrittingData(false);
       raiseError(`Something went wrong.\nTry again.`);
@@ -485,9 +474,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
               <TextInput
                 style={[styles.Input]}
                 onChangeText={val => {
-                  setItemName(val);
-                  setItemId(null);
-                  searchItem(val);
+                  setSearchVisible(true);
+                  setSupplierName(val);
+                  suplierSearch(val);
                   setSearchResultVisible(true);
                 }}
                 onFocus={() => {
@@ -524,6 +513,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                           key={i.id}
                           onPress={() => {
                             setSupplierName(i.doc.name);
+                            setSearchResultVisible(false);
+                            setSupplierSearchResult([]);
                             setSearchVisible(false);
                           }}>
                           <Text

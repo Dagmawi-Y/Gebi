@@ -119,8 +119,8 @@ const ItemDetails = ({route, navigation}) => {
       firestore()
         .collection('inventory')
         .doc(itemId)
-        .onSnapshot(querySnapshot => {
-          setData(querySnapshot.data());
+        .onSnapshot(res => {
+          setData(res.data());
         });
     } catch (error) {
       console.log(error);
@@ -150,7 +150,8 @@ const ItemDetails = ({route, navigation}) => {
   useEffect(() => {
     getItemInfo();
     getStockHistory();
-  }, []);
+  }, [itemId]);
+
   return (
     <SafeAreaView style={[styles.container]}>
       {pickerVisible ? (
@@ -197,9 +198,15 @@ const ItemDetails = ({route, navigation}) => {
                         }}>
                         <Icon
                           name="camera"
-                          size={20}
+                          size={25}
                           color={colors.white}
-                          style={{elevation: 15, shadowColor: 'black'}}
+                          style={{
+                            elevation: 10,
+                            shadowColor: 'black',
+                            backgroundColor: colors.primary,
+                            borderRadius: 100,
+                            padding: 2,
+                          }}
                         />
                       </TouchableOpacity>
                       <Image
