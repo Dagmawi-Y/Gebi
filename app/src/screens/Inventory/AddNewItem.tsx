@@ -31,6 +31,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [suppliers, setSuppliers]: Array<any> = useState([]);
+  const [supplierExists, setSupplierExists] = useState(false);
 
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
@@ -47,11 +48,24 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const [successAnimation, setSuccessAnimation] = useState(false);
   const [allItems, setAllItems]: Array<any> = useState([]);
   const [searchResult, setSearchResult]: Array<any> = useState([]);
+  const [supplierSearchResult, setSupplierSearchResult]: Array<any> = useState(
+    [],
+  );
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
   const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre')];
   const [categories, setCategories]: Array<any> = useState([]);
 
+  const suplierSearch = key => {
+    if (!key) setSupplierSearchResult([]);
+    if (key) {
+      setSupplierSearchResult(
+        suppliers.filter(i => {
+          return i.doc.item_name.toLowerCase().includes(key.toLowerCase());
+        }),
+      );
+    }
+  };
   const searchItem = key => {
     if (!key) setSearchResult([]);
     if (key) {
@@ -153,6 +167,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   };
 
   const addNewInventory = async () => {
+    if (
+      suppliers.filter(i =>
+        i.doc.name.toLowerCase().includes(supplierName.toLowerCase()),
+      ).length > 0
+    )
+      return raiseError('Supplier already exists');
+
     if (checkEmpty()) return raiseError('Empty_Empty_Fields_Are_Not_Allowed');
     setWrittingData(true);
     const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
@@ -455,8 +476,10 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
               <TextInput
                 style={[styles.Input]}
                 onChangeText={val => {
-                  setSearchVisible(true);
-                  setSupplierName(val);
+                  setItemName(val);
+                  setItemId(null);
+                  searchItem(val);
+                  setSearchResultVisible(true);
                 }}
                 onFocus={() => {
                   setSearchResultVisible(false);
@@ -465,7 +488,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 keyboardType="default"
                 placeholderTextColor={colors.faded_grey}
               />
-              {suppliers.length && searchVisible ? (
+              {suppliers.filter(i =>
+                i.doc.name.toLowerCase().includes(supplierName.toLowerCase()),
+              ).length && searchVisible ? (
                 <View
                   style={{
                     zIndex: 10,
@@ -478,8 +503,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       width: '100%',
                       elevation: 10,
                       padding: 10,
-                      // marginTop: 10,
-                      // marginHorizontal: 12,
                     }}>
                     {suppliers
                       .filter(i =>
