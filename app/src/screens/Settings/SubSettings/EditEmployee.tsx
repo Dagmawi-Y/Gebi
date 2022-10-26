@@ -75,7 +75,9 @@ const AddEmployee = ({route, navigation}) => {
               .delete()
               .then(res => {
                 setUpdating(false);
-                navigation.goBack();
+                setLoading(true)
+                console.log(userInfo);
+                // navigation.pop();
               })
               .catch(err => {
                 setUpdating(false);

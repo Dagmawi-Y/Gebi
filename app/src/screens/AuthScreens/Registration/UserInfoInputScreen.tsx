@@ -104,7 +104,7 @@ const UserInfoInputScreen = ({navigation}) => {
 
   useEffect(() => {
     getUserInfo();
-  }, [userInfo]);
+  }, []);
 
   if (loading) {
     return (

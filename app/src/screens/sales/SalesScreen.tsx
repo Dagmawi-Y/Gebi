@@ -67,6 +67,11 @@ export default function Items({navigation}) {
     )
       return 'Today';
     if (
+      new Date(d).getDate() - new Date().getDate() == 1 &&
+      dateMonth == thisMonth
+    )
+      return 'Yesterday';
+    if (
       new Date(d).getDate() - new Date().getDate() < 7 &&
       dateMonth == thisMonth
     )
@@ -332,7 +337,7 @@ export default function Items({navigation}) {
                     <View style={{flex: 1}}>
                       {Object.keys(data).map(i => {
                         return (
-                          <View>
+                          <View key={i}>
                             <Text
                               style={{
                                 color: colors.primary,

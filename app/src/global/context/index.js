@@ -95,6 +95,29 @@ const StateContextProvider = ({children}) => {
   }
   // End  Auth
 
+  //
+  const getUserInfo = async () => {
+    try {
+      if (user)
+        firestore()
+          .collection('users')
+          .where('phone', '==', user?.phoneNumber)
+          .get()
+          .then(res => {
+            if (res.docs.length > 0) {
+              navigation.replace(routes.mainNavigator, {
+                screen: routes.salesNav,
+              });
+            } else {
+              setLoading(false);
+            }
+          });
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
+
   const init = async () => {
     try {
       await AsyncStorage.getItem('lang')
@@ -123,6 +146,12 @@ const StateContextProvider = ({children}) => {
     }
   };
 
+  useEffect(() => {
+    if (!initializing) {
+      getUserInfo();
+    }
+  }, [user]);
+  
   useEffect(() => {
     // reset();
     init();

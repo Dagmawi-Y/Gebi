@@ -15,12 +15,13 @@ import colors from '../../config/colors';
 import routes from '../../navigation/routes';
 import {StateContext} from '../../global/context';
 import firestore from '@react-native-firebase/firestore';
+import Loading from '../../components/lotties/Loading';
 
 const Settings = ({navigation}) => {
   const {t, i18n} = useTranslation();
   const [langDropDownVisible, setLangDropDownVisible] = useState(false);
   const [accountsVisible, setAccountsVisible] = useState(false);
-  const {userInfo, isAdmin} = useContext(StateContext);
+  const {userInfo, user, isAdmin} = useContext(StateContext);
   const [employes, setEmployees] = useState<any>([]);
 
   const progress = useRef(new Animated.Value(0)).current;
@@ -64,16 +65,17 @@ const Settings = ({navigation}) => {
   ];
 
   const fetchEmployes = () => {
-    firestore()
-      .collection('users')
-      .where('companyId', '==', userInfo[0].doc.companyId)
-      .onSnapshot(qsn => {
-        let arr: any = [];
-        qsn.forEach(u => {
-          arr.push(u.data());
+    if (userInfo)
+      firestore()
+        .collection('users')
+        .where('companyId', '==', userInfo[0].doc.companyId)
+        .onSnapshot(qsn => {
+          let arr: any = [];
+          qsn.forEach(u => {
+            arr.push(u.data());
+          });
+          setEmployees(arr);
         });
-        setEmployees(arr);
-      });
   };
 
   const changeLang = async (lang: string) => {
@@ -83,7 +85,15 @@ const Settings = ({navigation}) => {
 
   useEffect(() => {
     fetchEmployes();
-  }, []);
+  }, [userInfo]);
+
+  console.log("==================================================================")
+  console.log("userInfo", userInfo)
+  console.log("==================================================================")
+  console.log("user", user)
+  console.log("==================================================================")
+
+  if (userInfo.length == 0 || !user) return <Loading size={50} />;
 
   return (
     <View style={{flex: 1, padding: 20}}>
