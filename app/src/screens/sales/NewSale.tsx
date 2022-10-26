@@ -36,6 +36,15 @@ const NewSale = ({navigation}) => {
   const [isTaxTabVisible, setIsTaxTabVisible] = useState(false);
   const [taxType, setTaxType] = useState('');
 
+  const reset = () => {
+    setIsModalVisible(false);
+    setSearchVisible(false);
+    setAddedItems([]);
+    setCustomer('');
+    setPaymentMethod('');
+    setIsTaxTabVisible(false);
+  };
+
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -230,7 +239,7 @@ const NewSale = ({navigation}) => {
               .catch(err => {
                 console.log(err);
               });
-            setAddedItems([]);
+            reset();
             navigation.goBack();
           } catch (error) {
             console.log(error);
@@ -357,7 +366,9 @@ const NewSale = ({navigation}) => {
             keyboardType="default"
             placeholderTextColor={colors.faded_grey}
           />
-          {customers.length && searchVisible ? (
+          {customers.filter(i =>
+            i.data().name.toLowerCase().includes(customer.toLowerCase()),
+          ).length && searchVisible ? (
             <View
               style={{
                 zIndex: 10,

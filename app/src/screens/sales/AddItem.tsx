@@ -159,7 +159,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 18,
                   }}>
-                  {t('Amount')} {`(${t('Current_Amount')}: `}
+                  {t('Quantity')} {`(${t('In_stock')}: `}
                   {detailsItem!.quantity}
                   {')'}
                 </Text>
@@ -174,7 +174,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     }
                   }}
                   value={quantity}
-                  placeholder={t('Enter_Amount')}
+                  placeholder={t('Enter_quantity')}
                   keyboardType="numeric"
                   placeholderTextColor={colors.faded_grey}
                 />

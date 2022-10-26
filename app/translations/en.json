@@ -79,7 +79,7 @@
   "Item_Name": "Item Name",
   "Amount": "Amount",
   "Amount2": "Amount",
-  "Unit_Price": "Unit Purchase Price",
+  "Unit_Price": "Unit buying price",
   "Unit_Sale_Price": "Unit Sale Price",
   "Category": "Category",
   "Category_Name": "CategoryName",
@@ -106,10 +106,10 @@
   "Roll_Back": "Rollback",
 
   "Current_Price": "Current price",
-  "Current_Amount": "Current amount",
+  "In_stock": "In stock",
 
   "Enter_Unit_Price": "Enter Unit price",
-  "Enter_Amount": "Enter Amount",
+  "Enter_quantity": "Enter Quantity",
 
   "Sales_Receipt": "የሽያጭ ደረሰኝ",
   "New_Sales_Reciept": "New Sales Reciept",

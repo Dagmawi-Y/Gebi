@@ -75,7 +75,7 @@
 
   "Add_New_Item": "አዲስ እቃ መመዝገብያ",
   "Item_Name": "የእቃ ስም",
-  "Amount": "ብዛት",
+  "Quantity": "ብዛት",
   "Amount2": "መጠን",
   "Unit_Price": "የአንዱ የግዢ ዋጋ",
   "Unit_Sale_Price": "የአንዱ የመሽጫ ዋጋ",
@@ -103,10 +103,10 @@
   "Roll_Back": "ተመላሽ አድርግ",
 
   "Current_Price": "የተመዝገበው ዋጋ",
-  "Current_Amount": "የተመዝገበው ብዛት",
+  "In stock": "የተመዝገበው ብዛት",
 
   "Enter_Unit_Price": "የአንዱን ዋጋ ያስግቡ",
-  "Enter_Amount": "ብዛት?",
+  "Enter_quantity": "ብዛት?",
 
   "Sales_Receipt": "የሽያጭ ደረሰኝ",
   "New_Sales_Reciept": "አዲስ የሽያጭ ደረሰኝ",
