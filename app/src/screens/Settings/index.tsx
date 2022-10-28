@@ -7,6 +7,7 @@ import {
   Share,
   Animated,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -17,11 +18,13 @@ import routes from '../../navigation/routes';
 import {StateContext} from '../../global/context';
 import firestore from '@react-native-firebase/firestore';
 import Loading from '../../components/lotties/Loading';
+import auth from '@react-native-firebase/auth';
 
 const Settings = ({navigation}) => {
   const {t, i18n} = useTranslation();
   const [langDropDownVisible, setLangDropDownVisible] = useState(false);
   const [accountsVisible, setAccountsVisible] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const {userInfo, user, isAdmin} = useContext(StateContext);
   const [employes, setEmployees] = useState<any>([]);
 
@@ -60,11 +63,6 @@ const Settings = ({navigation}) => {
     }).start();
   };
 
-  const availableLanguages = [
-    {name: 'Amharic', code: 'am'},
-    {name: 'English', code: 'en'},
-  ];
-
   const fetchEmployes = () => {
     if (userInfo)
       firestore()
@@ -97,15 +95,86 @@ const Settings = ({navigation}) => {
       alert(error.message);
     }
   };
+
+  const availableLanguages = [
+    {name: 'Amharic', code: 'am'},
+    {name: 'English', code: 'en'},
+  ];
+
   const changeLang = async (lang: string) => {
     i18n.changeLanguage(lang);
     await AsyncStorage.setItem('lang', lang);
+  };
+
+  const deleteAccount = () => {
+    Alert.alert(t('Are_You_Sure?'), `Do you want to delete your account??`, [
+      {
+        text: t('Yes'),
+        onPress: () => {
+          const userCollections = [
+            'categories',
+            'customExpenseTypes',
+            'customers',
+            'expenses',
+            'inventory',
+            'sales',
+            'stock',
+            'suppliers',
+            'users',
+          ];
+
+          const userId = userInfo[0].doc.companyId;
+          userCollections.map(coll => {
+            firestore()
+              .collection(coll)
+              .get()
+              .then(res => {
+                res.docs.map(i => {
+                  console.log(i.data().owner);
+                  setDeleting(true);
+                  if (coll == 'users') {
+                    if (i.data().companyId === userId && isAdmin) {
+                      return firestore()
+                        .collection(coll)
+                        .doc(i.id)
+                        .delete()
+                        .then(res => console.log('DELETED', res, '\n'))
+                        .catch(err => console.log('DELETE ERROR', err, '\n'));
+                    }
+                  }
+
+                  if (i.data().owner === userId && isAdmin) {
+                    return firestore()
+                      .collection(coll)
+                      .doc(i.id)
+                      .delete()
+                      .then(res => console.log('DELETED', res, '\n'))
+                      .catch(err => console.log('DELETE ERROR', err, '\n'));
+                  }
+                });
+              });
+            if (user) {
+              auth().signOut();
+            }
+            setDeleting(false);
+          });
+        },
+        style: 'default',
+      },
+      {
+        text: t('Cancel'),
+        onPress: () => {},
+        style: 'default',
+      },
+    ]);
   };
 
   useEffect(() => {
     fetchEmployes();
   }, [userInfo]);
   if (userInfo.length == 0 || !user) return <Loading size={50} />;
+
+  if (deleting) return <Loading size={40} />;
 
   return (
     <View style={{flex: 1, padding: 20}}>
@@ -141,6 +210,18 @@ const Settings = ({navigation}) => {
             <Icon2 name="account-edit" size={30} color={colors.primary} />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          onPress={() => deleteAccount()}
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            borderWidth: 0.1,
+            borderColor: colors.primary,
+            borderRadius: 200,
+          }}>
+          <Icon2 name="delete-circle" size={30} color={colors.red} />
+        </TouchableOpacity>
 
         <View style={{alignItems: 'center'}}>
           <View

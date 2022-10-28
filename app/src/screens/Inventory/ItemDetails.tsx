@@ -105,7 +105,6 @@ const ItemDetails = ({route, navigation}) => {
 
       task.then(async () => {
         const link = await reference.getDownloadURL();
-        console.log(link);
         firestore()
           .collection('inventory')
           .doc(itemId)
@@ -136,7 +135,6 @@ const ItemDetails = ({route, navigation}) => {
         .doc(itemId)
         .onSnapshot(res => {
           setData(res.data());
-          console.log(data)
         });
     } catch (error) {
       console.log(error);
