@@ -4,6 +4,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Share,
   Animated,
   ScrollView,
 } from 'react-native';
@@ -78,6 +79,24 @@ const Settings = ({navigation}) => {
         });
   };
 
+  const onShare = async (name, number, company) => {
+    try {
+      const result = await Share.share({
+        message: `Gebi\n\nHello ${name}\n${company} has added you as an employee on Gebi.\n\nGebi allows you to manage my business sales, expense and stock please download the app from PlayStore and singup with your number ${number}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   const changeLang = async (lang: string) => {
     i18n.changeLanguage(lang);
     await AsyncStorage.setItem('lang', lang);
@@ -86,13 +105,6 @@ const Settings = ({navigation}) => {
   useEffect(() => {
     fetchEmployes();
   }, [userInfo]);
-
-  console.log("==================================================================")
-  console.log("userInfo", userInfo)
-  console.log("==================================================================")
-  console.log("user", user)
-  console.log("==================================================================")
-
   if (userInfo.length == 0 || !user) return <Loading size={50} />;
 
   return (
@@ -249,14 +261,15 @@ const Settings = ({navigation}) => {
                         }}>
                         {i.name}
                       </Text>
-                      {/* <TouchableOpacity>
-                      <Icon2
-                        name="eye-outline"
-                        color={colors.black}
-                        size={25}
-                        style={{marginRight: 10}}
-                      />
-                    </TouchableOpacity> */}
+                      <TouchableOpacity
+                        onPress={() => onShare(i.name, i.phone, i.orgName)}>
+                        <Icon2
+                          name="share"
+                          color={colors.black}
+                          size={25}
+                          style={{marginRight: 10}}
+                        />
+                      </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() =>
                           navigation.navigate(routes.editEmployee, {
