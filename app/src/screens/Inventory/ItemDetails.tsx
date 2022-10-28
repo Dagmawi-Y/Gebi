@@ -223,7 +223,33 @@ const ItemDetails = ({route, navigation}) => {
                       />
                     </View>
                   </View>
-                  <Text style={styles.textBold}>{t('Item_Details')}</Text>
+
+                  <Text style={[styles.textBold, {marginTop: 5}]}>
+                    {t('Item_Details')}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: 10,
+                      borderRadius: 5,
+                      justifyContent: 'space-between',
+                      paddingLeft: 10,
+                      backgroundColor: colors.white,
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.black,
+                        fontSize: 15,
+                        marginRight: 5,
+                        fontWeight: 'bold',
+                      }}>
+                      {t('AddedBy')}
+                    </Text>
+                    <Text style={{color: colors.black, fontSize: 15}}>
+                      {data.createdBy}
+                    </Text>
+                  </View>
                   <View style={styles.boardContainer}>
                     <View style={styles.boardCol}>
                       <Text style={styles.boardTopTitle}>{t('Price')}</Text>
@@ -362,7 +388,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   boardContainer: {
-    marginVertical: 15,
+    marginVertical: 10,
     backgroundColor: 'white',
     height: 80,
     borderRadius: 5,
@@ -385,14 +411,13 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   textBold: {
-    fontSize: 22,
-    marginTop: 25,
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.black,
     paddingHorizontal: 10,
   },
   textLight: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '400',
     color: colors.black,
     marginHorizontal: 20,
