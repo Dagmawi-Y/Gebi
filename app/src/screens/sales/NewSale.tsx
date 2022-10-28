@@ -166,6 +166,7 @@ const NewSale = ({navigation}) => {
     items: {...addedItems},
     vat: taxType == 'VAT' ? true : false,
     tot: taxType == 'TOT' ? true : false,
+    createdBy: userInfo[0].doc.name,
   };
 
   const checkEmpty = () => {
@@ -182,7 +183,8 @@ const NewSale = ({navigation}) => {
       .get()
       .then(res => {
         setCustomers(res.docs);
-      });
+      })
+      .catch(err => console.log(err));
   };
 
   const addNewSale = async () => {
@@ -233,7 +235,8 @@ const NewSale = ({navigation}) => {
                         .catch(err => {
                           console.log(err);
                         });
-                    });
+                    })
+                    .catch(err => console.log(err));
                 }
               })
               .catch(err => {
@@ -445,26 +448,40 @@ const NewSale = ({navigation}) => {
                           );
                         }}
                       />
-                      <View style={{marginLeft: 10}}>
+                      <View style={{}}>
                         <Text style={styles.textBold}>{item.itemName}</Text>
                         <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.textBold}>
+                          <Text
+                            style={[styles.textBold, {fontWeight: 'normal'}]}>
                             {formatNumber(item.quantity)}
-                            <Text style={styles.textLight}>
-                              {' '}
-                              - {t('Amount')}
-                            </Text>
+                            <Text style={styles.textLight}> {t('(qty)')}</Text>
                           </Text>
                         </View>
                       </View>
                     </View>
                     <View style={styles.RightContainer}>
                       <Text style={styles.textLight}>
-                        <Text style={styles.textBold}>
+                        <Text style={{}}>
                           {formatNumber(item.unitSalePrice)}
                           {t('Birr')}
                         </Text>
-                        /{t('Single')}
+                        /
+                        {item.unit === 'Piece'
+                          ? 'pc'
+                          : item.unit === 'Litre'
+                          ? 'l'
+                          : item.unit === 'Metre'
+                          ? 'm'
+                          : item.unit.substring(0, 2)}
+                      </Text>
+                      <Text style={styles.textLight}>
+                        <Text style={styles.textBold}>
+                          {formatNumber(
+                            parseFloat(item.unitSalePrice) *
+                              parseFloat(item.quantity),
+                          )}
+                          {t('Birr')}
+                        </Text>
                       </Text>
                     </View>
                   </View>
@@ -1018,7 +1035,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   RightContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
     marginLeft: 'auto',

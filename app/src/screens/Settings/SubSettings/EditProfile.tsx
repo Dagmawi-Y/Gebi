@@ -61,34 +61,32 @@ const AddEmployee = ({navigation}) => {
     };
 
     setUpdating(true);
-    try {
-      await firestore()
-        .collection('users')
-        .where('phone', '==', phoneNumber)
-        .get()
-        .then(res => {
-          const docId = res.docs[0].id;
-          if (docId) {
-            firestore()
-              .collection('users')
-              .doc(docId)
-              .update(userData)
-              .then(res => {
-                setUpdating(false);
-                navigation.goBack();
-              })
-              .catch(err => {
-                setUpdating(false);
-                setError('Something went wrong, try again.');
-                console.log(err);
-              });
-          } else {
-            setUpdating(false);
-          }
-        });
-    } catch (error) {
-      console.log(error);
-    }
+
+    await firestore()
+      .collection('users')
+      .where('phone', '==', phoneNumber)
+      .get()
+      .then(res => {
+        const docId = res.docs[0].id;
+        if (docId) {
+          firestore()
+            .collection('users')
+            .doc(docId)
+            .update(userData)
+            .then(res => {
+              setUpdating(false);
+              navigation.goBack();
+            })
+            .catch(err => {
+              setUpdating(false);
+              setError('Something went wrong, try again.');
+              console.log(err);
+            });
+        } else {
+          setUpdating(false);
+        }
+      })
+      .catch(err => console.log(err));
   };
 
   const populate = () => {

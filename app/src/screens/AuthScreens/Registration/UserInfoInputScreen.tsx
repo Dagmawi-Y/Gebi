@@ -95,7 +95,7 @@ const UserInfoInputScreen = ({navigation}) => {
             } else {
               setLoading(false);
             }
-          });
+          }).catch(err=>console.log(err))
     } catch (error) {
       console.log(error);
     }

@@ -62,37 +62,30 @@ export default function Items({navigation}) {
     const dateMonth = new Date(d).getMonth();
     const thisMonth = new Date().getMonth();
     if (
-      new Date(d).getDate() - new Date().getDate() == 0 &&
+      new Date().getDate() - new Date(d).getDate() == 0 &&
       dateMonth == thisMonth
     )
       return 'Today';
     if (
-      new Date(d).getDate() - new Date().getDate() == 1 &&
+      new Date().getDate() - new Date(d).getDate() == 1 &&
       dateMonth == thisMonth
     )
       return 'Yesterday';
-    if (
-      new Date(d).getDate() - new Date().getDate() < 7 &&
-      dateMonth == thisMonth
-    )
-      return 'This week';
-    if (
-      new Date(d).getDate() - new Date().getDate() > 7 &&
-      dateMonth == thisMonth
-    )
-      return 'Last week';
 
     return new Date(d).toDateString();
   };
+
   const getSales = async () => {
     setLoading(true);
-    try {
-      firestore()
-        .collection('sales')
-        .where('owner', '==', userInfo[0].doc.companyId)
-        .onSnapshot(querySnapshot => {
-          let result: any = [];
-          querySnapshot.forEach(sn => {
+
+    firestore()
+      .collection('sales')
+      .where('owner', '==', userInfo[0].doc.companyId)
+
+      .onSnapshot(querySnapshot => {
+        let result: any = [];
+        if (querySnapshot)
+          querySnapshot.docs.forEach(sn => {
             const item = {
               id: sn.id,
               date: sn.data().date,
@@ -101,26 +94,34 @@ export default function Items({navigation}) {
               items: sn.data().items,
               paymentMethod: sn.data().paymentMethod,
               saleProfit: sn.data().saleProfit,
+              createdBy: sn.data().createdBy,
               vat: sn.data().vat,
               tot: sn.data().tot,
             };
             result.push(item);
           });
 
-          const grouped = result.reduce(function (r, a) {
-            r[a.date] = r[a.date] || [];
-            r[a.date].push(a);
-            return r;
-          }, Object.create(null));
+        const grouped = result.reduce(function (r, a) {
+          r[a.date] = r[a.date] || [];
+          r[a.date].push(a);
+          return r;
+        }, {});
 
-          setData(grouped);
-        });
+        console.log(grouped);
 
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+        // SORT EXPERIMENT
+        // const sortable = Object.fromEntries(
+        //   Object.entries(grouped).sort(([, a], [, b]) => a - b),
+        // );
+        // console.log(
+        //   '=============-------------===============================\n',
+        //   sortable,
+        // );
+        // SORT EXPERIMENT
+
+        setData(grouped);
+        setLoading(false);
+      });
   };
 
   const getStockCount = () => {
@@ -130,7 +131,8 @@ export default function Items({navigation}) {
       .get()
       .then(snap => {
         setStockCount(snap.size);
-      });
+      })
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {
@@ -331,7 +333,7 @@ export default function Items({navigation}) {
                 ) : null}
 
                 <ScrollView style={{flex: 1}}>
-                  {data.length == 0 ? (
+                  {!Object.keys(data).length ? (
                     <EmptyBox message={t('No_Sales_Yet')} />
                   ) : (
                     <View style={{flex: 1}}>
@@ -343,6 +345,7 @@ export default function Items({navigation}) {
                                 color: colors.primary,
                                 marginVertical: 5,
                               }}>
+                              {/* {new Date(i).getDate() - new Date().getDate()} */}
                               {dateConverter(i)}
                             </Text>
                             {data[i]

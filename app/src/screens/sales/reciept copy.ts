@@ -1,6 +1,5 @@
 module.exports = arg => {
-  const {customerName, createdBy, date, paymentMethod, invoiceNumber} =
-    arg.data;
+  const {customerName, date, paymentMethod, invoiceNumber, titles} = arg.data;
   const {sum, tax, total} = arg;
   const items = arg.data.items;
 
@@ -132,15 +131,15 @@ p {
 </style>
   
 <div class="container box-shadow">
-  <h2 class="title">የሽያጭ ደረሰኝ</h2>
+  // <h2 class="title">${titles.reciept}</h2>
   <div class="heading">
     <div class="date">
       <p>${date}</p>
-      <p>የክፍያ መጠየቂያ ቀን</p>
+      <p>${titles.date}</p>
     </div>
     <div class="invoice-number">
       <p>${invoiceNumber}</p>
-      <p>የደረሰኝ ቁጥር</p>
+      <p>${titles.Invoice_Number}</p>
     </div>
   </div>
 
@@ -149,14 +148,15 @@ p {
   </div>
   <div class="details-container">
     <div class="customer">
+      <h2>${titles.customer}</h2>
+      <h3>${customerName}</h3>
+    </div>
     <div class="customer">
-    <h2>ደንበኛ</h2>
-    <h3>${customerName}</h3>
-  </div>
-
+      <h2>${titles.Sales_officer}</h2>
+      <h3>${customerName}</h3>
     </div>
     <div class="items padding box-shadow border-radius">
-      <h2>የእቃዎች ዝርዝር</h2>
+      <h2>${titles.Items_List}</h2>
       ${Object.getOwnPropertyNames(items).map(i => {
         return `<div class="item">
           <div class="item-left">
@@ -171,18 +171,18 @@ p {
     <div class="price padding box-shadow border-radius">
       <div class="price-div">
         <div>
-          <p>ድምር</p>
+          <p>${titles.subtotal}</p>
           <p>${sum} ብር</p>
         </div>
         <div>
-          <p>ታክስ (15% ቫት)</p>
+          <p>${titles.total} (15% ቫት)</p>
           <p>${tax} ብር</p>
         </div>
       </div>
       <hr />
       <div class="price-div">
         <div class="total">
-          <p>አጠቃላይ ድምር</p>
+          <p>${titles.total}</p>
           <p>${total} ብር</p>
         </div>
       </div>

@@ -37,9 +37,6 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
   let unmounted = false;
 
   const handleSubmit = () => {
-    // console.log(selectedItem);
-    // return;
-
     if (quantityInputError) return;
     // if (!quantity) return setQuntityInputError(t('Item_Out_Of_Stock'));
     let q = parseFloat(selectedItem[0].quantity);
@@ -57,6 +54,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
       saleProfit: saleProfit,
       originalPrice: p,
       unitPrice: p,
+      unit: selectedItem[0].unit,
       unitSalePrice: unitSalePrice,
       quantity: totalItems,
     };
@@ -79,6 +77,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
               itemName: sn.data().item_name,
               quantity: sn.data().currentCount,
               unitPrice: sn.data().unit_price,
+              unit: sn.data().unit,
               unitSalePrice: sn.data().unit_SalePrice,
             };
             if (addedItems.length) {
@@ -362,7 +361,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     </View>
                     <View style={styles.RightContainer}>
                       <Text style={styles.textBold}>
-                        {t('Amount')} {item.quantity}
+                        {t('Quantity')} {item.quantity}
                       </Text>
                     </View>
                     <Icon name="plus-circle" color={colors.black} size={30} />

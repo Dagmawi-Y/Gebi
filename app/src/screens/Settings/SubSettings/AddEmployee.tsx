@@ -95,7 +95,7 @@ const AddEmployee = ({navigation}) => {
             setLoading(false);
             setError('Phone number already taken.');
           }
-        });
+        }).catch(err=>console.log(err))
     } catch (error) {
       console.log(error);
     }

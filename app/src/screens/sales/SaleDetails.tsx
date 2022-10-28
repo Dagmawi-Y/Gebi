@@ -19,7 +19,7 @@ import RNPrint from 'react-native-print';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 
-import receipt from './reciept';
+const receipt = require('./reciept');
 import {useTranslation} from 'react-i18next';
 import roundDecimal from '../../utils/roundDecimal';
 import {StateContext} from '../../global/context';
@@ -37,7 +37,7 @@ const SaleDetails = ({route, navigation}) => {
   const [error, setError] = useState('');
   const [menuvisible, setMenuvisible] = useState(false);
 
-  const imageRef = useRef(null);
+  const imageRef = useRef<any>(null);
 
   const calculate = () => {
     let sum: number = 0;
@@ -110,7 +110,8 @@ const SaleDetails = ({route, navigation}) => {
                 console.log(err);
               });
             setLoading(false);
-          });
+          })
+          .catch(err => console.log(err));
       }
       if (proceed) {
         firestore().collection('sales').doc(data.id).delete();
@@ -121,9 +122,26 @@ const SaleDetails = ({route, navigation}) => {
     }
   };
 
+  const titles = {
+    paymentType: t('paymentType'),
+    reciept: t('reciept'),
+    Total: t('Total'),
+    Vat: t('Vat'),
+    Tax: t('Tax'),
+    date: t('Date'),
+    subtotal: t('subtotal'),
+    Birr: t('Birr'),
+    Quantity: t('Quantity'),
+    Items_List: t('Items_List'),
+    Sales_officer: t('Sales_officer'),
+    Customer: t('Customer'),
+    Invoice_Number: t('Invoice_Number '),
+  };
+
   const print = async () => {
     const printData = {
       data: data,
+      titles: titles,
       sum: sum,
       tax: parseFloat(sum) * 0.15,
       total: total,
@@ -145,7 +163,7 @@ const SaleDetails = ({route, navigation}) => {
   }, [data]);
 
   return (
-    <>
+    <View style={{backgroundColor: 'white', flex: 1}}>
       {loading && (
         <StatusBox
           msg={t('Please_Wait...')}
@@ -183,7 +201,7 @@ const SaleDetails = ({route, navigation}) => {
               justifyContent: 'space-around',
               paddingHorizontal: 10,
               height: 100,
-              borderRadius: 15,
+              borderRadius: 5,
               borderTopRightRadius: 0,
               alignItems: 'flex-start',
               borderWidth: 0.6,
@@ -248,12 +266,12 @@ const SaleDetails = ({route, navigation}) => {
                 alignItems: 'center',
                 paddingVertical: 10,
                 paddingHorizontal: 5,
-                borderRadius: 10,
+                borderRadius: 5,
                 backgroundColor: colors.white,
                 marginHorizontal: 5,
                 borderWidth: 0.4,
                 borderColor: '#00000040',
-                shadowColor: '#00000040',
+                shadowColor: '#00000010',
                 elevation: 10,
               }}>
               <Text style={styles.textBold}>
@@ -262,6 +280,29 @@ const SaleDetails = ({route, navigation}) => {
               </Text>
               <Text style={{fontSize: 18, color: colors.faded_dark}}>
                 {data.customerName}
+              </Text>
+            </View>
+            <View
+              style={{
+                marginTop: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 10,
+                paddingHorizontal: 5,
+                borderRadius: 5,
+                backgroundColor: colors.white,
+                marginHorizontal: 5,
+                borderWidth: 0.4,
+                borderColor: '#00000040',
+                shadowColor: '#00000010',
+                elevation: 10,
+              }}>
+              <Text style={styles.textBold}>
+                {t('Sales Officer')}
+                {':'}
+              </Text>
+              <Text style={{fontSize: 18, color: colors.faded_dark}}>
+                {data.createdBy}
               </Text>
             </View>
             <View style={styles.ListItemContainer}>
@@ -435,15 +476,6 @@ const SaleDetails = ({route, navigation}) => {
             </View>
           </ScrollView>
         </ViewShot>
-
-        {/* <View
-          style={{
-            paddingHorizontal: 10,
-            marginBottom: 'auto',
-            paddingTop: 'auto',
-          }}> */}
-
-        {/* </View> */}
         <TouchableOpacity
           onPress={() => {
             Alert.alert(t('Are_You_Sure?'), ``, [
@@ -464,13 +496,13 @@ const SaleDetails = ({route, navigation}) => {
           style={{
             backgroundColor: colors.red,
             height: 60,
-            marginTop: 'auto',
-
+            margin: 'auto',
+            alignSelf: 'center',
             paddingHorizontal: 20,
             justifyContent: 'space-between',
             width: 'auto',
             alignItems: 'center',
-            borderRadius: 30,
+            borderRadius: 5,
             flexDirection: 'row',
           }}>
           <Text
@@ -483,7 +515,7 @@ const SaleDetails = ({route, navigation}) => {
           <Icon2 name="backup-restore" size={25} color={colors.white} />
         </TouchableOpacity>
       </ScrollView>
-    </>
+    </View>
   );
 };
 
@@ -494,6 +526,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingVertical: 15,
+    backgroundColor: colors.white,
   },
   header: {
     flexDirection: 'row',
@@ -543,7 +576,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginHorizontal: 10,
     marginVertical: 10,
-    borderRadius: 10,
+    borderRadius: 5,
   },
   ListItemContainer: {
     justifyContent: 'center',
@@ -559,7 +592,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
+    borderRadius: 5,
     alignSelf: 'center',
 
     borderWidth: 0.4,
@@ -576,11 +609,11 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     marginVertical: 20,
     borderWidth: 0.4,
     borderColor: '#00000040',
-    shadowColor: '#00000040',
+    shadowColor: '#00000010',
     elevation: 10,
     paddingVertical: 10,
     backgroundColor: colors.white,
@@ -597,13 +630,13 @@ const styles = StyleSheet.create({
   },
   paymentTypeContainer: {
     paddingHorizontal: 5,
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 15,
     paddingVertical: 10,
     backgroundColor: colors.white,
     borderWidth: 0.4,
     borderColor: '#00000040',
-    shadowColor: '#00000040',
+    shadowColor: '#00000010',
     elevation: 10,
     marginHorizontal: 5,
   },

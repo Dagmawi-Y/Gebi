@@ -41,16 +41,19 @@ const ItemDetails = ({route, navigation}) => {
   const deleteStock = async () => {
     let batch = firestore().batch();
     let totSaleCount: number = 0;
-    const sales = await firestore()
+    await firestore()
       .collection('stock')
       .where('owner', '==', userInfo[0].doc.companyId)
       .where('item_id', '==', itemId)
-      .get();
-    sales.docs.map(i => (totSaleCount += parseInt(i.data().initialCount)));
-    setTotalSaleCount(totSaleCount);
-    sales.forEach(sale => {
-      batch.delete(sale.ref);
-    });
+      .get()
+      .then(sales => {
+        sales.docs.map(i => (totSaleCount += parseInt(i.data().initialCount)));
+        setTotalSaleCount(totSaleCount);
+        sales.forEach(sale => {
+          batch.delete(sale.ref);
+        });
+      })
+      .catch(err => console.log(err));
     return batch.commit().then(async () => [
       await firestore()
         .collection('categories')

@@ -30,7 +30,8 @@ const HomeScreen = ({navigation}) => {
     const info = await firestore()
       .collection('users')
       .where('phone', '==', user?.phoneNumber)
-      .get();
+      .get()
+      .catch(err => console.log(err));
   };
 
   useEffect(() => {

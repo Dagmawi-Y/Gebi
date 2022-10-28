@@ -319,7 +319,7 @@ const PhoneInputScreen = ({navigation}) => {
                     borderRadius: 10,
                     alignSelf: 'center',
                     marginBottom: 10,
-                    width: 100,
+                    // width: 100,
                   }}>
                   <Text
                     style={{
@@ -332,6 +332,7 @@ const PhoneInputScreen = ({navigation}) => {
                   </Text>
                 </TouchableOpacity>
               )}
+              
               {phoneNumber ? (
                 <View
                   style={{
@@ -342,16 +343,16 @@ const PhoneInputScreen = ({navigation}) => {
                   }}>
                   <Text
                     style={{
-                      fontSize: 23,
+                      fontSize: 18,
                       textAlign: 'center',
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}>
-                    ኮድ የተላከው ወደ
+                    ኮድ የተላከበት፡
                   </Text>
                   <Text
                     style={{
-                      fontSize: 23,
+                      fontSize: 18,
                       color: colors.primary,
                       fontStyle: 'italic',
                       fontWeight: '600',

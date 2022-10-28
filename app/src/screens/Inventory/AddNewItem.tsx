@@ -202,6 +202,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
                     owner: userInfo[0].doc.companyId,
+                    createdBy: userInfo[0].doc.name,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(async () => {
@@ -228,11 +229,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 owner: userInfo[0].doc.companyId,
                 item_name: itemName,
                 unit_price: unitPrice,
+                unit: unit,
                 unit_SalePrice: unitSalePrice,
                 currentCount: quantity,
                 picture: fileUrl,
                 category: itemCategory.toLowerCase(),
                 categoryId: categoryId,
+                createdBy: userInfo[0].doc.name,
               })
               .then(res => {
                 const item_id = res['_documentPath']['_parts'][1];
@@ -245,6 +248,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     unit_price: unitPrice,
                     unit: unit,
                     owner: userInfo[0].doc.companyId,
+                    createdBy: userInfo[0].doc.name,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(() => {

@@ -55,7 +55,7 @@ const ListItem = (sale, navigation) => {
               Inv: {invoiceNumber.substring(0, 7)}
             </Text>
             <Text style={[styles.listTextLight, {fontStyle: 'italic'}]}>
-              {' ( '}
+              {' ('}
               {customerName}
               {')'}
             </Text>
