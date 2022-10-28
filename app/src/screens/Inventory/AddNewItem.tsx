@@ -31,7 +31,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [suppliers, setSuppliers]: Array<any> = useState([]);
-  const [supplierExists, setSupplierExists] = useState(false);
 
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');

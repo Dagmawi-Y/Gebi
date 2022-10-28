@@ -9,12 +9,21 @@ const ImageSelector = ({photo, setPhoto}) => {
 
   const pickImage = type => {
     type == 'image'
-      ? ImagePicker.openPicker({})
+      ? ImagePicker.openPicker({
+          compressImageMaxWidth: 400,
+          compressImageMaxheight: 400,
+          compressImageQuality: 0.5,
+        })
           .then(image => {
             setPhoto(image.path);
           })
           .catch(err => console.log(err))
-      : ImagePicker.openCamera({useFrontCamera: false})
+      : ImagePicker.openCamera({
+          useFrontCamera: false,
+          compressImageMaxWidth: 400,
+          compressImageMaxheight: 400,
+          compressImageQuality: 0.5,
+        })
           .then(image => {
             setPhoto(image.path);
           })
