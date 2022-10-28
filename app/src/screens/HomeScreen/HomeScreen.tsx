@@ -19,6 +19,7 @@ import {
 } from '../../components/Icons';
 import {StateContext} from '../../global/context';
 import Loading from '../../components/lotties/Loading';
+import TopScreen from '../../components/TopScreen/TopScreen';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
@@ -42,10 +43,11 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.screenContainer}>
+      <TopScreen />
       <View style={{}}>
         {userInfo.length ? (
           <>
-            <View
+            {/* <View
               style={{
                 borderRadius: 100,
                 marginVertical: 10,
@@ -61,7 +63,7 @@ const HomeScreen = ({navigation}) => {
                 style={{fontSize: 70, color: colors.black, fontWeight: '600'}}>
                 {userInfo[0].doc.orgName.substring(0, 1)}
               </Text>
-            </View>
+            </View> */}
             <Text
               style={{
                 fontSize: 20,
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   pageHeading: {
-    fontSize: 30,
+    fontSize: 22,
     color: colors.white,
     fontWeight: '500',
     marginTop: 5,
