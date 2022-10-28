@@ -64,6 +64,8 @@ const ItemDetails = ({route, navigation}) => {
     ]);
   };
 
+  const deleteImage = () => {};
+
   const deleteItem = async () => {
     Alert.alert(t('Are_You_Sure?'), ``, [
       {
@@ -74,6 +76,11 @@ const ItemDetails = ({route, navigation}) => {
             pictureRef.delete().catch(err => console.log(err));
           }
           await firestore().collection('inventory').doc(itemId).delete();
+          const picture = storage().refFromURL(data.picture);
+          picture
+            .delete()
+            .then(res => {})
+            .catch(err => console.log(err));
           deleteStock();
           navigation.goBack();
         },
@@ -91,6 +98,7 @@ const ItemDetails = ({route, navigation}) => {
     if (!photo) return null;
     setUpdating(true);
     try {
+      const oldPicture = storage().refFromURL(data.picture);
       const reference = storage().ref(`image_${Date.now()}`);
       const pathToFile = photo;
       const task = reference.putFile(pathToFile);
@@ -105,6 +113,10 @@ const ItemDetails = ({route, navigation}) => {
             picture: link,
           })
           .then(res => {
+            oldPicture
+              .delete()
+              .then(res => {})
+              .catch(err => console.log(err));
             setUpdating(false);
             setPickerVisible(false);
           })
@@ -124,11 +136,13 @@ const ItemDetails = ({route, navigation}) => {
         .doc(itemId)
         .onSnapshot(res => {
           setData(res.data());
+          console.log(data)
         });
     } catch (error) {
       console.log(error);
     }
   };
+
   const getStockHistory = async () => {
     try {
       firestore()
