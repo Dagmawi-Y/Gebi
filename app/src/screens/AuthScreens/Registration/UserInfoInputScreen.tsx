@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   inputLable: {
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 5,
     color: colors.black,
   },
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.white,
   },
 });

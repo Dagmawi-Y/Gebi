@@ -412,14 +412,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   boardTopTitle: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.black,
     fontWeight: '800',
   },
   boardSubTitle: {
     fontWeight: '300',
     textAlign: 'left',
-    fontSize: 22,
+    fontSize: 20,
     color: colors.black,
   },
   textBold: {

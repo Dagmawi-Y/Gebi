@@ -43,7 +43,7 @@ const LanguageSelector = () => {
       <Text
         style={{
           color: colors.black,
-          fontSize: 18,
+          fontSize: 15,
           textAlign: 'center',
           fontWeight: 'bold',
           marginVertical: 10,
@@ -111,7 +111,7 @@ const LanguageSelector = () => {
                   padding: 10,
                   borderRadius: 10,
                   color: colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                 }}>
                 {t(`${lang.name}`)}
               </Text>

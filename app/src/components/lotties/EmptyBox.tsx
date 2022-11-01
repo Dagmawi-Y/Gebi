@@ -14,7 +14,7 @@ const Loading = ({message}) => {
       />
       <Text
         style={{
-          fontSize: 18,
+          fontSize: 15,
           color: colors.primary,
           fontFamily: 'monospace',
         }}>

@@ -156,7 +156,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     fontWeight: '600',
                     marginHorizontal: 5,
                     marginTop: 10,
-                    fontSize: 18,
+                    fontSize: 15,
                   }}>
                   {t('Quantity')} {`(${t('In_stock')}: `}
                   {detailsItem!.quantity}
@@ -185,7 +185,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     fontWeight: '600',
                     marginHorizontal: 5,
                     marginTop: 10,
-                    fontSize: 18,
+                    fontSize: 15,
                   }}>
                   {t('Unit_Sale_Price')}
                   {` (${detailsItem!.unitSalePrice} ${t('Birr')})`}
@@ -291,7 +291,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                   flexGrow: 1,
                   padding: 5,
                   paddingHorizontal: 10,
-                  fontSize: 18,
+                  fontSize: 15,
                   color: colors.black,
                 }}
                 autoFocus={true}
@@ -381,14 +381,14 @@ const styles = StyleSheet.create({
   textBold: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: 15,
     paddingHorizontal: 10,
   },
   textLight: {
     paddingHorizontal: 10,
     color: colors.faded_grey,
     fontWeight: '300',
-    fontSize: 18,
+    fontSize: 15,
   },
 
   ListItemContainer: {},
@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 20,
     borderRadius: 10,
-    fontSize: 18,
+    fontSize: 15,
     marginTop: 10,
   },
 });

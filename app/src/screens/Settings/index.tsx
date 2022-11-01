@@ -337,7 +337,7 @@ const Settings = ({navigation}) => {
                       <Text
                         style={{
                           color: colors.black,
-                          fontSize: 22,
+                          fontSize: 20,
                           marginRight: 'auto',
                         }}>
                         {i.name}
@@ -387,7 +387,7 @@ const Settings = ({navigation}) => {
             <Text
               style={{
                 color: colors.black,
-                fontSize: 22,
+                fontSize: 20,
               }}>
               Add Account
             </Text>
@@ -398,7 +398,7 @@ const Settings = ({navigation}) => {
       <Text
         style={{
           color: colors.black,
-          fontSize: 18,
+          fontSize: 15,
           fontWeight: 'bold',
           marginVertical: 10,
         }}>
@@ -478,7 +478,7 @@ const Settings = ({navigation}) => {
                 <Text
                   style={{
                     color: colors.black,
-                    fontSize: 22,
+                    fontSize: 20,
                   }}>
                   {t(`${lang.name}`)}
                 </Text>

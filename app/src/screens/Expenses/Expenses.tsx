@@ -128,7 +128,7 @@ export default function Expenses({navigation}: any) {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
                       padding: 10,
                     }}>
                     {date}
@@ -145,7 +145,7 @@ export default function Expenses({navigation}: any) {
                             <Text
                               style={{
                                 color: colors.black,
-                                fontSize: 18,
+                                fontSize: 15,
                                 fontWeight: '700',
                               }}>
                               {t(i.data.expenseName)}
@@ -182,7 +182,7 @@ export default function Expenses({navigation}: any) {
                 <Text
                   style={{
                     color: colors.black,
-                    fontSize: 18,
+                    fontSize: 15,
                     fontWeight: '700',
                     textAlign: 'center',
                   }}>
@@ -246,7 +246,7 @@ const topCard = StyleSheet.create({
     alignItems: 'flex-start',
   },
   boardTopTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '900',
     color: colors.black,
   },

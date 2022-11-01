@@ -350,7 +350,7 @@ const NewSale = ({navigation}) => {
               height: 50,
               paddingHorizontal: 15,
               color: colors.black,
-              fontSize: 18,
+              fontSize: 15,
               flexDirection: 'row-reverse',
               justifyContent: 'flex-start',
               backgroundColor: colors.white,
@@ -404,7 +404,7 @@ const NewSale = ({navigation}) => {
                       <Text
                         style={{
                           color: colors.black,
-                          fontSize: 18,
+                          fontSize: 15,
                           marginVertical: 5,
                           borderBottomWidth: 0.4,
                           borderColor: '#00000040',
@@ -544,7 +544,7 @@ const NewSale = ({navigation}) => {
               <Text
                 style={[
                   styles.textBold,
-                  {textAlign: 'right', fontSize: 18, marginBottom: 15},
+                  {textAlign: 'right', fontSize: 15, marginBottom: 15},
                 ]}>
                 {formatNumber(sum)} {t('Birr')}
               </Text>
@@ -580,7 +580,7 @@ const NewSale = ({navigation}) => {
                     styles.textBold,
                     {
                       textAlign: 'right',
-                      fontSize: 18,
+                      fontSize: 15,
                     },
                   ]}>
                   {formatNumber(sum * 0.15)} {t('Birr')}
@@ -618,7 +618,7 @@ const NewSale = ({navigation}) => {
                     styles.textBold,
                     {
                       textAlign: 'right',
-                      fontSize: 18,
+                      fontSize: 15,
                     },
                   ]}>
                   {formatNumber(sum * 0.02)} {t('Birr')}
@@ -634,7 +634,7 @@ const NewSale = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <Text
-                style={[styles.textBold, {fontSize: 18, fontWeight: '600'}]}>
+                style={[styles.textBold, {fontSize: 15, fontWeight: '600'}]}>
                 {t('Total')} {t('Sum')}
               </Text>
               <Text
@@ -1000,14 +1000,14 @@ const styles = StyleSheet.create({
   textBold: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: 15,
     paddingHorizontal: 10,
   },
   textLight: {
     paddingHorizontal: 10,
     color: colors.faded_grey,
     fontWeight: '300',
-    fontSize: 18,
+    fontSize: 15,
   },
 
   ListItemContainer: {

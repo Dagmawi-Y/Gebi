@@ -60,7 +60,7 @@ export default function TopScreen() {
         }
       });
       setTotalSaleExpense(tsaleExp);
-      SetTotalProfit(totalSaleProfit);
+      SetTotalProfit(totalSaleProfit - expenses);
       SetTotalIncome(totalSaleIncome);
     }
   };
@@ -126,7 +126,7 @@ export default function TopScreen() {
   useEffect(() => {
     getSales();
     getExpenses();
-  }, []);
+  }, [data]);
 
   if (loading) return null;
 
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   boardTopTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '900',
     color: colors.black,
   },

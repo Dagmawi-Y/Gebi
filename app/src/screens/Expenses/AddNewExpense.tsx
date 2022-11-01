@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     padding: 5,
     paddingHorizontal: 15,
-    fontSize: 18,
+    fontSize: 15,
     elevation: 5,
     height: 55,
     shadowColor: colors.transBlack,
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   },
   inputLable: {
     color: colors.black,
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 5,
   },
   button: {

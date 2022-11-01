@@ -119,7 +119,7 @@ const PhoneInputScreen = ({navigation, route}) => {
           {minutes > 0 || seconds > 0 ? (
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 15,
                 marginBottom: 10,
                 fontWeight: '500',
                 textAlign: 'center',
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
   },
   confirmInput: {
     color: colors.black,

@@ -93,7 +93,7 @@ export default function Intro({navigation}: any) {
         ]}>
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 15,
             alignItems: 'center',
             justifyContent: 'center',
             padding: 12,

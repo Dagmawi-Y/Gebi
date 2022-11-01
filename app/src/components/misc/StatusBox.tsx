@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: colors.black,
-    fontSize: 18,
+    fontSize: 15,
   },
 });
 

@@ -285,7 +285,7 @@ const category = StyleSheet.create({
     paddingHorizontal: 10,
     color: colors.faded_grey,
     fontWeight: '300',
-    fontSize: 18,
+    fontSize: 15,
   },
 });
 

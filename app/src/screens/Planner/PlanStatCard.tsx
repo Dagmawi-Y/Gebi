@@ -69,7 +69,7 @@ export default function PlansStatCard({
         <Text
           style={{
             fontWeight: 'bold',
-            fontSize: 18,
+            fontSize: 15,
             color: positive ? '#1BC773' : 'rgb(242, 71, 80)',
           }}>
           {value} {`ብር`}

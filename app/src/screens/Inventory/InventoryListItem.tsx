@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   listTextbold: {
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 15,
     color: colors.black,
     marginRight: 5,
     // marginLeft: 5,

@@ -204,7 +204,7 @@ const PhoneInputScreen = ({navigation}) => {
                 </View>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 15,
                     color: 'red',
                     marginVertical: 15,
                     paddingHorizontal: 10,
@@ -343,7 +343,7 @@ const PhoneInputScreen = ({navigation}) => {
                   }}>
                   <Text
                     style={{
-                      fontSize: 18,
+                      fontSize: 15,
                       textAlign: 'center',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -352,7 +352,7 @@ const PhoneInputScreen = ({navigation}) => {
                   </Text>
                   <Text
                     style={{
-                      fontSize: 18,
+                      fontSize: 15,
                       color: colors.primary,
                       fontStyle: 'italic',
                       fontWeight: '600',
@@ -386,7 +386,7 @@ const PhoneInputScreen = ({navigation}) => {
                 />
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 15,
                     color: 'red',
                     marginVertical: 15,
                     paddingHorizontal: 10,
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
   },
   confirmInput: {
     color: colors.black,

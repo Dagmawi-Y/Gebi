@@ -120,7 +120,7 @@ const ImageSelector = ({photo, setPhoto}) => {
             </TouchableOpacity>
           </View>
 
-          <Text style={{color: colors.black, fontSize: 18}}>ፎቶ ማያያዣ</Text>
+          <Text style={{color: colors.black, fontSize: 15}}>ፎቶ ማያያዣ</Text>
         </View>
       )}
     </View>

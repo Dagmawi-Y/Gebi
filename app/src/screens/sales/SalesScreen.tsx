@@ -203,7 +203,7 @@ export default function Items({navigation}) {
                   backgroundColor: colors.white,
                   flexGrow: 1,
                   height: 40,
-                  fontSize: 18,
+                  fontSize: 15,
                   color: colors.black,
                 }}
                 selectionColor="black"
@@ -233,7 +233,7 @@ export default function Items({navigation}) {
                 <Text
                   style={{
                     fontWeight: 'bold',
-                    fontSize: 18,
+                    fontSize: 15,
                     paddingHorizontal: 5,
                     color: colors.faded_dark,
                   }}>
@@ -257,7 +257,7 @@ export default function Items({navigation}) {
                       style={{
                         textAlign: 'center',
                         color: colors.white,
-                        fontSize: 18,
+                        fontSize: 15,
                         alignItems: 'center',
                       }}>
                       {t(filterValue)}
@@ -281,7 +281,7 @@ export default function Items({navigation}) {
                   <Text
                     style={{
                       color: colors.black,
-                      fontSize: 18,
+                      fontSize: 15,
                       marginRight: 10,
                     }}>
                     {t('Filter')}
@@ -320,7 +320,7 @@ export default function Items({navigation}) {
                                 color: colors.white,
                                 marginVertical: 5,
                                 borderRadius: 10,
-                                fontSize: 18,
+                                fontSize: 15,
                                 marginRight: 10,
                               },
                             ]}>
@@ -428,10 +428,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 20,
   },
-  boardTopTitle: {fontSize: 22, fontWeight: '900'},
+  boardTopTitle: {fontSize: 20, fontWeight: '900'},
   boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
 });
 
@@ -455,7 +455,7 @@ const topCard = StyleSheet.create({
     alignItems: 'flex-start',
   },
   boardTopTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '900',
     color: colors.black,
   },

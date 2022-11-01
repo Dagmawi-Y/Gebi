@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   pageHeading: {
-    fontSize: 22,
+    fontSize: 20,
     color: colors.white,
     fontWeight: '500',
     marginTop: 5,

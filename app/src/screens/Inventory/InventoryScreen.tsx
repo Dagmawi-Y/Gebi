@@ -169,7 +169,7 @@ export default function Items({navigation}) {
                   backgroundColor: colors.white,
                   flexGrow: 1,
                   height: 40,
-                  fontSize: 18,
+                  fontSize: 15,
                   color: colors.black,
                 }}
                 selectionColor="black"
@@ -199,7 +199,7 @@ export default function Items({navigation}) {
               <Text
                 style={{
                   fontWeight: 'bold',
-                  fontSize: 18,
+                  fontSize: 15,
                   color: colors.faded_dark,
                 }}>
                 {t('Total_Items')}
@@ -295,7 +295,7 @@ export default function Items({navigation}) {
                   categories.map(cat =>
                     cat.count > 0 ? (
                       <View key={cat.id}>
-                        <Text style={{color: colors.black, fontSize: 18}}>
+                        <Text style={{color: colors.black, fontSize: 15}}>
                           {cat.name} {`(${cat.count})`}
                         </Text>
                         {data
@@ -383,10 +383,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 20,
   },
-  boardTopTitle: {fontSize: 22, fontWeight: '900'},
+  boardTopTitle: {fontSize: 20, fontWeight: '900'},
   boardSubTitle: {color: colors.grey, fontWeight: 'bold', fontSize: 12},
 });
 
@@ -410,7 +410,7 @@ const topCard = StyleSheet.create({
     alignItems: 'flex-start',
   },
   boardTopTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '900',
     color: colors.black,
   },

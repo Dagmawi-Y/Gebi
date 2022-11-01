@@ -214,7 +214,7 @@ const SaleDetails = ({route, navigation}) => {
               }}
               onPress={() => print()}>
               <Icon name={'pdffile1'} size={30} color={colors.primary} />
-              <Text style={{marginLeft: 5, fontSize: 18, color: colors.black}}>
+              <Text style={{marginLeft: 5, fontSize: 15, color: colors.black}}>
                 PDF
               </Text>
             </TouchableOpacity>
@@ -225,7 +225,7 @@ const SaleDetails = ({route, navigation}) => {
               }}
               onPress={() => capture()}>
               <Icon name={'picture'} size={30} color={colors.primary} />
-              <Text style={{marginLeft: 5, fontSize: 18, color: colors.black}}>
+              <Text style={{marginLeft: 5, fontSize: 15, color: colors.black}}>
                 Photo
               </Text>
             </TouchableOpacity>
@@ -278,7 +278,7 @@ const SaleDetails = ({route, navigation}) => {
                 {t('Customer')}
                 {':'}
               </Text>
-              <Text style={{fontSize: 18, color: colors.faded_dark}}>
+              <Text style={{fontSize: 15, color: colors.faded_dark}}>
                 {data.customerName}
               </Text>
             </View>
@@ -298,10 +298,10 @@ const SaleDetails = ({route, navigation}) => {
                 elevation: 10,
               }}>
               <Text style={styles.textBold}>
-                {t('Sales Officer')}
+                {t('Sales_Officer')}
                 {':'}
               </Text>
-              <Text style={{fontSize: 18, color: colors.faded_dark}}>
+              <Text style={{fontSize: 15, color: colors.faded_dark}}>
                 {data.createdBy}
               </Text>
             </View>
@@ -325,7 +325,7 @@ const SaleDetails = ({route, navigation}) => {
                           <Text
                             style={{
                               color: colors.black,
-                              fontSize: 18,
+                              fontSize: 15,
                               fontWeight: 'bold',
                             }}>
                             {data.items[i].itemName}
@@ -372,7 +372,7 @@ const SaleDetails = ({route, navigation}) => {
                   <Text
                     style={[
                       styles.textBold,
-                      {textAlign: 'right', fontSize: 18},
+                      {textAlign: 'right', fontSize: 15},
                     ]}>
                     {sum} {t('Birr')}
                   </Text>
@@ -390,7 +390,7 @@ const SaleDetails = ({route, navigation}) => {
                     <Text
                       style={[
                         styles.textBold,
-                        {textAlign: 'right', fontSize: 18},
+                        {textAlign: 'right', fontSize: 15},
                       ]}>
                       {VATVal} {t('Birr')}
                     </Text>
@@ -410,7 +410,7 @@ const SaleDetails = ({route, navigation}) => {
                     <Text
                       style={[
                         styles.textBold,
-                        {textAlign: 'right', fontSize: 18},
+                        {textAlign: 'right', fontSize: 15},
                       ]}>
                       {TOTVal} {t('Birr')}
                     </Text>
@@ -427,7 +427,7 @@ const SaleDetails = ({route, navigation}) => {
                   <Text
                     style={[
                       styles.textBold,
-                      {fontSize: 18, fontWeight: '600'},
+                      {fontSize: 15, fontWeight: '600'},
                     ]}>
                     {t('Total')}
                   </Text>
@@ -557,20 +557,20 @@ const styles = StyleSheet.create({
   textBold: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: 15,
     paddingHorizontal: 10,
   },
   textLight: {
     paddingHorizontal: 10,
     color: colors.faded_grey,
     fontWeight: '300',
-    fontSize: 18,
+    fontSize: 15,
   },
 
   textValue: {
     color: colors.black,
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: 15,
     paddingHorizontal: 10,
     backgroundColor: colors.white,
     paddingVertical: 15,

@@ -245,7 +245,7 @@ const DrawerButton = ({
       </View>
       <Text
         style={{
-          fontSize: 18,
+          fontSize: 15,
           fontWeight: '300',
           marginLeft: 10,
           color: colors.white,
