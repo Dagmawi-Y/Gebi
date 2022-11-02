@@ -15,6 +15,7 @@ const StateContextProvider = ({children}) => {
   const [expense, setExpense] = useState(false);
   const [plan, setPlan] = useState(false);
   const [inventory, setInventory] = useState(false);
+  const [subcriptionPlan, setSubscriptionPlan] = useState([]);
 
   const [loadingUserData, setLoadingUserData] = useState(null);
   const [isReady, setIsReady] = useState(false);
@@ -61,6 +62,8 @@ const StateContextProvider = ({children}) => {
     isAdmin,
     sales,
     setSales,
+    subcriptionPlan,
+    setSubscriptionPlan,
     expense,
     setExpense,
     plan,
@@ -111,7 +114,8 @@ const StateContextProvider = ({children}) => {
             } else {
               // setLoading(false);
             }
-          }).catch(err=>console.log(err))
+          })
+          .catch(err => console.log(err));
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +155,7 @@ const StateContextProvider = ({children}) => {
       getUserInfo();
     }
   }, [user]);
-  
+
   useEffect(() => {
     // reset();
     init();

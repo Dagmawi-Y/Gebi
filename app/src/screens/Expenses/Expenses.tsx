@@ -33,6 +33,7 @@ export default function Expenses({navigation}: any) {
   const [dates, setDates]: Array<any> = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(true);
 
   const getExpenses = async () => {
     setLoading(true);
@@ -80,12 +81,12 @@ export default function Expenses({navigation}: any) {
   };
 
   useEffect(() => {
-    if (mountedRef && user) {
+    if (mounted && user) {
       getExpenses();
       calExpenses();
     }
     return () => {
-      mountedRef.current = false;
+      setMounted(false);
     };
   }, []);
 

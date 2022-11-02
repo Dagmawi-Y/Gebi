@@ -24,25 +24,20 @@ import TopScreen from '../../components/TopScreen/TopScreen';
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
 
-  const {user, userInfo, sales, expense, plan, inventory, isAdmin} =
-    useContext(StateContext);
+  const {
+    user,
+    userInfo,
+    sales,
+    expense,
+    plan,
+    inventory,
+    isAdmin,
+    subcriptionPlan,
+  } = useContext(StateContext);
   const [mounted, setMounted] = useState(true);
 
-  const getUser = async () => {
-    const info = await firestore()
-      .collection('users')
-      .where('phone', '==', user?.phoneNumber)
-      .get()
-      .catch(err => console.log(err));
-  };
-
   useEffect(() => {
-    if (mounted) {
-      getUser();
-    }
-    return () => {
-      setMounted(false);
-    };
+    console.log(subcriptionPlan);
   }, []);
 
   if (!userInfo || !user) return <Loading size={50} />;
@@ -53,23 +48,6 @@ const HomeScreen = ({navigation}) => {
       <View style={{}}>
         {userInfo.length ? (
           <>
-            {/* <View
-              style={{
-                borderRadius: 100,
-                marginVertical: 10,
-                backgroundColor: colors.white,
-                elevation: 10,
-                width: 100,
-                alignSelf: 'center',
-                alignItems: 'center',
-                justifyContent: 'center',
-                aspectRatio: 1,
-              }}>
-              <Text
-                style={{fontSize: 70, color: colors.black, fontWeight: '600'}}>
-                {userInfo[0].doc.orgName.substring(0, 1)}
-              </Text>
-            </View> */}
             <Text
               style={{
                 fontSize: 20,
@@ -77,7 +55,10 @@ const HomeScreen = ({navigation}) => {
                 color: colors.white,
                 fontWeight: '400',
               }}>
-              {userInfo[0].doc.orgName}
+              {userInfo[0].doc.orgName}{' '}
+              {subcriptionPlan.length > 0
+                ? new Date(subcriptionPlan[0].endDate).toString()
+                : 'Active'}
             </Text>
           </>
         ) : null}

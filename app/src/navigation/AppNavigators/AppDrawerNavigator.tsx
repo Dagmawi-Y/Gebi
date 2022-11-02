@@ -27,6 +27,7 @@ import AddNewItem from '../../screens/Inventory/AddNewItem';
 import CategoryNav from './AppTabNavigator/InventoryNavigation/CategoriesNav';
 import Edit from '../../screens/Inventory/Edit';
 import AddEmployee from '../../screens/Settings/SubSettings/AddEmployee';
+import Subscriptions from '../../screens/subscriptions/Subscriptions';
 const Drawer = createDrawerNavigator();
 
 function headerBackKey(navigation) {
@@ -176,6 +177,27 @@ function AppDrawerNavigator({}) {
             ),
           }}
           component={SettingsNavigator}
+        />
+        <Drawer.Screen
+          name={routes.subscriptions}
+          options={{
+            headerTitle: t('Settings'),
+            headerShown: false,
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}>
+                <Icon
+                  name="arrow-left"
+                  size={25}
+                  color={colors.white}
+                  style={{marginLeft: 10}}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+          component={Subscriptions}
         />
       </Drawer.Navigator>
     </>

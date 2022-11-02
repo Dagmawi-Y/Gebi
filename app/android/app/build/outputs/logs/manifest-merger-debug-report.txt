@@ -25,6 +25,7 @@ MERGED from [:react-native-share] C:\Users\seidr\Desktop\Gebi\app\node_modules\r
 MERGED from [:react-native-system-navigation-bar] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-system-navigation-bar\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-vector-icons] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-view-shot] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-view-shot\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
 MERGED from [com.facebook.react:react-native:0.68.2] C:\Users\seidr\.gradle\caches\transforms-3\b6f4aefb89dd992910b63f65ab43f7f4\transformed\jetified-react-native-0.68.2\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\seidr\.gradle\caches\transforms-3\a44445499e3519e56a35d8c348a10fed\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.firebase:firebase-auth:21.0.6] C:\Users\seidr\.gradle\caches\transforms-3\df5fb00a4d46b2c4531b71a87cfa2112\transformed\jetified-firebase-auth-21.0.6\AndroidManifest.xml:17:1-73:12
@@ -61,6 +62,7 @@ MERGED from [com.facebook.fresco:middleware:2.6.0] C:\Users\seidr\.gradle\caches
 MERGED from [com.facebook.fresco:ui-common:2.6.0] C:\Users\seidr\.gradle\caches\transforms-3\2e0cfacaf61ab69392eed27f3d6b1852\transformed\jetified-ui-common-2.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\seidr\.gradle\caches\transforms-3\233a78ba0b6442956f4f19acf75c3988\transformed\jetified-core-ktx-1.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\seidr\.gradle\caches\transforms-3\349c292536951c686d6e6ad9bda9c1db\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\seidr\.gradle\caches\transforms-3\58740f30b413d24e0184ea502cba17c2\transformed\webkit-1.4.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.browser:browser:1.4.0] C:\Users\seidr\.gradle\caches\transforms-3\3d816edc59c4826c81fb4b525e27eae2\transformed\browser-1.4.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\seidr\.gradle\caches\transforms-3\4d6b6fa757375595e3cf91e8ce03cb60\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-components:17.0.0] C:\Users\seidr\.gradle\caches\transforms-3\4af68da2c5504ce3ebb673b4f1df475b\transformed\jetified-firebase-components-17.0.0\AndroidManifest.xml:15:1-23:12
@@ -166,6 +168,8 @@ MERGED from [:react-native-image-crop-picker] C:\Users\seidr\Desktop\Gebi\app\no
 MERGED from [:react-native-image-crop-picker] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:5-31:19
 MERGED from [:react-native-share] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
 MERGED from [:react-native-share] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
 MERGED from [com.facebook.react:react-native:0.68.2] C:\Users\seidr\.gradle\caches\transforms-3\b6f4aefb89dd992910b63f65ab43f7f4\transformed\jetified-react-native-0.68.2\AndroidManifest.xml:9:5-20
 MERGED from [com.facebook.react:react-native:0.68.2] C:\Users\seidr\.gradle\caches\transforms-3\b6f4aefb89dd992910b63f65ab43f7f4\transformed\jetified-react-native-0.68.2\AndroidManifest.xml:9:5-20
 MERGED from [com.google.firebase:firebase-auth:21.0.6] C:\Users\seidr\.gradle\caches\transforms-3\df5fb00a4d46b2c4531b71a87cfa2112\transformed\jetified-firebase-auth-21.0.6\AndroidManifest.xml:26:5-71:19
@@ -294,6 +298,8 @@ MERGED from [:react-native-vector-icons] C:\Users\seidr\Desktop\Gebi\app\node_mo
 MERGED from [:react-native-vector-icons] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-vector-icons\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-view-shot] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-view-shot\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-view-shot] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-view-shot\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.68.2] C:\Users\seidr\.gradle\caches\transforms-3\b6f4aefb89dd992910b63f65ab43f7f4\transformed\jetified-react-native-0.68.2\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.react:react-native:0.68.2] C:\Users\seidr\.gradle\caches\transforms-3\b6f4aefb89dd992910b63f65ab43f7f4\transformed\jetified-react-native-0.68.2\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\seidr\.gradle\caches\transforms-3\a44445499e3519e56a35d8c348a10fed\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:20:5-22:41
@@ -366,6 +372,8 @@ MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\seidr\.gradle\caches\transfo
 MERGED from [androidx.core:core-ktx:1.6.0] C:\Users\seidr\.gradle\caches\transforms-3\233a78ba0b6442956f4f19acf75c3988\transformed\jetified-core-ktx-1.6.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\seidr\.gradle\caches\transforms-3\349c292536951c686d6e6ad9bda9c1db\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] C:\Users\seidr\.gradle\caches\transforms-3\349c292536951c686d6e6ad9bda9c1db\transformed\coordinatorlayout-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\seidr\.gradle\caches\transforms-3\58740f30b413d24e0184ea502cba17c2\transformed\webkit-1.4.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.webkit:webkit:1.4.0] C:\Users\seidr\.gradle\caches\transforms-3\58740f30b413d24e0184ea502cba17c2\transformed\webkit-1.4.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.browser:browser:1.4.0] C:\Users\seidr\.gradle\caches\transforms-3\3d816edc59c4826c81fb4b525e27eae2\transformed\browser-1.4.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.browser:browser:1.4.0] C:\Users\seidr\.gradle\caches\transforms-3\3d816edc59c4826c81fb4b525e27eae2\transformed\browser-1.4.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\seidr\.gradle\caches\transforms-3\4d6b6fa757375595e3cf91e8ce03cb60\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
@@ -570,6 +578,16 @@ ADDED from [:react-native-share] C:\Users\seidr\Desktop\Gebi\app\node_modules\re
 		ADDED from [:react-native-share] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-37
 	android:name
 		ADDED from [:react-native-share] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-55
+provider#com.reactnativecommunity.webview.RNCWebViewFileProvider
+ADDED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-18:20
+	android:grantUriPermissions
+		ADDED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-47
+	android:authorities
+		ADDED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-64
+	android:exported
+		ADDED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-37
+	android:name
+		ADDED from [:react-native-webview] C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-83
 activity#com.google.firebase.auth.internal.GenericIdpActivity
 ADDED from [com.google.firebase:firebase-auth:21.0.6] C:\Users\seidr\.gradle\caches\transforms-3\df5fb00a4d46b2c4531b71a87cfa2112\transformed\jetified-firebase-auth-21.0.6\AndroidManifest.xml:27:9-44:20
 	android:excludeFromRecents

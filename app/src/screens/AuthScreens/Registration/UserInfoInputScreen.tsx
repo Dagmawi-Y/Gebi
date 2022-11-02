@@ -79,6 +79,7 @@ const UserInfoInputScreen = ({navigation}) => {
       plan: plan,
       roles: ['admin'],
       financial: financial,
+      isFree: true,
     };
 
     try {

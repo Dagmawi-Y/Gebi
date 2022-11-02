@@ -47,6 +47,8 @@ import com.reactnativesystemnavigationbar.SystemNavigationBarPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-view-shot
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
+// react-native-webview
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 public class PackageList {
   private Application application;
@@ -109,7 +111,8 @@ public class PackageList {
       new SplashScreenReactPackage(),
       new SystemNavigationBarPackage(),
       new VectorIconsPackage(),
-      new RNViewShotPackage()
+      new RNViewShotPackage(),
+      new RNCWebViewPackage()
     ));
   }
 }

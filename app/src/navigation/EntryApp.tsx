@@ -19,9 +19,45 @@ import routes from './routes';
 const Stack = createStackNavigator();
 
 const EntryApp = ({navigation}) => {
-  const {user, setUserInfo, userInfo, initializing, setIsAdmin} =
-    useContext(StateContext);
+  const {
+    user,
+    setUserInfo,
+    userInfo,
+    initializing,
+    setIsAdmin,
+    subcriptionPlan,
+    setSubscriptionPlan,
+  } = useContext(StateContext);
   const [loading, setLoading] = useState(true);
+
+  const getUserPlan = async () => {
+    try {
+      if (userInfo.length > 0) {
+        setLoading(true);
+        firestore()
+          .collection('subscriptions')
+          .where('owner', '==', userInfo[0].doc.companyId)
+          .onSnapshot(qsn => {
+            let result: Array<any> = [];
+            qsn.forEach(sn => {
+              result.push(sn.data());
+            });
+            const latestPlan = result.filter(p => {
+              return Date.parse(p.endDate) - Date.now() > 0;
+            });
+            if (latestPlan.length) {
+              setSubscriptionPlan(latestPlan);
+            }
+
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getUserInfo = async () => {
     try {
@@ -52,6 +88,10 @@ const EntryApp = ({navigation}) => {
   };
 
   useEffect(() => {
+    getUserPlan();
+  }, [userInfo]);
+
+  useEffect(() => {
     setIsAdmin(false);
     if (!user && !initializing && !loading) {
       navigation.replace(routes.authNavigator, {
@@ -60,6 +100,7 @@ const EntryApp = ({navigation}) => {
     }
     if (!initializing) {
       getUserInfo();
+      getUserPlan();
     }
   }, [user, initializing]);
 

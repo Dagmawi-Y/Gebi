@@ -108,18 +108,6 @@ export default function Items({navigation}) {
           return r;
         }, {});
 
-        console.log(grouped);
-
-        // SORT EXPERIMENT
-        // const sortable = Object.fromEntries(
-        //   Object.entries(grouped).sort(([, a], [, b]) => a - b),
-        // );
-        // console.log(
-        //   '=============-------------===============================\n',
-        //   sortable,
-        // );
-        // SORT EXPERIMENT
-
         setData(grouped);
         setLoading(false);
       });

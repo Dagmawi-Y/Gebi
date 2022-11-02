@@ -131,27 +131,7 @@ const CustomDrawer = ({route, navigation}) => {
             iconType="2"
           />
         ) : null}
-        {/* {inventory || isAdmin ? (
-          <DrawerButton
-            active={active}
-            setActive={setActive}
-            navigation={navigation}
-            route={routes.categories}
-            title={'Categories'}
-            rootRoute={true}
-            icon="clipboard-pencil"
-            iconType="2"
-          />
-        ) : null} */}
 
-        {/* <DrawerButton
-          active={active}
-          setActive={setActive}
-          navigation={navigation}
-          route={routes.plan}
-          title={'Calculator'}
-          icon="point-of-sale"
-        /> */}
         <DrawerButton
           active={active}
           setActive={setActive}
@@ -161,6 +141,27 @@ const CustomDrawer = ({route, navigation}) => {
           rootRoute={true}
           icon="settings"
         />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(routes.subscriptions);
+          }}
+          style={{
+            marginTop: 5,
+            alignItems: 'center',
+            marginLeft: 25,
+            flexDirection: 'row',
+            paddingVertical: 5,
+          }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: '300',
+              color: colors.white,
+            }}>
+            {t('Subscriptions')}
+          </Text>
+          <Icon name="arrow-right" size={20} color={colors.white} />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             Alert.alert(t('Are_You_Sure?'), ``, [

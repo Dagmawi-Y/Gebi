@@ -41,6 +41,7 @@
     "react-native-gesture-handler": "^2.4.2",
     "react-native-image-crop-picker": "^0.38.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-meda-pay": "^1.0.8",
     "react-native-modal": "^13.0.1",
     "react-native-print": "^0.10.0",
     "react-native-reanimated": "^2.8.0",
@@ -52,6 +53,7 @@
     "react-native-system-navigation-bar": "^1.0.5",
     "react-native-vector-icons": "^9.1.0",
     "react-native-view-shot": "^3.3.0",
+    "react-native-webview": "^11.23.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

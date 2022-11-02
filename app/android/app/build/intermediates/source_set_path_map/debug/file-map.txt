@@ -51,3 +51,4 @@ com.meda.gebi.app-packaged_res-49 C:\Users\seidr\Desktop\Gebi\app\node_modules\r
 com.meda.gebi.app-packaged_res-50 C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-system-navigation-bar\android\build\intermediates\packaged_res\debug
 com.meda.gebi.app-packaged_res-51 C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-vector-icons\android\build\intermediates\packaged_res\debug
 com.meda.gebi.app-packaged_res-52 C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-view-shot\android\build\intermediates\packaged_res\debug
+com.meda.gebi.app-packaged_res-53 C:\Users\seidr\Desktop\Gebi\app\node_modules\react-native-webview\android\build\intermediates\packaged_res\debug

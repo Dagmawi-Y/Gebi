@@ -33,4 +33,5 @@ export default Object.freeze({
   editProfile: 'editProfile',
   addEmployee: 'New Employee',
   editEmployee: 'Edit Employee',
+  subscriptions: 'Subscriptions',
 });
