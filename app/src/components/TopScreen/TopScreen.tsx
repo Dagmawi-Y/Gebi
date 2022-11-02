@@ -28,6 +28,7 @@ export default function TopScreen() {
   const [loading, setLoading] = useState(false);
   const [totalSaleExpense, setTotalSaleExpense] = useState(0);
   const [expenses, setExpenses] = useState(0);
+  const [mounted, setMounted] = useState(true);
 
   const totalCalc = data => {
     let totalSaleIncome: number = 0;
@@ -120,12 +121,14 @@ export default function TopScreen() {
   };
 
   useEffect(() => {
-    if (data.length) totalCalc(data);
-  }, [data]);
-
-  useEffect(() => {
-    getSales();
-    getExpenses();
+    if (mounted) {
+      if (data.length) totalCalc(data);
+      getSales();
+      getExpenses();
+    }
+    return () => {
+      setMounted(false);
+    };
   }, [data]);
 
   if (loading) return null;

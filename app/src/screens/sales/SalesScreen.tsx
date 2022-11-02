@@ -43,6 +43,7 @@ export default function Items({navigation}) {
 
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
+  const [mounted, setMounted] = useState(true);
 
   const [searchKey, setSearchKey] = useState('');
   const [filterValue, setFilterValue] = useState('');
@@ -136,14 +137,13 @@ export default function Items({navigation}) {
   };
 
   useEffect(() => {
-    let mounted = true;
     if (mounted && userInfo) {
       getSales();
       getStockCount();
     }
 
     return () => {
-      mounted = false;
+      setMounted(false);
     };
   }, []);
 

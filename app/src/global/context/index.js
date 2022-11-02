@@ -105,11 +105,11 @@ const StateContextProvider = ({children}) => {
           .get()
           .then(res => {
             if (res.docs.length > 0) {
-              navigation.replace(routes.mainNavigator, {
-                screen: routes.salesNav,
-              });
+              // navigation.replace(routes.mainNavigator, {
+              //   screen: routes.salesNav,
+              // });
             } else {
-              setLoading(false);
+              // setLoading(false);
             }
           }).catch(err=>console.log(err))
     } catch (error) {

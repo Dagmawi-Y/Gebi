@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 import routes from '../../navigation/routes';
@@ -26,6 +26,7 @@ const HomeScreen = ({navigation}) => {
 
   const {user, userInfo, sales, expense, plan, inventory, isAdmin} =
     useContext(StateContext);
+  const [mounted, setMounted] = useState(true);
 
   const getUser = async () => {
     const info = await firestore()
@@ -36,7 +37,12 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    getUser();
+    if (mounted) {
+      getUser();
+    }
+    return () => {
+      setMounted(false);
+    };
   }, []);
 
   if (!userInfo || !user) return <Loading size={50} />;

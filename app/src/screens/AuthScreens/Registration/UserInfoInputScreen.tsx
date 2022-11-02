@@ -47,6 +47,23 @@ const UserInfoInputScreen = ({navigation}) => {
     return false;
   };
 
+  const createPlan = async id => {
+    const subscriptionPlan = {
+      subscription: 'free',
+      onwer: id,
+      startDate: new Date().toLocaleDateString(),
+      endDate: null,
+    };
+
+    try {
+      return await firestore()
+        .collection('subscriptions')
+        .add(subscriptionPlan);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = async () => {
     if (checkEmpty()) {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
@@ -68,8 +85,10 @@ const UserInfoInputScreen = ({navigation}) => {
       firestore()
         .collection('users')
         .add(userData)
-        .then(res => {
-          getUserInfo();
+        .then(async res => {
+          await createPlan(res.id).then(plan => {
+            getUserInfo();
+          });
           // navigation.replace(routes.mainNavigator);
           // setLoading(false);
         });
@@ -95,7 +114,8 @@ const UserInfoInputScreen = ({navigation}) => {
             } else {
               setLoading(false);
             }
-          }).catch(err=>console.log(err))
+          })
+          .catch(err => console.log(err));
     } catch (error) {
       console.log(error);
     }
