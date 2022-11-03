@@ -22,12 +22,14 @@ export default function TopScreen() {
     userInfo,
     SetTotalProfit,
     SetTotalIncome,
+    expenses,
+    setExpenses,
   } = useContext(StateContext);
 
   const [data, setData]: Array<any> = useState(false);
   const [loading, setLoading] = useState(false);
   const [totalSaleExpense, setTotalSaleExpense] = useState(0);
-  const [expenses, setExpenses] = useState(0);
+  // const [expenses, setExpenses] = useState(0);
   const [mounted, setMounted] = useState(true);
 
   const totalCalc = data => {
@@ -61,7 +63,7 @@ export default function TopScreen() {
         }
       });
       setTotalSaleExpense(tsaleExp);
-      SetTotalProfit(totalSaleProfit - expenses);
+      SetTotalProfit(totalSaleProfit);
       SetTotalIncome(totalSaleIncome);
     }
   };
@@ -122,9 +124,19 @@ export default function TopScreen() {
 
   useEffect(() => {
     if (mounted) {
-      if (data.length) totalCalc(data);
-      getSales();
       getExpenses();
+    }
+    return () => {
+      setMounted(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      if (data.length > 0) {
+        totalCalc(data);
+      }
+      getSales();
     }
     return () => {
       setMounted(false);
@@ -153,7 +165,7 @@ export default function TopScreen() {
           <View style={{marginVertical: 10}}>
             <StatCardFullWidth
               label={t('Profit')}
-              value={totalProfit}
+              value={parseFloat(totalProfit) - parseFloat(expenses)}
               trend={
                 totalProfit > 0
                   ? 'positive'

@@ -7,6 +7,8 @@ import {useTranslation} from 'react-i18next';
 const StateContext = React.createContext();
 
 const StateContextProvider = ({children}) => {
+  const [expenses, setExpenses] = useState(0);
+
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -62,6 +64,8 @@ const StateContextProvider = ({children}) => {
     isAdmin,
     sales,
     setSales,
+    expenses,
+    setExpenses,
     subcriptionPlan,
     setSubscriptionPlan,
     expense,
