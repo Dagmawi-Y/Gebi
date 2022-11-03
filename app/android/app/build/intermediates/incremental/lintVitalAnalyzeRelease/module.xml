@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="C:\Users\seidr\Desktop\Gebi\app\android\app"
+    name=":app"
+    type="APP"
+    maven="app:app:"
+    gradle="7.2.1"
+    buildFolder="build"
+    bootClassPath="C:\Users\seidr\AppData\Local\Android\Sdk\platforms\android-31\android.jar;C:\Users\seidr\AppData\Local\Android\Sdk\build-tools\30.0.3\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-31"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

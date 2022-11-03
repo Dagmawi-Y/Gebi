@@ -34,23 +34,27 @@ const EntryApp = ({navigation}) => {
     try {
       if (userInfo.length > 0) {
         setLoading(true);
-        firestore()
-          .collection('subscriptions')
-          .where('owner', '==', userInfo[0].doc.companyId)
-          .onSnapshot(qsn => {
-            let result: Array<any> = [];
-            qsn.forEach(sn => {
-              result.push(sn.data());
-            });
-            const latestPlan = result.filter(p => {
-              return Date.parse(p.endDate) - Date.now() > 0;
-            });
-            if (latestPlan.length) {
-              setSubscriptionPlan(latestPlan);
-            }
+        if (!userInfo[0].doc.isFree) {
 
-            setLoading(false);
-          });
+        } else {
+          firestore()
+            .collection('subscriptions')
+            .where('owner', '==', userInfo[0].doc.companyId)
+            .onSnapshot(qsn => {
+              let result: Array<any> = [];
+              qsn.forEach(sn => {
+                result.push(sn.data());
+              });
+              const latestPlan = result.filter(p => {
+                return Date.parse(p.endDate) - Date.now() > 0;
+              });
+              if (latestPlan.length) {
+                setSubscriptionPlan(latestPlan);
+              }
+
+              setLoading(false);
+            });
+        }
       } else {
         setLoading(false);
       }

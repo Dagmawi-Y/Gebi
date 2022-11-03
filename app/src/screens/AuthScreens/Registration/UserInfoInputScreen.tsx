@@ -33,6 +33,7 @@ const UserInfoInputScreen = ({navigation}) => {
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
 
+  const [mounted, setMounted] = useState(true);
   // input fields
   const [name, setName] = useState('');
   const [orgName, setOrgName] = useState('');
@@ -124,7 +125,10 @@ const UserInfoInputScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    getUserInfo();
+    mounted && getUserInfo();
+    return () => {
+      setMounted(false);
+    };
   }, []);
 
   if (loading) {

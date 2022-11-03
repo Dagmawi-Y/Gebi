@@ -57,8 +57,8 @@ const HomeScreen = ({navigation}) => {
               }}>
               {userInfo[0].doc.orgName}{' '}
               {subcriptionPlan.length > 0
-                ? new Date(subcriptionPlan[0].endDate).toString()
-                : 'Active'}
+                ? "[Active]"
+                : '[Expired]'}
             </Text>
           </>
         ) : null}
