@@ -9,7 +9,7 @@ import formatNumber from '../../utils/formatNumber';
 type Props = {
   containerStyle?: ViewStyle;
   label: string;
-  value: string;
+  value: any;
   trend?: 'positive' | 'negative' | 'neutral';
 };
 

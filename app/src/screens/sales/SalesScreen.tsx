@@ -33,12 +33,14 @@ import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
 import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
+import { DataContext } from '../../global/context/DataContext';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
   const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
+  const {salesCount, setSalesCount} = useContext(DataContext);
   const [stockCount, setStockCount]: any = useState();
 
   const [loading, setLoading] = useState(true);
@@ -76,9 +78,9 @@ export default function Items({navigation}) {
     return new Date(d).toDateString();
   };
 
+
   const getSales = async () => {
     setLoading(true);
-
     firestore()
       .collection('sales')
       .where('owner', '==', userInfo[0].doc.companyId)
@@ -101,7 +103,7 @@ export default function Items({navigation}) {
             };
             result.push(item);
           });
-
+        setSalesCount(result.length);
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
@@ -139,6 +141,10 @@ export default function Items({navigation}) {
     <>
       <FloatingButton
         action={() => {
+          if (userInfo[0].doc.isFree) {
+            console.log(salesCount);
+          }
+          // return;
           if (stockCount > 0) {
             navigation.navigate(routes.newSale);
           } else {

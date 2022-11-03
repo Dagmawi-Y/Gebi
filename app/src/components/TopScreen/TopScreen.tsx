@@ -41,12 +41,12 @@ export default function TopScreen() {
         Object.keys(i.items).map(key => {
           totalSaleIncome =
             totalSaleIncome +
-            parseFloat(i.items[key].unitPrice) *
+            parseFloat(i.items[key].unitSalePrice) *
               parseFloat(i.items[key].quantity);
 
           tsaleExp =
             tsaleExp +
-            parseFloat(i.items[key].originalPrice) *
+            parseFloat(i.items[key].unitPrice) *
               parseFloat(i.items[key].quantity);
           totalSaleProfit =
             totalSaleProfit + parseFloat(i.items[key].saleProfit);
@@ -99,6 +99,7 @@ export default function TopScreen() {
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {
+            console.log(sn.data().items);
             const item = {
               id: sn.id,
               date: sn.data().date,

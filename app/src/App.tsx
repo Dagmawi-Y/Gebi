@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Pressable, StatusBar} from 'react-native';
 import {StateContext, StateContextProvider} from './global/context';
+import {DataContext, DataContextProvider} from './global/context/DataContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -86,15 +87,17 @@ const App = () => {
 
   return (
     <StateContextProvider>
-      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={lang && intro ? 'app' : 'intro'}
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="intro" component={IntroNavigator} />
-          <Stack.Screen name="app" component={EntryApp} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <DataContextProvider>
+        <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={lang && intro ? 'app' : 'intro'}
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="intro" component={IntroNavigator} />
+            <Stack.Screen name="app" component={EntryApp} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </DataContextProvider>
     </StateContextProvider>
   );
 };
