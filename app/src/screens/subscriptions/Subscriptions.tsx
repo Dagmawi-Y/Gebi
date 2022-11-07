@@ -1,22 +1,19 @@
-import {StyleSheet, Text, Touchable, View} from 'react-native';
+import {Alert, StyleSheet, Text, Touchable, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import colors from '../../config/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MedaPayModal, {checkBillStat} from 'react-native-meda-pay';
 import {StateContext} from '../../global/context';
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3IiwiaWF0IjoxNjU5MTY4NTYyfQ.-PSUZd8YX6PHsw2sn54Em31iK4jcWclc-TakokBaglI';
+const sandBoxToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhdG9tZWRhQDM2MGdyb3VuZC5jb20iLCJuYW1lIjoiTWVkYSBWb3VjaGVyIiwicGhvbmUiOiIrMjUxOTEzMDA4NTk1IiwiaXNzIjoiIiwiaWF0IjoxNTk4OTY0NTQwLCJleHAiOjIwMzA1MDA1NDB9.p-QGfkmRtUlGTQhthS5PW1Ora6E4E-i5VMLjzAo96mY';
 
 const Subscriptions = () => {
   const [isMedaPayModal, setIsMedaPayModal] = useState(false);
   const {user, userInfo} = useContext(StateContext);
-  const [plan, setPlan] = useState('');
-
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3IiwiaWF0IjoxNjU5MTY4NTYyfQ.-PSUZd8YX6PHsw2sn54Em31iK4jcWclc-TakokBaglI';
-
-  const sandBoxToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhdG9tZWRhQDM2MGdyb3VuZC5jb20iLCJuYW1lIjoiTWVkYSBWb3VjaGVyIiwicGhvbmUiOiIrMjUxOTEzMDA4NTk1IiwiaXNzIjoiIiwiaWF0IjoxNTk4OTY0NTQwLCJleHAiOjIwMzA1MDA1NDB9.p-QGfkmRtUlGTQhthS5PW1Ora6E4E-i5VMLjzAo96mY';
-
-  const paymentData = {
+  const [plan, setPlan] = useState('Monthly');
+  const [paymentData, setPaymentData] = useState<any>({
     Authorization: token,
     isSandBox: false,
     merchantName: 'example merchant',
@@ -26,42 +23,86 @@ const Subscriptions = () => {
         description: plan,
         amount: 1,
         customerName: `Gebi_${userInfo[0].doc.companyId}`,
-        customerPhoneNumber: '251943844599',
+        customerPhoneNumber: userInfo[0].doc.phone.split('+')[1],
       },
       redirectUrls: {
         returnUrl: 'NaN',
         cancelUrl: 'NaN',
-        callbackUrl: 'https://3806-196-188-51-250.ngrok.io/',
+        callbackUrl: 'https://jobbb.me/gebi/',
       },
       metaData: {
         'any Data': 'any Val',
       },
     },
-  };
+  });
 
   useEffect(() => {
-    console.log(userInfo[0].doc.companyId);
-  }, []);
+    setPaymentData({
+      Authorization: token,
+      isSandBox: false,
+      merchantName: 'example merchant',
+      data: {
+        purchaseDetails: {
+          orderId: userInfo[0].doc.companyId,
+          description: plan,
+          amount: 1,
+          customerName: `Gebi_${userInfo[0].doc.companyId}`,
+          customerPhoneNumber: userInfo[0].doc.phone.split('+')[1],
+        },
+        redirectUrls: {
+          returnUrl: 'NaN',
+          cancelUrl: 'NaN',
+          callbackUrl: 'https://jobbb.me/gebi/',
+        },
+        metaData: {
+          'any Data': 'any Val',
+        },
+      },
+    });
+  }, [plan]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Subscriptions</Text>
       <View>
         <PriceCard
-          setIsMedaPayModal={setIsMedaPayModal}
+          plan={plan}
+          setPlan={setPlan}
           duration={'Monthly'}
           price={10}
           currency={'Birr'}
           color={colors.dark_grey}
         />
         <PriceCard
-          setIsMedaPayModal={setIsMedaPayModal}
+          plan={plan}
+          setPlan={setPlan}
           duration={'Yearly'}
           price={80}
           currency={'Birr'}
           color={colors.primary}
         />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            if (!plan) {
+              return Alert.alert('Please choose a plan', '', [
+                {text: 'Ok', onPress: () => {}},
+              ]);
+            }
+            setIsMedaPayModal(true);
+          }}
+          style={{
+            backgroundColor: colors.primary,
+            padding: 10,
+            maxWidth: '50%',
+            borderRadius: 5,
+            alignSelf: 'center',
+            marginTop: 30,
+          }}>
+          <Text style={{color: colors.white}}>Proceed to payment</Text>
+        </TouchableOpacity>
       </View>
+
       <MedaPayModal
         config={paymentData}
         isVisible={isMedaPayModal}
@@ -96,6 +137,7 @@ const Subscriptions = () => {
         }}
         onPaymentMethodSelected={selectedPaymentMethod => {
           console.log(selectedPaymentMethod);
+          console.log(paymentData);
         }}
       />
     </View>
@@ -106,24 +148,37 @@ export default Subscriptions;
 
 type CardDataTypes = {
   duration: string;
+  plan: string;
   price: number;
   currency: string;
   color: string;
-  setIsMedaPayModal: any;
+  setPlan: any;
 };
 
 const PriceCard = ({
   duration,
   price,
   currency,
+  plan,
   color,
-  setIsMedaPayModal,
+  setPlan,
 }: CardDataTypes) => {
   return (
     <TouchableOpacity
-      onPress={() => setIsMedaPayModal(true)}
+      onPress={() => {
+        setPlan(duration);
+      }}
       activeOpacity={0.6}
-      style={CardStyles.card}>
+      style={[
+        CardStyles.card,
+        plan == duration
+          ? {
+              shadowColor: colors.primary,
+              borderColor: colors.primary,
+              borderWidth: 2,
+            }
+          : {},
+      ]}>
       <View style={[CardStyles.cardheader, {backgroundColor: color}]}>
         <Text style={CardStyles.cardHeaderText}>{duration}</Text>
       </View>
@@ -138,7 +193,11 @@ const PriceCard = ({
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.white, padding: 20},
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    padding: 20,
+  },
   headerText: {
     color: colors.black,
     textAlign: 'center',
@@ -154,7 +213,7 @@ const CardStyles = StyleSheet.create({
     borderRadius: 10,
     paddingBottom: 10,
     marginVertical: 20,
-    elevation: 10,
+    elevation: 20,
   },
   cardheader: {
     borderTopEndRadius: 10,

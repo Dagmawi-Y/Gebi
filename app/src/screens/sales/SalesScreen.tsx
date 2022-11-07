@@ -33,7 +33,8 @@ import FloatingButton from '../../components/FloatingButton/FloatingButton';
 
 import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
-import { DataContext } from '../../global/context/DataContext';
+import {DataContext} from '../../global/context/DataContext';
+import {FreeLimitReached} from './LimitReached';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
@@ -45,6 +46,7 @@ export default function Items({navigation}) {
 
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
+  const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [mounted, setMounted] = useState(true);
 
   const [searchKey, setSearchKey] = useState('');
@@ -77,7 +79,6 @@ export default function Items({navigation}) {
 
     return new Date(d).toDateString();
   };
-
 
   const getSales = async () => {
     setLoading(true);
@@ -139,15 +140,21 @@ export default function Items({navigation}) {
 
   return (
     <>
+      {limitReachedVisible ? (
+        <FreeLimitReached
+          setModalVisible={setLimitReachedVisible}
+          navigation={navigation}
+        />
+      ) : null}
       <FloatingButton
         action={() => {
-          if (userInfo[0].doc.isFree) {
-            console.log(salesCount);
+          // 100th sale or 25th customer or 10th supplier
+          if (userInfo[0].doc.isFree && salesCount > 0) {
+            return setLimitReachedVisible(true);
           }
           // return;
           if (stockCount > 0) {
             navigation.navigate(routes.newSale);
-          } else {
             Alert.alert(
               t('There_Is_No_Item_In_Your_Stock'),
               t('Please_Add_Stock_First'),
