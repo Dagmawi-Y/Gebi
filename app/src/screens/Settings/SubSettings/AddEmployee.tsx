@@ -64,6 +64,7 @@ const AddEmployee = ({navigation}) => {
       companyId: user.uid,
       orgName: userInfo[0].doc.orgName,
       name: name,
+      isFree: userInfo[0].doc.isFree,
       roles: [
         sales ? 'sales' : null,
         inventory ? 'inventory' : null,
