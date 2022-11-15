@@ -152,10 +152,10 @@ export default function Items({navigation}) {
           if (userInfo[0].doc.isFree && salesCount > 0) {
             return setLimitReachedVisible(true);
           }
+          console.log(stockCount);
           // return;
-          if (stockCount > 0) {
-            navigation.navigate(routes.newSale);
-            Alert.alert(
+          if (stockCount <= 0) {
+            return Alert.alert(
               t('There_Is_No_Item_In_Your_Stock'),
               t('Please_Add_Stock_First'),
               [
@@ -174,6 +174,7 @@ export default function Items({navigation}) {
               ],
             );
           }
+          navigation.navigate(routes.newSale);
         }}
         value={''}
       />

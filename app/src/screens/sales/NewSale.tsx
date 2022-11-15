@@ -263,7 +263,7 @@ const NewSale = ({navigation}) => {
     let sum: number = 0;
     let total: number = 0;
     addedItems.map(i => {
-      sum = sum + i.quantity * i.unitPrice;
+      sum = sum + i.quantity * i.unitSalePrice;
     });
     total = sum;
     if (taxType == 'VAT') {

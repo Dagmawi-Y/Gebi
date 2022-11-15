@@ -43,7 +43,7 @@ const SaleDetails = ({route, navigation}) => {
     let sum: number = 0;
     let total: number = 0;
     Object.keys(data.items).map(i => {
-      sum = sum + data.items[i].quantity * data.items[i].unitPrice;
+      sum = sum + data.items[i].quantity * data.items[i].unitSalePrice;
     });
 
     if (data.vat && !data.tot) {
@@ -348,7 +348,7 @@ const SaleDetails = ({route, navigation}) => {
                       <View style={styles.RightContainer}>
                         <Text style={styles.textLight}>
                           <Text style={styles.textBold}>
-                            {formatNumber(data.items[i].unitPrice)}
+                            {formatNumber(data.items[i].unitSalePrice)}
                             {t('Birr')}
                           </Text>
                           / {t('Single')}

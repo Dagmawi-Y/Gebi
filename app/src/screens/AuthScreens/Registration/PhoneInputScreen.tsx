@@ -58,7 +58,7 @@ const PhoneInputScreen = ({navigation}) => {
             setConfirm(confirmation);
             setLoading(false);
             setStartCountDown(true);
-          });
+          }).catch(err=>{console.log(err)})
       }
     } catch (error) {
       setLoading(false);

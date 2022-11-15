@@ -13,14 +13,14 @@ const ListItem = (sale, navigation) => {
   const {invoiceNumber, customerName, date, items, paymentMethod, vat, tot} =
     sale.sale;
   const itemsLength = Object.getOwnPropertyNames(items).length;
-  const [totalPrice, setTotalPrice] = useState('');
+  const [totalPrice, setTotalPrice] = useState<any>('');
 
   const init = () => {
     let totalSum = 0;
     setTotalPrice(0);
     Object.keys(items).map(key => {
       totalSum +=
-        parseFloat(items[key].unitPrice) * parseFloat(items[key].quantity);
+        parseFloat(items[key].unitSalePrice) * parseFloat(items[key].quantity);
     });
 
     if (vat && !tot) totalSum = totalSum * 0.15 + totalSum;
