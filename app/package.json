@@ -24,6 +24,7 @@
     "@react-navigation/stack": "^6.2.1",
     "@rneui/base": "^4.0.0-rc.4",
     "@rneui/themed": "^4.0.0-rc.4",
+    "dayjs": "^1.11.6",
     "firebase-admin": "^11.0.0",
     "i18next": "^21.8.13",
     "lottie-ios": "3.2.3",

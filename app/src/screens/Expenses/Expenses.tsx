@@ -22,6 +22,8 @@ import FloatingButton from '../../components/FloatingButton/FloatingButton';
 import routes from '../../navigation/routes';
 import firestore from '@react-native-firebase/firestore';
 import StatusBox from '../../components/misc/StatusBox';
+import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
+import {DataContext} from '../../global/context/DataContext';
 
 export default function Expenses({navigation}: any) {
   const mountedRef = useRef(true);
@@ -89,14 +91,40 @@ export default function Expenses({navigation}: any) {
       setMounted(false);
     };
   }, []);
-
+  const [limitReachedVisible, setLimitReachedVisible] = useState(false);
+  const [expired, setExpired] = useState(false);
+  const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
+    useContext(DataContext);
   if (loading) return <StatusBox msg="Loading..." overlay={false} />;
 
   return (
     <>
+      {limitReachedVisible ? (
+        <FreeLimitReached
+          setModalVisible={setLimitReachedVisible}
+          navigation={navigation}
+        />
+      ) : null}
+
+      {expired ? (
+        <ExpiredModal setModalVisible={setExpired} navigation={navigation} />
+      ) : null}
+
       <SafeAreaView style={styles.container}>
         <FloatingButton
-          action={() => navigation.navigate(routes.addNewExpense)}
+          action={() => {
+            if (
+              (userInfo[0].doc.isFree && salesCount > 0) ||
+              customerCount > 5 ||
+              supplierCount > 5
+            ) {
+              return setLimitReachedVisible(true);
+            }
+            if (!userInfo[0].doc.isFree && planExpired) {
+              return setLimitReachedVisible(true);
+            }
+            navigation.navigate(routes.addNewExpense);
+          }}
           value={'addNewModalVisible'}
         />
 

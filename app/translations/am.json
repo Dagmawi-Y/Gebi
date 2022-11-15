@@ -187,6 +187,12 @@
   "Litre": "ሊትር",
   "Metre": "ሜትር",
   "AddedBy": "መዝጋቢ",
-  "Sales_officer": "የሽያጭ ባለሙያ"
+  "Sales_officer": "የሽያጭ ባለሙያ",
 
+  "Max_Reached": "ገደብ ደርሷል",
+  "Subcribe_To_Continue": "ለመቀጠል ሰብስክራይብ ያድርጉ",
+  "Subscribe": "ሰብስክራይብ ያድርጉ",
+  "Expired": "Expiredጊዜው አልፎበታል",
+  "Renew_Subscription": "የደንበኝነት ምዝገባዎን ያድሱ",
+  "Renew": "ያድሱ"
 }

@@ -17,7 +17,7 @@ export const FreeLimitReached = ({setModalVisible, navigation}) => {
         zIndex: 100,
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        paddingHorizontal: 20,
         justifyContent: 'center',
       }}>
       <View
@@ -50,6 +50,7 @@ export const FreeLimitReached = ({setModalVisible, navigation}) => {
     </Pressable>
   );
 };
+
 export const ExpiredModal = ({setModalVisible, navigation}) => {
   const {t} = useTranslation();
 

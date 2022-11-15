@@ -34,19 +34,21 @@ import FloatingButton from '../../components/FloatingButton/FloatingButton';
 import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
-import {FreeLimitReached} from './LimitReached';
+import {ExpiredModal, FreeLimitReached} from './LimitReached';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
   const {t, i18n} = useTranslation();
 
   const [data, setData]: Array<any> = useState([]);
-  const {salesCount, setSalesCount} = useContext(DataContext);
+  const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
+    useContext(DataContext);
   const [stockCount, setStockCount]: any = useState();
 
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
+  const [expired, setExpired] = useState(false);
   const [mounted, setMounted] = useState(true);
 
   const [searchKey, setSearchKey] = useState('');
@@ -146,14 +148,24 @@ export default function Items({navigation}) {
           navigation={navigation}
         />
       ) : null}
+
+      {expired ? (
+        <ExpiredModal setModalVisible={setExpired} navigation={navigation} />
+      ) : null}
       <FloatingButton
         action={() => {
           // 100th sale or 25th customer or 10th supplier
-          if (userInfo[0].doc.isFree && salesCount > 0) {
+          if (
+            (userInfo[0].doc.isFree && salesCount > 0) ||
+            customerCount > 5 ||
+            supplierCount > 5
+          ) {
             return setLimitReachedVisible(true);
           }
-          console.log(stockCount);
-          // return;
+          if (!userInfo[0].doc.isFree && planExpired) {
+            return setLimitReachedVisible(true);
+          }
+
           if (stockCount <= 0) {
             return Alert.alert(
               t('There_Is_No_Item_In_Your_Stock'),

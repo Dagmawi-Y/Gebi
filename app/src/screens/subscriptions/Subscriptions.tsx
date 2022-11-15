@@ -4,15 +4,79 @@ import colors from '../../config/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MedaPayModal, {checkBillStat} from 'react-native-meda-pay';
 import {StateContext} from '../../global/context';
+import firestore from '@react-native-firebase/firestore';
+import dayjs from 'dayjs';
+
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3IiwiaWF0IjoxNjU5MTY4NTYyfQ.-PSUZd8YX6PHsw2sn54Em31iK4jcWclc-TakokBaglI';
 const sandBoxToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhdG9tZWRhQDM2MGdyb3VuZC5jb20iLCJuYW1lIjoiTWVkYSBWb3VjaGVyIiwicGhvbmUiOiIrMjUxOTEzMDA4NTk1IiwiaXNzIjoiIiwiaWF0IjoxNTk4OTY0NTQwLCJleHAiOjIwMzA1MDA1NDB9.p-QGfkmRtUlGTQhthS5PW1Ora6E4E-i5VMLjzAo96mY';
 
-const Subscriptions = () => {
+const Subscriptions = ({navigation}) => {
   const [isMedaPayModal, setIsMedaPayModal] = useState(false);
-  const {user, userInfo} = useContext(StateContext);
+  const {user, userInfo, setSubscriptionPlan} = useContext(StateContext);
   const [plan, setPlan] = useState('Monthly');
+
+  async function writeSubscription(data) {
+    firestore()
+      .collection('subscriptions')
+      .add(data)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  }
+
+  async function updateUsers(orderId) {
+    try {
+      firestore()
+        .collection('users')
+        .onSnapshot(querySnapshot => {
+          querySnapshot.forEach(async sn => {
+            firestore().collection('users').doc(sn.id).update({isFree: false});
+          });
+        });
+      navigation.goBack();
+    } catch (e) {
+      console.error('Error updating users: ', e);
+      return null;
+    }
+  }
+
+  const getUserPlan = async () => {
+    try {
+      if (userInfo.length > 0) {
+        firestore()
+          .collection('subscriptions')
+          .where('owner', '==', userInfo[0].doc.companyId)
+          .onSnapshot(qsn => {
+            let result: Array<any> = [];
+            qsn.forEach(sn => {
+              result.push(sn.data());
+            });
+            const latestPlan = result.filter(p => {
+              return Date.parse(p.endDate) - Date.now() > 0;
+            });
+            if (latestPlan.length) {
+              setSubscriptionPlan(latestPlan);
+              navigation.goBack();
+            }
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const simulatePayment = () => {
+    const data = {
+      endDate: dayjs().add(1, 'month').toISOString(),
+      owner: userInfo[0].doc.companyId,
+      startDate: dayjs().toISOString(),
+      subscription: plan,
+    };
+    writeSubscription(data);
+    getUserPlan();
+    updateUsers(userInfo[0].doc.companyId);
+  };
+
   const [paymentData, setPaymentData] = useState<any>({
     Authorization: token,
     isSandBox: false,
@@ -89,7 +153,8 @@ const Subscriptions = () => {
                 {text: 'Ok', onPress: () => {}},
               ]);
             }
-            setIsMedaPayModal(true);
+            simulatePayment();
+            // setIsMedaPayModal(true);
           }}
           style={{
             backgroundColor: colors.primary,
@@ -99,7 +164,8 @@ const Subscriptions = () => {
             alignSelf: 'center',
             marginTop: 30,
           }}>
-          <Text style={{color: colors.white}}>Proceed to payment</Text>
+          {/* <Text style={{color: colors.white}}>Proceed to payment</Text> */}
+          <Text style={{color: colors.white}}>Pay</Text>
         </TouchableOpacity>
       </View>
 

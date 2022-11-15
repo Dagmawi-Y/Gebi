@@ -15,6 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import NewUserNavigator from './NewUserNavigator/NewUserNavigator';
 import LottieView from 'lottie-react-native';
 import routes from './routes';
+import {DataContext} from '../global/context/DataContext';
 
 const Stack = createStackNavigator();
 
@@ -28,13 +29,50 @@ const EntryApp = ({navigation}) => {
     subcriptionPlan,
     setSubscriptionPlan,
   } = useContext(StateContext);
+  const {setSalesCount, setCustomerCount, setSupplierCount, setPlanExpired} =
+    useContext(DataContext);
   const [loading, setLoading] = useState(true);
 
-  const getUserPlan = async () => {
+  const getCounts = async () => {
     try {
       if (userInfo.length > 0) {
         setLoading(true);
 
+        //Sales count
+        firestore()
+          .collection('sales')
+          .where('owner', '==', userInfo[0].doc.companyId)
+          .onSnapshot(qsn => {
+            setSalesCount(qsn.docs.length);
+          });
+
+        //Supplier count
+        firestore()
+          .collection('suppliers')
+          .where('owner', '==', userInfo[0].doc.companyId)
+          .onSnapshot(qsn => {
+            setSupplierCount(qsn.docs.length);
+          });
+
+        //Customer count
+        firestore()
+          .collection('customers')
+          .where('owner', '==', userInfo[0].doc.companyId)
+          .onSnapshot(qsn => {
+            setCustomerCount(qsn.docs.length);
+          });
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserPlan = async () => {
+    try {
+      if (userInfo.length > 0) {
         firestore()
           .collection('subscriptions')
           .where('owner', '==', userInfo[0].doc.companyId)
@@ -48,12 +86,11 @@ const EntryApp = ({navigation}) => {
             });
             if (latestPlan.length) {
               setSubscriptionPlan(latestPlan);
+              setPlanExpired(false);
+            } else {
+              setPlanExpired(true);
             }
-
-            setLoading(false);
           });
-      } else {
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -90,7 +127,8 @@ const EntryApp = ({navigation}) => {
 
   useEffect(() => {
     getUserPlan();
-  }, [userInfo]);
+    getCounts();
+  }, [userInfo, subcriptionPlan]);
 
   useEffect(() => {
     setIsAdmin(false);
@@ -101,7 +139,6 @@ const EntryApp = ({navigation}) => {
     }
     if (!initializing) {
       getUserInfo();
-      getUserPlan();
     }
   }, [user, initializing]);
 

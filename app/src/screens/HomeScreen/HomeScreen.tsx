@@ -20,10 +20,11 @@ import {
 import {StateContext} from '../../global/context';
 import Loading from '../../components/lotties/Loading';
 import TopScreen from '../../components/TopScreen/TopScreen';
+import {DataContext} from '../../global/context/DataContext';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
-
+  const {salesCount, customerCount, supplierCount} = useContext(DataContext);
   const {
     user,
     userInfo,
@@ -56,8 +57,9 @@ const HomeScreen = ({navigation}) => {
                 fontWeight: '400',
               }}>
               {userInfo[0].doc.orgName}{' '}
-              {subcriptionPlan.length > 0 ? '[Active]' : '[Expired]'}{' '}
-              {JSON.stringify(subcriptionPlan)}
+              {salesCount + " " + customerCount + " " + supplierCount}
+              {/* {subcriptionPlan.length > 0 ? '[Active]' : '[Expired]'}{' '}
+              {JSON.stringify(subcriptionPlan)} */}
             </Text>
           </>
         ) : null}
