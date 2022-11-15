@@ -156,9 +156,9 @@ export default function Items({navigation}) {
         action={() => {
           // 100th sale or 25th customer or 10th supplier
           if (
-            (userInfo[0].doc.isFree && salesCount > 0) ||
-            customerCount > 5 ||
-            supplierCount > 5
+            (userInfo[0].doc.isFree && salesCount >=5) ||
+            customerCount >= 5 ||
+            supplierCount >= 5
           ) {
             return setLimitReachedVisible(true);
           }

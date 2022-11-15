@@ -56,10 +56,10 @@ const HomeScreen = ({navigation}) => {
                 color: colors.white,
                 fontWeight: '400',
               }}>
-              {userInfo[0].doc.orgName}{' '}
+              {userInfo[0].doc.orgName}{'\n'}
               {/* {salesCount + " " + customerCount + " " + supplierCount} */}
-              {/* {subcriptionPlan.length > 0 ? '[Active]' : '[Expired]'}{' '}
-              {JSON.stringify(subcriptionPlan)} */}
+              {subcriptionPlan.length > 0 ? `${subcriptionPlan[0].subscription} plan is active` : 'Expired'}{' '}
+              {/* {JSON.stringify(subcriptionPlan[0].subscription)} */}
             </Text>
           </>
         ) : null}

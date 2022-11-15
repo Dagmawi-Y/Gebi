@@ -9,6 +9,7 @@
     "l": "react-native link",
     "android": "react-native run-android",
     "start": "react-native start",
+    "bundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "test": "jest",
     "lint": "eslint ."
   },
