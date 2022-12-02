@@ -102,7 +102,7 @@ const AddEmployee = ({navigation}) => {
     }
   };
 
-  useEffect(() => {}, []);
+
 
   return (
     <>

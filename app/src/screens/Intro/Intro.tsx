@@ -106,7 +106,6 @@ export default function Intro({navigation}: any) {
       </View>
     );
   };
-  useEffect(() => {}, []);
   return (
     <SafeAreaView style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />

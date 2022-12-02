@@ -37,9 +37,7 @@ const HomeScreen = ({navigation}) => {
   } = useContext(StateContext);
   const [mounted, setMounted] = useState(true);
 
-  useEffect(() => {
-    console.log(subcriptionPlan);
-  }, []);
+
 
   if (!userInfo || !user) return <Loading size={50} />;
 

@@ -99,7 +99,6 @@ export default function TopScreen() {
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {
-            console.log(sn.data().items);
             const item = {
               id: sn.id,
               date: sn.data().date,
