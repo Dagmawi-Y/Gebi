@@ -63,7 +63,7 @@ export default function TopScreen() {
         }
       });
       setTotalSaleExpense(tsaleExp);
-      SetTotalProfit(totalSaleProfit);
+      SetTotalProfit(totalSaleProfit - expenses);
       SetTotalIncome(totalSaleIncome);
     }
   };
