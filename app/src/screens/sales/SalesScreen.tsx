@@ -83,7 +83,7 @@ export default function Items({navigation}) {
   };
 
   const getSales = async () => {
-    setLoading(true);
+    setLoading(true);    
     firestore()
       .collection('sales')
       .where('owner', '==', userInfo[0].doc.companyId)

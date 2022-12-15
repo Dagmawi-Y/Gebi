@@ -101,7 +101,6 @@ const AppTabNavigator = ({navigation}) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        unmountOnBlur: true,
         headerShown: false,
         headerTintColor: colors.white,
         tabBarLabelStyle: {fontSize: 14},
