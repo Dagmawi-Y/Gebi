@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Pressable,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
@@ -51,6 +52,7 @@ export default function Items({navigation}) {
   const [totalItems, setTotalItems] = useState('0');
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
   const [categories, setCategories]: Array<any> = useState([]);
+  const [refreshing, setRefreshing] = useState(false)
 
   const reCalculate = dt => {
     let sumItem = 0;
@@ -166,7 +168,11 @@ export default function Items({navigation}) {
           backgroundColor={colors.primary}
         />
 
-        <ScrollView>
+        <ScrollView
+         refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getInventory} />
+        }
+        >
           <View style={{backgroundColor: colors.primary, padding: 10}}>
             <View style={topCard.boardContainer}>
               <View style={topCard.boardCol}>

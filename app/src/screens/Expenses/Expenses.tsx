@@ -4,6 +4,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import colors from '../../config/colors';
@@ -93,6 +94,7 @@ export default function Expenses({navigation}: any) {
   }, []);
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [expired, setExpired] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
     useContext(DataContext);
   if (loading) return <StatusBox msg="Loading..." overlay={false} />;
@@ -150,7 +152,11 @@ export default function Expenses({navigation}: any) {
             </Text>
           </View>
 
-          <ScrollView contentContainerStyle={{marginBottom: 10}}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={getExpenses} />
+            }
+            contentContainerStyle={{marginBottom: 10}}>
             {expenses.length > 0 ? (
               dates.map(date => (
                 <View key={date}>

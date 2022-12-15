@@ -11,6 +11,7 @@ import {
   Pressable,
   StatusBar,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
@@ -39,6 +40,7 @@ import {ExpiredModal, FreeLimitReached} from './LimitReached';
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
   const {t, i18n} = useTranslation();
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const [data, setData]: Array<any> = useState([]);
   const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
@@ -83,7 +85,7 @@ export default function Items({navigation}) {
   };
 
   const getSales = async () => {
-    setLoading(true);    
+    setLoading(true);
     firestore()
       .collection('sales')
       .where('owner', '==', userInfo[0].doc.companyId)
@@ -156,7 +158,7 @@ export default function Items({navigation}) {
         action={() => {
           // 100th sale or 25th customer or 10th supplier
           if (
-            (userInfo[0].doc.isFree && salesCount >=5) ||
+            (userInfo[0].doc.isFree && salesCount >= 5) ||
             customerCount >= 5 ||
             supplierCount >= 5
           ) {
@@ -196,7 +198,10 @@ export default function Items({navigation}) {
           backgroundColor={colors.primary}
         />
 
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={getSales} />
+          }>
           <TopScreen />
           {searchVisible && (
             <View
