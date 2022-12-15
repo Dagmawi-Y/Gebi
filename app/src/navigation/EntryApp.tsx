@@ -128,7 +128,7 @@ const EntryApp = ({navigation}) => {
   useEffect(() => {
     getUserPlan();
     getCounts();
-  }, [userInfo, subcriptionPlan]);
+  }, []);
 
   useEffect(() => {
     setIsAdmin(false);
