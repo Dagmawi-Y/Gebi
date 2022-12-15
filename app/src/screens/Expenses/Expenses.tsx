@@ -44,6 +44,7 @@ export default function Expenses({navigation}: any) {
       firestore()
         .collection('expenses')
         .where('owner', '==', userInfo[0].doc.companyId)
+        .orderBy('date')
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           let dates: Array<Object> = [];
@@ -59,7 +60,6 @@ export default function Expenses({navigation}: any) {
             setExpenses(result);
           }
         });
-
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -153,10 +153,14 @@ export default function Expenses({navigation}: any) {
           </View>
 
           <ScrollView
+            style={{}}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={getExpenses} />
             }
-            contentContainerStyle={{marginBottom: 10}}>
+            contentContainerStyle={{
+              marginBottom: 10,
+              justifyContent: 'flex-end',
+            }}>
             {expenses.length > 0 ? (
               dates.map(date => (
                 <View key={date}>
@@ -171,36 +175,7 @@ export default function Expenses({navigation}: any) {
                   {expenses
                     .filter(exp => exp.data.date == date)
                     .map(i => {
-                      return (
-                        <TouchableOpacity
-                          activeOpacity={0.7}
-                          style={styles.expenseListItem}
-                          key={i.id}>
-                          <View>
-                            <Text
-                              style={{
-                                color: colors.black,
-                                fontSize: 15,
-                                fontWeight: '700',
-                              }}>
-                              {t(i.data.expenseName)}
-                            </Text>
-                          </View>
-                          <View style={{alignItems: 'flex-end'}}>
-                            <Text
-                              style={{color: colors.red, fontWeight: '700'}}>
-                              -{i.data.amount} {t('Birr')}
-                            </Text>
-                            <Text
-                              style={{
-                                color: colors.faded_grey,
-                                fontWeight: '500',
-                              }}>
-                              {i.data.date}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      );
+                      return <ExpenseListItem key={i.id} t={t} item={i} />;
                     })}
                 </View>
               ))
@@ -232,6 +207,67 @@ export default function Expenses({navigation}: any) {
   );
 }
 
+const ExpenseListItem = ({item, t}) => {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.expenseListItem}
+      onPress={() => setExpanded(!expanded)}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          <Text
+            style={{
+              color: colors.black,
+              fontSize: 15,
+              fontWeight: '700',
+            }}>
+            {t(item.data.expenseName)}
+          </Text>
+        </View>
+        <View style={{}}>
+          <Text style={{color: colors.red, fontWeight: '700'}}>
+            -{item.data.amount} {t('Birr')}
+          </Text>
+          <Text
+            style={{
+              color: colors.faded_grey,
+              fontWeight: '500',
+            }}>
+            {item.data.date}
+          </Text>
+        </View>
+      </View>
+      {expanded && item.data.note ? (
+        <View style={{flexDirection:'row', marginTop:10}}>
+          <Text
+            style={{
+              color: colors.black,
+              fontSize: 15,
+              marginRight:5,
+              fontWeight:'700'
+            }}>
+            {t("Description")}{': '}
+          </Text>
+          <Text
+            style={{
+              color: colors.black,
+              fontSize: 15,
+              fontStyle:'italic'
+            }}>
+            {t(item.data.note)}
+          </Text>
+        </View>
+      ) : null}
+    </TouchableOpacity>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -251,10 +287,8 @@ const styles = StyleSheet.create({
   expenseListItem: {
     marginVertical: 5,
     backgroundColor: colors.white,
-    flexDirection: 'row',
+    flexDirection: 'column',
     elevation: 5,
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 10,
     borderRadius: 5,
     marginHorizontal: 15,

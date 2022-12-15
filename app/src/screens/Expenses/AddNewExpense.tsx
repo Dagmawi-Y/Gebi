@@ -297,10 +297,7 @@ const AddNewExpense = ({navigation}) => {
         </Pressable>
       ) : null}
       <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          enabled
-          keyboardVerticalOffset={150}>
+        <ScrollView>
           <Text style={styles.pageLabel}>{t('Add_New_Expense')}</Text>
           {resultVisible ? (
             <ScrollView
@@ -420,7 +417,7 @@ const AddNewExpense = ({navigation}) => {
             style={styles.button}>
             <Text style={styles.buttonLable}>{t('Submit')}</Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
+        </ScrollView>
       </View>
     </>
   );

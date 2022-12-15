@@ -149,6 +149,8 @@
   "TAX": "ታክስ",
   "Entertainment": "መዝናኛ",
   "Sales_Commission": "የሽያጭ ኮሚሽን",
+  "Update_Item_Image":"የዕቃ ምስል ያዘምኑ",
+
 
   "Current": "ትክክለኛ",
   "Expense_Type": "የወጪ አይነት",
@@ -194,5 +196,9 @@
   "Subscribe": "ሰብስክራይብ ያድርጉ",
   "Expired": "Expiredጊዜው አልፎበታል",
   "Renew_Subscription": "የደንበኝነት ምዝገባዎን ያድሱ",
-  "Renew": "ያድሱ"
+  "Renew": "ያድሱ",
+
+  "item(s)":"እቃ(ዎች)",
+  "attach_photo":"ፎቶ ማያያዣ",
+  "No-Description":"መግለጫ የለም"
 }

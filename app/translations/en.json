@@ -56,7 +56,7 @@
 
   "Cash": "Cash",
   "Debt": "Debt",
-  "Check": "Check",
+  "Check": "Cheque",
 
   "Income": "Income",
   "Expense": "Expense",
@@ -74,6 +74,7 @@
   "Inventory_Empty": "Inventory Empty.",
   "Plan": "Plan",
   "Profit": "Profit",
+  "Update_Item_Image":"Update Item Image",
 
   "Supplier_Name": "Supplier name",
   "Item_Name": "Item Name",
@@ -111,7 +112,7 @@
   "Enter_Unit_Price": "Enter Unit price",
   "Enter_quantity": "Enter Quantity",
 
-  "Sales_Receipt": "የሽያጭ ደረሰኝ",
+  "Sales_Receipt": "Sales Receipt",
   "New_Sales_Reciept": "New Sales Reciept",
   "Receipt_Number": "Receipt Number",
   "Customer": "Customer",
@@ -199,5 +200,8 @@
   "Subscribe": "Subscribe",
   "Expired": "Expired",
   "Renew_Subscription": "Renew yor subscription",
-  "Renew": "Renew"
+  "Renew": "Renew",
+  "item(s)":"item(s)",
+  "attach_photo":"Attach Photo",
+  "No-Description":"No description"
 }

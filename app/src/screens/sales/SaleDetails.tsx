@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
   ScrollView,
+  Modal,
 } from 'react-native';
 import React, {useEffect, useState, useRef, useContext} from 'react';
 import colors from '../../config/colors';
@@ -173,64 +174,60 @@ const SaleDetails = ({route, navigation}) => {
         />
       )}
       <ScrollView style={{flex: 1}}>
-        <View style={{backgroundColor: colors.white, width: '100%'}}>
-          <TouchableOpacity
-            style={{
-              justifyContent: 'flex-end',
-              marginLeft: 'auto',
-            }}
-            onPress={() => setMenuvisible(!menuvisible)}>
-            <Icon
-              name={!menuvisible ? 'sharealt' : 'close'}
-              size={25}
-              color={colors.primary}
-              style={{margin: 5, marginLeft: 'auto'}}
-            />
-          </TouchableOpacity>
-        </View>
-        {menuvisible ? (
-          <View
-            style={{
-              backgroundColor: 'white',
-              elevation: 10,
-              position: 'absolute',
-              right: 30,
-              zIndex: 10,
-              top: 30,
-              width: 100,
-              justifyContent: 'space-around',
-              paddingHorizontal: 10,
-              height: 100,
-              borderRadius: 5,
-              borderTopRightRadius: 0,
-              alignItems: 'flex-start',
-              borderWidth: 0.6,
-              borderColor: '#00000040',
-            }}>
-            <TouchableOpacity
-              style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}
-              onPress={() => print()}>
-              <Icon name={'pdffile1'} size={30} color={colors.primary} />
-              <Text style={{marginLeft: 5, fontSize: 15, color: colors.black}}>
-                PDF
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}
-              onPress={() => capture()}>
-              <Icon name={'picture'} size={30} color={colors.primary} />
-              <Text style={{marginLeft: 5, fontSize: 15, color: colors.black}}>
-                Photo
-              </Text>
-            </TouchableOpacity>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={menuvisible}
+          onRequestClose={() => {
+            setMenuvisible(!menuvisible);
+          }}>
+          <View style={styles_modal.centeredView}>
+            <View style={styles_modal.modalView}>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    marginRight: 10,
+                  }}
+                  onPress={() => print()}>
+                  <Icon name={'pdffile1'} size={30} color={colors.primary} />
+                  <Text
+                    style={{marginLeft: 5, fontSize: 15, color: colors.black}}>
+                    PDF
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                  }}
+                  onPress={() => capture()}>
+                  <Icon name={'picture'} size={30} color={colors.primary} />
+                  <Text
+                    style={{marginLeft: 5, fontSize: 15, color: colors.black}}>
+                    Photo
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={[
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 20,
+                    borderWidth: 1,
+                    borderRadius: 20,
+                    borderColor: colors.red,
+                  },
+                ]}
+                onPress={() => setMenuvisible(!menuvisible)}>
+                <Icon size={25} name="close" color={colors.red} />
+              </TouchableOpacity>
+            </View>
           </View>
-        ) : null}
+        </Modal>
 
         <ViewShot
           ref={imageRef}
@@ -476,44 +473,58 @@ const SaleDetails = ({route, navigation}) => {
             </View>
           </ScrollView>
         </ViewShot>
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert(t('Are_You_Sure?'), ``, [
-              {
-                text: t('Yes'),
-                onPress: () => {
-                  rollBackSale();
-                },
-                style: 'default',
-              },
-              {
-                text: t('Cancel'),
-                onPress: () => {},
-                style: 'default',
-              },
-            ]);
-          }}
+        <View
           style={{
-            backgroundColor: colors.red,
-            height: 60,
-            margin: 'auto',
-            alignSelf: 'center',
-            paddingHorizontal: 20,
-            justifyContent: 'space-between',
-            width: 'auto',
-            alignItems: 'center',
-            borderRadius: 5,
             flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Text
-            style={[
-              styles.textBold,
-              {color: colors.white, textAlign: 'center'},
-            ]}>
-            {t('Roll_Back')}
-          </Text>
-          <Icon2 name="backup-restore" size={25} color={colors.white} />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(t('Are_You_Sure?'), ``, [
+                {
+                  text: t('Yes'),
+                  onPress: () => {
+                    rollBackSale();
+                  },
+                  style: 'default',
+                },
+                {
+                  text: t('Cancel'),
+                  onPress: () => {},
+                  style: 'default',
+                },
+              ]);
+            }}
+            style={[styles.button, {backgroundColor: colors.red}]}>
+            <Text
+              style={[
+                styles.textBold,
+                {color: colors.white, textAlign: 'center'},
+              ]}>
+              {t('Roll_Back')}
+            </Text>
+            <Icon2 name="backup-restore" size={25} color={colors.white} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: colors.primary}]}
+            onPress={() => setMenuvisible(!menuvisible)}>
+            <Text
+              style={[
+                styles.textBold,
+                {color: colors.white, textAlign: 'center'},
+              ]}>
+              {t('Share')}
+            </Text>
+            <Icon
+              name={'sharealt'}
+              size={25}
+              color={colors.white}
+              style={{margin: 5, marginLeft: 'auto'}}
+            />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -581,6 +592,7 @@ const styles = StyleSheet.create({
   ListItemContainer: {
     justifyContent: 'center',
   },
+  modal: {},
   ListItem: {
     zIndex: 1,
     marginBottom: 5,
@@ -597,6 +609,19 @@ const styles = StyleSheet.create({
 
     borderWidth: 0.4,
     borderColor: '#00000040',
+  },
+
+  button: {
+    height: 45,
+    flex: 0.3,
+    marginLeft: 15,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    width: 'auto',
+    alignItems: 'center',
+    borderRadius: 5,
+    flexDirection: 'row',
   },
   LeftContainer: {
     flexDirection: 'row',
@@ -644,5 +669,52 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 8,
     flexDirection: 'row',
+  },
+});
+
+const styles_modal = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    // alignItems: 'center',
+    width: '60%',
+    alignSelf: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    // elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    marginTop: 20,
+    // backgroundColor: colors.primary,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });

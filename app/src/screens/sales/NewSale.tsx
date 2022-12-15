@@ -57,7 +57,7 @@ const NewSale = ({navigation}) => {
       isChecked: true,
       iconStyle: {
         marginBottom: 10,
-        marginLeft: 30,
+        marginLeft: 0,
         borderColor: colors.primary,
         borderWidth: 3,
       },
@@ -74,7 +74,7 @@ const NewSale = ({navigation}) => {
       unfillColor: '#FFFFFF',
       iconStyle: {
         marginBottom: 10,
-        marginLeft: 30,
+        marginLeft: 0,
         borderColor: colors.primary,
         borderWidth: 3,
       },
@@ -91,7 +91,7 @@ const NewSale = ({navigation}) => {
       unfillColor: '#FFFFFF',
       iconStyle: {
         marginBottom: 10,
-        marginLeft: 30,
+        marginLeft: 0,
         borderColor: colors.primary,
         borderWidth: 3,
       },
@@ -496,7 +496,7 @@ const NewSale = ({navigation}) => {
                     marginHorizontal: 10,
                     borderRadius: 10,
                     textAlign: 'center',
-                    backgroundColor: '#ffffff',
+                    // backgroundColor: '#878787',
                   },
                 ]}>
                 <Icon name="folderopen" size={25} />
@@ -686,6 +686,7 @@ const NewSale = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <BouncyCheckboxGroup
+              style={{}}
                 data={paymentTypes as any}
                 onChange={(selectedItem: ICheckboxButton) => {
                   const val = selectedItem.text;

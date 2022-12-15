@@ -46,7 +46,7 @@ const ListItem = (sale, navigation) => {
           <View style={styles.listTitleContainer}>
             <Text style={styles.listTextbold}>
               {itemsLength > 1
-                ? `${items[0].itemName} + ${itemsLength - 1} item(s)`
+                ? `${items[0].itemName} + ${itemsLength - 1} ${t("item(s)")}`
                 : items[0].itemName}
             </Text>
           </View>
