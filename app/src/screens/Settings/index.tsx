@@ -67,7 +67,7 @@ const Settings = ({navigation}) => {
     if (userInfo)
       firestore()
         .collection('users')
-        .where('companyId', '==', userInfo[0].doc.companyId)
+        .where('companyId', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
           let arr: any = [];
           qsn.forEach(u => {
@@ -123,7 +123,7 @@ const Settings = ({navigation}) => {
             'users',
           ];
 
-          const userId = userInfo[0].doc.companyId;
+          const userId = userInfo[0]?.doc?.companyId;
           userCollections.map(coll => {
             firestore()
               .collection(coll)
@@ -195,7 +195,7 @@ const Settings = ({navigation}) => {
               color: colors.primary,
               fontWeight: 'bold',
             }}>
-            {userInfo[0].doc.orgName.substring(0, 1)}
+            {userInfo[0]?.doc?.orgName.substring(0, 1)}
           </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate(routes.editProfile)}
@@ -238,7 +238,7 @@ const Settings = ({navigation}) => {
                 color: colors.black,
                 fontWeight: 'bold',
               }}>
-              {userInfo[0].doc.orgName}
+              {userInfo[0]?.doc?.orgName}
             </Text>
           </View>
 
@@ -248,7 +248,7 @@ const Settings = ({navigation}) => {
               marginBottom: 20,
               color: colors.black,
             }}>
-            {userInfo[0].doc.name}
+            {userInfo[0]?.doc?.name}
           </Text>
         </View>
       </View>
@@ -311,7 +311,7 @@ const Settings = ({navigation}) => {
           }}>
           {employes.length
             ? employes
-                .filter(j => j.phone !== userInfo[0].doc.phone)
+                .filter(j => j.phone !== userInfo[0]?.doc?.phone)
                 .map(i => {
                   return (
                     <View
@@ -389,7 +389,7 @@ const Settings = ({navigation}) => {
                 color: colors.black,
                 fontSize: 20,
               }}>
-              Add Account
+              {t('Create_Account')}
             </Text>
           </TouchableOpacity>
         </ScrollView>

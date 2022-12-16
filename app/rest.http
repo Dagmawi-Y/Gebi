@@ -1,0 +1,30 @@
+POST https://jobbbs.me/gebi/pay HTTP/1.1
+content-type: application/json
+
+{
+    "isSimulation": false,
+    "currency": "ETB",
+    "referenceNumber": "22352715",
+    "accountNumber": "251946393208",
+    "customerName": "Gebi_P1VqtGsveQXXEKJNPLLo58X23aV2",
+    "description": "Monthly",
+    "amount": 1,
+    "paymentMethod": "Telebirr",
+    "issuer": "62e4e717f4df8a06adb53d77",
+    "status": "PAYED",
+    "metaData": {
+      "purchaseDetails": {
+        "orderId": "P1VqtGsveQXXEKJNPLLo58X23aV2",
+        "description": "Monthly",
+        "amount": 1,
+        "customerName": "Gebi_P1VqtGsveQXXEKJNPLLo58X23aV2",
+        "customerPhoneNumber": "251946393208"
+      },
+      "metaData": {
+        "any Data": "any Val"
+      }
+    },
+    "createdAt": "2022-12-16T07:28:37.498Z",
+    "updatedAt": "2022-12-16T07:28:37.498Z",
+    "orderId": "P1VqtGsveQXXEKJNPLLo58X23aV2"
+  }

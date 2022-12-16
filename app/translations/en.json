@@ -194,6 +194,7 @@
   "Metre": "Metre",
   "AddedBy": "Added by",
   "Sales_Officer": "Sales officer",
+  "Free":"Free",
 
   "Max_Reached": "Free Limit Reached",
   "Subcribe_To_Continue": "Subcribe to continue",
@@ -207,5 +208,12 @@
 
   "item(s)":"item(s)",
   "attach_photo":"Attach Photo",
-  "No-Description":"No description"
+  "No-Description":"No description",
+  "Add_New_Employee":"Add New Employee",
+
+  "Phone_Number":"Phone number",
+  "Name":"Name",
+  "Privileges":"Privileges",
+  "Create_Account":"Create account",
+  "Accounts":"ሰራተኞች"
 }

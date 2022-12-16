@@ -59,15 +59,15 @@ const CustomDrawer = ({route, navigation}) => {
               color: colors.black,
               fontWeight: 'bold',
             }}>
-            {userInfo[0].doc.orgName.substring(0, 1)}
+            {userInfo[0]?.doc?.orgName.substring(0, 1)}
           </Text>
         </View>
         <View style={{marginVertical: 15, alignItems: 'center'}}>
           <Text style={{fontSize: 25, color: colors.white}}>
-            {userInfo[0].doc.orgName}
+            {userInfo[0]?.doc?.orgName}
           </Text>
           <Text style={{fontSize: 15, color: colors.white, fontWeight: '300'}}>
-            {userInfo[0].doc.name}
+            {userInfo[0]?.doc?.name}
           </Text>
         </View>
       </View>
@@ -141,27 +141,29 @@ const CustomDrawer = ({route, navigation}) => {
           rootRoute={true}
           icon="settings"
         />
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate(routes.subscriptions);
-          }}
-          style={{
-            marginTop: 5,
-            alignItems: 'center',
-            marginLeft: 25,
-            flexDirection: 'row',
-            paddingVertical: 5,
-          }}>
-          <Text
+        {isAdmin ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(routes.subscriptions);
+            }}
             style={{
-              fontSize: 18,
-              fontWeight: '300',
-              color: colors.white,
+              marginTop: 5,
+              alignItems: 'center',
+              marginLeft: 25,
+              flexDirection: 'row',
+              paddingVertical: 5,
             }}>
-            {t('Subscription')}
-          </Text>
-          <Icon name="arrow-right" size={20} color={colors.white} />
-        </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: '300',
+                color: colors.white,
+              }}>
+              {t('Subscription')}
+            </Text>
+            <Icon name="arrow-right" size={20} color={colors.white} />
+          </TouchableOpacity>
+        ) : null}
         <TouchableOpacity
           onPress={() => {
             Alert.alert(t('Are_You_Sure?'), ``, [

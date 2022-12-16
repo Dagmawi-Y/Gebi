@@ -41,7 +41,7 @@ const EntryApp = ({navigation}) => {
         //Sales count
         firestore()
           .collection('sales')
-          .where('owner', '==', userInfo[0].doc.companyId)
+          .where('owner', '==', userInfo[0]?.doc?.companyId)
           .onSnapshot(qsn => {
             setSalesCount(qsn.docs.length);
           });
@@ -49,7 +49,7 @@ const EntryApp = ({navigation}) => {
         //Supplier count
         firestore()
           .collection('suppliers')
-          .where('owner', '==', userInfo[0].doc.companyId)
+          .where('owner', '==', userInfo[0]?.doc?.companyId)
           .onSnapshot(qsn => {
             setSupplierCount(qsn.docs.length);
           });
@@ -57,7 +57,7 @@ const EntryApp = ({navigation}) => {
         //Customer count
         firestore()
           .collection('customers')
-          .where('owner', '==', userInfo[0].doc.companyId)
+          .where('owner', '==', userInfo[0]?.doc?.companyId)
           .onSnapshot(qsn => {
             setCustomerCount(qsn.docs.length);
           });
@@ -75,22 +75,25 @@ const EntryApp = ({navigation}) => {
       if (userInfo.length > 0) {
         firestore()
           .collection('subscriptions')
-          .where('owner', '==', userInfo[0].doc.companyId)
+          .where('owner', '==', userInfo[0]?.doc?.companyId)
           .onSnapshot(qsn => {
+            
             let result: Array<any> = [];
             qsn.forEach(sn => {
+              console.log(sn);
               result.push(sn.data());
+              console.log(sn.id)
             });
             const latestPlan = result.filter(p => {
               return Date.parse(p.endDate) - Date.now() > 0;
             });
-           
+
             if (latestPlan.length) {
+
               setSubscriptionPlan(latestPlan);
-              setPlanExpired(false);
-            } else {
-              setPlanExpired(true);
+              return setPlanExpired(false);
             }
+            return setPlanExpired(true);
           });
       }
     } catch (error) {
@@ -105,7 +108,7 @@ const EntryApp = ({navigation}) => {
         firestore()
           .collection('users')
           .where('phone', '==', user.phoneNumber)
-          .onSnapshot(querySnapshot => {
+          .get().then(querySnapshot => {
             let result: Array<any> = [];
             querySnapshot.forEach(documentSnapshot => {
               result.push({
@@ -129,7 +132,7 @@ const EntryApp = ({navigation}) => {
   useEffect(() => {
     getUserPlan();
     getCounts();
-  }, []);
+  }, [userInfo]);
 
   useEffect(() => {
     setIsAdmin(false);

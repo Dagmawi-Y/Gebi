@@ -68,7 +68,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
     try {
       firestore()
         .collection('inventory')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {

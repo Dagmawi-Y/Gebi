@@ -43,7 +43,7 @@ const ItemDetails = ({route, navigation}) => {
     let totSaleCount: number = 0;
     await firestore()
       .collection('stock')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .where('item_id', '==', itemId)
       .get()
       .then(sales => {

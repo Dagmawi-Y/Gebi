@@ -49,10 +49,11 @@ const Subscriptions = ({navigation}) => {
       if (userInfo.length > 0) {
         firestore()
           .collection('subscriptions')
-          .where('owner', '==', userInfo[0].doc.companyId)
+          .where('owner', '==', userInfo[0]?.doc?.companyId)
           .onSnapshot(qsn => {
             let result: Array<any> = [];
             qsn.forEach(sn => {
+              console.log(sn.id)
               result.push(sn.data());
             });
             const latestPlan = result.filter(p => {
@@ -68,16 +69,17 @@ const Subscriptions = ({navigation}) => {
       console.log(error);
     }
   };
+
   const simulatePayment = () => {
     const data = {
       endDate: dayjs().add(1, 'month').toISOString(),
-      owner: userInfo[0].doc.companyId,
+      owner: userInfo[0]?.doc?.companyId,
       startDate: dayjs().toISOString(),
       subscription: plan,
     };
     writeSubscription(data);
     getUserPlan();
-    updateUsers(userInfo[0].doc.companyId);
+    updateUsers(userInfo[0]?.doc?.companyId);
   };
 
   const [paymentData, setPaymentData] = useState<any>({
@@ -86,16 +88,16 @@ const Subscriptions = ({navigation}) => {
     merchantName: 'example merchant',
     data: {
       purchaseDetails: {
-        orderId: userInfo[0].doc.companyId,
+        orderId: userInfo[0]?.doc?.companyId,
         description: plan,
         amount: 1,
-        customerName: `Gebi_${userInfo[0].doc.companyId}`,
-        customerPhoneNumber: userInfo[0].doc.phone.split('+')[1],
+        customerName: `Gebi_${userInfo[0]?.doc?.companyId}`,
+        customerPhoneNumber: userInfo[0]?.doc?.phone.split('+')[1],
       },
       redirectUrls: {
         returnUrl: 'NaN',
         cancelUrl: 'NaN',
-        callbackUrl: 'https://jobbb.me/gebi/',
+        callbackUrl: 'https://jobbbs.me/gebi/pay',
       },
       metaData: {
         'any Data': 'any Val',
@@ -110,16 +112,16 @@ const Subscriptions = ({navigation}) => {
       merchantName: 'example merchant',
       data: {
         purchaseDetails: {
-          orderId: userInfo[0].doc.companyId,
+          orderId: userInfo[0]?.doc?.companyId,
           description: plan,
           amount: 1,
-          customerName: `Gebi_${userInfo[0].doc.companyId}`,
-          customerPhoneNumber: userInfo[0].doc.phone.split('+')[1],
+          customerName: `Gebi_${userInfo[0]?.doc?.companyId}`,
+          customerPhoneNumber: userInfo[0]?.doc?.phone.split('+')[1],
         },
         redirectUrls: {
           returnUrl: 'NaN',
           cancelUrl: 'NaN',
-          callbackUrl: 'https://jobbb.me/gebi/',
+          callbackUrl: 'https://jobbbs.me/gebi/pay',
         },
         metaData: {
           'any Data': 'any Val',
@@ -158,8 +160,8 @@ const Subscriptions = ({navigation}) => {
                 {text: 'Ok', onPress: () => {}},
               ]);
             }
-            simulatePayment();
-            // setIsMedaPayModal(true);
+            // simulatePayment();
+            setIsMedaPayModal(true);
           }}
           style={{
             backgroundColor: colors.primary,
@@ -169,7 +171,6 @@ const Subscriptions = ({navigation}) => {
             alignSelf: 'center',
             marginTop: 30,
           }}>
-          {/* <Text style={{color: colors.white}}>Proceed to payment</Text> */}
           <Text style={{color: colors.white}}>{t('Pay')}</Text>
         </TouchableOpacity>
       </View>

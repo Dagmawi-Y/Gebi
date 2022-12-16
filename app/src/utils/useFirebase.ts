@@ -9,7 +9,7 @@ const useFirebase = (user, userInfo, collection) => {
     setLoading(true);
     const subscriber = firestore()
       .collection(collection)
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(querySnapshot => {
         let result: Array<Object> = [];
         querySnapshot.forEach(sn => {

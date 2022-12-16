@@ -73,7 +73,7 @@ export default function TopScreen() {
     try {
       firestore()
         .collection('expenses')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
           let expAmount = 0;
           if (qsn) {
@@ -95,7 +95,7 @@ export default function TopScreen() {
     try {
       firestore()
         .collection('sales')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {

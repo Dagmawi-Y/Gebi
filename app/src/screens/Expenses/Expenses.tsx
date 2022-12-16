@@ -43,7 +43,7 @@ export default function Expenses({navigation}: any) {
     try {
       firestore()
         .collection('expenses')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .orderBy('date')
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
@@ -73,7 +73,7 @@ export default function Expenses({navigation}: any) {
       setTotalExpense(total);
       firestore()
         .collection('expenses')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
           qsn.forEach(sn => {
             total += parseFloat(sn.data().amount);
@@ -116,13 +116,13 @@ export default function Expenses({navigation}: any) {
         <FloatingButton
           action={() => {
             if (
-              (userInfo[0].doc.isFree && salesCount > 0) ||
+              (userInfo[0]?.doc?.isFree && salesCount > 0) ||
               customerCount > 5 ||
               supplierCount > 5
             ) {
               return setLimitReachedVisible(true);
             }
-            if (!userInfo[0].doc.isFree && planExpired) {
+            if (!userInfo[0]?.doc?.isFree && planExpired) {
               return setLimitReachedVisible(true);
             }
             navigation.navigate(routes.addNewExpense);

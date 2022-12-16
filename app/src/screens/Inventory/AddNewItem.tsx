@@ -79,7 +79,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const getItems = () => {
     firestore()
       .collection('inventory')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -98,7 +98,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const getSuppliers = () => {
     firestore()
       .collection('suppliers')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -117,7 +117,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const getCategories = () => {
     firestore()
       .collection('categories')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -200,8 +200,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     unit_price: unitPrice,
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
-                    owner: userInfo[0].doc.companyId,
-                    createdBy: userInfo[0].doc.name,
+                    owner: userInfo[0]?.doc?.companyId,
+                    createdBy: userInfo[0]?.doc?.name,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(async () => {
@@ -213,7 +213,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       });
                     await firestore().collection('suppliers').add({
                       name: supplierName,
-                      owner: userInfo[0].doc.companyId,
+                      owner: userInfo[0]?.doc?.companyId,
                     });
                   });
                 setWrittingData(false);
@@ -225,7 +225,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
             await firestore()
               .collection('inventory')
               .add({
-                owner: userInfo[0].doc.companyId,
+                owner: userInfo[0]?.doc?.companyId,
                 item_name: itemName,
                 unit_price: unitPrice,
                 unit: unit,
@@ -234,7 +234,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 picture: fileUrl,
                 category: itemCategory.toLowerCase(),
                 categoryId: categoryId,
-                createdBy: userInfo[0].doc.name,
+                createdBy: userInfo[0]?.doc?.name,
               })
               .then(res => {
                 const item_id = res['_documentPath']['_parts'][1];
@@ -246,8 +246,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     initialCount: quantity,
                     unit_price: unitPrice,
                     unit: unit,
-                    owner: userInfo[0].doc.companyId,
-                    createdBy: userInfo[0].doc.name,
+                    owner: userInfo[0]?.doc?.companyId,
+                    createdBy: userInfo[0]?.doc?.name,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(() => {
@@ -259,7 +259,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       });
                     firestore().collection('suppliers').add({
                       name: supplierName,
-                      owner: userInfo[0].doc.companyId,
+                      owner: userInfo[0]?.doc?.companyId,
                     });
                   });
                 reset();

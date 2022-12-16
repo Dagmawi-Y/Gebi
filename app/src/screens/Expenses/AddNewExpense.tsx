@@ -136,7 +136,7 @@ const AddNewExpense = ({navigation}) => {
           name: newName.trim(),
           description: newDescription.trim() ?? '',
           date: new Date().toLocaleDateString(),
-          owner: userInfo[0].doc.companyId,
+          owner: userInfo[0]?.doc?.companyId,
         })
         .then(res => {
           console.log(res);
@@ -170,7 +170,7 @@ const AddNewExpense = ({navigation}) => {
           amount: amount ?? '',
           note: note ?? '',
           date: new Date().toLocaleDateString(),
-          owner: userInfo[0].doc.companyId,
+          owner: userInfo[0]?.doc?.companyId,
         })
         .then(() => {
           setLoading(false);

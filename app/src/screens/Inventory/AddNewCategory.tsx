@@ -45,7 +45,7 @@ const AddNewCategory = ({navigation}) => {
             const category = {
               name: categoryName,
               description: categoryDescription ?? '',
-              owner: userInfo[0].doc.companyId,
+              owner: userInfo[0]?.doc?.companyId,
               count: 0,
             };
 

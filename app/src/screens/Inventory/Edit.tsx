@@ -73,7 +73,7 @@ const AddNew = ({
   const getItems = () => {
     firestore()
       .collection('inventory')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -92,7 +92,7 @@ const AddNew = ({
   const getSuppliers = () => {
     firestore()
       .collection('suppliers')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -111,7 +111,7 @@ const AddNew = ({
   const getCategories = () => {
     firestore()
       .collection('categories')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .onSnapshot(qsn => {
         let result: Array<any> = [];
         if (qsn) {
@@ -190,7 +190,7 @@ const AddNew = ({
                     unit_price: unitPrice,
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
-                    owner: userInfo[0].doc.companyId,
+                    owner: userInfo[0]?.doc?.companyId,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(async () => {
@@ -202,7 +202,7 @@ const AddNew = ({
                       });
                     await firestore().collection('suppliers').add({
                       name: supplierName,
-                      owner: userInfo[0].doc.companyId,
+                      owner: userInfo[0]?.doc?.companyId,
                     });
                   });
                 navigation.goBack();
@@ -212,7 +212,7 @@ const AddNew = ({
             await firestore()
               .collection('inventory')
               .add({
-                owner: userInfo[0].doc.companyId,
+                owner: userInfo[0]?.doc?.companyId,
                 item_name: itemName,
                 unit_price: unitPrice,
                 unit_SalePrice: unitSalePrice,
@@ -231,7 +231,7 @@ const AddNew = ({
                     initialCount: quantity,
                     unit_price: unitPrice,
                     unit: unit,
-                    owner: userInfo[0].doc.companyId,
+                    owner: userInfo[0]?.doc?.companyId,
                     date: new Date().toLocaleDateString(),
                   })
                   .then(() => {
@@ -243,7 +243,7 @@ const AddNew = ({
                       });
                     firestore().collection('suppliers').add({
                       name: supplierName,
-                      owner: userInfo[0].doc.companyId,
+                      owner: userInfo[0]?.doc?.companyId,
                     });
                   });
 

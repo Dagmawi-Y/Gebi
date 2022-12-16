@@ -62,9 +62,9 @@ const AddEmployee = ({navigation}) => {
 
     const userData = {
       companyId: user.uid,
-      orgName: userInfo[0].doc.orgName,
+      orgName: userInfo[0]?.doc?.orgName,
       name: name,
-      isFree: userInfo[0].doc.isFree,
+      isFree: userInfo[0]?.doc?.isFree,
       roles: [
         sales ? 'sales' : null,
         inventory ? 'inventory' : null,
@@ -171,7 +171,7 @@ const AddEmployee = ({navigation}) => {
                     size={25}
                     fillColor={colors.primary}
                     unfillColor="#FFFFFF"
-                    text={i}
+                    text={t(i)}
                     iconStyle={{
                       borderColor: colors.black,
                       margin: 10,
@@ -215,7 +215,7 @@ const AddEmployee = ({navigation}) => {
             paddingVertical: 10,
             borderRadius: 5,
           }}>
-          <Text style={{color: colors.white}}>Create account</Text>
+          <Text style={{color: colors.white}}>{t("Create_Account")}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </>

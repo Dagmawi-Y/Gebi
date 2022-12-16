@@ -41,7 +41,7 @@ const AppTabNavigator = ({navigation}) => {
   } = useContext(StateContext);
 
   const setPrivileges = () => {
-    const roles = userInfo[0].doc.roles;
+    const roles = userInfo[0]?.doc?.roles;
 
     roles.map(i => {
       switch (i) {

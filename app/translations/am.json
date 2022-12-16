@@ -190,6 +190,7 @@
   "Metre": "ሜትር",
   "AddedBy": "መዝጋቢ",
   "Sales_officer": "የሽያጭ ባለሙያ",
+  "Free":"ነጻ",
 
   "Max_Reached": "ገደብ ደርሷል",
   "Subcribe_To_Continue": "ለመቀጠል ሰብስክራይብ ያድርጉ",
@@ -202,5 +203,14 @@
 
   "item(s)":"እቃ(ዎች)",
   "attach_photo":"ፎቶ ማያያዣ",
-  "No-Description":"መግለጫ የለም"
+  "No-Description":"መግለጫ የለም",
+  "Add_New_Employee":"አዲስ ሰራተኛ ጨምር",
+
+
+  "Phone_Number":"ስልክ ቁጥር",
+  "Name":"ስም",
+  "Privileges":"ኃላፊነት",
+  "Create_Account":"መለያ ፍጠር",
+  "Accounts":"ሰራተኞች"
+
 }

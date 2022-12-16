@@ -158,7 +158,7 @@ const NewSale = ({navigation}) => {
   ];
 
   const sale = {
-    owner: userInfo[0].doc.companyId,
+    owner: userInfo[0]?.doc?.companyId,
     customerName: customer,
     date: new Date().toLocaleDateString(),
     invoiceNumber: Math.random().toString().split('.')[1],
@@ -166,7 +166,7 @@ const NewSale = ({navigation}) => {
     items: {...addedItems},
     vat: taxType == 'VAT' ? true : false,
     tot: taxType == 'TOT' ? true : false,
-    createdBy: userInfo[0].doc.name,
+    createdBy: userInfo[0]?.doc?.name,
   };
 
   const checkEmpty = () => {
@@ -179,7 +179,7 @@ const NewSale = ({navigation}) => {
   const getCustomers = async () => {
     await firestore()
       .collection('customers')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .get()
       .then(res => {
         setCustomers(res.docs);
@@ -214,7 +214,7 @@ const NewSale = ({navigation}) => {
                   .collection('customers')
                   .add({
                     name: customer,
-                    owner: userInfo[0].doc.companyId,
+                    owner: userInfo[0]?.doc?.companyId,
                   })
                   .catch(err => console.log(err));
 

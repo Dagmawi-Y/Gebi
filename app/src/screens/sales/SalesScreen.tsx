@@ -88,7 +88,7 @@ export default function Items({navigation}) {
     setLoading(true);
     firestore()
       .collection('sales')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
 
       .onSnapshot(querySnapshot => {
         let result: any = [];
@@ -123,7 +123,7 @@ export default function Items({navigation}) {
   const getStockCount = () => {
     firestore()
       .collection('inventory')
-      .where('owner', '==', userInfo[0].doc.companyId)
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
       .get()
       .then(snap => {
         setStockCount(snap.size);
@@ -135,7 +135,7 @@ export default function Items({navigation}) {
     if (mounted && userInfo) {
       getSales();
       getStockCount();
-    }
+    }   
 
     return () => {
       setMounted(false);
@@ -144,6 +144,10 @@ export default function Items({navigation}) {
 
   return (
     <>
+     {expired ? (
+        <ExpiredModal setModalVisible={setExpired} navigation={navigation} />
+      ) : null}
+
       {limitReachedVisible ? (
         <FreeLimitReached
           setModalVisible={setLimitReachedVisible}
@@ -151,20 +155,17 @@ export default function Items({navigation}) {
         />
       ) : null}
 
-      {expired ? (
-        <ExpiredModal setModalVisible={setExpired} navigation={navigation} />
-      ) : null}
       <FloatingButton
         action={() => {
           // 100th sale or 25th customer or 10th supplier
           if (
-            (userInfo[0].doc.isFree && salesCount >= 5) ||
+            (userInfo[0]?.doc?.isFree && salesCount >= 5) ||
             customerCount >= 5 ||
             supplierCount >= 5
           ) {
             return setLimitReachedVisible(true);
           }
-          if (!userInfo[0].doc.isFree && planExpired) {
+          if (!userInfo[0]?.doc?.isFree && planExpired) {
             return setLimitReachedVisible(true);
           }
 

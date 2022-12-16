@@ -74,7 +74,7 @@ export default function Items({navigation}) {
     try {
       firestore()
         .collection('inventory')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(documentSnapshot => {
@@ -101,7 +101,7 @@ export default function Items({navigation}) {
     if (user)
       firestore()
         .collection('categories')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
           let result: Array<any> = [];
           if (qsn) {
@@ -148,13 +148,13 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           if (
-            (userInfo[0].doc.isFree && salesCount > 0) ||
+            (userInfo[0]?.doc?.isFree && salesCount > 0) ||
             customerCount > 5 ||
             supplierCount > 5
           ) {
             return setLimitReachedVisible(true);
           }
-          if (!userInfo[0].doc.isFree && planExpired) {
+          if (!userInfo[0]?.doc?.isFree && planExpired) {
             return setLimitReachedVisible(true);
           }
           navigation.navigate(routes.addNewItem);

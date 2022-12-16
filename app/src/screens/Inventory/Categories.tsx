@@ -21,7 +21,7 @@ const Categories = ({navigation}) => {
       setLoading(true);
       await firestore()
         .collection('categories')
-        .where('owner', '==', userInfo[0].doc.companyId)
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
           let result: Array<any> = [];
           qsn.forEach(i => {

@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.screenContainer}>
       <TopScreen />
       <View style={{}}>
-        {userInfo.length ? (
+        {userInfo.length && !userInfo[0]?.doc?.isFree ? (
           <>
             <Text
               style={{
@@ -54,13 +54,22 @@ const HomeScreen = ({navigation}) => {
                 color: colors.white,
                 fontWeight: '400',
               }}>
-              {userInfo[0].doc.orgName}{'\n'}
+              {userInfo[0]?.doc?.orgName}{'\n'}
               {t("Subscription")}{': '}
-              {subcriptionPlan.length > 0 ? `${subcriptionPlan[0].subscription}` : t('Expired')}{' '}
+              {subcriptionPlan?.length > 0 ? `${t(subcriptionPlan[0]?.subscription)}` : t('Expired')}{' '}
               
             </Text>
           </>
-        ) : null}
+        ) : <Text
+        style={{
+          fontSize: 20,
+          textAlign: 'center',
+          color: colors.white,
+          fontWeight: '400',
+        }}>
+        {userInfo[0]?.doc?.orgName}{'\n'}
+        {t("Subscription")}{': '} {t("Free")}
+      </Text>}
         <View
           style={{
             backgroundColor: colors.transWhite,
