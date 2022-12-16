@@ -6,6 +6,7 @@ import MedaPayModal, {checkBillStat} from 'react-native-meda-pay';
 import {StateContext} from '../../global/context';
 import firestore from '@react-native-firebase/firestore';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3IiwiaWF0IjoxNjU5MTY4NTYyfQ.-PSUZd8YX6PHsw2sn54Em31iK4jcWclc-TakokBaglI';
@@ -16,6 +17,8 @@ const Subscriptions = ({navigation}) => {
   const [isMedaPayModal, setIsMedaPayModal] = useState(false);
   const {user, userInfo, setSubscriptionPlan} = useContext(StateContext);
   const [plan, setPlan] = useState('Monthly');
+
+  const {t} = useTranslation()
 
   async function writeSubscription(data) {
     firestore()
@@ -127,7 +130,7 @@ const Subscriptions = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Subscriptions</Text>
+      <Text style={styles.headerText}>{t("Subscription")}</Text>
       <View>
         <PriceCard
           plan={plan}
@@ -136,8 +139,10 @@ const Subscriptions = ({navigation}) => {
           price={10}
           currency={'Birr'}
           color={colors.dark_grey}
+          t={t}
         />
         <PriceCard
+          t={t}
           plan={plan}
           setPlan={setPlan}
           duration={'Yearly'}
@@ -165,7 +170,7 @@ const Subscriptions = ({navigation}) => {
             marginTop: 30,
           }}>
           {/* <Text style={{color: colors.white}}>Proceed to payment</Text> */}
-          <Text style={{color: colors.white}}>Pay</Text>
+          <Text style={{color: colors.white}}>{t('Pay')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -219,6 +224,7 @@ type CardDataTypes = {
   currency: string;
   color: string;
   setPlan: any;
+  t:any
 };
 
 const PriceCard = ({
@@ -228,6 +234,7 @@ const PriceCard = ({
   plan,
   color,
   setPlan,
+  t
 }: CardDataTypes) => {
   return (
     <TouchableOpacity
@@ -246,12 +253,12 @@ const PriceCard = ({
           : {},
       ]}>
       <View style={[CardStyles.cardheader, {backgroundColor: color}]}>
-        <Text style={CardStyles.cardHeaderText}>{duration}</Text>
+        <Text style={CardStyles.cardHeaderText}>{t(duration)}</Text>
       </View>
       <View style={{flexDirection: 'row'}}>
         <Text style={CardStyles.cardPrice}>
           {price}
-          {currency}
+          {t(currency)}
         </Text>
       </View>
     </TouchableOpacity>
@@ -276,7 +283,7 @@ const CardStyles = StyleSheet.create({
     backgroundColor: colors.white,
     width: '80%',
     alignSelf: 'center',
-    borderRadius: 10,
+    borderRadius: 15,
     paddingBottom: 10,
     marginVertical: 20,
     elevation: 20,

@@ -84,6 +84,7 @@ const EntryApp = ({navigation}) => {
             const latestPlan = result.filter(p => {
               return Date.parse(p.endDate) - Date.now() > 0;
             });
+           
             if (latestPlan.length) {
               setSubscriptionPlan(latestPlan);
               setPlanExpired(false);

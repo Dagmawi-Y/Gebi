@@ -55,9 +55,9 @@ const HomeScreen = ({navigation}) => {
                 fontWeight: '400',
               }}>
               {userInfo[0].doc.orgName}{'\n'}
-              {/* {salesCount + " " + customerCount + " " + supplierCount} */}
-              {subcriptionPlan.length > 0 ? `${subcriptionPlan[0].subscription} plan is active` : 'Expired'}{' '}
-              {/* {JSON.stringify(subcriptionPlan[0].subscription)} */}
+              {t("Subscription")}{': '}
+              {subcriptionPlan.length > 0 ? `${subcriptionPlan[0].subscription}` : t('Expired')}{' '}
+              
             </Text>
           </>
         ) : null}

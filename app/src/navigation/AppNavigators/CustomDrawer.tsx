@@ -158,7 +158,7 @@ const CustomDrawer = ({route, navigation}) => {
               fontWeight: '300',
               color: colors.white,
             }}>
-            {t('Subscriptions')}
+            {t('Subscription')}
           </Text>
           <Icon name="arrow-right" size={20} color={colors.white} />
         </TouchableOpacity>

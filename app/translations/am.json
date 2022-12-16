@@ -194,9 +194,11 @@
   "Max_Reached": "ገደብ ደርሷል",
   "Subcribe_To_Continue": "ለመቀጠል ሰብስክራይብ ያድርጉ",
   "Subscribe": "ሰብስክራይብ ያድርጉ",
-  "Expired": "Expiredጊዜው አልፎበታል",
+  "Expired": "ጊዜው አልፎበታል",
   "Renew_Subscription": "የደንበኝነት ምዝገባዎን ያድሱ",
+  "Subscription": "የደንበኝነት ምዝገባ",
   "Renew": "ያድሱ",
+  "Pay":"ክፈል",
 
   "item(s)":"እቃ(ዎች)",
   "attach_photo":"ፎቶ ማያያዣ",
