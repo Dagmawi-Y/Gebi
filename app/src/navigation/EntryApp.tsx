@@ -80,9 +80,7 @@ const EntryApp = ({navigation}) => {
             
             let result: Array<any> = [];
             qsn.forEach(sn => {
-              console.log(sn);
               result.push(sn.data());
-              console.log(sn.id)
             });
             const latestPlan = result.filter(p => {
               return Date.parse(p.endDate) - Date.now() > 0;
