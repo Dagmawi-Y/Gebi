@@ -192,7 +192,7 @@ const AddNewExpense = ({navigation}) => {
     let result: Array<any> = [];
     firestore()
       .collection('defaultExpenseTypes')
-      .orderBy('name')
+      // .orderBy('name')
       .onSnapshot(qsn => {
         qsn.forEach(sn => {
           result.push({
@@ -209,16 +209,19 @@ const AddNewExpense = ({navigation}) => {
     let result: Array<Object> = [];
     firestore()
       .collection('customExpenseTypes')
-      .orderBy('name')
+      .where('owner', '==', userInfo[0]?.doc.companyId)
+      // .orderBy('name')
       .onSnapshot(qsn => {
-        qsn.forEach(sn => {
-          result.push({
-            id: sn.id,
-            data: sn.data(),
+        if (qsn) {
+          qsn.forEach(sn => {
+            result.push({
+              id: sn.id,
+              data: sn.data(),
+            });
+            setCustomExpTypes([]);
+            setCustomExpTypes(result);
           });
-          setCustomExpTypes([]);
-          setCustomExpTypes(result);
-        });
+        }
       });
   };
 
@@ -297,7 +300,7 @@ const AddNewExpense = ({navigation}) => {
         </Pressable>
       ) : null}
       <View style={styles.container}>
-        <ScrollView>
+        <View>
           <Text style={styles.pageLabel}>{t('Add_New_Expense')}</Text>
           {resultVisible ? (
             <ScrollView
@@ -417,7 +420,7 @@ const AddNewExpense = ({navigation}) => {
             style={styles.button}>
             <Text style={styles.buttonLable}>{t('Submit')}</Text>
           </TouchableOpacity>
-        </ScrollView>
+        </View>
       </View>
     </>
   );

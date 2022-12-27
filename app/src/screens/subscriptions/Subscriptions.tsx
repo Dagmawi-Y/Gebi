@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjJlNGU3MTdmNGRmOGEwNmFkYjUzZDc3IiwiaWF0IjoxNjU5MTY4NTYyfQ.-PSUZd8YX6PHsw2sn54Em31iK4jcWclc-TakokBaglI';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjM5YzYwY2YwOTAwNzExZGQwMjcxODg0Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjM5YzYwY2YwOTAwNzExZGQwMjcxODg0IiwiaWF0IjoxNjcxMTkyODA2fQ.whAr3Z3dtOs37X8_fTowEvLPEWIjq5k60SbGfKC4AuM';
 const sandBoxToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhdG9tZWRhQDM2MGdyb3VuZC5jb20iLCJuYW1lIjoiTWVkYSBWb3VjaGVyIiwicGhvbmUiOiIrMjUxOTEzMDA4NTk1IiwiaXNzIjoiIiwiaWF0IjoxNTk4OTY0NTQwLCJleHAiOjIwMzA1MDA1NDB9.p-QGfkmRtUlGTQhthS5PW1Ora6E4E-i5VMLjzAo96mY';
 
@@ -85,12 +85,12 @@ const Subscriptions = ({navigation}) => {
   const [paymentData, setPaymentData] = useState<any>({
     Authorization: token,
     isSandBox: false,
-    merchantName: 'example merchant',
+    merchantName: 'Gebi',
     data: {
       purchaseDetails: {
         orderId: userInfo[0]?.doc?.companyId,
         description: plan,
-        amount: 1,
+        amount: 100,
         customerName: `Gebi_${userInfo[0]?.doc?.companyId}`,
         customerPhoneNumber: userInfo[0]?.doc?.phone.split('+')[1],
       },
@@ -109,13 +109,13 @@ const Subscriptions = ({navigation}) => {
     setPaymentData({
       Authorization: token,
       isSandBox: false,
-      merchantName: 'example merchant',
+      merchantName: 'Gebi',
       data: {
         purchaseDetails: {
           orderId: userInfo[0]?.doc?.companyId,
           description: plan,
-          amount: 1,
-          customerName: `Gebi_${userInfo[0]?.doc?.companyId}`,
+          amount: 100,
+          customerName: `Gebi_${userInfo[0]?.doc?.name}`,
           customerPhoneNumber: userInfo[0]?.doc?.phone.split('+')[1],
         },
         redirectUrls: {
@@ -138,12 +138,12 @@ const Subscriptions = ({navigation}) => {
           plan={plan}
           setPlan={setPlan}
           duration={'Monthly'}
-          price={10}
+          price={100}
           currency={'Birr'}
-          color={colors.dark_grey}
+          color={colors.primary}
           t={t}
         />
-        <PriceCard
+        {/* <PriceCard
           t={t}
           plan={plan}
           setPlan={setPlan}
@@ -151,7 +151,7 @@ const Subscriptions = ({navigation}) => {
           price={80}
           currency={'Birr'}
           color={colors.primary}
-        />
+        /> */}
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {

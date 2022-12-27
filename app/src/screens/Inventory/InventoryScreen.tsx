@@ -148,9 +148,9 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           if (
-            (userInfo[0]?.doc?.isFree && salesCount > 0) ||
-            customerCount > 5 ||
-            supplierCount > 5
+            (userInfo[0]?.doc?.isFree && salesCount > 100) ||
+            customerCount > 25 ||
+            supplierCount > 10
           ) {
             return setLimitReachedVisible(true);
           }
@@ -242,7 +242,7 @@ export default function Items({navigation}) {
                 {t('Total_Items')}
               </Text>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={[
                   styles.buttonwithIcon,
                   {marginLeft: 'auto', marginRight: 10},
@@ -257,7 +257,7 @@ export default function Items({navigation}) {
                   }}>
                   {t('Print_QR')}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <View style={{marginRight: 10}}>
                 {!searchVisible ? (
                   <Icon

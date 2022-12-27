@@ -135,7 +135,7 @@ export default function Items({navigation}) {
     if (mounted && userInfo) {
       getSales();
       getStockCount();
-    }   
+    }
 
     return () => {
       setMounted(false);
@@ -144,7 +144,7 @@ export default function Items({navigation}) {
 
   return (
     <>
-     {expired ? (
+      {expired ? (
         <ExpiredModal setModalVisible={setExpired} navigation={navigation} />
       ) : null}
 
@@ -159,9 +159,9 @@ export default function Items({navigation}) {
         action={() => {
           // 100th sale or 25th customer or 10th supplier
           if (
-            (userInfo[0]?.doc?.isFree && salesCount >= 5) ||
-            customerCount >= 5 ||
-            supplierCount >= 5
+            (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
+            (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
+            (userInfo[0]?.doc?.isFree && supplierCount >= 10)
           ) {
             return setLimitReachedVisible(true);
           }

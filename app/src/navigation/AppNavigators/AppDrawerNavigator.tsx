@@ -77,7 +77,7 @@ function AppDrawerNavigator({}) {
           headerRightContainerStyle: {paddingRight: 20},
           headerRight: () => (
             <TouchableOpacity activeOpacity={0.5}>
-              <Icon name="bell" color={colors.white} size={25} />
+              {/* <Icon name="bell" color={colors.white} size={25} /> */}
             </TouchableOpacity>
           ),
         })}>
@@ -181,8 +181,8 @@ function AppDrawerNavigator({}) {
         <Drawer.Screen
           name={routes.subscriptions}
           options={{
-            headerTitle: t('Settings'),
-            headerShown: false,
+            headerTitle: t('Subscription'),
+            headerShown: true,
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => {

@@ -295,7 +295,7 @@ const SaleDetails = ({route, navigation}) => {
                 elevation: 10,
               }}>
               <Text style={styles.textBold}>
-                {t('Sales_Officer')}
+                {t('Sales_officer')}
                 {':'}
               </Text>
               <Text style={{fontSize: 15, color: colors.faded_dark}}>

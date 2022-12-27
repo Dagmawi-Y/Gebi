@@ -3,9 +3,11 @@ import React, {Component, useState} from 'react';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import colors from '../../config/colors';
 import ImagePicker from 'react-native-image-crop-picker';
+import {useTranslation} from 'react-i18next';
 
 const ImageSelector = ({photo, setPhoto}) => {
   //   const [photo, setPhoto] = useState('');
+  const {t} = useTranslation();
 
   const pickImage = type => {
     type == 'image'
@@ -120,7 +122,9 @@ const ImageSelector = ({photo, setPhoto}) => {
             </TouchableOpacity>
           </View>
 
-          <Text style={{color: colors.black, fontSize: 15}}>ፎቶ ማያያዣ</Text>
+          <Text style={{color: colors.black, fontSize: 15}}>
+            {t('attach_photo')}
+          </Text>
         </View>
       )}
     </View>

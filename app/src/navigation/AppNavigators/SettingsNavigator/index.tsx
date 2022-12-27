@@ -14,6 +14,10 @@ import {useTranslation} from 'react-i18next';
 import colors from '../../../config/colors';
 import EditProfile from '../../../screens/Settings/SubSettings/EditProfile';
 import EditEmployee from '../../../screens/Settings/SubSettings/EditEmployee';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 
 const Stack = createStackNavigator();
 
@@ -34,6 +38,7 @@ const SettingsNavigator = ({navigation}) => {
           fontSize: 30,
           fontWeight: 'bold',
         },
+        
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         transitionSpec: {
           open: {

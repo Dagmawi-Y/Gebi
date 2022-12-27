@@ -193,8 +193,9 @@
   "Litre": "Litre",
   "Metre": "Metre",
   "AddedBy": "Added by",
-  "Sales_Officer": "Sales officer",
+  "Sales_officer": "Sales officer",
   "Free":"Free",
+  "Share":"Share",
 
   "Max_Reached": "Free Limit Reached",
   "Subcribe_To_Continue": "Subcribe to continue",
@@ -215,5 +216,5 @@
   "Name":"Name",
   "Privileges":"Privileges",
   "Create_Account":"Create account",
-  "Accounts":"ሰራተኞች"
+  "Accounts":"Accounts"
 }

@@ -283,7 +283,7 @@ const ItemDetails = ({route, navigation}) => {
                       <Text style={tableStyles.theadFont}>{t('Price')}</Text>
                       <Text style={tableStyles.theadFont}>{t('Unit')}</Text>
                       <Text style={tableStyles.theadFont}>{t('Supplier')}</Text>
-                      <Text style={tableStyles.theadFont}>{t('date')}</Text>
+                      <Text style={tableStyles.theadFont}>{t('Date')}</Text>
                     </View>
                     {stockHistory.map(history => {
                       return (
@@ -305,7 +305,7 @@ const ItemDetails = ({route, navigation}) => {
                                 '.',
                               )[0]
                             }{' '}
-                            {history.doc.unit}
+                            {t(history.doc.unit)}
                           </Text>
                           <Text style={tableStyles.trowFont}>
                             {history.doc.supplier_name}

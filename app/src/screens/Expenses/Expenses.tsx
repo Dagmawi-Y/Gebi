@@ -114,11 +114,12 @@ export default function Expenses({navigation}: any) {
 
       <SafeAreaView style={styles.container}>
         <FloatingButton
+        
           action={() => {
             if (
-              (userInfo[0]?.doc?.isFree && salesCount > 0) ||
-              customerCount > 5 ||
-              supplierCount > 5
+              (userInfo[0]?.doc?.isFree && salesCount > 100) ||
+              customerCount > 25 ||
+              supplierCount > 10
             ) {
               return setLimitReachedVisible(true);
             }
