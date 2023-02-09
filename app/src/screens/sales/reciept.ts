@@ -1,5 +1,5 @@
 module.exports = arg => {
-  const {customerName, createdBy, date, paymentMethod, invoiceNumber} =
+  const {customerName, createdBy, date, paymentMethod, invoiceNumber, organization} =
     arg.data;
   const {sum, tax, total} = arg;
   const items = arg.data.items;
@@ -146,6 +146,12 @@ p {
 
   <div class="qrCode">
   <h1> << QR CODE >> </h1>
+  </div>
+  <div class="details-container">
+    <div class="customer">
+    <div class="customer">
+    <h2>ደንበኛ</h2>
+    <h3>${customerName}</h3>
   </div>
   <div class="details-container">
     <div class="customer">

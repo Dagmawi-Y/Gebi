@@ -4,13 +4,13 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 
-const StateContext = React.createContext();
+const StateContext = React.createContext(null);
 
 const StateContextProvider = ({children}) => {
   const [expenses, setExpenses] = useState(0);
 
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<any>();
   const [isAdmin, setIsAdmin] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
   const [sales, setSales] = useState(false);
@@ -39,57 +39,54 @@ const StateContextProvider = ({children}) => {
   const [curlang, setCurlang] = useState('');
   const [introDone, setIntroDone] = useState(false);
 
-  const test = () => {
-    onBack();
-  };
+ 
 
-  const value = {
-    test,
-    user,
-    curlang,
-    isReady,
-    userInfo,
-    introDone,
+  const value:any = {
+    addNewModalVisible,
+    bottomNavVisible,
+    subcriptionPlan,
+    loadingUserData,
+    headerVisible,
+    initializing,
+    totalExpense,
+    headerTitle,
     totalProfit,
     totalIncome,
-    totalExpense,
-    initializing,
-    headerVisible,
-    loadingUserData,
-    addNewModalVisible,
-    headerTitle,
-    bottomNavVisible,
     headerBack,
-    onBack,
-    isAdmin,
-    sales,
-    setSales,
+    inventory,
+    introDone,
+    userInfo,
     expenses,
-    setExpenses,
-    subcriptionPlan,
-    setSubscriptionPlan,
     expense,
-    setExpense,
+    isAdmin,
+    curlang,
+    isReady,
+    onBack,
+    sales,
+    user,
     plan,
     setPlan,
-    inventory,
-    setInventory,
-    setIsAdmin,
-    setOnBack,
-    setBottomNavVisible,
-    setHeaderBack,
-    setHeaderTitle,
     setUser,
+    setSales,
+    setOnBack,
+    setIsAdmin,
     setIsReady,
     setCurlang,
+    setExpense,
+    setExpenses,
     setUserInfo,
     setIntroDone,
+    setInventory,
+    setHeaderBack,
+    setHeaderTitle,
     SetTotalIncome,
     SetTotalProfit,
     setInitializing,
     setTotalExpense,
     setHeaderVisible,
     setLoadingUserData,
+    setBottomNavVisible,
+    setSubscriptionPlan,
     setAdNewModalVisible,
   };
 
@@ -137,7 +134,7 @@ const StateContextProvider = ({children}) => {
         })
         .catch(err => {});
       await AsyncStorage.getItem('introDone')
-        .then(val => setIntroDone(val.toString()))
+        .then((val:any) => setIntroDone(val.toString()))
         .catch(err => {});
     } catch (error) {
       console.log(error);
