@@ -160,7 +160,7 @@ const NewSale = ({navigation}) => {
   const sale = {
     owner: userInfo[0]?.doc?.companyId,
     customerName: customer,
-    date: new Date().toLocaleDateString(),
+    date: new Date().toISOString(),
     invoiceNumber: Math.random().toString().split('.')[1],
     paymentMethod: paymentMethod,
     items: {...addedItems},

@@ -148,15 +148,16 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           if (
-            (userInfo[0]?.doc?.isFree && salesCount > 100) ||
-            customerCount > 25 ||
-            supplierCount > 10
+            (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
+            (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
+            (userInfo[0]?.doc?.isFree && supplierCount >= 10)
           ) {
             return setLimitReachedVisible(true);
           }
           if (!userInfo[0]?.doc?.isFree && planExpired) {
             return setLimitReachedVisible(true);
           }
+
           navigation.navigate(routes.addNewItem);
         }}
         value={addNewModalVisible}

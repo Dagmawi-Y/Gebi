@@ -52,7 +52,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   );
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
-  const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre')];
+  const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre'), t('Quintal')];
   const [categories, setCategories]: Array<any> = useState([]);
 
   const suplierSearch = key => {

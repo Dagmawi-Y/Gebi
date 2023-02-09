@@ -89,7 +89,6 @@ export default function Items({navigation}) {
     firestore()
       .collection('sales')
       .where('owner', '==', userInfo[0]?.doc?.companyId)
-
       .onSnapshot(querySnapshot => {
         let result: any = [];
         if (querySnapshot)
