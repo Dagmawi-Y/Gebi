@@ -24,11 +24,13 @@ const receipt = require('./reciept');
 import {useTranslation} from 'react-i18next';
 import roundDecimal from '../../utils/roundDecimal';
 import {StateContext} from '../../global/context';
+import {HorizontalBox} from '../../components/HorizontalBox';
+import {SalesDetailListItem} from '../../components/SalesDetailListItem';
 
 const SaleDetails = ({route, navigation}) => {
   const {t} = useTranslation();
   const {data} = route.params;
-  const {user} = useContext(StateContext);
+  const {userInfo} = useContext(StateContext);
 
   const [sum, setSum] = useState('');
   const [total, setTotal] = useState('');
@@ -123,26 +125,14 @@ const SaleDetails = ({route, navigation}) => {
     }
   };
 
-  const titles = {
-    paymentType: t('paymentType'),
-    reciept: t('reciept'),
-    Total: t('Total'),
-    Vat: t('Vat'),
-    Tax: t('Tax'),
-    date: t('Date'),
-    subtotal: t('subtotal'),
-    Birr: t('Birr'),
-    Quantity: t('Quantity'),
-    Items_List: t('Items_List'),
-    Sales_officer: t('Sales_officer'),
-    Customer: t('Customer'),
-    Invoice_Number: t('Invoice_Number '),
-  };
-
   const print = async () => {
     const printData = {
-      data: data,
-      titles: titles,
+      data: {
+        ...data,
+        organization: userInfo[0]?.doc?.orgName,
+        date: new Date(data.date).toDateString(),
+      },
+
       sum: sum,
       tax: parseFloat(sum) * 0.15,
       total: total,
@@ -229,6 +219,7 @@ const SaleDetails = ({route, navigation}) => {
           </View>
         </Modal>
 
+        {/* @ts-ignore */}
         <ViewShot
           ref={imageRef}
           options={{format: 'jpg', quality: 0.9}}
@@ -243,65 +234,29 @@ const SaleDetails = ({route, navigation}) => {
             <View style={styles.header}>
               <Text style={styles.pageTitle}>{t('Sales_Receipt')}</Text>
             </View>
+
             <View style={styles.topInfo}>
               <View style={styles.topInfoLeft}>
-                <Text style={styles.textBold}>{data.date}</Text>
+                <Text style={styles.textBold}>
+                  {new Date(data.date).toDateString()}
+                </Text>
                 <Text style={styles.textLight}>{t('Date')}</Text>
               </View>
               <View style={styles.topInfoRight}>
                 <Text style={styles.textBold}>
                   {data.invoiceNumber.substring(0, 9)}
-                  {'...'}
+                  {/* {'...'} */}
                 </Text>
                 <Text style={styles.textLight}>{t('Receipt_Number')}</Text>
               </View>
             </View>
-            <View
-              style={{
-                marginTop: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingVertical: 10,
-                paddingHorizontal: 5,
-                borderRadius: 5,
-                backgroundColor: colors.white,
-                marginHorizontal: 5,
-                borderWidth: 0.4,
-                borderColor: '#00000040',
-                shadowColor: '#00000010',
-                elevation: 10,
-              }}>
-              <Text style={styles.textBold}>
-                {t('Customer')}
-                {':'}
-              </Text>
-              <Text style={{fontSize: 15, color: colors.faded_dark}}>
-                {data.customerName}
-              </Text>
-            </View>
-            <View
-              style={{
-                marginTop: 5,
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingVertical: 10,
-                paddingHorizontal: 5,
-                borderRadius: 5,
-                backgroundColor: colors.white,
-                marginHorizontal: 5,
-                borderWidth: 0.4,
-                borderColor: '#00000040',
-                shadowColor: '#00000010',
-                elevation: 10,
-              }}>
-              <Text style={styles.textBold}>
-                {t('Sales_officer')}
-                {':'}
-              </Text>
-              <Text style={{fontSize: 15, color: colors.faded_dark}}>
-                {data.createdBy}
-              </Text>
-            </View>
+            <HorizontalBox title={t('Customer')} value={data.customerName} />
+            <HorizontalBox title={t('Sales_officer')} value={data.createdBy} />
+            <HorizontalBox
+              title={t('Organization')}
+              value={userInfo[0]?.doc?.orgName}
+            />
+
             <View style={styles.ListItemContainer}>
               <Text
                 style={[
@@ -314,46 +269,14 @@ const SaleDetails = ({route, navigation}) => {
               <ScrollView
                 style={{width: '100%'}}
                 contentContainerStyle={{paddingHorizontal: 5}}>
-                {Object.keys(data.items).map(i => {
-                  return (
-                    <View key={Math.random()} style={styles.ListItem}>
-                      <View style={styles.LeftContainer}>
-                        <View style={{marginLeft: 10}}>
-                          <Text
-                            style={{
-                              color: colors.black,
-                              fontSize: 15,
-                              fontWeight: 'bold',
-                            }}>
-                            {data.items[i].itemName}
-                          </Text>
-                          <View style={{flexDirection: 'row'}}>
-                            <Text style={styles.textBold}>
-                              {
-                                formatNumber(data.items[i].quantity).split(
-                                  '.',
-                                )[0]
-                              }
-                              <Text style={styles.textLight}>
-                                {' '}
-                                - {t('Amount')}
-                              </Text>
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-                      <View style={styles.RightContainer}>
-                        <Text style={styles.textLight}>
-                          <Text style={styles.textBold}>
-                            {formatNumber(data.items[i].unitSalePrice)}
-                            {t('Birr')}
-                          </Text>
-                          / {t('Single')}
-                        </Text>
-                      </View>
-                    </View>
-                  );
-                })}
+                {Object.keys(data.items).map(i => (
+                  <SalesDetailListItem
+                    key={i}
+                    itemName={data.items[i].itemName}
+                    quantity={data.items[i].quantity}
+                    unitSalePrice={data.items[i].unitSalePrice}
+                  />
+                ))}
               </ScrollView>
             </View>
 
@@ -532,7 +455,7 @@ const SaleDetails = ({route, navigation}) => {
 
 export default SaleDetails;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,

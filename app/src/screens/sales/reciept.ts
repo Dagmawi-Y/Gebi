@@ -47,33 +47,39 @@ p {
   flex-direction: row;
   justify-content: space-between;
 }
+.reciept-head {
+  display:flex;
+  justify-content: space-between;
+  margin-block: 10px;
+}
 
 .heading div:nth-child(2) {
   text-align: end;
 }
+
 .heading div > p:nth-child(2) {
   font-size: 13px;
   color: rgb(144 144 144);
 }
-.title {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 
-.customer {
-  display: flex;
-  flex-direction: row;
+.card-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   padding-left: 5px;
   margin: 10px 0 10px 0;
-  align-items: center;
 }
 
-.customer h2 {
+.card-info div {
+  display: flex; 
+  align-items: center;
+  gap: 10px;
+}
+.card-info h2 {
   margin-right: 20px;
   font-weight: 600;
   font-size: 20px;
 }
-.customer h3 {
+.card-info h3 {
   font-weight: 300;
   font-size: 18px;
 }
@@ -132,7 +138,10 @@ p {
 </style>
   
 <div class="container box-shadow">
-  <h2 class="title">የሽያጭ ደረሰኝ</h2>
+  <div class="reciept-head">
+    <h2 class="title">የሽያጭ ደረሰኝ</h2>
+    <h2 class="organization-name">${organization}</h2>
+  </div>
   <div class="heading">
     <div class="date">
       <p>${date}</p>
@@ -147,17 +156,12 @@ p {
   <div class="qrCode">
   <h1> << QR CODE >> </h1>
   </div>
-  <div class="details-container">
-    <div class="customer">
-    <div class="customer">
-    <h2>ደንበኛ</h2>
-    <h3>${customerName}</h3>
-  </div>
-  <div class="details-container">
-    <div class="customer">
-    <div class="customer">
-    <h2>ደንበኛ</h2>
-    <h3>${customerName}</h3>
+  <div class="details-container"> 
+  <div class="card-info">
+    <div>
+      <h2>ደንበኛ</h2>
+      <h3>${customerName}</h3>
+    </div>
   </div>
 
     </div>

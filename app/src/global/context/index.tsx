@@ -4,7 +4,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 
-const StateContext = React.createContext(null);
+const StateContext = React.createContext<any>(null);
 
 const StateContextProvider = ({children}) => {
   const [expenses, setExpenses] = useState(0);
