@@ -287,6 +287,9 @@ const ItemDetails = ({route, navigation}) => {
                     </View>
                     {stockHistory.map(history => {
                       return (
+                        <TouchableOpacity key={history.id} onPress={() => navigation.navigate(t(routes.EditInventoryItem),  {
+                          data: history,
+                        })}>
                         <View
                           key={Math.random()}
                           style={[
@@ -314,6 +317,7 @@ const ItemDetails = ({route, navigation}) => {
                             {history.doc.date}
                           </Text>
                         </View>
+                        </TouchableOpacity>
                       );
                     })}
                   </View>

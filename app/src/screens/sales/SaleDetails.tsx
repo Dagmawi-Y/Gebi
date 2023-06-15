@@ -26,6 +26,7 @@ import roundDecimal from '../../utils/roundDecimal';
 import {StateContext} from '../../global/context';
 import {HorizontalBox} from '../../components/HorizontalBox';
 import {SalesDetailListItem} from '../../components/SalesDetailListItem';
+import { transform } from '@babel/core';
 
 const SaleDetails = ({route, navigation}) => {
   const {t} = useTranslation();
@@ -117,7 +118,9 @@ const SaleDetails = ({route, navigation}) => {
           .catch(err => console.log(err));
       }
       if (proceed) {
-        firestore().collection('sales').doc(data.id).delete();
+        firestore().collection('sales').doc(data.id).update({
+          shouldDiscard : true
+        });
       }
       navigation.goBack();
     } catch (error) {
@@ -403,6 +406,7 @@ const SaleDetails = ({route, navigation}) => {
             alignItems: 'center',
           }}>
           <TouchableOpacity
+            disabled={data.shouldDiscard}
             onPress={() => {
               Alert.alert(t('Are_You_Sure?'), ``, [
                 {
@@ -432,6 +436,7 @@ const SaleDetails = ({route, navigation}) => {
 
           <TouchableOpacity
             style={[styles.button, {backgroundColor: colors.primary}]}
+            disabled={data.shouldDiscard}
             onPress={() => setMenuvisible(!menuvisible)}>
             <Text
               style={[
@@ -448,12 +453,52 @@ const SaleDetails = ({route, navigation}) => {
             />
           </TouchableOpacity>
         </View>
+       {!data.shouldDiscard ? <TouchableOpacity
+            style={[styles.button, {backgroundColor: colors.primary}, {marginTop : 20, marginBottom : 20}]}
+            disabled={data.shouldDiscard}
+            onPress={() => false}>
+            <Text
+              style={[
+                styles.textBold,
+                {color: colors.white, textAlign: 'center'},
+              ]}>
+              {t('Change_Payment_Method')}
+            </Text>
+            <Icon
+              name={'exchange'}
+              size={25}
+              color={colors.white}
+              style={{margin: 5, marginLeft: 'auto'}}
+            />
+          </TouchableOpacity>  : <View></View>}
+       { data.shouldDiscard ?  <View style={void_reciept_style.container}>
+      <Image
+        source={require('../../assets/images/void_reciept.png')} // Provide the source of your image
+        style={void_reciept_style.image}
+      />
+    </View> : <View></View>}
+
       </ScrollView>
+
     </View>
   );
 };
 
 export default SaleDetails;
+
+const void_reciept_style = StyleSheet.create({
+  container: {
+    position : "absolute",
+    top: "40%",
+    left: "20%",
+    marginRight : 200
+  },
+  image: {
+    width: 250,
+    height: 200,
+  },
+});
+
 
 export const styles = StyleSheet.create({
   container: {

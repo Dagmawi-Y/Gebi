@@ -104,6 +104,7 @@ export default function Items({navigation}) {
               createdBy: sn.data().createdBy,
               vat: sn.data().vat,
               tot: sn.data().tot,
+              shouldDiscard : sn.data().shouldDiscard
             };
             result.push(item);
           });

@@ -167,6 +167,7 @@ const NewSale = ({navigation}) => {
     vat: taxType == 'VAT' ? true : false,
     tot: taxType == 'TOT' ? true : false,
     createdBy: userInfo[0]?.doc?.name,
+    shouldDiscard : false
   };
 
   const checkEmpty = () => {

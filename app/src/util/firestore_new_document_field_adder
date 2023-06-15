@@ -1,0 +1,25 @@
+  const checkEmpty = () => {
+    const collectionRef = firestore().collection('sales');
+  
+    // Retrieve all documents in the collection
+    collectionRef.get()
+      .then((querySnapshot) => {
+        // Iterate over each document and update the desired field
+        querySnapshot.forEach((doc) => {
+          doc.ref.update({
+            shouldDiscard: false,
+          })
+            .then(() => {
+              console.log(`Document ${doc.id} updated successfully!`);
+            })
+            .catch((error) => {
+              console.error(`Error updating document ${doc.id}:`, error);
+            });
+        });
+      })
+      .catch((error) => {
+        console.error('Error getting documents:', error);
+      });
+
+      return false;
+  };

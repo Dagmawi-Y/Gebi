@@ -28,6 +28,7 @@ import CategoryNav from './AppTabNavigator/InventoryNavigation/CategoriesNav';
 import Edit from '../../screens/Inventory/Edit';
 import AddEmployee from '../../screens/Settings/SubSettings/AddEmployee';
 import Subscriptions from '../../screens/subscriptions/Subscriptions';
+import EditInventoryItem from '../../screens/Inventory/EditInventoryItem';
 const Drawer = createDrawerNavigator();
 
 function headerBackKey(navigation) {
@@ -93,6 +94,16 @@ function AppDrawerNavigator({}) {
             headerLeft: () => headerBackKey(navigation),
           }}
         />
+
+        <Drawer.Screen
+          name={routes.EditInventoryItem}
+          component={EditInventoryItem}
+          options={{
+            headerTitle: t(routes.EditInventoryItem),
+            headerLeft: () => headerBackKey(navigation),
+          }}
+        />
+
         <Drawer.Screen
           name={routes.newSale}
           component={NewSale}

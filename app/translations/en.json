@@ -105,8 +105,8 @@
   "Submit": "Submit",
   "Add_Item": "Add Item",
   "Delete": "Delete",
-  "Roll_Back": "Rollback",
-
+  "Roll_Back": "Discard",
+  "Change_Payment_Method" : "Change Payment Method",
   "Current_Price": "Current price",
   "In_stock": "In stock",
 
@@ -173,6 +173,7 @@
   "categories": "Categories",
   "addNewCategory": "Add Category",
   "saleDetails": "Sale Details",
+  "EditInventoryItem" : "EditInventoryItem",
   "NewSale": "New sale",
   "expenses": "Expenses",
   "plan": "Plan",

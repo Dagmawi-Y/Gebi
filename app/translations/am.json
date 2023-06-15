@@ -102,7 +102,7 @@
   "Add_Item": "እቃ ጨምር",
   "Delete": "አጥፋ",
   "Roll_Back": "ተመላሽ አድርግ",
-
+  "Change_Payment_Method" : "Change Payment Method",
   "Current_Price": "የተመዝገበው ዋጋ",
   "In stock": "የተመዝገበው ብዛት",
 
@@ -173,6 +173,7 @@
   "categories": "የእቃ ምድብ",
   "addNewCategory": "አዲስ ምድብ መፍጠርያ",
   "saleDetails": "የሽያጭ ደረስኝ",
+  "EditInventoryItem" : "እቃ ይቀይሩ",
   "NewSale": "አዲስ ሽያጭ",
   "expenses": "ወጪ",
   "plan": "እቅድ",
