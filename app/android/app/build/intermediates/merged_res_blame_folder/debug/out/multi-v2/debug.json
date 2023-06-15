@@ -7127,20 +7127,20 @@
             "outputFile": "com.meda.gebi.app-merged_res-34:/values_values.arsc.flat",
             "map": [
                 {
-                    "source": "/Users/gsharew/360GroundMobileApplicationCollection/gebi/app/android/app/src/main/res/values/colors.xml",
+                    "source": "/Users/gsharew/Documents/360GroundMobileApplicationCollection/gebi/app/android/app/src/main/res/values/strings.xml",
                     "from": {
-                        "startLines": "2",
+                        "startLines": "1",
                         "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "46",
-                        "endOffsets": "97"
+                        "startOffsets": "16",
+                        "endColumns": "41",
+                        "endOffsets": "53"
                     },
                     "to": {
-                        "startLines": "196",
+                        "startLines": "756",
                         "startColumns": "4",
-                        "startOffsets": "12563",
-                        "endColumns": "46",
-                        "endOffsets": "12605"
+                        "startOffsets": "48646",
+                        "endColumns": "41",
+                        "endOffsets": "48683"
                     }
                 },
                 {
@@ -7160,6 +7160,42 @@
                         "endLines": "642,665,698,5954,5958",
                         "endColumns": "56,64,63,24,24",
                         "endOffsets": "42007,43093,44800,353674,353823"
+                    }
+                },
+                {
+                    "source": "/Users/gsharew/Documents/360GroundMobileApplicationCollection/gebi/app/android/app/src/main/res/values/styles.xml",
+                    "from": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "54",
+                        "endLines": "7",
+                        "endColumns": "12",
+                        "endOffsets": "329"
+                    },
+                    "to": {
+                        "startLines": "923",
+                        "startColumns": "4",
+                        "startOffsets": "68124",
+                        "endLines": "927",
+                        "endColumns": "12",
+                        "endOffsets": "68364"
+                    }
+                },
+                {
+                    "source": "/Users/gsharew/Documents/360GroundMobileApplicationCollection/gebi/app/android/app/src/main/res/values/colors.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "46",
+                        "endOffsets": "97"
+                    },
+                    "to": {
+                        "startLines": "196",
+                        "startColumns": "4",
+                        "startOffsets": "12563",
+                        "endColumns": "46",
+                        "endOffsets": "12605"
                     }
                 },
                 {
@@ -7256,7 +7292,7 @@
                     }
                 },
                 {
-                    "source": "/Users/gsharew/360GroundMobileApplicationCollection/gebi/app/node_modules/react-native-splash-screen/android/build/intermediates/packaged_res/debug/values/values.xml",
+                    "source": "/Users/gsharew/Documents/360GroundMobileApplicationCollection/gebi/app/node_modules/react-native-splash-screen/android/build/intermediates/packaged_res/debug/values/values.xml",
                     "from": {
                         "startLines": "6,9,12",
                         "startColumns": "4,4,4",
@@ -7366,23 +7402,6 @@
                     }
                 },
                 {
-                    "source": "/Users/gsharew/360GroundMobileApplicationCollection/gebi/app/android/app/src/main/res/values/strings.xml",
-                    "from": {
-                        "startLines": "1",
-                        "startColumns": "4",
-                        "startOffsets": "16",
-                        "endColumns": "41",
-                        "endOffsets": "53"
-                    },
-                    "to": {
-                        "startLines": "756",
-                        "startColumns": "4",
-                        "startOffsets": "48646",
-                        "endColumns": "41",
-                        "endOffsets": "48683"
-                    }
-                },
-                {
                     "source": "/Users/gsharew/.gradle/caches/transforms-3/9212be528f8f5900945a01492f5dc8a0/transformed/core-1.6.0/res/values/values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,89,90,94,95,96,97,104,111,159,191,228",
@@ -7421,7 +7440,24 @@
                     }
                 },
                 {
-                    "source": "/Users/gsharew/360GroundMobileApplicationCollection/gebi/app/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
+                    "source": "/Users/gsharew/Documents/360GroundMobileApplicationCollection/gebi/app/android/app/build/generated/res/google-services/debug/values/values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,199,281,385,494,614,708",
+                        "endColumns": "143,81,103,108,119,93,70",
+                        "endOffsets": "194,276,380,489,609,703,774"
+                    },
+                    "to": {
+                        "startLines": "814,822,823,824,825,826,876",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55379,56206,56288,56392,56501,56621,64617",
+                        "endColumns": "143,81,103,108,119,93,70",
+                        "endOffsets": "55518,56283,56387,56496,56616,56710,64683"
+                    }
+                },
+                {
+                    "source": "/Users/gsharew/Documents/360GroundMobileApplicationCollection/gebi/app/android/app/build/generated/res/resValues/debug/values/gradleResValues.xml",
                     "from": {
                         "startLines": "6,8",
                         "startColumns": "4,4",
@@ -7452,42 +7488,6 @@
                         "startOffsets": "42012,42052,42533,42843,42898,44146,44200,44252,44301,44362",
                         "endColumns": "39,46,42,54,46,53,51,48,60,49",
                         "endOffsets": "42047,42094,42571,42893,42940,44195,44247,44296,44357,44407"
-                    }
-                },
-                {
-                    "source": "/Users/gsharew/360GroundMobileApplicationCollection/gebi/app/android/app/build/generated/res/google-services/debug/values/values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "55,199,281,385,494,614,708",
-                        "endColumns": "143,81,103,108,119,93,70",
-                        "endOffsets": "194,276,380,489,609,703,774"
-                    },
-                    "to": {
-                        "startLines": "814,822,823,824,825,826,876",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "55379,56206,56288,56392,56501,56621,64617",
-                        "endColumns": "143,81,103,108,119,93,70",
-                        "endOffsets": "55518,56283,56387,56496,56616,56710,64683"
-                    }
-                },
-                {
-                    "source": "/Users/gsharew/360GroundMobileApplicationCollection/gebi/app/android/app/src/main/res/values/styles.xml",
-                    "from": {
-                        "startLines": "3",
-                        "startColumns": "4",
-                        "startOffsets": "54",
-                        "endLines": "7",
-                        "endColumns": "12",
-                        "endOffsets": "329"
-                    },
-                    "to": {
-                        "startLines": "923",
-                        "startColumns": "4",
-                        "startOffsets": "68124",
-                        "endLines": "927",
-                        "endColumns": "12",
-                        "endOffsets": "68364"
                     }
                 },
                 {
