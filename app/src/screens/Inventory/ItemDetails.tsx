@@ -64,7 +64,7 @@ const ItemDetails = ({route, navigation}) => {
     ]);
   };
 
-  const deleteImage = () => {};
+  const editItem = async () => {};
 
   const deleteItem = async () => {
     Alert.alert(t('Are_You_Sure?'), ``, [
@@ -321,39 +321,39 @@ const ItemDetails = ({route, navigation}) => {
               </ScrollView>
               <View
                 style={{
-                  paddingHorizontal: 10,
+                  paddingHorizontal: 5,
                   flexDirection: 'row',
                   justifyContent: 'space-around',
                 }}>
-                {/* <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(routes.EditItem, {
-              data,
-              owner,
-              itemId,
-            })
-          }
-          style={{
-            backgroundColor: colors.primary,
-            height: 45,
-            marginBottom: 10,
-            paddingHorizontal: 20,
-            justifyContent: 'space-between',
-            width: '30%',
-            alignItems: 'center',
-            borderRadius: 10,
-            flexDirection: 'row',
-          }}>
-          <Text
-            style={{
-              color: colors.white,
-              textAlign: 'center',
-              fontSize: 19,
-            }}>
-            {t('Update')}
-          </Text>
-          <Icon name="pencil" size={25} color={colors.white} />
-        </TouchableOpacity> */}
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate(routes.EditItem, {
+                      data,
+                      owner,
+                      itemId,
+                    })
+                  }
+                  style={{
+                    backgroundColor: colors.primary,
+                    height: 45,
+                    marginBottom: 10,
+                    paddingHorizontal: 20,
+                    justifyContent: 'space-between',
+                    width: '30%',
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    flexDirection: 'row',
+                  }}>
+                  <Text
+                    style={{
+                      color: colors.white,
+                      textAlign: 'center',
+                      fontSize: 19,
+                    }}>
+                    {t('Edit')}
+                  </Text>
+                  <Icon name="pencil" size={25} color={colors.white} />
+                </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => deleteItem()}

@@ -10,6 +10,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import colors from '../../config/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ListItem, Text} from '@rneui/themed';
+import moment from 'moment';
 
 import {ExpenseTypes, getIconForExpenseType} from './expenseTypes';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,10 +34,14 @@ export default function Expenses({navigation}: any) {
   const {user, totalExpense, totalProfit, totalIncome} =
     useContext(StateContext);
   const [expenses, setExpenses]: Array<any> = useState([]);
+  
   const [dates, setDates]: Array<any> = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(true);
+  const [expandedList, setExpandedList] = useState(
+    new Array(dates.length).fill(false),
+  );
 
   const getExpenses = async () => {
     setLoading(true);
@@ -44,7 +49,7 @@ export default function Expenses({navigation}: any) {
       firestore()
         .collection('expenses')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
-        .orderBy('date')
+        .orderBy('date', 'desc')
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           let dates: Array<Object> = [];
@@ -54,6 +59,8 @@ export default function Expenses({navigation}: any) {
                 id: sn.id,
                 data: sn.data(),
               });
+
+
               !dates.includes(sn.data().date) && dates.push(sn.data().date);
             });
             setDates(dates);
@@ -93,6 +100,9 @@ export default function Expenses({navigation}: any) {
     };
   }, []);
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
+  const [expandedDate, setExpandedDate] = useState(true);
+  
+ 
   const [expired, setExpired] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
@@ -114,7 +124,6 @@ export default function Expenses({navigation}: any) {
 
       <SafeAreaView style={styles.container}>
         <FloatingButton
-        
           action={() => {
             if (
               (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
@@ -126,7 +135,7 @@ export default function Expenses({navigation}: any) {
             if (!userInfo[0]?.doc?.isFree && planExpired) {
               return setLimitReachedVisible(true);
             }
-  
+
             navigation.navigate(routes.addNewExpense);
           }}
           value={'addNewModalVisible'}
@@ -165,22 +174,49 @@ export default function Expenses({navigation}: any) {
             }}>
             {expenses.length > 0 ? (
               dates.map(date => (
+               
                 <View key={date}>
-                  <Text
-                    style={{
-                      color: colors.black,
-                      fontSize: 15,
-                      padding: 10,
-                    }}>
-                    {date}
-                  </Text>
-                  {expenses
-                    .filter(exp => exp.data.date == date)
-                    .map(i => {
+                  <TouchableOpacity onPress={()=>{
+                    const newList = [...expandedList];
+                    newList[date] = !newList[date];
+                    setExpandedList(newList);
+
+                  setExpandedDate(!expandedDate)
+                  }}  >
+                   
+                    <Text
+                      style={{
+                        color: colors.black,
+                        fontSize: 15,
+                        padding: 10,
+                      }}>
+                      {moment(date).format('DD-MM-YYYY')}
+                    </Text>
+                
+                  </TouchableOpacity>
+
+             {
+                 !(new Date(date).getDate() - new Date().getDate()==0)?             
+               expandedList[date]&&             
+               expenses
+                    .filter(
+                      exp => exp.data.date == date)
+                    .map(i => {                     
                       return <ExpenseListItem key={i.id} t={t} item={i} />;
-                    })}
+                    }
+                    )    
+                  : expenses
+                  .filter(
+                    exp => exp.data.date == date)
+                  .map(i => {                     
+                    return <ExpenseListItem key={i.id} t={t} item={i} />;
+                  }
+                  )            
+                  }
+                  
                 </View>
-              ))
+              )
+              )
             ) : (
               <View
                 style={{
@@ -216,58 +252,63 @@ const ExpenseListItem = ({item, t}) => {
       activeOpacity={0.7}
       style={styles.expenseListItem}
       onPress={() => setExpanded(!expanded)}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <View>
-          <Text
+      <View>    
+          <View
             style={{
-              color: colors.black,
-              fontSize: 15,
-              fontWeight: '700',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
-            {t(item.data.expenseName)}
-          </Text>
-        </View>
-        <View style={{}}>
-          <Text style={{color: colors.red, fontWeight: '700'}}>
-            -{item.data.amount} {t('Birr')}
-          </Text>
-          <Text
-            style={{
-              color: colors.faded_grey,
-              fontWeight: '500',
-            }}>
-            {item.data.date}
-          </Text>
-        </View>
+            <View>
+              <Text
+                style={{
+                  color: colors.black,
+                  fontSize: 15,
+                  fontWeight: '700',
+                }}>
+                {t(item.data.expenseName)}
+              </Text>
+            </View>
+            <View style={{}}>
+              <Text style={{color: colors.red, fontWeight: '700'}}>
+                -{item.data.amount} {t('Birr')}
+              </Text>
+              <Text
+                style={{
+                  color: colors.faded_grey,
+                  fontWeight: '500',
+                }}>
+                {item.data.date}
+              </Text>
+            </View>
+          </View>
+        
+        {expanded && item.data.note ? (
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            <Text
+              style={{
+                color: colors.black,
+                fontSize: 15,
+                marginRight: 5,
+                fontWeight: '700',
+              }}>
+              {t('Description')}
+              {': '}
+            </Text>
+            <Text
+              style={{
+                color: colors.black,
+                fontSize: 15,
+                fontStyle: 'italic',
+              }}>
+              {t(item.data.note)}
+            </Text>
+          </View>
+        ) : null}
       </View>
-      {expanded && item.data.note ? (
-        <View style={{flexDirection:'row', marginTop:10}}>
-          <Text
-            style={{
-              color: colors.black,
-              fontSize: 15,
-              marginRight:5,
-              fontWeight:'700'
-            }}>
-            {t("Description")}{': '}
-          </Text>
-          <Text
-            style={{
-              color: colors.black,
-              fontSize: 15,
-              fontStyle:'italic'
-            }}>
-            {t(item.data.note)}
-          </Text>
-        </View>
-      ) : null}
     </TouchableOpacity>
-  );
+    
+  )
 };
 
 const styles = StyleSheet.create({

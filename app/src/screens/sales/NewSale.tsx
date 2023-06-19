@@ -472,7 +472,7 @@ const NewSale = ({navigation}) => {
                           ? 'l'
                           : item.unit === 'Metre'
                           ? 'm'
-                          : item.unit.substring(0, 2)}
+                          : item.unit.substring(0,2)}
                       </Text>
                       <Text style={styles.textLight}>
                         <Text style={styles.textBold}>

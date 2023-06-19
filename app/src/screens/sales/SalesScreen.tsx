@@ -36,6 +36,8 @@ import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
+import messaging from '@react-native-firebase/messaging';
+import { log } from 'react-native-reanimated';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
@@ -46,18 +48,25 @@ export default function Items({navigation}) {
   const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
     useContext(DataContext);
   const [stockCount, setStockCount]: any = useState();
+  const [expandedDate, setExpandedDate] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [searchVisible, setSearchVisible] = useState(false);
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [expired, setExpired] = useState(false);
   const [mounted, setMounted] = useState(true);
+  const [expandedList, setExpandedList] = useState(
+    new Array(data.length).fill(false),
+  );
 
   const [searchKey, setSearchKey] = useState('');
   const [filterValue, setFilterValue] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
+  const [selectedDateIndex, setSelectedDateIndex] = useState(null);
 
   const progress = useRef(new Animated.Value(0)).current;
+
+  
 
   const animate = val => {
     let to = !filterVisible ? 1 : 0;
@@ -80,6 +89,16 @@ export default function Items({navigation}) {
       dateMonth == thisMonth
     )
       return 'Yesterday';
+    // if (
+    //   new Date(d).getDate() - new Date().getDate() < 7 &&
+    //   dateMonth == thisMonth
+    // )
+    //   return 'This week';
+    // if (
+    //   new Date(d).getDate() - new Date().getDate() > 7 &&
+    //   dateMonth == thisMonth
+    // )
+    //   return 'Last week';
 
     return new Date(d).toDateString();
   };
@@ -107,12 +126,26 @@ export default function Items({navigation}) {
             };
             result.push(item);
           });
+          result.sort((a, b) => {
+            const aDate = new Date(a.date);
+            const bDate = new Date(b.date);
+            if (isNaN(aDate.getTime()) || isNaN(bDate.getTime())) {
+              return 0;
+            }
+            return bDate.getTime() - aDate.getTime();
+          });
         setSalesCount(result.length);
+        console.log(result.date);
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
+          //console.log(a)
           return r;
         }, {});
+        // const reversedGrouped = Object.keys(grouped).reverse().reduce(function (r, k) {
+        //   r[k] = grouped[k]||[]
+        //   return r;
+        // }, {});
 
         setData(grouped);
         setLoading(false);
@@ -129,12 +162,39 @@ export default function Items({navigation}) {
       })
       .catch(err => console.log(err));
   };
+  const sendNotification = () => {
+    const options = {
+      sound: true,
+      title: "Low Stock Alert", 
+      body: "Your stock has fallen below the required level."  
+    }
+    
+    // messaging().send(options)
+    //   .then((response) => {
+    //     console.log("Notification sent successfully:", response);
+    //   })
+    //   .catch((err) => {
+    //     console.log("Notification failed:", err);
+    //   })
+  }
 
+  
   useEffect(() => {
+    
+  const token=  messaging().getToken().then(token =>{
+     console.log(token)
+   }
+   );
+   if(token){
+  console.log("user FCM token:",token)
+   }
+      
+ 
     if (mounted && userInfo) {
       getSales();
       getStockCount();
     }
+  
 
     return () => {
       setMounted(false);
@@ -156,6 +216,16 @@ export default function Items({navigation}) {
 
       <FloatingButton
         action={() => {
+         
+        const stockCounts=getStockCount();
+        const requiredCount=5;
+        console.log(stockCount)
+
+          if(stockCount<=requiredCount){
+     alert('Your stock product is getting low please add product'+
+     '')
+    }
+
           // 100th sale or 25th customer or 10th supplier
           if (
             (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
@@ -279,8 +349,7 @@ export default function Items({navigation}) {
                         fontSize: 15,
                         alignItems: 'center',
                       }}>
-                      {t(filterValue)}
-                      {'  '}
+                      {t(filterValue)}{' '}
                     </Text>
                     <TouchableOpacity
                       onPress={() => {
@@ -321,7 +390,7 @@ export default function Items({navigation}) {
                       justifyContent: 'space-between',
                       marginLeft: 'auto',
                     }}>
-                    {['Cash', 'Debt', 'Check'].map(i => {
+                    {['Cash', 'Debt', 'Check',].map(i => {
                       return (
                         <TouchableOpacity
                           key={i}
@@ -352,49 +421,113 @@ export default function Items({navigation}) {
                 ) : null}
 
                 <ScrollView style={{flex: 1}}>
+                  
                   {!Object.keys(data).length ? (
                     <EmptyBox message={t('No_Sales_Yet')} />
                   ) : (
+                   
                     <View style={{flex: 1}}>
-                      {Object.keys(data).map(i => {
+                      {Object.keys(data).map((dateString) => {
+                        const date=new Date(dateString);
+                        const formattedDate = date.toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                        });
                         return (
-                          <View key={i}>
-                            <Text
-                              style={{
-                                color: colors.primary,
-                                marginVertical: 5,
+                          <View key={dateString}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                const newList = [...expandedList];
+                                newList[dateString] = !newList[dateString];
+                                setExpandedList(newList);
+
+                                //setExpandedDate(!expandedDate)
                               }}>
-                              {/* {new Date(i).getDate() - new Date().getDate()} */}
-                              {dateConverter(i)}
-                            </Text>
-                            {data[i]
-                              .filter(saleItem => {
-                                if (!filterValue) return saleItem;
-                                return (
-                                  saleItem.paymentMethod.toLowerCase() ===
-                                  filterValue.toLowerCase()
-                                );
-                              })
-                              .map(sale => {
-                                return (
-                                  <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    key={sale.id}
-                                    onPress={() => {
-                                      navigation.navigate(routes.saleDetails, {
-                                        data: sale,
-                                      });
-                                    }}>
-                                    <SalesListItem
-                                      sale={sale}
-                                      navigation={navigation}
-                                    />
-                                  </TouchableOpacity>
-                                );
-                              })}
+                              <Text
+                                style={{
+                                  color: colors.primary,
+                                  marginVertical: 5,
+                                }}>
+                                {/* {new Date(i).getDate() - new Date().getDate()} */}
+
+                                {formattedDate}
+                              </Text>
+                            </TouchableOpacity>
+
+                            {
+                              !(new Date(date).getDate() - new Date().getDate()==0)?
+                              expandedList[dateString]&&
+                            data[dateString]
+                                  .filter(saleItem => {
+                                    if (!filterValue) return saleItem;
+                                    return (
+                                      saleItem.paymentMethod.toLowerCase() ===
+                                      filterValue.toLowerCase()
+                                      // saleItem.date===filterValue
+                                    );
+                                  })
+                                  .map(sale => {
+                                    return (
+                                      <TouchableOpacity
+                                        activeOpacity={0.5}
+                                        key={sale.id}
+                                        onPress={() => {
+                                          navigation.navigate(
+                                            routes.saleDetails,
+                                            {
+                                              data: sale,
+                                            },
+                                          );
+                                        }}>
+                                        <SalesListItem
+                                        key={`${dateString}_${sale.id}`}
+                                          sale={sale}
+                                          navigation={navigation}
+                                        />
+                                      </TouchableOpacity>
+                                    );
+                                  })
+                             
+                              :data[dateString]
+                                  .filter(saleItem => {
+                                    if (!filterValue) return saleItem;
+                                    return (
+                                      saleItem.paymentMethod.toLowerCase() ===
+                                      filterValue.toLowerCase()
+                                      // saleItem.date===filterValue
+                                    );
+                                  })
+                                  .map(sale => {
+                                    return (
+                                      <TouchableOpacity
+                                        activeOpacity={0.5}
+                                        key={sale.id}
+                                        onPress={() => {
+                                          navigation.navigate(
+                                            routes.saleDetails,
+                                            {
+                                              data: sale,
+                                            },
+                                          );
+                                        }}>
+                                        <SalesListItem
+                                        key={`${dateString}_${sale.id}`}
+                                          sale={sale}
+                                          navigation={navigation}
+                                        />
+                                      </TouchableOpacity>
+                                    );
+                                  })
+    
+                            }
+
                           </View>
+                          // </TouchableOpacity>
                         );
-                      })}
+                      }
+                      )
+                    }
                     </View>
                   )}
                 </ScrollView>

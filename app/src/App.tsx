@@ -53,6 +53,7 @@ const App = () => {
       console.log(error);
     }
   };
+  
 
   useEffect(() => {
     setTimeout(() => SplashScreen.hide(), 1500);

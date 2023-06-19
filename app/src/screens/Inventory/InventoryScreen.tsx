@@ -359,7 +359,8 @@ export default function Items({navigation}) {
                                     owner: item.doc.owner,
                                     itemId: id,
                                   });
-                                }}>
+                                }
+                                }>
                                 <InvetoryListItem
                                   title={item.doc.item_name}
                                   unitPrice={item.doc.unit_price}
