@@ -114,6 +114,8 @@ export default function Items({navigation}) {
                   sn.data().name.substring(1),
               });
             });
+            console.log(userInfo[0]?.doc?.companyId);
+            console.log(result);
             setCategories(result);
           }
         });
@@ -152,10 +154,10 @@ export default function Items({navigation}) {
             (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
             (userInfo[0]?.doc?.isFree && supplierCount >= 10)
           ) {
-            return setLimitReachedVisible(true);
+            // return setLimitReachedVisible(true);
           }
           if (!userInfo[0]?.doc?.isFree && planExpired) {
-            return setLimitReachedVisible(true);
+            // return setLimitReachedVisible(true);
           }
 
           navigation.navigate(routes.addNewItem);

@@ -104,7 +104,7 @@
   "Cancel": "Cancel",
   "Submit": "Submit",
   "Add_Item": "Add Item",
-  "Delete": "Delete",
+  "DeleteAll": "Delete All",
   "Roll_Back": "Discard",
   "Change_Payment_Method" : "Change Payment Method",
   "Current_Price": "Current price",

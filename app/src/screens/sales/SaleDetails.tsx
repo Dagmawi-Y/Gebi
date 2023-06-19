@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
   Modal,
+  ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState, useRef, useContext} from 'react';
 import colors from '../../config/colors';
@@ -27,6 +28,8 @@ import {StateContext} from '../../global/context';
 import {HorizontalBox} from '../../components/HorizontalBox';
 import {SalesDetailListItem} from '../../components/SalesDetailListItem';
 import { transform } from '@babel/core';
+import SelectDropdown from 'react-native-select-dropdown';
+import { CheckBox, color } from '@rneui/base';
 
 const SaleDetails = ({route, navigation}) => {
   const {t} = useTranslation();
@@ -40,6 +43,9 @@ const SaleDetails = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [menuvisible, setMenuvisible] = useState(false);
+  const paymentMethods = ['Cache', 'Debt', 'Check'];
+  const [seletedPaymentMethod, setSelectedPayment]  = useState('Debt')
+  const[shouldShowPaymentMethodDropDown, setShouldShowPaymentMethodDropDown] = useState(false);
 
   const imageRef = useRef<any>(null);
 
@@ -78,6 +84,10 @@ const SaleDetails = ({route, navigation}) => {
     });
   };
 
+  const toggleDropDownPaymentOption = () =>{
+    setShouldShowPaymentMethodDropDown(!shouldShowPaymentMethodDropDown);
+  }
+
   const rollBackSale = async () => {
     setLoading(true);
     let proceed = false;
@@ -109,11 +119,14 @@ const SaleDetails = ({route, navigation}) => {
                 currentCount:
                   parseFloat(res.data()!.currentCount) +
                   parseFloat(items[i].quantity),
+              }).then(() =>{
+                setLoading(false);
               })
               .catch(err => {
                 console.log(err);
+                setLoading(false);
               });
-            setLoading(false);
+            
           })
           .catch(err => console.log(err));
       }
@@ -147,6 +160,7 @@ const SaleDetails = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    setSelectedPayment(data.paymentMethod);
     let mounted = true;
     if (mounted) {
       calculate();
@@ -155,6 +169,18 @@ const SaleDetails = ({route, navigation}) => {
       mounted = false;
     };
   }, [data]);
+
+  async function updateSalesDetail(): Promise<void> {
+   await firestore().collection('sales').doc(data.id).update({
+      paymentMethod : seletedPaymentMethod
+    }).then(()=>{
+      setShouldShowPaymentMethodDropDown(false);
+      ToastAndroid.show("Updated", ToastAndroid.SHORT);
+    }).catch((error) =>{
+      //this wil be shown if incase the exception is happened while updating the data
+      ToastAndroid.show("Update Error", ToastAndroid.SHORT);
+    });
+  }
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
@@ -300,6 +326,7 @@ const SaleDetails = ({route, navigation}) => {
                     {sum} {t('Birr')}
                   </Text>
                 </View>
+                
                 {data.vat ? (
                   <View
                     style={{
@@ -453,25 +480,51 @@ const SaleDetails = ({route, navigation}) => {
             />
           </TouchableOpacity>
         </View>
-       {!data.shouldDiscard ? <TouchableOpacity
-            style={[styles.button, {backgroundColor: colors.primary}, {marginTop : 20, marginBottom : 20}]}
+       {!data.shouldDiscard ? <CheckBox
+       style={{marginTop : 10}}
+        title="Change Payment Method"
+        checked={shouldShowPaymentMethodDropDown}
+        onPress={toggleDropDownPaymentOption}
+      />  : <View></View>}
+
+          {shouldShowPaymentMethodDropDown ? <View style={{marginLeft : 21, marginRight : 40}}>
+            <SelectDropdown
+                    data={paymentMethods}
+                    defaultButtonText={seletedPaymentMethod}
+                    renderDropdownIcon={() => (
+                      <View>
+                        <Icon name="caretdown" size={20} color={colors.black} />
+                      </View>
+                    )}
+                    buttonStyle={styles.dropDown}
+                    disabled={false}
+                    onSelect={selectedItem => {
+                     setSelectedPayment(selectedItem);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item;
+                    }}
+                  />
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: colors.green}]}
             disabled={data.shouldDiscard}
-            onPress={() => false}>
+            onPress={updateSalesDetail}>
             <Text
               style={[
                 styles.textBold,
                 {color: colors.white, textAlign: 'center'},
               ]}>
-              {t('Change_Payment_Method')}
+              {"Update"}
             </Text>
-            <Icon
-              name={'exchange'}
-              size={25}
-              color={colors.white}
-              style={{margin: 5, marginLeft: 'auto'}}
-            />
-          </TouchableOpacity>  : <View></View>}
+          </TouchableOpacity>
+
+                  </View> : <View></View> }
+                  
        { data.shouldDiscard ?  <View style={void_reciept_style.container}>
+        
       <Image
         source={require('../../assets/images/void_reciept.png')} // Provide the source of your image
         style={void_reciept_style.image}
@@ -637,6 +690,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 8,
     flexDirection: 'row',
+  },
+  dropDown: {
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    marginBottom: 20,
+    backgroundColor: colors.white,
   },
 });
 

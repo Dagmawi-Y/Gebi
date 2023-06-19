@@ -7,118 +7,198 @@ import {
     Image,
     View,
     TouchableOpacity,
+    ToastAndroid,
   } from 'react-native';
   
-  import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { TextInput, TouchableHighlight } from 'react-native-gesture-handler';
 import colors from '../../config/colors';
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-  
+import firestore, {firebase} from '@react-native-firebase/firestore';
+import { StateContext } from '../../global/context';
+import Loading from '../../components/lotties/Loading';
+import LoadingModal from '../../components/lotties/LoadingModal';
+import SelectDropdown from 'react-native-select-dropdown';
   const EditInventoryItem = ({route, navigation}) => {
-    const history = route.params;
-    const [initialCount, setInitialCount] = useState(history.initialCount);
-    const [unit, setUnit] = useState(history.unit);
-    const [unit_price, setUnitPrice]  = useState(history.unit_price);
+    const {data, itemId, updateCategoryCount, totalStock} = route.params;
+    const [total, setTotal] = useState(0);
+    const [unit, setUnit] = useState('');
+    const [unit_price, setUnitPrice]  = useState(0);
     const [shouldEdit, setShouldEdit] = useState(false);
+    const [createdDate, setCreatedDate] = useState('');
+    const [supplier, setSupplier] = useState('');
     const {t} = useTranslation();
     const [headerMessage, setHeaderMessage] = useState("Item Detail");
+    const {userInfo} = useContext(StateContext);
+    const [loading, setLoading] = useState(false);
+    const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre'), t('Quintal')];
+
     useEffect(()=>{
-      console.log(history);
-    });
+      console.log(data);
+      setTotal(data.doc.initialCount);
+      setUnit(data.doc.unit);
+      setUnitPrice(data.doc.unit_price);
+      setCreatedDate(data.doc.date);
+      setSupplier(data.doc.supplier_name);
+    }, [route]);
+
     const deleteItem = async () => {
-    //   Alert.alert(t('Are_You_Sure?'), ``, [
-    //     {
-    //       text: t('Yes'),
-    //       onPress: async () => {
-    //         if (data.picture) {
-    //           let pictureRef = storage().refFromURL(data.picture);
-    //           pictureRef.delete().catch(err => console.log(err));
-    //         }
-    //         await firestore().collection('inventory').doc(itemId).delete();
-    //         const picture = storage().refFromURL(data.picture);
-    //         picture
-    //           .delete()
-    //           .then(res => {})
-    //           .catch(err => console.log(err));
-    //         deleteStock();
-    //         navigation.goBack();
-    //       },
-    //       style: 'default',
-    //     },
-    //     {
-    //       text: t('Cancel'),
-    //       onPress: () => {},
-    //       style: 'cancel',
-    //     },
-    //   ]);
+      Alert.alert(t('Are_You_Sure?'), ``, [
+        {
+          text: t('Yes'),
+          onPress: async () => {
+                await firestore().collection('stock').doc(data.id).delete().then(async ()=>{
+                  await firestore().collection('inventory').doc(itemId).update({
+                    currentCount : firestore.FieldValue.increment(-data.doc.initialCount)
+                  })
+                }).catch((error) =>{
+                  ToastAndroid.show("Delete Error", ToastAndroid.SHORT);
+                });
+                
+               //this means now the item is left 1 in stock and this has to be deleted from inventory as well 
+                if(totalStock == 1) {
+                  await firestore().collection('inventory').doc(itemId).delete();
+               }
+                updateCategoryCount(-data.doc.initialCount);
+
+            navigation.goBack();
+          },
+          style: 'default',
+        },
+        {
+          text: t('Cancel'),
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ]);
     };
 
 
-    const CustomTextInput = (value, onChange, setValue, shouldEdit, placeholder)=>  {
+    const CustomTextInput = (value : any, setValue : any, shouldEdit : boolean, placeholder : string, keyboardInput, hardDisable: boolean)=>  {
 
       return (
           <TextInput
               style={styles.emailInput}
-              onChangeText={(code: any) => setValue(value)}
+              onChangeText={(value: any) => setValue(value)}
               value={value}
               placeholder={placeholder}
-              keyboardType="numeric"
+              keyboardType={keyboardInput}
               placeholderTextColor={colors.black}
-              editable={shouldEdit}
-              focusable={true}
+              editable={hardDisable ? false :  shouldEdit}
             />
       )
   
   }
 
-  
-  const handleSubmit = () => {
-      
+  const handleEdit = async () =>{
+    // console.log("unit : " + unit);
+    // console.log("total : " + total);
+    // console.log("Supplier : " + supplier);
+    // console.log("Unit price : " + unit_price);
+    // console.log("created date :" + createdDate);
+    const newTotalItems: number = total - data.doc.initialCount;
+    Alert.alert(t('Are_You_Sure?'), ``, [
+      {
+        text: t('Yes'),
+        onPress: async () => {
+              setLoading(true);
+              await firestore().collection('stock').doc(data.id).update({
+                initialCount : total,
+                unit : unit,
+                supplier_name : supplier,
+                unit_price : unit_price
+              }).then(async ()=>{
+                data.doc.initialCount = total;
+                await firestore().collection('inventory').doc(itemId).update({
+                  currentCount : firestore.FieldValue.increment(newTotalItems)
+                })
+              }).catch((error) =>{
+                ToastAndroid.show("Update Error", ToastAndroid.SHORT);
+              });
+              setLoading(false);
+              setShouldEdit(false);
+              updateCategoryCount(newTotalItems);
+        },
+        style: 'default',
+      },
+      {
+        text: t('Cancel'),
+        onPress: () => {},
+        style: 'cancel',
+      },
+    ]);
+
   }
 
-  const handleDeleteItem = () =>{
-      
-  }
     return (
         <View>
+          <ScrollView>
             <Text style={{marginTop : 10, fontWeight : 'bold', fontSize : 25, textAlign : 'center', color : 'black'}}>{headerMessage}</Text>
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
-                  {t('Birr')}
+           {"Total"}
             </Text>
-           {CustomTextInput(initialCount, handleSubmit, setInitialCount, shouldEdit, "Birr")}
-           <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
-           {"Initial Count"}
-            </Text>
-           {CustomTextInput(unit, handleSubmit, setUnit, shouldEdit, "Initial Count")}
+            
+           {CustomTextInput(total.toString(), setTotal, shouldEdit, "total", "number", false)}
+
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
                   {"Unit"}
             </Text>
-           {CustomTextInput(unit_price, handleSubmit, setUnitPrice,shouldEdit, "Unit")}
+            <View style={{marginLeft : 21, marginRight : 40}}>
+            <SelectDropdown
+                    data={quantifiers}
+                    defaultButtonText={unit}
+                    renderDropdownIcon={() => (
+                      <View>
+                        <Icon name="chevron-down" size={20} color={colors.black} />
+                      </View>
+                    )}
+                    buttonStyle={styles.dropDown}
+                    disabled={!shouldEdit}
+                    onSelect={selectedItem => {
+                      setUnit(selectedItem);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item;
+                    }}
+                  />
+                  </View>
+
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
-                  {"Unit Sale Price"}
+                  {"Supplier"}
             </Text>
-           {CustomTextInput(unit_price, handleSubmit, setUnitPrice,shouldEdit, "Unit sale price")}
+           {CustomTextInput(supplier, setSupplier,shouldEdit, "Supplier", "text", false)}
+
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
                   {"Unit Price"}
             </Text>
-           {CustomTextInput(unit_price, handleSubmit, setUnitPrice,shouldEdit, "Unit Price")}
+           {CustomTextInput(unit_price, setUnitPrice,shouldEdit, "Unit Price", "number", false)}
+
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
                   {"Created Date"}
             </Text>
-           {CustomTextInput(unit_price, handleSubmit, setUnitPrice,shouldEdit, "Created Date")}
-           <TouchableHighlight onPress={handleSubmit} style={styles.button}>
-              <Text style={styles.buttonText}>Save</Text>
-          </TouchableHighlight>
+           {CustomTextInput(createdDate, setCreatedDate,shouldEdit, "Created Date", "text", true)}
+          {
+              shouldEdit ? <TouchableHighlight onPress={handleEdit} style={styles.button}>
+              <Text style={styles.buttonText}>{ !loading ?  'Save' : 'Saving...'}</Text>
+          </TouchableHighlight> : <View></View>
+          } 
           <View style={styles.editAndDelteStyle}>
             <TouchableOpacity onPress={() => setShouldEdit(!shouldEdit)}>
-            <Icon style={styles.iconsStyle} name={!shouldEdit ? "pencil" : "content-save-outline"} size={25} color={colors.black} />
+            <Icon style={{padding : 20}} name={!shouldEdit ? "pencil" : "close"} size={25} color={colors.black} />
             </TouchableOpacity>
        
-            <TouchableOpacity onPress={() => handleDeleteItem()}>
-              <Icon style={styles.iconsStyle} name="delete" size={25} color={colors.black} />
-            </TouchableOpacity>
+           {
+            !shouldEdit ? 
+            <TouchableOpacity onPress={() => deleteItem()}>
+              <Icon style={{padding : 20, color : '#BF2626'}} name="delete" size={25} color={colors.black} />
+            </TouchableOpacity> : <View></View>
+           } 
           </View>
+          </ScrollView>
         </View>
     );
   };
@@ -135,9 +215,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
         borderColor: 'black',
         paddingLeft : 5,
         color : colors.black
+      
     },
     button: {
-        backgroundColor: 'blue',
+        backgroundColor: '#203FBB',
         borderRadius: 15,
         margin: 20,
         padding: 10,
@@ -153,9 +234,14 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
       alignItems : 'center',
       justifyContent : 'center'
     },
-    iconsStyle : {
-      padding : 20
-    }
+
+    dropDown: {
+      width: '100%',
+      borderRadius: 10,
+      borderWidth: 1,
+      marginBottom: 20,
+      backgroundColor: colors.white,
+    },
    });
 
 
