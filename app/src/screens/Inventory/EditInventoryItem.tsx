@@ -79,7 +79,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 
       return (
           <TextInput
-              style={styles.emailInput}
+              style={styles.input}
               onChangeText={(value: any) => setValue(value)}
               value={value}
               placeholder={placeholder}
@@ -204,7 +204,7 @@ import SelectDropdown from 'react-native-select-dropdown';
   };
 
   const styles = StyleSheet.create({
-    emailInput: {
+    input: {
         marginLeft : 20,
         marginTop : 3,
         marginBottom : 10,

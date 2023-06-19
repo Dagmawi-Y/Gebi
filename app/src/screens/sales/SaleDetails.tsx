@@ -510,7 +510,6 @@ const SaleDetails = ({route, navigation}) => {
                   />
           <TouchableOpacity
             style={[styles.button, {backgroundColor: colors.green}]}
-            disabled={data.shouldDiscard}
             onPress={updateSalesDetail}>
             <Text
               style={[

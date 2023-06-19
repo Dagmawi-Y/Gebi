@@ -6,11 +6,13 @@ import {
   Button,
   TouchableHighlight,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import colors from '../../config/colors';
 import {SafeAreaView, useSafeAreaFrame} from 'react-native-safe-area-context';
 import {ListItem, SpeedDial, Text} from '@rneui/themed';
+import { CheckBox, color } from '@rneui/base';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import Modal from 'react-native-modal';
@@ -25,6 +27,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
 import TopScreen from '../../components/TopScreen/TopScreen';
+import { TextInput } from 'react-native-gesture-handler';
 
 export default function PlanerScreen({navigation}: any) {
   const {t} = useTranslation();
@@ -34,6 +37,8 @@ export default function PlanerScreen({navigation}: any) {
   const {totalExpense, setTotalExpense} = useContext(StateContext);
   const {totalProfit, SetTotalProfit} = useContext(StateContext);
   const {totalIncome, SetTotalIncome} = useContext(StateContext);
+  const [shouldShowPlanChanger, setShouldShowPlanChanger] = useState(false);
+  const [newPlan, setNewPlan] = useState(100);
 
   const getUserData = async () => {
     setLoading(true);
@@ -62,10 +67,26 @@ export default function PlanerScreen({navigation}: any) {
     }
   };
 
+  const toggleShouldShowPlanChanger = () =>{
+    setShouldShowPlanChanger(!shouldShowPlanChanger);
+  }
+
   useEffect(() => {
     getUserData();
   }, []);
 
+  const updatePlan = () =>{
+    console.log("new plan is : " + newPlan);
+    
+    // firestore()
+    // .collection('users').doc(user.uid).update({
+    //   finanicial : newPlan
+    // }).then(() =>[
+    //   ToastAndroid.show("Plan Updated", ToastAndroid.SHORT)
+    // ]).catch((error) =>{
+    //   ToastAndroid.show("Update Error", ToastAndroid.SHORT);
+    // });
+  }
   if (!userData.length) return null;
 
   return (
@@ -148,6 +169,37 @@ export default function PlanerScreen({navigation}: any) {
               </View>
             </View>
           </View>
+
+          <CheckBox
+              style={{marginTop : 10}}
+                title="Change Payment Method"
+                checked={shouldShowPlanChanger}
+                onPress={toggleShouldShowPlanChanger}
+          /> 
+
+
+{shouldShowPlanChanger ? <View style={{marginLeft : 21, marginRight : 40}}>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value: any) => setNewPlan(value)}
+              value={newPlan.toString()}
+              placeholder={"Enter New Plan"}
+              placeholderTextColor={colors.black}
+            />
+
+            <TouchableOpacity
+            style={[{backgroundColor: colors.green, height : 40, borderRadius : 10, marginLeft : 10, marginTop : 5}]}
+            onPress={updatePlan}>
+            <Text
+              style={[
+                {color: colors.white, textAlign: 'center', marginTop : 8},
+              ]}>
+              {"Update"}
+            </Text>
+          </TouchableOpacity>
+
+                  </View> : <View></View> }
+
         </View>
       </SafeAreaView>
     </>
@@ -169,4 +221,29 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
   },
+
+  button: {
+    height: 45,
+    flex: 0.3,
+    marginLeft: 15,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    width: 'auto',
+    alignItems: 'center',
+    borderRadius: 5,
+    flexDirection: 'row',
+  },
+  input: {
+    marginTop : 5,
+    marginBottom : 10,
+    width: 350,
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: 'black',
+    paddingLeft : 5,
+    color : colors.black
+  
+},
 });
