@@ -141,6 +141,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     if (!itemCategory) return true;
     if (!quantity) return true;
     if (!unit) return true;
+    if (!InvoiceNumber) return true;
     if (!unitPrice) return true;
     if (!unitSalePrice) return true;
     return false;
@@ -198,7 +199,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     item_id: itemId,
                     supplier_name: supplierName,
                     initialCount: quantity,
-                    InvoiceNumber : InvoiceNumber,
+                    invoiceNumber : InvoiceNumber,
                     unit_price: unitPrice,
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
@@ -231,7 +232,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 item_name: itemName,
                 unit_price: unitPrice,
                 unit: unit,
-                InvoiceNumber : InvoiceNumber,
+                invoiceNumber : InvoiceNumber,
                 unit_SalePrice: unitSalePrice,
                 currentCount: quantity,
                 picture: fileUrl,
@@ -247,7 +248,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     item_id: item_id,
                     supplier_name: supplierName,
                     initialCount: quantity,
-                    InvoiceNumber : InvoiceNumber,
+                    invoiceNumber : InvoiceNumber,
                     unit_price: unitPrice,
                     unit: unit,
                     owner: userInfo[0]?.doc?.companyId,

@@ -4,19 +4,19 @@
   "Where_Do_You_Want_To_Go_?": "የት መሄድ ይፈልጋሉ?",
   "Enter_Phone_Number": "ስልክ ቁጥር ያስግቡ",
   "Edit": "ቀይር",
-
+  
   "There_Is_No_Item_In_Your_Stock": "በእቃ ክፍሉ ምንም እቃ የለም",
   "Please_Add_Stock_First": "በመጀመርያ እቃ ይመዝግቡ",
   "Add_Stock_Item": "አዲስ እቃ መዝግብ",
   "Optional": "ካለ",
   "Categories": "የእቃ ምድብ",
-
+  "Void" : "( ተሰርዟል )",
   "No_Description": "ማብራሪያ የለውም",
   "Add_One_First": "ቅድሚያ አዲስ ይፍጠሩ",
   "No_Categories_Yet": "ምንም ምድብ አልፈጠሩም",
   "No_Expenses_Yet": "ምንም ውጪ አልተመዘገበም",
   "Include_Tax": "ታክስ አካት",
-
+  "Invoice Number" : "የክፍያ መጠየቂያ ቁጥር",
   "Send_Code_Again": "ኮድ ድጋሜ ለማስላክ",
   "Resend_Code": "ድጋሜ ላክ",
   "Edit_Your_Phone_?": "ስልክ ቁጥርዎን ያስተካክሉ?",
@@ -41,7 +41,7 @@
   "Prev": "የፊት",
   "Skip": "ዝለል",
   "Ready": "ዝግጁ",
-
+  "Progress" : "ሂደት",
   "Gebi": "ገቢ",
   "Filter": "አጣራ",
   "Sales": "ሽያጭ",
@@ -103,6 +103,8 @@
   "DeleteAll": "ሁሉንም  አጥፋ",
   "Roll_Back": "ተመላሽ አድርግ",
   "Change_Payment_Method" : "Change Payment Method",
+  "Change Income Plan" : "የገቢ እቅድ ይቀይሩ",
+  "Income Plan" : "የገቢ እቅድ",
   "Current_Price": "የተመዝገበው ዋጋ",
   "In stock": "የተመዝገበው ብዛት",
 
@@ -151,7 +153,7 @@
   "Entertainment": "መዝናኛ",
   "Sales_Commission": "የሽያጭ ኮሚሽን",
   "Update_Item_Image":"የዕቃ ምስል ያዘምኑ",
-
+  "Update" : "አዘምን",
 
   "Current": "ትክክለኛ",
   "Expense_Type": "የወጪ አይነት",

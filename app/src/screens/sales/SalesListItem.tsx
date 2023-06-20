@@ -7,10 +7,11 @@ import {useNavigation} from '@react-navigation/native';
 import formatNumber from '../../utils/formatNumber';
 import {useTranslation} from 'react-i18next';
 import roundDecimal from '../../utils/roundDecimal';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ListItem = (sale, navigation) => {
   const {t} = useTranslation();
-  const {invoiceNumber, customerName, date, items, paymentMethod, vat, tot} =
+  const {invoiceNumber, customerName, date, items, paymentMethod, vat, tot, shouldDiscard} =
     sale.sale;
   const itemsLength = Object.getOwnPropertyNames(items).length;
   const [totalPrice, setTotalPrice] = useState<any>('');
@@ -76,7 +77,7 @@ const ListItem = (sale, navigation) => {
                       : paymentMethod == 'Check'
                       ? colors.yellow
                       : colors.red,
-                }}>{`(${t(paymentMethod)})`}</Text>
+                }}>{`(${t(paymentMethod)})`} </Text> {shouldDiscard ? <Icon size={20} name='close-circle' color={colors.red}></Icon>  : <Icon size={20} name='check-circle' color={colors.green}></Icon>}
             </Text>
           </View>
           <View>

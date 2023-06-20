@@ -28,6 +28,7 @@ import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
 import TopScreen from '../../components/TopScreen/TopScreen';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import CustomProgressBar from '../../components/ProgressBar';
 
 export default function PlanerScreen({navigation}: any) {
   const {t} = useTranslation();
@@ -39,6 +40,7 @@ export default function PlanerScreen({navigation}: any) {
   const {totalIncome, SetTotalIncome} = useContext(StateContext);
   const [shouldShowPlanChanger, setShouldShowPlanChanger] = useState(false);
   const [newPlan, setNewPlan] = useState("");
+  const deviceWidth = Dimensions.get('window').width;
 
   const getUserData = async () => {
     setLoading(true);
@@ -76,6 +78,10 @@ export default function PlanerScreen({navigation}: any) {
   }, []);
 
   const updatePlan = async () =>{
+    if(!newPlan){
+      ToastAndroid.show("Invalid Plan", ToastAndroid.SHORT);
+      return false;
+    }
     const querySnapshot =  await firestore()
     .collection('users')
     .where('companyId', '==', user.uid).get();
@@ -102,6 +108,7 @@ export default function PlanerScreen({navigation}: any) {
       <SafeAreaView style={styles.container}>
         <ScrollView>
         <TopScreen />
+        
         <View
           style={{
             backgroundColor: colors.primary,
@@ -109,11 +116,38 @@ export default function PlanerScreen({navigation}: any) {
           }}>
           <View style={{marginVertical: 20, marginHorizontal: 10}}>
             <Text h4 style={{color: 'white'}}>
-              የገቢ እቅድ
+             {t("Income Plan")}
             </Text>
           </View>
         </View>
         <View style={styles.contentContainer}>
+          
+        <View style={styles.planBoard}>
+            <View style={{flexDirection: 'row', marginBottom: 5}}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                }}>
+                {t('Progress')} {"  "}
+              </Text>
+              <Text style ={{fontSize: 15,
+                  fontWeight: 'bold',}}>
+              {(totalProfit/userData[0].financial) * 100}{"%"}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', marginBottom: 5}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                }}>
+                <CustomProgressBar progress={(totalProfit/userData[0].financial)} width={deviceWidth - 40} height={10}></CustomProgressBar>
+              </View>
+            </View>
+          </View>
+
           <View style={styles.planBoard}>
             <View style={{flexDirection: 'row', marginBottom: 5}}>
               <Text
@@ -181,19 +215,20 @@ export default function PlanerScreen({navigation}: any) {
 
           <CheckBox
               style={{marginTop : 10}}
-                title="Change Income Plan"
+                title={t("Change Income Plan")}
                 checked={shouldShowPlanChanger}
                 onPress={toggleShouldShowPlanChanger}
           /> 
 
 
-{shouldShowPlanChanger ? <View style={{marginLeft : 21, marginRight : 40}}>
+          {shouldShowPlanChanger ? <View style={{marginLeft : 21, marginRight : 40}}>
             <TextInput
               style={styles.input}
               onChangeText={(value: any) => setNewPlan(value)}
               value={newPlan.toString()}
-              placeholder={"Income"}
+              placeholder={t("Income")}
               placeholderTextColor={colors.black}
+              keyboardType={'numeric'} 
             />
 
             <TouchableOpacity
@@ -203,7 +238,7 @@ export default function PlanerScreen({navigation}: any) {
               style={[
                 {color: colors.white, textAlign: 'center', marginTop : 8},
               ]}>
-              {"Update"}
+              {t("Update")}
             </Text>
           </TouchableOpacity>
          </View> : <View></View> }

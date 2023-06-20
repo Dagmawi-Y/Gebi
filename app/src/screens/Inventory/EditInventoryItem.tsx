@@ -33,9 +33,9 @@ import SelectDropdown from 'react-native-select-dropdown';
     const {userInfo} = useContext(StateContext);
     const [loading, setLoading] = useState(false);
     const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre'), t('Quintal')];
+    const [invoiceNumber, setInvoiceNumber] = useState('');
 
     useEffect(()=>{
-      console.log(data);
       setTotal(data.doc.initialCount);
       setUnit(data.doc.unit);
       setUnitPrice(data.doc.unit_price);
@@ -43,35 +43,43 @@ import SelectDropdown from 'react-native-select-dropdown';
       setSupplier(data.doc.supplier_name);
     }, [route]);
 
+    function ValidateForm() : boolean{
+          if(!invoiceNumber || !total || !unit || !unit_price || !supplier){
+            return false;
+          } else {
+            return true;
+          }
+    }
     const deleteItem = async () => {
-      Alert.alert(t('Are_You_Sure?'), ``, [
-        {
-          text: t('Yes'),
-          onPress: async () => {
-                await firestore().collection('stock').doc(data.id).delete().then(async ()=>{
-                  await firestore().collection('inventory').doc(itemId).update({
-                    currentCount : firestore.FieldValue.increment(-data.doc.initialCount)
-                  })
-                }).catch((error) =>{
-                  ToastAndroid.show("Delete Error", ToastAndroid.SHORT);
-                });
-                
-               //this means now the item is left 1 in stock and this has to be deleted from inventory as well 
-                if(totalStock == 1) {
-                  await firestore().collection('inventory').doc(itemId).delete();
-               }
-                updateCategoryCount(-data.doc.initialCount);
-
-            navigation.goBack();
+        Alert.alert(t('Are_You_Sure?'), ``, [
+          {
+            text: t('Yes'),
+            onPress: async () => {
+                  await firestore().collection('stock').doc(data.id).delete().then(async ()=>{
+                    await firestore().collection('inventory').doc(itemId).update({
+                      currentCount : firestore.FieldValue.increment(-data.doc.initialCount)
+                    })
+                  }).catch((error) =>{
+                    ToastAndroid.show("Delete Error", ToastAndroid.SHORT);
+                  });
+                  
+                 //this means now the item is left 1 in stock and this has to be deleted from inventory as well 
+                  if(totalStock == 1) {
+                    await firestore().collection('inventory').doc(itemId).delete();
+                 }
+                  updateCategoryCount(-data.doc.initialCount);
+  
+              navigation.goBack();
+            },
+            style: 'default',
           },
-          style: 'default',
-        },
-        {
-          text: t('Cancel'),
-          onPress: () => {},
-          style: 'cancel',
-        },
-      ]);
+          {
+            text: t('Cancel'),
+            onPress: () => {},
+            style: 'cancel',
+          },
+        ]);
+     
     };
 
 
@@ -97,6 +105,7 @@ import SelectDropdown from 'react-native-select-dropdown';
     // console.log("Supplier : " + supplier);
     // console.log("Unit price : " + unit_price);
     // console.log("created date :" + createdDate);
+    if(ValidateForm()){
     const newTotalItems: number = total - data.doc.initialCount;
     Alert.alert(t('Are_You_Sure?'), ``, [
       {
@@ -107,11 +116,13 @@ import SelectDropdown from 'react-native-select-dropdown';
                 initialCount : total,
                 unit : unit,
                 supplier_name : supplier,
+                invoiceNumber : invoiceNumber,
                 unit_price : unit_price
               }).then(async ()=>{
                 data.doc.initialCount = total;
                 await firestore().collection('inventory').doc(itemId).update({
-                  currentCount : firestore.FieldValue.increment(newTotalItems)
+                  currentCount : firestore.FieldValue.increment(newTotalItems),
+                  invoiceNumber : invoiceNumber
                 })
               }).catch((error) =>{
                 ToastAndroid.show("Update Error", ToastAndroid.SHORT);
@@ -128,18 +139,27 @@ import SelectDropdown from 'react-native-select-dropdown';
         style: 'cancel',
       },
     ]);
-
+  } else {
+    ToastAndroid.show("Field is requied", ToastAndroid.SHORT);
+  }
   }
 
     return (
         <View>
           <ScrollView>
             <Text style={{marginTop : 10, fontWeight : 'bold', fontSize : 25, textAlign : 'center', color : 'black'}}>{headerMessage}</Text>
+           
+            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
+           {"Invocie Number"}
+            </Text>
+            
+           {CustomTextInput(invoiceNumber.toString(), setInvoiceNumber, shouldEdit, "invoice", "text", false)}
+
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
            {"Total"}
             </Text>
             
-           {CustomTextInput(total.toString(), setTotal, shouldEdit, "total", "number", false)}
+           {CustomTextInput(total.toString(), setTotal, shouldEdit, "total", "numeric", false)}
 
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
                   {"Unit"}
@@ -175,7 +195,7 @@ import SelectDropdown from 'react-native-select-dropdown';
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
                   {"Unit Price"}
             </Text>
-           {CustomTextInput(unit_price, setUnitPrice,shouldEdit, "Unit Price", "number", false)}
+           {CustomTextInput(unit_price, setUnitPrice,shouldEdit, "Unit Price", "numeric", false)}
 
            <Text style={{color : colors.black, fontWeight: 'bold', fontSize : 18, marginLeft : 20}}>
                   {"Created Date"}

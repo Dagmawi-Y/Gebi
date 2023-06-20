@@ -99,17 +99,20 @@ export default function TopScreen() {
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {
-            const item = {
-              id: sn.id,
-              date: sn.data().date,
-              customerName: sn.data().customerName,
-              invoiceNumber: sn.data().invoiceNumber,
-              items: sn.data().items,
-              paymentMethod: sn.data().paymentMethod,
-              vat: sn.data().vat,
-              tot: sn.data().tot,
-            };
-            result.push(item);
+            if(sn.data().shouldDiscard == false){
+              const item = {
+                id: sn.id,
+                date: sn.data().date,
+                customerName: sn.data().customerName,
+                invoiceNumber: sn.data().invoiceNumber,
+                items: sn.data().items,
+                paymentMethod: sn.data().paymentMethod,
+                vat: sn.data().vat,
+                tot: sn.data().tot,
+              };
+              result.push(item);
+            }
+
           });
           setData(result);
         });
