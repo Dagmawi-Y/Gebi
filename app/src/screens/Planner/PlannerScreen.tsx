@@ -27,7 +27,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
 import TopScreen from '../../components/TopScreen/TopScreen';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 
 export default function PlanerScreen({navigation}: any) {
   const {t} = useTranslation();
@@ -38,7 +38,7 @@ export default function PlanerScreen({navigation}: any) {
   const {totalProfit, SetTotalProfit} = useContext(StateContext);
   const {totalIncome, SetTotalIncome} = useContext(StateContext);
   const [shouldShowPlanChanger, setShouldShowPlanChanger] = useState(false);
-  const [newPlan, setNewPlan] = useState(100);
+  const [newPlan, setNewPlan] = useState("");
 
   const getUserData = async () => {
     setLoading(true);
@@ -75,23 +75,32 @@ export default function PlanerScreen({navigation}: any) {
     getUserData();
   }, []);
 
-  const updatePlan = () =>{
-    console.log("new plan is : " + newPlan);
-    
-    // firestore()
-    // .collection('users').doc(user.uid).update({
-    //   finanicial : newPlan
-    // }).then(() =>[
-    //   ToastAndroid.show("Plan Updated", ToastAndroid.SHORT)
-    // ]).catch((error) =>{
-    //   ToastAndroid.show("Update Error", ToastAndroid.SHORT);
-    // });
+  const updatePlan = async () =>{
+    const querySnapshot =  await firestore()
+    .collection('users')
+    .where('companyId', '==', user.uid).get();
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach(sn => {
+        firestore().collection('users').doc(sn.id).update({
+          financial : newPlan
+        }).then(() =>{
+          ToastAndroid.show("Plan Updated", ToastAndroid.SHORT);
+          setShouldShowPlanChanger(false);
+        }).catch((error) => {
+          ToastAndroid.show("Error Updating Plan", ToastAndroid.SHORT);
+        });
+    });
+    } else {
+      ToastAndroid.show("User not found", ToastAndroid.SHORT);
+    }
+
   }
   if (!userData.length) return null;
 
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <ScrollView>
         <TopScreen />
         <View
           style={{
@@ -172,7 +181,7 @@ export default function PlanerScreen({navigation}: any) {
 
           <CheckBox
               style={{marginTop : 10}}
-                title="Change Payment Method"
+                title="Change Income Plan"
                 checked={shouldShowPlanChanger}
                 onPress={toggleShouldShowPlanChanger}
           /> 
@@ -183,7 +192,7 @@ export default function PlanerScreen({navigation}: any) {
               style={styles.input}
               onChangeText={(value: any) => setNewPlan(value)}
               value={newPlan.toString()}
-              placeholder={"Enter New Plan"}
+              placeholder={"Income"}
               placeholderTextColor={colors.black}
             />
 
@@ -197,10 +206,10 @@ export default function PlanerScreen({navigation}: any) {
               {"Update"}
             </Text>
           </TouchableOpacity>
-
-                  </View> : <View></View> }
+         </View> : <View></View> }
 
         </View>
+        </ScrollView>
       </SafeAreaView>
     </>
   );

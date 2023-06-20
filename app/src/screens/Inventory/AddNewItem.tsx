@@ -50,6 +50,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const [supplierSearchResult, setSupplierSearchResult]: Array<any> = useState(
     [],
   );
+  const [InvoiceNumber, setInvoiceNumber] = useState('');
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
   const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre'), t('Quintal')];
@@ -197,6 +198,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     item_id: itemId,
                     supplier_name: supplierName,
                     initialCount: quantity,
+                    InvoiceNumber : InvoiceNumber,
                     unit_price: unitPrice,
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
@@ -229,6 +231,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 item_name: itemName,
                 unit_price: unitPrice,
                 unit: unit,
+                InvoiceNumber : InvoiceNumber,
                 unit_SalePrice: unitSalePrice,
                 currentCount: quantity,
                 picture: fileUrl,
@@ -244,6 +247,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     item_id: item_id,
                     supplier_name: supplierName,
                     initialCount: quantity,
+                    InvoiceNumber : InvoiceNumber,
                     unit_price: unitPrice,
                     unit: unit,
                     owner: userInfo[0]?.doc?.companyId,
@@ -536,6 +540,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 </View>
               ) : null}
               <View>
+                  <View>
                 <Text
                   style={{
                     color: colors.black,
@@ -560,6 +565,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   keyboardType="default"
                   placeholderTextColor={colors.faded_grey}
                 />
+                </View>
+                
                 {searchResult.length && searchResultVisible ? (
                   <View
                     style={{
@@ -605,6 +612,28 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   </View>
                 ) : null}
               </View>
+              <View>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 15,
+                    marginBottom: 5,
+                  }}>
+                  {t('Invoice Number')}
+                </Text>
+
+                <TextInput
+                  style={[styles.Input]}
+                  onChangeText={val => {
+                    setInvoiceNumber(val);
+                  }}
+                
+                  value={InvoiceNumber}
+                  keyboardType="default"
+                  placeholderTextColor={colors.faded_grey}
+                />
+              </View>
+
               <View
                 style={{
                   flexDirection: 'row',
