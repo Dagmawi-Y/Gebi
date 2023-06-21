@@ -29,6 +29,8 @@ import formatNumber from '../../utils/formatNumber';
 import TopScreen from '../../components/TopScreen/TopScreen';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import CustomProgressBar from '../../components/ProgressBar';
+import SelectDropdown from 'react-native-select-dropdown';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export default function PlanerScreen({navigation}: any) {
   const {t} = useTranslation();
@@ -41,7 +43,13 @@ export default function PlanerScreen({navigation}: any) {
   const [shouldShowPlanChanger, setShouldShowPlanChanger] = useState(false);
   const [newPlan, setNewPlan] = useState("");
   const deviceWidth = Dimensions.get('window').width;
-
+  const DatePlans = [
+    t('Daily'),
+    t('Monthly'),
+    t('Six_Months'),
+    t('Yearly'),
+  ];
+const [seletedPaymentMethod, setSelectedPayment] = useState('Daily');
   const getUserData = async () => {
     setLoading(true);
     try {
@@ -230,6 +238,27 @@ export default function PlanerScreen({navigation}: any) {
               placeholderTextColor={colors.black}
               keyboardType={'numeric'} 
             />
+                        <SelectDropdown
+                    data={DatePlans}
+                    defaultButtonText={seletedPaymentMethod}
+                    renderDropdownIcon={() => (
+                      <View>
+                        <Icon name="caretdown" size={20} color={colors.black} />
+                      </View>
+                    )}
+                    buttonStyle={styles.dropDown}
+                    disabled={false}
+                    onSelect={selectedItem => {
+                     setSelectedPayment(selectedItem);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item;
+                    }}
+                  />
+                  
 
             <TouchableOpacity
             style={[{backgroundColor: colors.green, height : 40, borderRadius : 10, marginLeft : 10, marginTop : 5}]}
@@ -288,6 +317,12 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     paddingLeft : 5,
     color : colors.black
-  
+},
+dropDown: {
+  width: '100%',
+  borderRadius: 10,
+  borderWidth: 1,
+  marginBottom: 20,
+  backgroundColor: colors.white,
 },
 });
