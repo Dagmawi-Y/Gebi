@@ -49,7 +49,7 @@ export default function PlanerScreen({navigation}: any) {
     t('Six_Months'),
     t('Yearly'),
   ];
-const [seletedPaymentMethod, setSelectedPayment] = useState('Daily');
+const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
   const getUserData = async () => {
     setLoading(true);
     try {
@@ -90,13 +90,15 @@ const [seletedPaymentMethod, setSelectedPayment] = useState('Daily');
       ToastAndroid.show("Invalid Plan", ToastAndroid.SHORT);
       return false;
     }
+
     const querySnapshot =  await firestore()
     .collection('users')
     .where('companyId', '==', user.uid).get();
     if (!querySnapshot.empty) {
       querySnapshot.forEach(sn => {
         firestore().collection('users').doc(sn.id).update({
-          financial : newPlan
+          financial : newPlan,
+          plan : selectedDatePlan
         }).then(() =>{
           ToastAndroid.show("Plan Updated", ToastAndroid.SHORT);
           setShouldShowPlanChanger(false);
@@ -139,10 +141,10 @@ const [seletedPaymentMethod, setSelectedPayment] = useState('Daily');
                 }}>
                 {t('Progress')} {"  "}
               </Text>
-              <Text style ={{fontSize: 15,
+              {/* <Text style ={{fontSize: 15,
                   fontWeight: 'bold',}}>
               {(totalProfit/userData[0].financial) * 100}{"%"}
-              </Text>
+              </Text> */}
             </View>
             <View style={{flexDirection: 'row', marginBottom: 5}}>
               <View
@@ -240,7 +242,7 @@ const [seletedPaymentMethod, setSelectedPayment] = useState('Daily');
             />
                         <SelectDropdown
                     data={DatePlans}
-                    defaultButtonText={seletedPaymentMethod}
+                    defaultButtonText={selectedDatePlan}
                     renderDropdownIcon={() => (
                       <View>
                         <Icon name="caretdown" size={20} color={colors.black} />
@@ -249,7 +251,7 @@ const [seletedPaymentMethod, setSelectedPayment] = useState('Daily');
                     buttonStyle={styles.dropDown}
                     disabled={false}
                     onSelect={selectedItem => {
-                     setSelectedPayment(selectedItem);
+                     setSelectedDatePlan(selectedItem);
                     }}
                     buttonTextAfterSelection={(selectedItem, index) => {
                       return selectedItem;
@@ -310,7 +312,7 @@ const styles = StyleSheet.create({
   input: {
     marginTop : 5,
     marginBottom : 10,
-    width: 350,
+    width: 330,
     height: 50,
     borderWidth: 1,
     borderRadius: 15,
