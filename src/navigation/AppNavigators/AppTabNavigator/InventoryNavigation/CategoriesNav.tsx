@@ -11,6 +11,7 @@ import Categories from '../../../../screens/Inventory/Categories';
 import {StateContext} from '../../../../global/context';
 import {useTranslation} from 'react-i18next';
 import CustomHeader from '../../../CustomHeader';
+import EditInventoryItem from '../../../../screens/Inventory/EditInventoryItem';
 
 const Stack = createStackNavigator();
 

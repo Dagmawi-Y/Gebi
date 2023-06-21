@@ -55,15 +55,18 @@ const ItemDetails = ({route, navigation}) => {
       })
       .catch(err => console.log(err));
     return batch.commit().then(async () => [
-      await firestore()
-        .collection('categories')
-        .doc(data.categoryId)
-        .update({
-          count: firestore.FieldValue.increment(-totSaleCount),
-        }),
+      await updateCategoryCount(-totSaleCount)
     ]);
   };
 
+  const updateCategoryCount = async(totSaleCount : number) =>{
+    await firestore()
+    .collection('categories')
+    .doc(data.categoryId)
+    .update({
+      count: firestore.FieldValue.increment(totSaleCount),
+    });
+  }
   const deleteImage = () => {};
 
   const deleteItem = async () => {
@@ -281,12 +284,18 @@ const ItemDetails = ({route, navigation}) => {
                   <View style={{marginVertical: 20}}>
                     <View style={tableStyles.thead}>
                       <Text style={tableStyles.theadFont}>{t('Price')}</Text>
-                      <Text style={tableStyles.theadFont}>{t('Unit')}</Text>
+                      <Text style={tableStyles.theadFont}>{t('Total')}</Text>
                       <Text style={tableStyles.theadFont}>{t('Supplier')}</Text>
                       <Text style={tableStyles.theadFont}>{t('Date')}</Text>
                     </View>
                     {stockHistory.map(history => {
                       return (
+                        <TouchableOpacity key={history.id} onPress={() => navigation.navigate(t(routes.EditInventoryItem),  {
+                          data: history,
+                          itemId : itemId,
+                          updateCategoryCount,
+                          totalStock : stockHistory.length
+                        })}>
                         <View
                           key={Math.random()}
                           style={[
@@ -314,6 +323,7 @@ const ItemDetails = ({route, navigation}) => {
                             {history.doc.date}
                           </Text>
                         </View>
+                        </TouchableOpacity>
                       );
                     })}
                   </View>
@@ -363,7 +373,7 @@ const ItemDetails = ({route, navigation}) => {
                     marginBottom: 10,
                     paddingHorizontal: 20,
                     justifyContent: 'space-between',
-                    width: '30%',
+                    width: '40%',
                     alignItems: 'center',
                     borderRadius: 10,
                     flexDirection: 'row',
@@ -374,7 +384,7 @@ const ItemDetails = ({route, navigation}) => {
                       textAlign: 'center',
                       fontSize: 19,
                     }}>
-                    {t('Delete')}
+                    {t('DeleteAll')}
                   </Text>
                   <Icon name="delete" size={25} color={colors.white} />
                 </TouchableOpacity>

@@ -11,6 +11,7 @@ import colors from '../../../config/colors';
 import Edit from '../../../screens/Inventory/Edit';
 import AddNewItem from '../../../screens/Inventory/AddNewItem';
 import CategoryNav from './InventoryNavigation/CategoriesNav';
+import EditInventoryItem from '../../../screens/Inventory/EditInventoryItem';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,11 @@ const InventoryNavigator = ({navigation}) => {
           name={routes.itemDetails}
           options={{headerShown: false}}
           component={ItemDetails}
+        />
+         <Stack.Screen
+          name={routes.EditInventoryItem}
+          options={{headerShown: false}}
+          component={EditInventoryItem}
         />
         <Stack.Screen
           name={routes.addNewItem}

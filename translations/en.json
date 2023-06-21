@@ -16,7 +16,7 @@
   "No_Categories_Yet": "No categories yet",
   "No_Expenses_Yet": "No expenses yet",
   "Include_Tax": "Include TAX",
-
+  "Invoice Number" : "Invoice Number",
   "Send_Code_Again": "Send code again",
   "Resend_Code": "Resend Code",
   "Edit_Your_Phone_?": "Edit your phone?",
@@ -42,7 +42,7 @@
   "Prev": "Prev",
   "Skip": "Skip",
   "Ready": "Ready",
-
+  "Progress" : "Progress",
   "Gebi": "Gebi",
   "Filter": "Filter",
   "Sales": "Sales",
@@ -76,7 +76,7 @@
   "Plan": "Plan",
   "Profit": "Profit",
   "Update_Item_Image":"Update Item Image",
-
+  "Update" : "Update",
   "Supplier_Name": "Supplier name",
   "Item_Name": "Item Name",
   "Amount": "Amount",
@@ -104,12 +104,14 @@
   "Cancel": "Cancel",
   "Submit": "Submit",
   "Add_Item": "Add Item",
-  "Delete": "Delete",
-  "Roll_Back": "Rollback",
-
+  "DeleteAll": "Delete All",
+  "Roll_Back": "Discard",
+  "Change_Payment_Method" : "Change Payment Method",
+  "Change Income Plan" : "Change Income Plan",
+  "Income Plan" : "Income Plan",
   "Current_Price": "Current price",
   "In_stock": "In stock",
-
+  "Void" : "( Void )",
   "Enter_Unit_Price": "Enter Unit price",
   "Enter_quantity": "Enter Quantity",
 
@@ -173,6 +175,7 @@
   "categories": "Categories",
   "addNewCategory": "Add Category",
   "saleDetails": "Sale Details",
+  "EditInventoryItem" : "EditInventoryItem",
   "NewSale": "New sale",
   "expenses": "Expenses",
   "plan": "Plan",
