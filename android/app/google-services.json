@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "918645274056-n1emj9fumi0uq1upus74vio8nhft7slv.apps.googleusercontent.com",
+          "client_id": "918645274056-6jv24g1lipmpqpjj88ctvoe7678nplu2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meda.gebi",
+            "certificate_hash": "6c230ba609c4f74b8d87364ce078a00cf3e7baa0"
+          }
+        },
+        {
+          "client_id": "918645274056-7t2fuidjijbue17c6mdj4tdfbn581464.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "918645274056-n1emj9fumi0uq1upus74vio8nhft7slv.apps.googleusercontent.com",
+              "client_id": "918645274056-7t2fuidjijbue17c6mdj4tdfbn581464.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "918645274056-4lfnscst1sgvgo5t171r3vpu2nk31der.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.meda.gebi"
+              }
             }
           ]
         }
