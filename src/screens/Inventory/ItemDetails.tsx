@@ -59,9 +59,7 @@ const ItemDetails = ({route, navigation}) => {
     ]);
   };
 
-<<<<<<< HEAD:app/src/screens/Inventory/ItemDetails.tsx
   const editItem = async () => {};
-=======
   const updateCategoryCount = async(totSaleCount : number) =>{
     await firestore()
     .collection('categories')
@@ -71,7 +69,6 @@ const ItemDetails = ({route, navigation}) => {
     });
   }
   const deleteImage = () => {};
->>>>>>> latest_development:src/screens/Inventory/ItemDetails.tsx
 
   const deleteItem = async () => {
     Alert.alert(t('Are_You_Sure?'), ``, [
