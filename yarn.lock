@@ -1654,11 +1654,6 @@
   "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-15.1.1.tgz"
   "version" "15.1.1"
 
-"@react-native-firebase/messaging@^18.0.0":
-  "integrity" "sha512-BiYeHTNkEi67MBzMUXTjaTwEjbWTkCHcY/1PYejq9IQDxRoeYnlIPjd9J7GmJrY2nGKT14y0U5Q0aK7YU2ZKxA=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.0.0.tgz"
-  "version" "18.0.0"
-
 "@react-native-firebase/storage@^15.1.1":
   "integrity" "sha512-qOn+FBdTzEmhh5PBIqE9G32Ivn8E1WVxtjPzSi6rPe242IWff2eC0YqjgGEilfg0L1oZAZy+IyjIsUQR+2d10w=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-15.1.1.tgz"
