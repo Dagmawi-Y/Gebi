@@ -36,7 +36,6 @@ import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
-import messaging from '@react-native-firebase/messaging';
 import { log } from 'react-native-reanimated';
 
 export default function Items({navigation}) {
@@ -181,15 +180,6 @@ export default function Items({navigation}) {
 
   
   useEffect(() => {
-    
-  const token=  messaging().getToken().then(token =>{
-     console.log(token)
-   }
-   );
-   if(token){
-  console.log("user FCM token:",token)
-   }
-      
  
     if (mounted && userInfo) {
       getSales();
