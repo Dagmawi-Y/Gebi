@@ -420,7 +420,7 @@ const SaleDetails = ({route, navigation}) => {
                           : colors.red,
                     },
                   ]}>
-                  {t(data.paymentMethod)}
+                  {t(seletedPaymentMethod)}
                 </Text>
               </View>
             </View>

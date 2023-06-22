@@ -83,12 +83,13 @@ const UserInfoInputScreen = ({navigation}) => {
       financial: financial,
       isFree: true,
     };
-
+    console.log("user is about to be created");
     try {
       firestore()
         .collection('users')
         .add(userData)
         .then(async res => {
+          console.log("user created");
           await createPlan(res.id).then(plan => {
             getUserInfo();
           });

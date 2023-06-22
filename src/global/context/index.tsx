@@ -3,11 +3,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
-import routes from '../../navigation/routes';
 
 const StateContext = React.createContext<any>(null);
 
-const StateContextProvider = ({children, navigation}) => {
+const StateContextProvider = ({children}) => {
   const [expenses, setExpenses] = useState(0);
 
   const [initializing, setInitializing] = useState(true);
@@ -110,9 +109,9 @@ const StateContextProvider = ({children, navigation}) => {
           .get()
           .then(res => {
             if (res.docs.length > 0) {
-              navigation.replace(routes.mainNavigator, {
-                screen: routes.salesNav,
-              });
+              // navigation.replace(routes.mainNavigator, {
+              //   screen: routes.salesNav,
+              // });
             } else {
               // setLoading(false);
             }

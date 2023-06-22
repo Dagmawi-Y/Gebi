@@ -1,9 +1,6 @@
 {
   "name": "app",
   "version": "0.0.1",
-  "exports": {
-    "./package.json": "./package.json"
-  },
   "private": true,
   "scripts": {
     "a": "react-native run-android",
