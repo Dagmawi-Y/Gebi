@@ -92,8 +92,8 @@ const UserInfoInputScreen = ({navigation}) => {
           await createPlan(res.id).then(plan => {
             getUserInfo();
           });
-          navigation.replace(routes.mainNavigator);
-          setLoading(false);
+          // navigation.replace(routes.mainNavigator);
+          // setLoading(false);
         });
     } catch (error) {
       console.log(error);
