@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "834535791223",
-    "project_id": "gebi-prod",
-    "storage_bucket": "gebi-prod.appspot.com"
+    "project_number": "918645274056",
+    "project_id": "gebi-bdf92",
+    "storage_bucket": "gebi-bdf92.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:834535791223:android:4e30f1ac0c1c4322d24472",
+        "mobilesdk_app_id": "1:918645274056:android:a0bbbc1908aeef57073cfd",
         "android_client_info": {
           "package_name": "com.meda.gebi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "834535791223-gtjgpnhkieharte5ucdnl1o05plmunu9.apps.googleusercontent.com",
+          "client_id": "918645274056-n1emj9fumi0uq1upus74vio8nhft7slv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC3cPq3-w_8GmcP2B1p00xPM_VY9Q9gtOc"
+          "current_key": "AIzaSyB6Sdumorijlvmt7uyQlvzZQQ6qxvF9cJ0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "834535791223-gtjgpnhkieharte5ucdnl1o05plmunu9.apps.googleusercontent.com",
+              "client_id": "918645274056-n1emj9fumi0uq1upus74vio8nhft7slv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

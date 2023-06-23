@@ -83,7 +83,6 @@ const UserInfoInputScreen = ({navigation}) => {
       financial: financial,
       isFree: true,
     };
-    console.log("user is about to be created");
     try {
       firestore()
         .collection('users')
