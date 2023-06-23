@@ -241,7 +241,7 @@ android {
         debug {
             signingConfig signingConfigs.debug
             resValue "string", "app_name", "Gebi Dev"
-            applicationIdSuffix ".dev"
+            // applicationIdSuffix ".dev"
         }
         release {
             // Info! In production, you need to generate your own keystore file.
