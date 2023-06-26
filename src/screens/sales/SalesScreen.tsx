@@ -135,7 +135,6 @@ export default function Items({navigation}) {
             return bDate.getTime() - aDate.getTime();
           });
         setSalesCount(result.length);
-        console.log(result.date);
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
