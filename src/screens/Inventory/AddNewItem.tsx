@@ -241,6 +241,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 createdBy: userInfo[0]?.doc?.name,
               })
               .then(res => {
+                console.log("inventory added");
                 const item_id = res['_documentPath']['_parts'][1];
                 firestore()
                   .collection('stock')
@@ -256,6 +257,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     date: new Date().toLocaleDateString(),
                   })
                   .then(() => {
+                    console.log("stock added");
                     firestore()
                       .collection('categories')
                       .doc(categoryId)

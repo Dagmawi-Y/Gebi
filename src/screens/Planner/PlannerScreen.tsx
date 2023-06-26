@@ -82,6 +82,9 @@ const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
   }
 
   useEffect(() => {
+    // console.log(totalProfit)
+    // console.log(userData[0].financial);
+    // console.log(totalProfit/userData[0].financial);
     getUserData();
   }, []);
 
@@ -153,6 +156,7 @@ const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
                   flex: 1,
                   justifyContent: 'space-between',
                 }}>
+                  
                 <CustomProgressBar progress={(totalProfit/userData[0].financial) < 0 ? 0 : (totalProfit/userData[0].financial)} width={deviceWidth - 40} height={10}></CustomProgressBar>
               </View>
             </View>

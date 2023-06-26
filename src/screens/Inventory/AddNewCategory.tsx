@@ -48,7 +48,6 @@ const AddNewCategory = ({navigation}) => {
               owner: userInfo[0]?.doc?.companyId,
               count: 0,
             };
-
             firestore()
               .collection('categories')
               .add(category)
