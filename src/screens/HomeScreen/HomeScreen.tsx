@@ -9,6 +9,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 import routes from '../../navigation/routes';
+import PushNotification from "react-native-push-notification";
 import firestore from '@react-native-firebase/firestore';
 
 import {
@@ -37,8 +38,7 @@ const HomeScreen = ({navigation}) => {
   } = useContext(StateContext);
   const [mounted, setMounted] = useState(true);
 
-
-
+   
   if (!userInfo || !user) return <Loading size={50} />;
 
   return (

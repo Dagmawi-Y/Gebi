@@ -21,6 +21,7 @@ import firestore, {
 import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 import {useTranslation} from 'react-i18next';
+import PushNotification from 'react-native-push-notification';
 
 import TopScreen from '../../components/TopScreen/TopScreen';
 import Loading from '../../components/lotties/Loading';
@@ -127,14 +128,14 @@ export default function Items({navigation}) {
             };
             result.push(item);
           });
-          result.sort((a, b) => {
-            const aDate = new Date(a.date);
-            const bDate = new Date(b.date);
-            if (isNaN(aDate.getTime()) || isNaN(bDate.getTime())) {
-              return 0;
-            }
-            return bDate.getTime() - aDate.getTime();
-          });
+        result.sort((a, b) => {
+          const aDate = new Date(a.date);
+          const bDate = new Date(b.date);
+          if (isNaN(aDate.getTime()) || isNaN(bDate.getTime())) {
+            return 0;
+          }
+          return bDate.getTime() - aDate.getTime();
+        });
         setSalesCount(result.length);
         console.log(result.date);
         const grouped = result.reduce(function (r, a) {
@@ -169,7 +170,7 @@ export default function Items({navigation}) {
       title: "Low Stock Alert", 
       body: "Your stock has fallen below the required level."  
     }
-    
+
     // messaging().send(options)
     //   .then((response) => {
     //     console.log("Notification sent successfully:", response);
@@ -179,23 +180,23 @@ export default function Items({navigation}) {
     //   })
   }
 
-  
+
   useEffect(() => {
     
   const token=  messaging().getToken().then(token =>{
      console.log(token)
-   }
+    }
    );
    if(token){
   console.log("user FCM token:",token)
    }
       
- 
+
     if (mounted && userInfo) {
       getSales();
       getStockCount();
     }
-  
+
 
     return () => {
       setMounted(false);
@@ -217,15 +218,35 @@ export default function Items({navigation}) {
 
       <FloatingButton
         action={() => {
-         
-        const stockCounts=getStockCount();
-        const requiredCount=5;
-        console.log(stockCount)
+          const stockCounts = getStockCount();
+          const requiredCount = 5;
+          console.log(stockCount);
 
-          if(stockCount<=requiredCount){
-     alert('Your stock product is getting low please add product'+
-     '')
-    }
+          if (stockCount <= requiredCount) {
+            return Alert.alert(
+              t('Your_stock_product_is_lesss_than 5'),
+              t('Please_Add_Stock'),
+              [
+                {
+                  text: `+ ${t('Add_Stock_Item')}`,
+                  onPress: () => {
+                    navigation.navigate(t(routes.inventoryNav));
+                  },
+                  style: 'default',
+                },
+                {
+                  text: t('Cancel'),
+                  onPress: () => {},
+                  style: 'default',
+                },
+              ],
+            );
+            //  PushNotification.localNotification({
+            //   channelId:'test-channel',
+            //   title:"Your stock product is low",
+            //   message:'please add more product in your stock'
+            //  })
+          }
 
           // 100th sale or 25th customer or 10th supplier
           if (
@@ -459,7 +480,7 @@ export default function Items({navigation}) {
                             {
                               !(new Date(date).getDate() - new Date().getDate()==0)?
                               expandedList[dateString]&&
-                            data[dateString]
+                                data[dateString]
                                   .filter(saleItem => {
                                     if (!filterValue) return saleItem;
                                     return (
@@ -482,7 +503,7 @@ export default function Items({navigation}) {
                                           );
                                         }}>
                                         <SalesListItem
-                                        key={`${dateString}_${sale.id}`}
+                                          key={`${dateString}_${sale.id}`}
                                           sale={sale}
                                           navigation={navigation}
                                         />
@@ -513,7 +534,7 @@ export default function Items({navigation}) {
                                           );
                                         }}>
                                         <SalesListItem
-                                        key={`${dateString}_${sale.id}`}
+                                          key={`${dateString}_${sale.id}`}
                                           sale={sale}
                                           navigation={navigation}
                                         />
