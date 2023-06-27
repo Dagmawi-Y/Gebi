@@ -23,6 +23,7 @@ const Categories = ({navigation}) => {
         .collection('categories')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
+          console.log("Cateories Fetched");
           let result: Array<any> = [];
           qsn.forEach(i => {
             result.push({id: i.id, data: i.data()});

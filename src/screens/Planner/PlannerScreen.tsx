@@ -82,20 +82,23 @@ const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
   }
 
   useEffect(() => {
+    // console.log(totalProfit)
+    // console.log(userData[0].financial);
+    // console.log(totalProfit/userData[0].financial);
     getUserData();
   }, []);
 
   const updatePlan = async () =>{
     if(!newPlan){
-      ToastAndroid.show("Invalid Plan", ToastAndroid.SHORT);
+      ToastAndroid.show("Income Required", ToastAndroid.SHORT);
       return false;
     }
-
     const querySnapshot =  await firestore()
     .collection('users')
     .where('companyId', '==', user.uid).get();
     if (!querySnapshot.empty) {
-      querySnapshot.forEach(sn => {
+      querySnapshot.forEach(async sn => {
+        console.log(await firestore().collection('users').doc(sn.id).get());
         firestore().collection('users').doc(sn.id).update({
           financial : newPlan,
           plan : selectedDatePlan
@@ -153,6 +156,7 @@ const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
                   flex: 1,
                   justifyContent: 'space-between',
                 }}>
+                  
                 <CustomProgressBar progress={(totalProfit/userData[0].financial) < 0 ? 0 : (totalProfit/userData[0].financial)} width={deviceWidth - 40} height={10}></CustomProgressBar>
               </View>
             </View>
@@ -234,7 +238,7 @@ const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
           {shouldShowPlanChanger ? <View style={{marginLeft : 21, marginRight : 40}}>
             <TextInput
               style={styles.input}
-              onChangeText={(value: any) => setNewPlan(value)}
+              onChangeText={(value) => setNewPlan(value)}
               value={newPlan.toString()}
               placeholder={t("Income")}
               placeholderTextColor={colors.black}

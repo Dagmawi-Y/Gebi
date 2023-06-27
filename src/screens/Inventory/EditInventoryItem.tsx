@@ -41,10 +41,11 @@ import SelectDropdown from 'react-native-select-dropdown';
       setUnitPrice(data.doc.unit_price);
       setCreatedDate(data.doc.date);
       setSupplier(data.doc.supplier_name);
+      setInvoiceNumber(data.doc.invoiceNumber);
     }, [route]);
 
     function ValidateForm() : boolean{
-          if(!invoiceNumber || !total || !unit || !unit_price || !supplier){
+          if(!total || !unit || !unit_price || !supplier){
             return false;
           } else {
             return true;

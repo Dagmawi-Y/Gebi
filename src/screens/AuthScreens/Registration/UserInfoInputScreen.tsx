@@ -70,8 +70,9 @@ const UserInfoInputScreen = ({navigation}) => {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
       return;
     }
-
+    console.log("user is about to create");
     setLoading(true);
+    console.log(user);
     const userData = {
       companyId: user.uid,
       name: name,
@@ -82,12 +83,12 @@ const UserInfoInputScreen = ({navigation}) => {
       financial: financial,
       isFree: true,
     };
-
     try {
       firestore()
         .collection('users')
         .add(userData)
         .then(async res => {
+          console.log("user created");
           await createPlan(res.id).then(plan => {
             getUserInfo();
           });
@@ -95,12 +96,14 @@ const UserInfoInputScreen = ({navigation}) => {
           // setLoading(false);
         });
     } catch (error) {
+      console.log("Error thrown");
       console.log(error);
     }
   };
 
   const getUserInfo = async () => {
     setLoading(true);
+    console.log("user is about to find");
     try {
       if (user)
         firestore()
@@ -108,12 +111,15 @@ const UserInfoInputScreen = ({navigation}) => {
           .where('phone', '==', user?.phoneNumber)
           .get()
           .then((res: any) => {
-            if (res.docs.length > 0) {
+            console.log("user is finding");
+                        if (res.docs.length > 0) {
               setUserInfo(res);
+              console.log("user found");
               navigation.replace(routes.mainNavigator, {
                 screen: routes.salesNav,
               });
             } else {
+              console.log("user not found");
               setLoading(false);
             }
           })

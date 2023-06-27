@@ -37,7 +37,6 @@ import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
-import messaging from '@react-native-firebase/messaging';
 import { log } from 'react-native-reanimated';
 
 export default function Items({navigation}) {
@@ -137,7 +136,6 @@ export default function Items({navigation}) {
           return bDate.getTime() - aDate.getTime();
         });
         setSalesCount(result.length);
-        console.log(result.date);
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
@@ -183,15 +181,15 @@ export default function Items({navigation}) {
 
   useEffect(() => {
     
-  const token=  messaging().getToken().then(token =>{
-     console.log(token)
-    }
-   );
-   if(token){
-  console.log("user FCM token:",token)
-   }
+  // const token=  messaging().getToken().then(token =>{
+  //    console.log(token)
+  //  }
+  //  );
+  //  if(token){
+  // console.log("user FCM token:",token)
+  //  }
       
-
+ 
     if (mounted && userInfo) {
       getSales();
       getStockCount();
@@ -224,7 +222,7 @@ export default function Items({navigation}) {
 
           if (stockCount <= requiredCount) {
             return Alert.alert(
-              t('Your_stock_product_is_lesss_than 5'),
+              t('Your_stock_product_is_less_than required'),
               t('Please_Add_Stock'),
               [
                 {
@@ -254,10 +252,10 @@ export default function Items({navigation}) {
             (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
             (userInfo[0]?.doc?.isFree && supplierCount >= 10)
           ) {
-            // return setLimitReachedVisible(true);
+            return setLimitReachedVisible(true);
           }
           if (!userInfo[0]?.doc?.isFree && planExpired) {
-            // return setLimitReachedVisible(true);
+            return setLimitReachedVisible(true);
           }
 
           if (stockCount <= 0) {
