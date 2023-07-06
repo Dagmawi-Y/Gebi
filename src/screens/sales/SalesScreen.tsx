@@ -21,7 +21,6 @@ import firestore, {
 import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 import {useTranslation} from 'react-i18next';
-import PushNotification from 'react-native-push-notification';
 
 import TopScreen from '../../components/TopScreen/TopScreen';
 import Loading from '../../components/lotties/Loading';
@@ -181,13 +180,7 @@ export default function Items({navigation}) {
 
   useEffect(() => {
     
-  // const token=  messaging().getToken().then(token =>{
-  //    console.log(token)
-  //  }
-  //  );
-  //  if(token){
-  // console.log("user FCM token:",token)
-  //  }
+
       
  
     if (mounted && userInfo) {
