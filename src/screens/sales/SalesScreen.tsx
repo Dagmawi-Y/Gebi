@@ -36,7 +36,7 @@ import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
-import { log } from 'react-native-reanimated';
+import {log} from 'react-native-reanimated';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
@@ -64,8 +64,6 @@ export default function Items({navigation}) {
   const [selectedDateIndex, setSelectedDateIndex] = useState(null);
 
   const progress = useRef(new Animated.Value(0)).current;
-
-  
 
   const animate = val => {
     let to = !filterVisible ? 1 : 0;
@@ -122,7 +120,7 @@ export default function Items({navigation}) {
               createdBy: sn.data().createdBy,
               vat: sn.data().vat,
               tot: sn.data().tot,
-              shouldDiscard : sn.data().shouldDiscard
+              shouldDiscard: sn.data().shouldDiscard,
             };
             result.push(item);
           });
@@ -164,30 +162,25 @@ export default function Items({navigation}) {
   const sendNotification = () => {
     const options = {
       sound: true,
-      title: "Low Stock Alert", 
-      body: "Your stock has fallen below the required level."  
-    }
+      title: 'Low Stock Alert',
+      body: 'Your stock has fallen below the required level.',
+    };
 
-    // messaging().send(options)
-    //   .then((response) => {
-    //     console.log("Notification sent successfully:", response);
+    // messaging()
+    //   .send(options)
+    //   .then(response => {
+    //     console.log('Notification sent successfully:', response);
     //   })
-    //   .catch((err) => {
-    //     console.log("Notification failed:", err);
-    //   })
-  }
-
+    //   .catch(err => {
+    //     console.log('Notification failed:', err);
+    //   });
+  };
 
   useEffect(() => {
-    
-
-      
- 
     if (mounted && userInfo) {
       getSales();
       getStockCount();
     }
-
 
     return () => {
       setMounted(false);
@@ -210,7 +203,7 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           const stockCounts = getStockCount();
-          const requiredCount = 5;
+          const requiredCount = 3;
           console.log(stockCount);
 
           if (stockCount <= requiredCount) {
@@ -403,7 +396,7 @@ export default function Items({navigation}) {
                       justifyContent: 'space-between',
                       marginLeft: 'auto',
                     }}>
-                    {['Cash', 'Debt', 'Check',].map(i => {
+                    {['Cash', 'Debt', 'Check'].map(i => {
                       return (
                         <TouchableOpacity
                           key={i}
@@ -434,19 +427,19 @@ export default function Items({navigation}) {
                 ) : null}
 
                 <ScrollView style={{flex: 1}}>
-                  
                   {!Object.keys(data).length ? (
                     <EmptyBox message={t('No_Sales_Yet')} />
                   ) : (
-                   
                     <View style={{flex: 1}}>
-                      {Object.keys(data).map((dateString) => {
-                        const date=new Date(dateString);
-                        const formattedDate = date.toLocaleDateString('en-US', {
-                          weekday: 'short',
-                          month: 'short',
-                          day: 'numeric',
-                        });
+                      {Object.keys(data).map(dateString => {
+                        const date = new Date(dateString);
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const month = (date.getMonth() + 1)
+                          .toString()
+                          .padStart(2, '0');
+                        const year = date.getFullYear().toString();
+
+                        const formattedDate = `${day}/${month}/${year}`;
                         return (
                           <View key={dateString}>
                             <TouchableOpacity
@@ -468,9 +461,11 @@ export default function Items({navigation}) {
                               </Text>
                             </TouchableOpacity>
 
-                            {
-                              !(new Date(date).getDate() - new Date().getDate()==0)?
-                              expandedList[dateString]&&
+                            {!(
+                              new Date(date).getDate() - new Date().getDate() ==
+                              0
+                            )
+                              ? expandedList[dateString] &&
                                 data[dateString]
                                   .filter(saleItem => {
                                     if (!filterValue) return saleItem;
@@ -501,8 +496,7 @@ export default function Items({navigation}) {
                                       </TouchableOpacity>
                                     );
                                   })
-                             
-                              :data[dateString]
+                              : data[dateString]
                                   .filter(saleItem => {
                                     if (!filterValue) return saleItem;
                                     return (
@@ -531,16 +525,11 @@ export default function Items({navigation}) {
                                         />
                                       </TouchableOpacity>
                                     );
-                                  })
-    
-                            }
-
+                                  })}
                           </View>
                           // </TouchableOpacity>
                         );
-                      }
-                      )
-                    }
+                      })}
                     </View>
                   )}
                 </ScrollView>

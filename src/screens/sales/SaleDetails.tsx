@@ -27,9 +27,9 @@ import roundDecimal from '../../utils/roundDecimal';
 import {StateContext} from '../../global/context';
 import {HorizontalBox} from '../../components/HorizontalBox';
 import {SalesDetailListItem} from '../../components/SalesDetailListItem';
-import { transform } from '@babel/core';
+import {transform} from '@babel/core';
 import SelectDropdown from 'react-native-select-dropdown';
-import { CheckBox, color } from '@rneui/base';
+import {CheckBox, color} from '@rneui/base';
 
 const SaleDetails = ({route, navigation}) => {
   const {t} = useTranslation();
@@ -44,10 +44,12 @@ const SaleDetails = ({route, navigation}) => {
   const [error, setError] = useState('');
   const [menuvisible, setMenuvisible] = useState(false);
   const paymentMethods = ['Cash', 'Debt', 'Check'];
-  const [seletedPaymentMethod, setSelectedPayment]  = useState('Debt')
-  const[shouldShowPaymentMethodDropDown, setShouldShowPaymentMethodDropDown] = useState(false);
+  const [seletedPaymentMethod, setSelectedPayment] = useState('Debt');
+  const [shouldShowPaymentMethodDropDown, setShouldShowPaymentMethodDropDown] =
+    useState(false);
 
   const imageRef = useRef<any>(null);
+  const mountedRef = useRef(true);
 
   const calculate = () => {
     let sum: number = 0;
@@ -73,6 +75,10 @@ const SaleDetails = ({route, navigation}) => {
     if (!data.vat && !data.tot) {
       total = sum;
     }
+    if (mountedRef.current) {
+      setSum(formatNumber(sum));
+      setTotal(formatNumber(total));
+    }
 
     setSum(formatNumber(sum));
     setTotal(formatNumber(total));
@@ -84,9 +90,9 @@ const SaleDetails = ({route, navigation}) => {
     });
   };
 
-  const toggleDropDownPaymentOption = () =>{
+  const toggleDropDownPaymentOption = () => {
     setShouldShowPaymentMethodDropDown(!shouldShowPaymentMethodDropDown);
-  }
+  };
 
   const rollBackSale = async () => {
     setLoading(true);
@@ -119,21 +125,24 @@ const SaleDetails = ({route, navigation}) => {
                 currentCount:
                   parseFloat(res.data()!.currentCount) +
                   parseFloat(items[i].quantity),
-              }).then(() =>{
+              })
+              .then(() => {
                 setLoading(false);
               })
               .catch(err => {
                 console.log(err);
                 setLoading(false);
               });
-            
           })
           .catch(err => console.log(err));
       }
       if (proceed) {
         firestore().collection('sales').doc(data.id).update({
-          shouldDiscard : true
+          shouldDiscard: true,
         });
+      }
+      if (mountedRef.current) {
+        setLoading(false);
       }
       navigation.goBack();
     } catch (error) {
@@ -167,19 +176,25 @@ const SaleDetails = ({route, navigation}) => {
     }
     return () => {
       mounted = false;
+      mountedRef.current = false;
     };
   }, [data]);
 
   async function updateSalesDetail(): Promise<void> {
-   await firestore().collection('sales').doc(data.id).update({
-      paymentMethod : seletedPaymentMethod
-    }).then(()=>{
-      setShouldShowPaymentMethodDropDown(false);
-      ToastAndroid.show("Updated", ToastAndroid.SHORT);
-    }).catch((error) =>{
-      //this wil be shown if incase the exception is happened while updating the data
-      ToastAndroid.show("Update Error", ToastAndroid.SHORT);
-    });
+    await firestore()
+      .collection('sales')
+      .doc(data.id)
+      .update({
+        paymentMethod: seletedPaymentMethod,
+      })
+      .then(() => {
+        setShouldShowPaymentMethodDropDown(false);
+        ToastAndroid.show('Updated', ToastAndroid.SHORT);
+      })
+      .catch(error => {
+        //this wil be shown if incase the exception is happened while updating the data
+        ToastAndroid.show('Update Error', ToastAndroid.SHORT);
+      });
   }
 
   return (
@@ -326,7 +341,7 @@ const SaleDetails = ({route, navigation}) => {
                     {sum} {t('Birr')}
                   </Text>
                 </View>
-                
+
                 {data.vat ? (
                   <View
                     style={{
@@ -480,58 +495,66 @@ const SaleDetails = ({route, navigation}) => {
             />
           </TouchableOpacity>
         </View>
-       {!data.shouldDiscard ? <CheckBox
-       style={{marginTop : 10}}
-        title="Change Payment Method"
-        checked={shouldShowPaymentMethodDropDown}
-        onPress={toggleDropDownPaymentOption}
-      />  : <View></View>}
+        {!data.shouldDiscard ? (
+          <CheckBox
+            style={{marginTop: 10}}
+            title="Change Payment Method"
+            checked={shouldShowPaymentMethodDropDown}
+            onPress={toggleDropDownPaymentOption}
+          />
+        ) : (
+          <View></View>
+        )}
 
-          {shouldShowPaymentMethodDropDown ? <View style={{marginLeft : 21, marginRight : 40}}>
+        {shouldShowPaymentMethodDropDown ? (
+          <View style={{marginLeft: 21, marginRight: 40}}>
             <SelectDropdown
-                    data={paymentMethods}
-                    defaultButtonText={seletedPaymentMethod}
-                    renderDropdownIcon={() => (
-                      <View>
-                        <Icon name="caretdown" size={20} color={colors.black} />
-                      </View>
-                    )}
-                    buttonStyle={styles.dropDown}
-                    disabled={false}
-                    onSelect={selectedItem => {
-                     setSelectedPayment(selectedItem);
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                      return item;
-                    }}
-                  />
-          <TouchableOpacity
-            style={[styles.button, {backgroundColor: colors.green}]}
-            onPress={updateSalesDetail}>
-            <Text
-              style={[
-                styles.textBold,
-                {color: colors.white, textAlign: 'center'},
-              ]}>
-              {"Update"}
-            </Text>
-          </TouchableOpacity>
+              data={paymentMethods}
+              defaultButtonText={seletedPaymentMethod}
+              renderDropdownIcon={() => (
+                <View>
+                  <Icon name="caretdown" size={20} color={colors.black} />
+                </View>
+              )}
+              buttonStyle={styles.dropDown}
+              disabled={false}
+              onSelect={selectedItem => {
+                setSelectedPayment(selectedItem);
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+            />
+            <TouchableOpacity
+              style={[styles.button, {backgroundColor: colors.green}]}
+              onPress={updateSalesDetail}>
+              <Text
+                style={[
+                  styles.textBold,
+                  {color: colors.white, textAlign: 'center'},
+                ]}>
+                {'Update'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View></View>
+        )}
 
-                  </View> : <View></View> }
-                  
-       { data.shouldDiscard ?  <View style={void_reciept_style.container}>
-        
-      <Image
-        source={require('../../assets/images/void_reciept.png')} // Provide the source of your image
-        style={void_reciept_style.image}
-      />
-    </View> : <View></View>}
-
+        {data.shouldDiscard ? (
+          <View style={void_reciept_style.container}>
+            <Image
+              source={require('../../assets/images/void_reciept.png')} // Provide the source of your image
+              style={void_reciept_style.image}
+            />
+          </View>
+        ) : (
+          <View></View>
+        )}
       </ScrollView>
-
     </View>
   );
 };
@@ -540,17 +563,16 @@ export default SaleDetails;
 
 const void_reciept_style = StyleSheet.create({
   container: {
-    position : "absolute",
-    top: "40%",
-    left: "20%",
-    marginRight : 200
+    position: 'absolute',
+    top: '20%',
+    left: '30%',
+    marginRight: 200,
   },
   image: {
     width: 250,
     height: 200,
   },
 });
-
 
 export const styles = StyleSheet.create({
   container: {
