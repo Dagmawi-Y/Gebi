@@ -58,7 +58,10 @@ const PhoneInputScreen = ({navigation}) => {
             setConfirm(confirmation);
             setLoading(false);
             setStartCountDown(true);
-          }).catch(err=>{console.log(err)})
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     } catch (error) {
       setLoading(false);
@@ -92,7 +95,7 @@ const PhoneInputScreen = ({navigation}) => {
       num = val.substring(1);
     }
     if (num.length > 9 || num.length < 9 || !num.startsWith('9')) {
-      setError(t('Wrong_Number'));
+      setError(t('Incorrect Input'));
       return null;
     }
     setphoneNumber(num.toString());
@@ -332,7 +335,7 @@ const PhoneInputScreen = ({navigation}) => {
                   </Text>
                 </TouchableOpacity>
               )}
-              
+
               {phoneNumber ? (
                 <View
                   style={{
