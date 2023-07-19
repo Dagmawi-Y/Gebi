@@ -15,6 +15,7 @@ import IntroNavigator from './navigation/NewUserNavigator/IntroNavigators/IntroN
 import LottieView from 'lottie-react-native';
 import colors from './config/colors';
 import firestore from '@react-native-firebase/firestore';
+import {requestUserPermission, NotificationListener} from './utils/messaging';
 
 const Stack = createStackNavigator();
 
@@ -53,11 +54,12 @@ const App = () => {
       console.log(error);
     }
   };
-  
 
   useEffect(() => {
     setTimeout(() => SplashScreen.hide(), 1500);
     initialize();
+    requestUserPermission();
+    NotificationListener();
 
     // reset();
   }, []);

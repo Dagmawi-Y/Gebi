@@ -37,6 +37,7 @@ import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
 import {log} from 'react-native-reanimated';
+import messa from '../../utils/messaging.ts';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);

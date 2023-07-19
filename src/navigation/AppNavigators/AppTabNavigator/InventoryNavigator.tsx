@@ -66,7 +66,7 @@ const InventoryNavigator = ({navigation}) => {
           options={{headerShown: false}}
           component={ItemDetails}
         />
-         <Stack.Screen
+        <Stack.Screen
           name={routes.EditInventoryItem}
           options={{headerShown: false}}
           component={EditInventoryItem}
