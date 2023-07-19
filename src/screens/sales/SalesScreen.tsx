@@ -37,7 +37,6 @@ import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
 import {log} from 'react-native-reanimated';
-import messa from '../../utils/messaging.ts';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
@@ -137,7 +136,7 @@ export default function Items({navigation}) {
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
-          //console.log(a)
+          // console.log(a);
           return r;
         }, {});
         // const reversedGrouped = Object.keys(grouped).reverse().reduce(function (r, k) {

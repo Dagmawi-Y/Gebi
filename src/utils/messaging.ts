@@ -14,11 +14,13 @@ async function requestUserPermission() {
 
 async function getFCMToken() {
   let fcmtoken = await AsyncStorage.getItem('fcmtoken');
+  console.log(fcmtoken, 'old token');
   if (!fcmtoken) {
     try {
-      let fcmtoken = await messaging().getToken();
+      const fcmtoken = await messaging().getToken();
       if (fcmtoken) {
-        AsyncStorage.setItem('fcmtoken', fcmtoken);
+        console.log(fcmtoken, 'new token');
+        await AsyncStorage.setItem('fcmtoken', fcmtoken);
       } else {
       }
     } catch (e) {
@@ -55,4 +57,4 @@ const NotificationListener = () => {
   });
 };
 
-export {NotificationListener, requestUserPermission};
+export {NotificationListener, requestUserPermission, getFCMToken};
