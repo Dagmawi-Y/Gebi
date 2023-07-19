@@ -100,6 +100,20 @@ export default function Items({navigation}) {
     return new Date(d).toDateString();
   };
 
+  const groupSalesByDate = data => {
+    return Object.keys(data).reduce((groupedData, dateString) => {
+      const date = new Date(dateString);
+      const dayString = date.toISOString().slice(0, 10); // Get date in 'YYYY-MM-DD' format
+
+      if (!groupedData[dayString]) {
+        groupedData[dayString] = [];
+      }
+
+      groupedData[dayString].push(...data[dateString]);
+      return groupedData;
+    }, {});
+  };
+
   const getSales = async () => {
     setLoading(true);
     firestore()
@@ -144,7 +158,7 @@ export default function Items({navigation}) {
         //   return r;
         // }, {});
 
-        setData(grouped);
+        setData(groupSalesByDate(grouped));
         setLoading(false);
       });
   };
@@ -427,111 +441,59 @@ export default function Items({navigation}) {
                 ) : null}
 
                 <ScrollView style={{flex: 1}}>
-                  {!Object.keys(data).length ? (
-                    <EmptyBox message={t('No_Sales_Yet')} />
-                  ) : (
-                    <View style={{flex: 1}}>
-                      {Object.keys(data).map(dateString => {
-                        const date = new Date(dateString);
-                        const day = date.getDate().toString().padStart(2, '0');
-                        const month = (date.getMonth() + 1)
-                          .toString()
-                          .padStart(2, '0');
-                        const year = date.getFullYear().toString();
+                  {Object.keys(data).map(dateString => {
+                    const date = new Date(dateString);
+                    const day = date.getDate().toString().padStart(2, '0');
+                    const month = (date.getMonth() + 1)
+                      .toString()
+                      .padStart(2, '0');
+                    const year = date.getFullYear().toString();
 
-                        const formattedDate = `${day}/${month}/${year}`;
-                        return (
-                          <View key={dateString}>
-                            <TouchableOpacity
-                              onPress={() => {
-                                const newList = [...expandedList];
-                                newList[dateString] = !newList[dateString];
-                                setExpandedList(newList);
+                    const formattedDate = `${day}/${month}/${year}`;
+                    return (
+                      <View key={dateString}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            const newList = [...expandedList];
+                            newList[dateString] = !newList[dateString];
+                            setExpandedList(newList);
+                          }}>
+                          <Text
+                            style={{color: colors.primary, marginVertical: 5}}>
+                            {formattedDate}
+                          </Text>
+                        </TouchableOpacity>
 
-                                //setExpandedDate(!expandedDate)
-                              }}>
-                              <Text
-                                style={{
-                                  color: colors.primary,
-                                  marginVertical: 5,
-                                }}>
-                                {/* {new Date(i).getDate() - new Date().getDate()} */}
-
-                                {formattedDate}
-                              </Text>
-                            </TouchableOpacity>
-
-                            {!(
-                              new Date(date).getDate() - new Date().getDate() ==
-                              0
-                            )
-                              ? expandedList[dateString] &&
-                                data[dateString]
-                                  .filter(saleItem => {
-                                    if (!filterValue) return saleItem;
-                                    return (
-                                      saleItem.paymentMethod.toLowerCase() ===
-                                      filterValue.toLowerCase()
-                                      // saleItem.date===filterValue
-                                    );
-                                  })
-                                  .map(sale => {
-                                    return (
-                                      <TouchableOpacity
-                                        activeOpacity={0.5}
-                                        key={sale.id}
-                                        onPress={() => {
-                                          navigation.navigate(
-                                            routes.saleDetails,
-                                            {
-                                              data: sale,
-                                            },
-                                          );
-                                        }}>
-                                        <SalesListItem
-                                          key={`${dateString}_${sale.id}`}
-                                          sale={sale}
-                                          navigation={navigation}
-                                        />
-                                      </TouchableOpacity>
-                                    );
-                                  })
-                              : data[dateString]
-                                  .filter(saleItem => {
-                                    if (!filterValue) return saleItem;
-                                    return (
-                                      saleItem.paymentMethod.toLowerCase() ===
-                                      filterValue.toLowerCase()
-                                      // saleItem.date===filterValue
-                                    );
-                                  })
-                                  .map(sale => {
-                                    return (
-                                      <TouchableOpacity
-                                        activeOpacity={0.5}
-                                        key={sale.id}
-                                        onPress={() => {
-                                          navigation.navigate(
-                                            routes.saleDetails,
-                                            {
-                                              data: sale,
-                                            },
-                                          );
-                                        }}>
-                                        <SalesListItem
-                                          key={`${dateString}_${sale.id}`}
-                                          sale={sale}
-                                          navigation={navigation}
-                                        />
-                                      </TouchableOpacity>
-                                    );
-                                  })}
-                          </View>
-                          // </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  )}
+                        {expandedList[dateString] &&
+                          data[dateString]
+                            .filter(saleItem => {
+                              if (!filterValue) return saleItem;
+                              return (
+                                saleItem.paymentMethod.toLowerCase() ===
+                                filterValue.toLowerCase()
+                              );
+                            })
+                            .map(sale => {
+                              return (
+                                <TouchableOpacity
+                                  activeOpacity={0.5}
+                                  key={sale.id}
+                                  onPress={() => {
+                                    navigation.navigate(routes.saleDetails, {
+                                      data: sale,
+                                    });
+                                  }}>
+                                  <SalesListItem
+                                    key={`${dateString}_${sale.id}`}
+                                    sale={sale}
+                                    navigation={navigation}
+                                  />
+                                </TouchableOpacity>
+                              );
+                            })}
+                      </View>
+                    );
+                  })}
                 </ScrollView>
               </>
             )}
