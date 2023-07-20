@@ -57,4 +57,40 @@ const NotificationListener = () => {
   });
 };
 
-export {NotificationListener, requestUserPermission, getFCMToken};
+const sendLowStockNotification = async itemName => {
+  try {
+    const notificationThreshold = 50; // Set your desired threshold here
+
+    // Fetch the user's FCM token to send the notification
+    const fcmToken = await messaging().getToken();
+
+    if (
+      parseFloat(itemName.doc.currentCount) < notificationThreshold &&
+      fcmToken
+    ) {
+      const message = {
+        notification: {
+          title: 'Low Stock Alert',
+          body: `The item "${itemName.doc.item_name}" is running low in stock. Please restock.`,
+        },
+        token: fcmToken,
+      };
+
+      // Send the notification
+      await messaging().sendMessage(message as any);
+      console.log(message.notification.body);
+      messaging().onMessageSent(async remoteMessage => {
+        console.log(remoteMessage);
+      });
+    }
+  } catch (error) {
+    console.log('Error sending notification:', error);
+  }
+};
+
+export {
+  NotificationListener,
+  requestUserPermission,
+  getFCMToken,
+  sendLowStockNotification,
+};

@@ -54,20 +54,20 @@ const ItemDetails = ({route, navigation}) => {
         });
       })
       .catch(err => console.log(err));
-    return batch.commit().then(async () => [
-      await updateCategoryCount(-totSaleCount)
-    ]);
+    return batch
+      .commit()
+      .then(async () => [await updateCategoryCount(-totSaleCount)]);
   };
 
   const editItem = async () => {};
-  const updateCategoryCount = async(totSaleCount : number) =>{
+  const updateCategoryCount = async (totSaleCount: number) => {
     await firestore()
-    .collection('categories')
-    .doc(data.categoryId)
-    .update({
-      count: firestore.FieldValue.increment(totSaleCount),
-    });
-  }
+      .collection('categories')
+      .doc(data.categoryId)
+      .update({
+        count: firestore.FieldValue.increment(totSaleCount),
+      });
+  };
   const deleteImage = () => {};
 
   const deleteItem = async () => {
@@ -142,6 +142,8 @@ const ItemDetails = ({route, navigation}) => {
         });
     } catch (error) {
       console.log(error);
+    }
+    {
     }
   };
 
@@ -291,39 +293,45 @@ const ItemDetails = ({route, navigation}) => {
                     </View>
                     {stockHistory.map(history => {
                       return (
-                        <TouchableOpacity key={history.id} onPress={() => navigation.navigate(t(routes.EditInventoryItem),  {
-                          data: history,
-                          itemId : itemId,
-                          updateCategoryCount,
-                          totalStock : stockHistory.length
-                        })}>
-                        <View
-                          key={Math.random()}
-                          style={[
-                            tableStyles.trow,
-                            {
-                              backgroundColor:
-                                history.doc % 2 != 0 ? 'transparent' : 'white',
-                            },
-                          ]}>
-                          <Text style={tableStyles.trowFont}>
-                            {formatNumber(history.doc.unit_price)} {t('Birr')}
-                          </Text>
-                          <Text style={tableStyles.trowFont}>
-                            {
-                              formatNumber(history.doc.initialCount).split(
-                                '.',
-                              )[0]
-                            }{' '}
-                            {t(history.doc.unit)}
-                          </Text>
-                          <Text style={tableStyles.trowFont}>
-                            {history.doc.supplier_name}
-                          </Text>
-                          <Text style={tableStyles.trowFont}>
-                            {history.doc.date}
-                          </Text>
-                        </View>
+                        <TouchableOpacity
+                          key={history.id}
+                          onPress={() =>
+                            navigation.navigate(t(routes.EditInventoryItem), {
+                              data: history,
+                              itemId: itemId,
+                              updateCategoryCount,
+                              totalStock: stockHistory.length,
+                            })
+                          }>
+                          <View
+                            key={Math.random()}
+                            style={[
+                              tableStyles.trow,
+                              {
+                                backgroundColor:
+                                  history.doc % 2 != 0
+                                    ? 'transparent'
+                                    : 'white',
+                              },
+                            ]}>
+                            <Text style={tableStyles.trowFont}>
+                              {formatNumber(history.doc.unit_price)} {t('Birr')}
+                            </Text>
+                            <Text style={tableStyles.trowFont}>
+                              {
+                                formatNumber(history.doc.initialCount).split(
+                                  '.',
+                                )[0]
+                              }{' '}
+                              {t(history.doc.unit)}
+                            </Text>
+                            <Text style={tableStyles.trowFont}>
+                              {history.doc.supplier_name}
+                            </Text>
+                            <Text style={tableStyles.trowFont}>
+                              {history.doc.date}
+                            </Text>
+                          </View>
                         </TouchableOpacity>
                       );
                     })}

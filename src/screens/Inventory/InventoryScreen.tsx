@@ -34,6 +34,7 @@ import {useRef} from 'react';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
+import {sendLowStockNotification} from '../../utils/messaging';
 
 export default function Items({navigation}) {
   const {t} = useTranslation();
@@ -52,7 +53,7 @@ export default function Items({navigation}) {
   const [totalItems, setTotalItems] = useState('0');
   const [addNewModalVisible, setAddNewModalVisible] = useState(false);
   const [categories, setCategories]: Array<any> = useState([]);
-  const [refreshing, setRefreshing] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
 
   const reCalculate = dt => {
     let sumItem = 0;
@@ -70,6 +71,7 @@ export default function Items({navigation}) {
   };
 
   const getInventory = async () => {
+    const threshold = 50;
     setLoading(true);
     try {
       firestore()
@@ -78,10 +80,16 @@ export default function Items({navigation}) {
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(documentSnapshot => {
-            result.push({
+            const item = {
               id: documentSnapshot.id,
               doc: documentSnapshot.data(),
-            });
+            };
+            result.push(item);
+
+            // Check stock level and send a notification if it's below the threshold
+            if (parseFloat(item.doc.currentCount) < threshold) {
+              sendLowStockNotification(item);
+            }
           });
 
           if (mountedRef) {
@@ -172,10 +180,9 @@ export default function Items({navigation}) {
         />
 
         <ScrollView
-         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={getInventory} />
-        }
-        >
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={getInventory} />
+          }>
           <View style={{backgroundColor: colors.primary, padding: 10}}>
             <View style={topCard.boardContainer}>
               <View style={topCard.boardCol}>
@@ -361,8 +368,7 @@ export default function Items({navigation}) {
                                     owner: item.doc.owner,
                                     itemId: id,
                                   });
-                                }
-                                }>
+                                }}>
                                 <InvetoryListItem
                                   title={item.doc.item_name}
                                   unitPrice={item.doc.unit_price}
