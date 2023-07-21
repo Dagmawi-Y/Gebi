@@ -219,6 +219,7 @@
   "Create_Account":"ሰራተኛን ጨምር",
   "Accounts":"ሰራተኞች",
   "Your_stock_product_is_less_than required": "ምንም እቃ አልተመዘገበም",
-  "Please_Add_Stock": "እባክዎ ሽያጭዎትን ለማየት እቃ ይመዝግቡ"
+  "Please_Add_Stock": "እባክዎ ሽያጭዎትን ለማየት እቃ ይመዝግቡ",
+  "Low Stock Alert": "እያለቀ ያለ እቃ"
 
 }

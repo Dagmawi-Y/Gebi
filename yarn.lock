@@ -4418,7 +4418,7 @@ inherits@2, inherits@2.0.4, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.3:
 
 install-peerdeps@^3.0.3:
   version "3.0.3"
-  resolved "https://registry.yarnpkg.com/install-peerdeps/-/install-peerdeps-3.0.3.tgz#ed806da467fa81eeb31df280d603fe8dc470df04"
+  resolved "https://registry.npmjs.org/install-peerdeps/-/install-peerdeps-3.0.3.tgz"
   integrity sha512-FpuvEiJul5oDPnNXtwIMhh4moLR445U+St77FFU5Su8++cHFUVQmRrWf+r9pZ64yN17nhUzz1crFhbBEoCeG5Q==
   dependencies:
     "@babel/polyfill" "^7.7.0"
@@ -6798,11 +6798,6 @@ react-native-app-intro-slider@^4.0.4:
   resolved "https://registry.npmjs.org/react-native-app-intro-slider/-/react-native-app-intro-slider-4.0.4.tgz"
   integrity sha512-Zkjaol6X3BbZkHUpVDj2LjdidpS6rCgKi0fx80xgGKa0pHxBRd4swWTv2bHnnvu5k1/HXwYk0mY2TbK+2jHl5w==
 
-react-native-background-fetch@^4.1.10:
-  version "4.1.10"
-  resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-4.1.10.tgz#12c7e85140af67fb05edb7cd9960e4f09a457797"
-  integrity sha512-Ug54vTctZuD/c06ZLk/VyvFdhw/hCVVOHYR5heyMqc6FlT/m9fVhFWyl4uH3JmPCzmWDVR3fO28CzrGpKOrusw==
-
 react-native-bouncy-checkbox-group@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/react-native-bouncy-checkbox-group/-/react-native-bouncy-checkbox-group-0.1.0.tgz"
@@ -6897,7 +6892,7 @@ react-native-print@^0.10.0:
 
 react-native-push-notification@^8.1.1:
   version "8.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz#a41d20c70ea5a7709417e96261b225461f8dc73a"
+  resolved "https://registry.npmjs.org/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz"
   integrity sha512-XpBtG/w+a6WXTxu6l1dNYyTiHnbgnvjoc3KxPTxYkaIABRmvuJZkFxqruyGvfCw7ELAlZEAJO+dthdTabCe1XA==
 
 react-native-ratings@^8.1.0:

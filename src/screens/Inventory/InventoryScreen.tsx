@@ -11,6 +11,7 @@ import {
   Pressable,
   StatusBar,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
@@ -34,7 +35,11 @@ import {useRef} from 'react';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
-import {sendLowStockNotification} from '../../utils/messaging';
+import {
+  createLocalNotification,
+  sendLowStockNotification,
+} from '../../utils/messaging';
+import messaging from '@react-native-firebase/messaging';
 
 export default function Items({navigation}) {
   const {t} = useTranslation();
@@ -133,11 +138,12 @@ export default function Items({navigation}) {
     if (mountedRef && user) {
       getInventory();
       getCategories();
+      createLocalNotification();
     }
     return () => {
       mountedRef.current = false;
     };
-  }, []);
+  }, [salesCount]);
 
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [expired, setExpired] = useState(false);

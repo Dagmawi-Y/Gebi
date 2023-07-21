@@ -12,7 +12,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import colors from '../../config/colors';
 import {SafeAreaView, useSafeAreaFrame} from 'react-native-safe-area-context';
 import {ListItem, SpeedDial, Text} from '@rneui/themed';
-import { CheckBox, color } from '@rneui/base';
+import {CheckBox, color} from '@rneui/base';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import Modal from 'react-native-modal';
@@ -27,7 +27,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useTranslation} from 'react-i18next';
 import formatNumber from '../../utils/formatNumber';
 import TopScreen from '../../components/TopScreen/TopScreen';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import CustomProgressBar from '../../components/ProgressBar';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -41,15 +41,10 @@ export default function PlanerScreen({navigation}: any) {
   const {totalProfit, SetTotalProfit} = useContext(StateContext);
   const {totalIncome, SetTotalIncome} = useContext(StateContext);
   const [shouldShowPlanChanger, setShouldShowPlanChanger] = useState(false);
-  const [newPlan, setNewPlan] = useState("");
+  const [newPlan, setNewPlan] = useState('');
   const deviceWidth = Dimensions.get('window').width;
-  const DatePlans = [
-    t('Daily'),
-    t('Monthly'),
-    t('Six_Months'),
-    t('Yearly'),
-  ];
-const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
+  const DatePlans = [t('Daily'), t('Monthly'), t('Six_Months'), t('Yearly')];
+  const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
   const getUserData = async () => {
     setLoading(true);
     try {
@@ -77,208 +72,227 @@ const [selectedDatePlan, setSelectedDatePlan] = useState('Daily');
     }
   };
 
-  const toggleShouldShowPlanChanger = () =>{
+  const toggleShouldShowPlanChanger = () => {
     setShouldShowPlanChanger(!shouldShowPlanChanger);
-  }
+  };
 
   useEffect(() => {
-    // console.log(totalProfit)
+    // console.log(totalProfit);
     // console.log(userData[0].financial);
-    // console.log(totalProfit/userData[0].financial);
+    // console.log(totalProfit / userData[0].financial);
     getUserData();
   }, []);
 
-  const updatePlan = async () =>{
-    if(!newPlan){
-      ToastAndroid.show("Income Required", ToastAndroid.SHORT);
+  const updatePlan = async () => {
+    if (!newPlan) {
+      ToastAndroid.show('Income Required', ToastAndroid.SHORT);
       return false;
     }
-    const querySnapshot =  await firestore()
-    .collection('users')
-    .where('companyId', '==', user.uid).get();
+    const querySnapshot = await firestore()
+      .collection('users')
+      .where('companyId', '==', user.uid)
+      .get();
     if (!querySnapshot.empty) {
       querySnapshot.forEach(async sn => {
         console.log(await firestore().collection('users').doc(sn.id).get());
-        firestore().collection('users').doc(sn.id).update({
-          financial : newPlan,
-          plan : selectedDatePlan
-        }).then(() =>{
-          ToastAndroid.show("Plan Updated", ToastAndroid.SHORT);
-          setShouldShowPlanChanger(false);
-        }).catch((error) => {
-          ToastAndroid.show("Error Updating Plan", ToastAndroid.SHORT);
-        });
-    });
+        firestore()
+          .collection('users')
+          .doc(sn.id)
+          .update({
+            financial: newPlan,
+            plan: selectedDatePlan,
+          })
+          .then(() => {
+            ToastAndroid.show('Plan Updated', ToastAndroid.SHORT);
+            setShouldShowPlanChanger(false);
+          })
+          .catch(error => {
+            ToastAndroid.show('Error Updating Plan', ToastAndroid.SHORT);
+          });
+      });
     } else {
-      ToastAndroid.show("User not found", ToastAndroid.SHORT);
+      ToastAndroid.show('User not found', ToastAndroid.SHORT);
     }
-
-  }
+  };
   if (!userData.length) return null;
 
   return (
     <>
       <SafeAreaView style={styles.container}>
         <ScrollView>
-        <TopScreen />
-        
-        <View
-          style={{
-            backgroundColor: colors.primary,
-            paddingHorizontal: 5,
-          }}>
-          <View style={{marginVertical: 20, marginHorizontal: 10}}>
-            <Text h4 style={{color: 'white'}}>
-             {t("Income Plan")}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.contentContainer}>
-          
-        <View style={styles.planBoard}>
-            <View style={{flexDirection: 'row', marginBottom: 5}}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                }}>
-                {t('Progress')} {"  "}
+          <TopScreen />
+
+          <View
+            style={{
+              backgroundColor: colors.primary,
+              paddingHorizontal: 5,
+            }}>
+            <View style={{marginVertical: 20, marginHorizontal: 10}}>
+              <Text h4 style={{color: 'white'}}>
+                {t('Income Plan')}
               </Text>
-              {/* <Text style ={{fontSize: 15,
+            </View>
+          </View>
+          <View style={styles.contentContainer}>
+            <View style={styles.planBoard}>
+              <View style={{flexDirection: 'row', marginBottom: 5}}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 'bold',
+                  }}>
+                  {t('Progress')} {'  '}
+                </Text>
+                {/* <Text style ={{fontSize: 15,
                   fontWeight: 'bold',}}>
               {(totalProfit/userData[0].financial) * 100}{"%"}
               </Text> */}
-            </View>
-            <View style={{flexDirection: 'row', marginBottom: 5}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}>
-                  
-                <CustomProgressBar progress={(totalProfit/userData[0].financial) < 0 ? 0 : (totalProfit/userData[0].financial)} width={deviceWidth - 40} height={10}></CustomProgressBar>
+              </View>
+              <View style={{flexDirection: 'row', marginBottom: 5}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                  }}>
+                  <CustomProgressBar
+                    progress={
+                      totalProfit / userData[0].financial < 0
+                        ? 0
+                        : totalProfit / userData[0].financial
+                    }
+                    width={deviceWidth - 40}
+                    height={10}></CustomProgressBar>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={styles.planBoard}>
-            <View style={{flexDirection: 'row', marginBottom: 5}}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                }}>
-                {t('Income')}
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row', marginBottom: 5}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}>
-                <PlanStatCard
-                  label={t('Plan')}
-                  value={formatNumber(userData[0].financial)}
-                  trend="positive"
-                  labelStyle={{color: 'black'}}
-                />
-                <PlanStatCard
-                  label={t('Current')}
-                  value={totalIncome}
-                  trend="negative"
-                  labelStyle={{color: 'black'}}
-                />
+            <View style={styles.planBoard}>
+              <View style={{flexDirection: 'row', marginBottom: 5}}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 'bold',
+                  }}>
+                  {t('Income')}
+                </Text>
               </View>
-            </View>
-          </View>
-          <View style={styles.planBoard}>
-            <View style={{flexDirection: 'row', marginBottom: 5}}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontWeight: 'bold',
-                }}>
-                {t('Expense')}
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row', marginBottom: 5}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}>
-                <PlanStatCard
-                  label={t('Plan')}
-                  value="-"
-                  trend="positive"
-                  labelStyle={{color: 'black'}}
-                />
-                <PlanStatCard
-                  label={t('Current')}
-                  value={totalExpense}
-                  trend="negative"
-                  labelStyle={{color: 'black'}}
-                />
-              </View>
-            </View>
-          </View>
-
-          <CheckBox
-              style={{marginTop : 10}}
-                title={t("Change Income Plan")}
-                checked={shouldShowPlanChanger}
-                onPress={toggleShouldShowPlanChanger}
-          /> 
-
-
-          {shouldShowPlanChanger ? <View style={{marginLeft : 21, marginRight : 40}}>
-            <TextInput
-              style={styles.input}
-              onChangeText={(value) => setNewPlan(value)}
-              value={newPlan.toString()}
-              placeholder={t("Income")}
-              placeholderTextColor={colors.black}
-              keyboardType={'numeric'} 
-            />
-                        <SelectDropdown
-                    data={DatePlans}
-                    defaultButtonText={selectedDatePlan}
-                    renderDropdownIcon={() => (
-                      <View>
-                        <Icon name="caretdown" size={20} color={colors.black} />
-                      </View>
-                    )}
-                    buttonStyle={styles.dropDown}
-                    disabled={false}
-                    onSelect={selectedItem => {
-                     setSelectedDatePlan(selectedItem);
-                    }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item, index) => {
-                      return item;
-                    }}
+              <View style={{flexDirection: 'row', marginBottom: 5}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                  }}>
+                  <PlanStatCard
+                    label={t('Plan')}
+                    value={formatNumber(userData[0].financial)}
+                    trend="positive"
+                    labelStyle={{color: 'black'}}
                   />
-                  
+                  <PlanStatCard
+                    label={t('Current')}
+                    value={totalIncome}
+                    trend="negative"
+                    labelStyle={{color: 'black'}}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={styles.planBoard}>
+              <View style={{flexDirection: 'row', marginBottom: 5}}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 'bold',
+                  }}>
+                  {t('Expense')}
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', marginBottom: 5}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                  }}>
+                  <PlanStatCard
+                    label={t('Plan')}
+                    value="-"
+                    trend="positive"
+                    labelStyle={{color: 'black'}}
+                  />
+                  <PlanStatCard
+                    label={t('Current')}
+                    value={totalExpense}
+                    trend="negative"
+                    labelStyle={{color: 'black'}}
+                  />
+                </View>
+              </View>
+            </View>
 
-            <TouchableOpacity
-            style={[{backgroundColor: colors.green, height : 40, borderRadius : 10, marginLeft : 10, marginTop : 5}]}
-            onPress={updatePlan}>
-            <Text
-              style={[
-                {color: colors.white, textAlign: 'center', marginTop : 8},
-              ]}>
-              {t("Update")}
-            </Text>
-          </TouchableOpacity>
-         </View> : <View></View> }
+            <CheckBox
+              style={{marginTop: 10}}
+              title={t('Change Income Plan')}
+              checked={shouldShowPlanChanger}
+              onPress={toggleShouldShowPlanChanger}
+            />
 
-        </View>
+            {shouldShowPlanChanger ? (
+              <View style={{marginLeft: 21, marginRight: 40}}>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={value => setNewPlan(value)}
+                  value={newPlan.toString()}
+                  placeholder={t('Income')}
+                  placeholderTextColor={colors.black}
+                  keyboardType={'numeric'}
+                />
+                <SelectDropdown
+                  data={DatePlans}
+                  defaultButtonText={selectedDatePlan}
+                  renderDropdownIcon={() => (
+                    <View>
+                      <Icon name="caretdown" size={20} color={colors.black} />
+                    </View>
+                  )}
+                  buttonStyle={styles.dropDown}
+                  disabled={false}
+                  onSelect={selectedItem => {
+                    setSelectedDatePlan(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    return item;
+                  }}
+                />
+
+                <TouchableOpacity
+                  style={[
+                    {
+                      backgroundColor: colors.green,
+                      height: 40,
+                      borderRadius: 10,
+                      marginLeft: 10,
+                      marginTop: 5,
+                    },
+                  ]}
+                  onPress={updatePlan}>
+                  <Text
+                    style={[
+                      {color: colors.white, textAlign: 'center', marginTop: 8},
+                    ]}>
+                    {t('Update')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View></View>
+            )}
+          </View>
         </ScrollView>
       </SafeAreaView>
     </>
@@ -314,21 +328,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
-    marginTop : 5,
-    marginBottom : 10,
+    marginTop: 5,
+    marginBottom: 10,
     width: 330,
     height: 50,
     borderWidth: 1,
     borderRadius: 15,
     borderColor: 'black',
-    paddingLeft : 5,
-    color : colors.black
-},
-dropDown: {
-  width: '100%',
-  borderRadius: 10,
-  borderWidth: 1,
-  marginBottom: 20,
-  backgroundColor: colors.white,
-},
+    paddingLeft: 5,
+    color: colors.black,
+  },
+  dropDown: {
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    marginBottom: 20,
+    backgroundColor: colors.white,
+  },
 });

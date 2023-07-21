@@ -6,7 +6,8 @@ import MedaPayModal, {checkBillStat} from 'react-native-meda-pay';
 import {StateContext} from '../../global/context';
 import firestore from '@react-native-firebase/firestore';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
+import {subscriptionAlert} from '../../utils/messaging';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjM5YzYwY2YwOTAwNzExZGQwMjcxODg0Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjM5YzYwY2YwOTAwNzExZGQwMjcxODg0IiwiaWF0IjoxNjcxMTkyODA2fQ.whAr3Z3dtOs37X8_fTowEvLPEWIjq5k60SbGfKC4AuM';
@@ -18,7 +19,7 @@ const Subscriptions = ({navigation}) => {
   const {user, userInfo, setSubscriptionPlan} = useContext(StateContext);
   const [plan, setPlan] = useState('Monthly');
 
-  const {t} = useTranslation()
+  const {t} = useTranslation();
 
   async function writeSubscription(data) {
     firestore()
@@ -53,7 +54,7 @@ const Subscriptions = ({navigation}) => {
           .onSnapshot(qsn => {
             let result: Array<any> = [];
             qsn.forEach(sn => {
-              console.log(sn.id)
+              console.log(sn.id);
               result.push(sn.data());
             });
             const latestPlan = result.filter(p => {
@@ -132,7 +133,7 @@ const Subscriptions = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>{t("Subscription")}</Text>
+      <Text style={styles.headerText}>{t('Subscription')}</Text>
       <View>
         <PriceCard
           plan={plan}
@@ -225,7 +226,7 @@ type CardDataTypes = {
   currency: string;
   color: string;
   setPlan: any;
-  t:any
+  t: any;
 };
 
 const PriceCard = ({
@@ -235,7 +236,7 @@ const PriceCard = ({
   plan,
   color,
   setPlan,
-  t
+  t,
 }: CardDataTypes) => {
   return (
     <TouchableOpacity

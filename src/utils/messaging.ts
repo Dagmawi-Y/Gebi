@@ -1,5 +1,12 @@
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {t} from 'i18next';
+
+const messagingTranslation = () => {
+  const {t} = useTranslation();
+};
 
 async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -59,7 +66,7 @@ const NotificationListener = () => {
 
 const sendLowStockNotification = async itemName => {
   try {
-    const notificationThreshold = 50; // Set your desired threshold here
+    const notificationThreshold = 10; // Set your desired threshold here
 
     // Fetch the user's FCM token to send the notification
     const fcmToken = await messaging().getToken();
@@ -70,25 +77,54 @@ const sendLowStockNotification = async itemName => {
     ) {
       const message = {
         notification: {
-          title: 'Low Stock Alert',
-          body: `The item "${itemName.doc.item_name}" is running low in stock. Please restock.`,
+          title: t('Low Stock Alert'),
+          body: t(
+            `${itemName.doc.item_name} is running low in stock. Please restock.`,
+          ),
         },
         token: fcmToken,
       };
 
       // Send the notification
       await messaging().sendMessage(message as any);
-      console.log(message.notification.body);
-      messaging().onMessageSent(async remoteMessage => {
-        console.log(remoteMessage);
-      });
+      Alert.alert(
+        JSON.stringify(message.notification.title),
+        JSON.stringify(message.notification.body),
+      );
     }
   } catch (error) {
     console.log('Error sending notification:', error);
   }
 };
 
+const subscriptionAlert = async daysUntilExpiry => {
+  try {
+    const notificationTitle = 'Subscription Expiry Alert';
+    const notificationBody = `Your subscription is expiring in ${daysUntilExpiry} days.`;
+
+    // Fetch the user's FCM token to send the notification
+    const fcmToken = await messaging().getToken();
+
+    if (fcmToken) {
+      const remoteMessage = {
+        notification: {
+          title: notificationTitle,
+          body: notificationBody,
+        },
+        token: fcmToken,
+      };
+
+      // Send the notification
+      await messaging().sendMessage(remoteMessage as any);
+      Alert.alert(notificationTitle, notificationBody);
+    }
+  } catch (error) {
+    console.log('Error sending subscription alert:', error);
+  }
+};
+
 export {
+  subscriptionAlert,
   NotificationListener,
   requestUserPermission,
   getFCMToken,
