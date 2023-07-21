@@ -138,7 +138,6 @@ export default function Items({navigation}) {
     if (mountedRef && user) {
       getInventory();
       getCategories();
-      createLocalNotification();
     }
     return () => {
       mountedRef.current = false;

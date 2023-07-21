@@ -201,6 +201,25 @@ export default function Items({navigation}) {
     };
   }, []);
 
+  // Make the latest date of the sales to be expaned by default
+  useEffect(() => {
+    // Sort the data by date in descending order
+    const sortedDates = Object.keys(data).sort(
+      (a, b) => new Date(b).getTime() - new Date(a).getTime(),
+    );
+
+    // Create a copy of the current expandedList state
+    const newExpandedList = {...expandedList};
+
+    // Set the latest date's key to true in the newExpandedList
+    if (sortedDates.length > 0) {
+      newExpandedList[sortedDates[0]] = true;
+    }
+
+    // Update the expandedList state
+    setExpandedList(newExpandedList);
+  }, [data]);
+
   return (
     <>
       {expired ? (
@@ -454,7 +473,7 @@ export default function Items({navigation}) {
                       <View key={dateString}>
                         <TouchableOpacity
                           onPress={() => {
-                            const newList = [...expandedList];
+                            const newList = {...expandedList};
                             newList[dateString] = !newList[dateString];
                             setExpandedList(newList);
                           }}>
