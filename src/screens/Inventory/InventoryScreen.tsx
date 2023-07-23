@@ -35,11 +35,8 @@ import {useRef} from 'react';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
-import {
-  createLocalNotification,
-  sendLowStockNotification,
-} from '../../utils/messaging';
-import messaging from '@react-native-firebase/messaging';
+import {sendLowStockNotification} from '../../utils/messaging';
+import notifee from '@notifee/react-native';
 
 export default function Items({navigation}) {
   const {t} = useTranslation();
@@ -76,7 +73,7 @@ export default function Items({navigation}) {
   };
 
   const getInventory = async () => {
-    const threshold = 50;
+    const threshold = 10;
     setLoading(true);
     try {
       firestore()

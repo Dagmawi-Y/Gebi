@@ -1,3 +1,4 @@
 <resources>
     <!-- <string name="app_name">Gebi</string> -->
+    <string name="notification_channel_id">notifee</string>
 </resources>

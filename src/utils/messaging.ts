@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {t} from 'i18next';
+import notifee from '@notifee/react-native';
 
 const messagingTranslation = () => {
   const {t} = useTranslation();
@@ -64,38 +65,63 @@ const NotificationListener = () => {
   });
 };
 
-const sendLowStockNotification = async itemName => {
-  try {
-    const notificationThreshold = 10; // Set your desired threshold here
+// const sendLowStockNotification = async itemName => {
+//   try {
+//     const notificationThreshold = 10; // Set your desired threshold here
 
-    // Fetch the user's FCM token to send the notification
-    const fcmToken = await messaging().getToken();
+//     // Fetch the user's FCM token to send the notification
+//     const fcmToken = await messaging().getToken();
 
-    if (
-      parseFloat(itemName.doc.currentCount) < notificationThreshold &&
-      fcmToken
-    ) {
-      const message = {
-        notification: {
-          title: t('Low Stock Alert'),
-          body: t(
-            `${itemName.doc.item_name} is running low in stock. Please restock.`,
-          ),
-        },
-        token: fcmToken,
-      };
+//     if (
+//       parseFloat(itemName.doc.currentCount) < notificationThreshold &&
+//       fcmToken
+//     ) {
+//       const message = {
+//         notification: {
+//           title: t('Low Stock Alert'),
+//           body: t(
+//             `${itemName.doc.item_name} is running low in stock. Please restock.`,
+//           ),
+//         },
+//         token: fcmToken,
+//       };
 
-      // Send the notification
-      await messaging().sendMessage(message as any);
-      Alert.alert(
-        JSON.stringify(message.notification.title),
-        JSON.stringify(message.notification.body),
-      );
-    }
-  } catch (error) {
-    console.log('Error sending notification:', error);
-  }
-};
+//       // Send the notification
+//       await messaging().sendMessage(message as any);
+//       Alert.alert(
+//         JSON.stringify(message.notification.title),
+//         JSON.stringify(message.notification.body),
+//       );
+//     }
+//   } catch (error) {
+//     console.log('Error sending notification:', error);
+//   }
+// };
+
+async function sendLowStockNotification(item) {
+  // Request permissions (required for iOS)
+  await notifee.requestPermission();
+
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
+  // Display a notification
+  await notifee.displayNotification({
+    title: 'Low Stock Alert',
+    body: `${item.doc.item_name} is running low in stock. Please restock.`,
+    android: {
+      channelId,
+      smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+      // pressAction is needed if you want the notification to open the app when pressed
+      pressAction: {
+        id: 'low-stock',
+      },
+    },
+  });
+}
 
 const subscriptionAlert = async daysUntilExpiry => {
   try {
