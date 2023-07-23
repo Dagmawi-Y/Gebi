@@ -101,7 +101,7 @@ export default function Items({navigation}) {
               sendLowStockNotification(item);
               triggerLowInStock(item);
             } else {
-              notifee.cancelAllNotifications();
+              notifee.cancelAllNotifications(['lowStockTrigger']);
             }
           });
 

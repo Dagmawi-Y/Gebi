@@ -86,7 +86,7 @@ async function triggerLowInStock(item) {
       title: 'Item in stock is low',
       body: `${item.doc.item_name} is running low in stock. Please restock.`,
       android: {
-        channelId: '',
+        channelId: 'lowStockTrigger',
       },
     },
     trigger,
