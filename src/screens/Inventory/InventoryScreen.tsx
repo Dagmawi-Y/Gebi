@@ -12,6 +12,7 @@ import {
   StatusBar,
   RefreshControl,
   Alert,
+  AppRegistry,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
@@ -60,6 +61,10 @@ export default function Items({navigation}) {
   const [categories, setCategories]: Array<any> = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  notifee
+    .getTriggerNotifications()
+    .then(notifications => console.log(notifications));
+
   const reCalculate = dt => {
     let sumItem = 0;
     let sumItemPrice = 0;
@@ -95,6 +100,8 @@ export default function Items({navigation}) {
             if (parseFloat(item.doc.currentCount) < threshold) {
               sendLowStockNotification(item);
               triggerLowInStock(item);
+            } else {
+              notifee.cancelAllNotifications();
             }
           });
 
@@ -396,6 +403,8 @@ export default function Items({navigation}) {
     </>
   );
 }
+
+AppRegistry.registerComponent('items', () => Items);
 
 const styles = StyleSheet.create({
   container: {

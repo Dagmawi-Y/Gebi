@@ -9,8 +9,9 @@ import notifee, {
   TimeUnit,
   AndroidColor,
 } from '@notifee/react-native';
-import EditInventoryItem from '../screens/Inventory/EditInventoryItem';
+import Items from '../screens/Inventory/InventoryScreen';
 
+AppRegistry.registerComponent('items', () => Items);
 const messagingTranslation = () => {
   const {t} = useTranslation();
 };
@@ -66,7 +67,7 @@ async function sendLowStockNotification(item) {
       // pressAction is needed if you want the notification to open the app when pressed
       pressAction: {
         id: 'low-stock',
-        mainComponent: 'Edit-Inventory-Item',
+        mainComponent: 'items',
       },
     },
   });
@@ -90,6 +91,7 @@ async function triggerLowInStock(item) {
     },
     trigger,
   );
+  console.log(trigger);
 }
 
 const subscriptionAlert = async daysUntilExpiry => {

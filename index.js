@@ -9,8 +9,7 @@ import messaging from '@react-native-firebase/messaging';
 import { NavigationContainer } from '@react-navigation/native';
 import routes from './src/navigation/routes';
 import notifee, {EventType} from '@notifee/react-native';
-import EditInventoryItem from './src/screens/Inventory/EditInventoryItem';
-
+import Items from './src/screens/Inventory/InventoryScreen.tsx';
 
 // messaging().setBackgroundMessageHandler(async remoteMessage =>{
 //     console.log("Message handled in the background!",remoteMessage)
