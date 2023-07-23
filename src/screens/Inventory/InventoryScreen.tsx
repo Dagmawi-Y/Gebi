@@ -35,7 +35,10 @@ import {useRef} from 'react';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
-import {sendLowStockNotification} from '../../utils/messaging';
+import {
+  sendLowStockNotification,
+  triggerLowInStock,
+} from '../../utils/messaging';
 import notifee from '@notifee/react-native';
 
 export default function Items({navigation}) {
@@ -91,6 +94,7 @@ export default function Items({navigation}) {
             // Check stock level and send a notification if it's below the threshold
             if (parseFloat(item.doc.currentCount) < threshold) {
               sendLowStockNotification(item);
+              triggerLowInStock(item);
             }
           });
 
@@ -124,8 +128,8 @@ export default function Items({navigation}) {
                   sn.data().name.substring(1),
               });
             });
-            console.log(userInfo[0]?.doc?.companyId);
-            console.log(result);
+            // console.log(userInfo[0]?.doc?.companyId);
+            // console.log(result);
             setCategories(result);
           }
         });
