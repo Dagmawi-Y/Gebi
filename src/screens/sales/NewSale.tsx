@@ -167,7 +167,7 @@ const NewSale = ({navigation}) => {
     vat: taxType == 'VAT' ? true : false,
     tot: taxType == 'TOT' ? true : false,
     createdBy: userInfo[0]?.doc?.name,
-    shouldDiscard : false
+    shouldDiscard: false,
   };
 
   const checkEmpty = () => {
@@ -473,7 +473,7 @@ const NewSale = ({navigation}) => {
                           ? 'l'
                           : item.unit === 'Metre'
                           ? 'm'
-                          : item.unit.substring(0,2)}
+                          : item.unit.substring(0, 2)}
                       </Text>
                       <Text style={styles.textLight}>
                         <Text style={styles.textBold}>
@@ -687,7 +687,7 @@ const NewSale = ({navigation}) => {
                 alignItems: 'center',
               }}>
               <BouncyCheckboxGroup
-              style={{}}
+                style={{}}
                 data={paymentTypes as any}
                 onChange={(selectedItem: ICheckboxButton) => {
                   const val = selectedItem.text;

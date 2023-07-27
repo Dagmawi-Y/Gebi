@@ -23,7 +23,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {StateContext} from '../../global/context';
 import colors from '../../config/colors';
 import ImageSelector from '../../components/ImageSelector/ImageSelector';
+import messaging from '@react-native-firebase/messaging';
 import routes from '../../navigation/routes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const {t} = useTranslation();
@@ -53,7 +55,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   const [InvoiceNumber, setInvoiceNumber] = useState('');
   const [searchResultVisible, setSearchResultVisible] = useState(false);
 
-  const quantifiers = [t('Piece'), t('Kg'), t('Litre'), t('Metre'), t('Quintal')];
+  const quantifiers = [
+    t('Piece'),
+    t('Kg'),
+    t('Litre'),
+    t('Metre'),
+    t('Quintal'),
+  ];
   const [categories, setCategories]: Array<any> = useState([]);
 
   const suplierSearch = key => {
@@ -180,6 +188,24 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
       setWrittingData(false);
       return raiseError('Supplier already exists');
     }
+    async function getFCMToken() {
+      let fcmtoken = await AsyncStorage.getItem('fcmtoken');
+      console.log(fcmtoken, 'old token');
+      if (!fcmtoken) {
+        try {
+          const fcmtoken = await messaging().getToken();
+          if (fcmtoken) {
+            console.log(fcmtoken, 'new token');
+            await AsyncStorage.setItem('fcmtoken', fcmtoken);
+          } else {
+          }
+        } catch (e) {
+          console.log(e, 'error in fetching fcmtoken');
+        }
+      }
+      return fcmtoken;
+    }
+    const fcmToken = await getFCMToken();
 
     try {
       uploadImage()
@@ -199,7 +225,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     item_id: itemId,
                     supplier_name: supplierName,
                     initialCount: quantity,
-                    invoiceNumber : InvoiceNumber,
+                    invoiceNumber: InvoiceNumber,
                     unit_price: unitPrice,
                     unit_SalePrice: unitSalePrice,
                     unit: unit,
@@ -232,16 +258,17 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 item_name: itemName,
                 unit_price: unitPrice,
                 unit: unit,
-                invoiceNumber : InvoiceNumber,
+                invoiceNumber: InvoiceNumber,
                 unit_SalePrice: unitSalePrice,
                 currentCount: quantity,
                 picture: fileUrl,
                 category: itemCategory.toLowerCase(),
                 categoryId: categoryId,
                 createdBy: userInfo[0]?.doc?.name,
+                fcmToken: fcmToken,
               })
               .then(res => {
-                console.log("inventory added");
+                console.log('inventory added');
                 const item_id = res['_documentPath']['_parts'][1];
                 firestore()
                   .collection('stock')
@@ -249,7 +276,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     item_id: item_id,
                     supplier_name: supplierName,
                     initialCount: quantity,
-                    invoiceNumber : InvoiceNumber,
+                    invoiceNumber: InvoiceNumber,
                     unit_price: unitPrice,
                     unit: unit,
                     owner: userInfo[0]?.doc?.companyId,
@@ -257,7 +284,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     date: new Date().toLocaleDateString(),
                   })
                   .then(() => {
-                    console.log("stock added");
+                    console.log('stock added');
                     firestore()
                       .collection('categories')
                       .doc(categoryId)
@@ -543,33 +570,33 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 </View>
               ) : null}
               <View>
-                  <View>
-                <Text
-                  style={{
-                    color: colors.black,
-                    fontSize: 15,
-                    marginBottom: 5,
-                  }}>
-                  {t('Item_Name')}
-                </Text>
-                <TextInput
-                  style={[styles.Input]}
-                  onChangeText={val => {
-                    setItemName(val);
-                    setItemId(null);
-                    searchItem(val);
-                    setSearchResultVisible(true);
-                  }}
-                  onFocus={() => {
-                    setSearchResultVisible(true);
-                    setSearchVisible(false);
-                  }}
-                  value={itemName}
-                  keyboardType="default"
-                  placeholderTextColor={colors.faded_grey}
-                />
+                <View>
+                  <Text
+                    style={{
+                      color: colors.black,
+                      fontSize: 15,
+                      marginBottom: 5,
+                    }}>
+                    {t('Item_Name')}
+                  </Text>
+                  <TextInput
+                    style={[styles.Input]}
+                    onChangeText={val => {
+                      setItemName(val);
+                      setItemId(null);
+                      searchItem(val);
+                      setSearchResultVisible(true);
+                    }}
+                    onFocus={() => {
+                      setSearchResultVisible(true);
+                      setSearchVisible(false);
+                    }}
+                    value={itemName}
+                    keyboardType="default"
+                    placeholderTextColor={colors.faded_grey}
+                  />
                 </View>
-                
+
                 {searchResult.length && searchResultVisible ? (
                   <View
                     style={{
@@ -630,7 +657,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   onChangeText={val => {
                     setInvoiceNumber(val);
                   }}
-                
                   value={InvoiceNumber}
                   keyboardType="default"
                   placeholderTextColor={colors.faded_grey}

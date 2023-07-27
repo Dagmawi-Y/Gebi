@@ -239,7 +239,7 @@ export default function Items({navigation}) {
           const requiredCount = 3;
           console.log(stockCount);
 
-          if (stockCount <= requiredCount) {
+          if (stockCount < requiredCount) {
             return Alert.alert(
               t('Your_stock_product_is_less_than required'),
               t('Please_Add_Stock'),
@@ -267,9 +267,9 @@ export default function Items({navigation}) {
 
           // 100th sale or 25th customer or 10th supplier
           if (
-            (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
-            (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
-            (userInfo[0]?.doc?.isFree && supplierCount >= 10)
+            (userInfo[0]?.doc?.isFree && salesCount >= 500) ||
+            (userInfo[0]?.doc?.isFree && customerCount >= 200) ||
+            (userInfo[0]?.doc?.isFree && supplierCount >= 100)
           ) {
             return setLimitReachedVisible(true);
           }

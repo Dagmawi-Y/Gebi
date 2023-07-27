@@ -61,10 +61,6 @@ export default function Items({navigation}) {
   const [categories, setCategories]: Array<any> = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  notifee
-    .getTriggerNotifications()
-    .then(notifications => console.log(notifications));
-
   const reCalculate = dt => {
     let sumItem = 0;
     let sumItemPrice = 0;
@@ -97,12 +93,10 @@ export default function Items({navigation}) {
             result.push(item);
 
             // Check stock level and send a notification if it's below the threshold
-            if (parseFloat(item.doc.currentCount) < threshold) {
-              sendLowStockNotification(item);
-              triggerLowInStock(item);
-            } else {
-              notifee.cancelAllNotifications(['lowStockTrigger']);
-            }
+            // if (parseFloat(item.doc.currentCount) < threshold) {
+            //   sendLowStockNotification(item);
+            //   triggerLowInStock(item);
+            // }
           });
 
           if (mountedRef) {

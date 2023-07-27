@@ -44,7 +44,7 @@ async function getFCMToken() {
   }
 }
 
-async function sendLowStockNotification(item) {
+async function sendLowStockNotification(item: {id?: string; doc: any}) {
   // Request permissions (required for iOS)
   await notifee.requestPermission();
 
@@ -73,11 +73,11 @@ async function sendLowStockNotification(item) {
   });
 }
 
-async function triggerLowInStock(item) {
+async function triggerLowInStock(item: {id?: string; doc: any}) {
   const trigger: IntervalTrigger = {
     type: TriggerType.INTERVAL,
-    interval: 15,
-    timeUnit: TimeUnit.MINUTES,
+    interval: 1,
+    timeUnit: TimeUnit.DAYS,
   };
 
   // Create a trigger notification
@@ -91,10 +91,10 @@ async function triggerLowInStock(item) {
     },
     trigger,
   );
-  console.log(trigger);
+  console.log(trigger.interval, trigger.timeUnit);
 }
 
-const subscriptionAlert = async daysUntilExpiry => {
+const subscriptionAlert = async (daysUntilExpiry: any) => {
   try {
     const notificationTitle = 'Subscription Expiry Alert';
     const notificationBody = `Your subscription is expiring in ${daysUntilExpiry} days.`;

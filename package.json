@@ -15,9 +15,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@notifee/react-native" : "5.7.0",
+    "@notifee/react-native": "5.7.0",
     "@react-native-async-storage/async-storage": "^1.19.0",
-    "@react-native-firebase/app": "^18.0.0",
+    "@react-native-firebase/app": "^18.3.0",
     "@react-native-firebase/auth": "^18.0.0",
     "@react-native-firebase/firestore": "^18.0.0",
     "@react-native-firebase/messaging": "^18.2.0",
@@ -30,7 +30,8 @@
     "@rneui/themed": "^4.0.0-rc.4",
     "dayjs": "^1.11.6",
     "expo-updates": "^0.18.10",
-    "firebase-admin": "^11.0.0",
+    "firebase-admin": "^11.10.1",
+    "firebase-functions": "^4.4.1",
     "i18next": "^21.8.13",
     "lottie-ios": "3.2.3",
     "lottie-react-native": "^5.1.3",
@@ -62,7 +63,8 @@
     "react-native-vector-icons": "^9.1.0",
     "react-native-view-shot": "^3.3.0",
     "react-native-webview": "^11.23.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
