@@ -7,7 +7,7 @@ import {StateContext} from '../../global/context';
 import firestore from '@react-native-firebase/firestore';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
-import {subscriptionAlert} from '../../utils/messaging';
+import {subscriptionAlert} from '../../utils/messagingUtil';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjaGFudElkIjoiNjM5YzYwY2YwOTAwNzExZGQwMjcxODg0Iiwicm9sZSI6Im1lcmNoYW50Iiwic3ViIjoiNjM5YzYwY2YwOTAwNzExZGQwMjcxODg0IiwiaWF0IjoxNjcxMTkyODA2fQ.whAr3Z3dtOs37X8_fTowEvLPEWIjq5k60SbGfKC4AuM';

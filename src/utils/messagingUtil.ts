@@ -73,7 +73,7 @@ async function sendLowStockNotification(item: {id?: string; doc: any}) {
   });
 }
 
-async function triggerLowInStock(item: {id?: string; doc: any}) {
+async function triggerLowInStock(item) {
   const trigger: IntervalTrigger = {
     type: TriggerType.INTERVAL,
     interval: 1,
@@ -84,6 +84,7 @@ async function triggerLowInStock(item: {id?: string; doc: any}) {
   await notifee.createTriggerNotification(
     {
       title: 'Item in stock is low',
+      id: 'triggerNotif',
       body: `${item.doc.item_name} is running low in stock. Please restock.`,
       android: {
         channelId: 'lowStockTrigger',
