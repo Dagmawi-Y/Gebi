@@ -93,12 +93,12 @@ export default function Items({navigation}) {
             result.push(item);
 
             // Check stock level and send a notification if it's below the threshold
-            if (parseFloat(item.doc.currentCount) > threshold) {
-              notifee.cancelAllNotifications();
-            } else if (parseFloat(item.doc.currentCount) < threshold) {
-              // sendLowStockNotification(item);
-              triggerLowInStock(item);
-            }
+            // if (parseFloat(item.doc.currentCount) > threshold) {
+            //   notifee.cancelAllNotifications();
+            // } else if (parseFloat(item.doc.currentCount) < threshold) {
+            //   // sendLowStockNotification(item);
+            //   // triggerLowInStock(item);
+            // }
           });
 
           if (mountedRef) {
