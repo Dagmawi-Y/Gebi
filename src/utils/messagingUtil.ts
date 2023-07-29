@@ -76,8 +76,8 @@ async function sendLowStockNotification(item: {id?: string; doc: any}) {
 async function triggerLowInStock(item) {
   const trigger: IntervalTrigger = {
     type: TriggerType.INTERVAL,
-    interval: 1,
-    timeUnit: TimeUnit.DAYS,
+    interval: 15,
+    timeUnit: TimeUnit.MINUTES,
   };
 
   // Create a trigger notification

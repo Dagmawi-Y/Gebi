@@ -96,7 +96,7 @@ export default function Items({navigation}) {
             if (parseFloat(item.doc.currentCount) > threshold) {
               notifee.cancelAllNotifications();
             } else if (parseFloat(item.doc.currentCount) < threshold) {
-              sendLowStockNotification(item);
+              // sendLowStockNotification(item);
               triggerLowInStock(item);
             }
           });
