@@ -4,27 +4,16 @@ admin.initializeApp();
 
 exports.sendLowStockNotification = functions.firestore
   .document('inventory/{documentId}')
-  .onUpdate((change, context) => {
+  .onUpdate(async (change, context) => {
     const newValue = change.after.data();
-
+    const previousValue = change.before.data();
+    console.log(newValue);
+    const fcmToken = await newValue.fcmToken;
+    // Check if the 'name' field has changed
     if (newValue.currentCount < 10) {
-      // Get the FCM token from the user's document (replace 'fcmToken' with the actual field name)
-      const fcmToken = newValue.fcmToken;
+      // Get the FCM token from the user's document (replace 'fcmToken' with the actual field name
 
       if (fcmToken) {
-        // Prepare the notification payload
-        // const payload = {
-        //   message: {
-        //     token: fcmToken,
-        //     notification: {
-        //       title: 'Low on stock',
-        //       body: 'New news story available.',
-        //     },
-        //     data: {
-        //       story_id: 'story_12345',
-        //     },
-        //   },
-        // };
         const message = {
           notification: {
             title: 'Low on stock.',
@@ -32,10 +21,9 @@ exports.sendLowStockNotification = functions.firestore
           },
           token: fcmToken,
         };
-
         try {
           // Send the notification using FCM
-          admin
+          await admin
             .messaging()
             .send(message)
             .then(response => {
@@ -53,11 +41,41 @@ exports.sendLowStockNotification = functions.firestore
     } else {
       console.log('Current Count is greater than 10. No notification sent.');
     }
-
     return null; // Return null to indicate success (not needed, but won't return a warning)
   });
 
-// exports.sendLowStockNotification = functions.pubsub
-//   .schedule('0 */12 * * *')
-//   .onRun(async context => {
-// });
+exports.checkLowStock = functions.pubsub
+  .schedule('every 4 hours')
+  .onRun(async context => {
+    const inventoryRef = admin.firestore().collection('inventory');
+    const querySnapshot = await inventoryRef
+      .where('currentCount', '<', 10)
+      .get();
+
+    querySnapshot.forEach(doc => {
+      const item = doc.data();
+      const fcmToken = item.fcmToken;
+
+      if (fcmToken) {
+        const message = {
+          notification: {
+            title: 'Low on stock.',
+            body: `${item.item_name} is low on stock`,
+          },
+          token: fcmToken,
+        };
+
+        admin
+          .messaging()
+          .send(message)
+          .then(() => {
+            console.log('Notification sent successfully.');
+          })
+          .catch(error => {
+            console.error('Error sending notification:', error);
+          });
+      } else {
+        console.log('FCM token not found for user. Cannot send notification.');
+      }
+    });
+  });

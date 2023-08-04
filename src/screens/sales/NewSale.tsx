@@ -205,9 +205,9 @@ const NewSale = ({navigation}) => {
     Alert.alert(`እርግጠኛ ነዎት?`, ``, [
       {
         text: 'አዎ',
-        onPress: () => {
+        onPress: async () => {
           try {
-            firestore()
+            await firestore()
               .collection('sales')
               .add(sale)
               .then(async res => {

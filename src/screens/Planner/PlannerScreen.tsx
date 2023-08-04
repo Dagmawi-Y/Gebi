@@ -143,10 +143,10 @@ export default function PlanerScreen({navigation}: any) {
                   }}>
                   {t('Progress')} {'  '}
                 </Text>
-                {/* <Text style ={{fontSize: 15,
-                  fontWeight: 'bold',}}>
-              {(totalProfit/userData[0].financial) * 100}{"%"}
-              </Text> */}
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                  {((totalProfit / userData[0].financial) * 100).toFixed(0)}
+                  {'%'}
+                </Text>
               </View>
               <View style={{flexDirection: 'row', marginBottom: 5}}>
                 <View
@@ -192,7 +192,7 @@ export default function PlanerScreen({navigation}: any) {
                   />
                   <PlanStatCard
                     label={t('Current')}
-                    value={totalIncome}
+                    value={formatNumber(totalIncome)}
                     trend="negative"
                     labelStyle={{color: 'black'}}
                   />

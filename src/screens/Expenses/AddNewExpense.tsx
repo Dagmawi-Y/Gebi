@@ -392,7 +392,7 @@ const AddNewExpense = ({navigation}) => {
               />
             </View>
             <View style={styles.input}>
-              <Text style={styles.inputLable}>{t('Amount2')}</Text>
+              <Text style={styles.inputLable}>{t('Amount')}</Text>
               <TextInput
                 value={amount}
                 onChangeText={val => setAmount(val)}

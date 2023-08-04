@@ -25,7 +25,7 @@
   "Something_Went_Wrong": "Something went wrong",
   "Invalid_Code": "Invalid code",
   "This_information_will_be_used_to_set_up_your_profile": "This information will be used to set up your profile",
-  "Personal_And_Bussiness_Information": "የግል እና የንግድ መረጃ",
+  "Personal_And_Bussiness_Information": "Personal and Business Information",
   "Full_Name": "Full name",
   "Organization_Name": "Organization name",
   "Organization": "Organization",
@@ -221,5 +221,7 @@
   "Name":"Name",
   "Privileges":"Privileges",
   "Create_Account":"Create account",
-  "Accounts":"Accounts"
+  "Accounts":"Accounts",
+  "Your_stock_product_is_less_than required": "Your stock product is less than required",
+  "Please_Add_Stock": "Please add items to the stock"
 }

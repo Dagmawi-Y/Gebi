@@ -83,7 +83,7 @@ const AddNew = ({
               doc: sn.data(),
             });
           });
-          console.log(result["data"]);
+          console.log(result['data']);
 
           setAllItems(result);
         }
@@ -252,7 +252,7 @@ const AddNew = ({
               });
           }
         })
-        .catch(err => console.log('jona'+err));
+        .catch(err => console.log('jona' + err));
     } catch (error) {
       setWrittingData(false);
       raiseError(`Something went wrong.\nTry again.`);
@@ -274,16 +274,15 @@ const AddNew = ({
 
   useEffect(() => {
     let mounted = true;
-    if  (mounted && userInfo) {
+    if (mounted && userInfo) {
       getItems();
       getSuppliers();
       getCategories();
       reset();
     }
     return () => {
-      console.log('hello')
+      console.log('hello');
       mounted = false;
-      
     };
   }, []);
 

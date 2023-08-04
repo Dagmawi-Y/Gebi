@@ -37,7 +37,6 @@ const HomeScreen = ({navigation}) => {
   } = useContext(StateContext);
   const [mounted, setMounted] = useState(true);
 
-   
   if (!userInfo || !user) return <Loading size={50} />;
 
   return (
@@ -53,22 +52,29 @@ const HomeScreen = ({navigation}) => {
                 color: colors.white,
                 fontWeight: '400',
               }}>
-              {userInfo[0]?.doc?.orgName}{'\n'}
-              {t("Subscription")}{': '}
-              {subcriptionPlan?.length > 0 ? `${t(subcriptionPlan[0]?.subscription)}` : t('Expired')}{' '}
-              
+              {userInfo[0]?.doc?.orgName}
+              {'\n'}
+              {t('Subscription')}
+              {': '}
+              {subcriptionPlan?.length > 0
+                ? `${t(subcriptionPlan[0]?.subscription)}`
+                : t('Expired')}{' '}
             </Text>
           </>
-        ) : <Text
-        style={{
-          fontSize: 20,
-          textAlign: 'center',
-          color: colors.white,
-          fontWeight: '400',
-        }}>
-        {userInfo[0]?.doc?.orgName}{'\n'}
-        {t("Subscription")}{': '} {t("Free")}
-      </Text>}
+        ) : (
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: 'center',
+              color: colors.white,
+              fontWeight: '400',
+            }}>
+            {userInfo[0]?.doc?.orgName}
+            {'\n'}
+            {t('Subscription')}
+            {': '} {t('Free')}
+          </Text>
+        )}
         <View
           style={{
             backgroundColor: colors.transWhite,

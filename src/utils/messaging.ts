@@ -59,8 +59,8 @@ async function sendLowStockNotification(item: {id?: string; doc: any}) {
 
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
+      id: 'local',
+      name: 'Local Channel',
       lights: true,
       lightColor: AndroidColor.BLUE,
     });

@@ -34,7 +34,7 @@ export default function Expenses({navigation}: any) {
   const {user, totalExpense, totalProfit, totalIncome} =
     useContext(StateContext);
   const [expenses, setExpenses]: Array<any> = useState([]);
-  
+
   const [dates, setDates]: Array<any> = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,6 @@ export default function Expenses({navigation}: any) {
                 id: sn.id,
                 data: sn.data(),
               });
-
 
               !dates.includes(sn.data().date) && dates.push(sn.data().date);
             });
@@ -101,8 +100,7 @@ export default function Expenses({navigation}: any) {
   }, []);
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [expandedDate, setExpandedDate] = useState(true);
-  
- 
+
   const [expired, setExpired] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
@@ -126,9 +124,9 @@ export default function Expenses({navigation}: any) {
         <FloatingButton
           action={() => {
             if (
-              (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
-              (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
-              (userInfo[0]?.doc?.isFree && supplierCount >= 10)
+              (userInfo[0]?.doc?.isFree && salesCount >= 200) ||
+              (userInfo[0]?.doc?.isFree && customerCount >= 150) ||
+              (userInfo[0]?.doc?.isFree && supplierCount >= 100)
             ) {
               return setLimitReachedVisible(true);
             }
@@ -174,16 +172,15 @@ export default function Expenses({navigation}: any) {
             }}>
             {expenses.length > 0 ? (
               dates.map(date => (
-               
                 <View key={date}>
-                  <TouchableOpacity onPress={()=>{
-                    const newList = [...expandedList];
-                    newList[date] = !newList[date];
-                    setExpandedList(newList);
+                  <TouchableOpacity
+                    onPress={() => {
+                      const newList = [...expandedList];
+                      newList[date] = !newList[date];
+                      setExpandedList(newList);
 
-                  setExpandedDate(!expandedDate)
-                  }}  >
-                   
+                      setExpandedDate(!expandedDate);
+                    }}>
                     <Text
                       style={{
                         color: colors.black,
@@ -192,31 +189,22 @@ export default function Expenses({navigation}: any) {
                       }}>
                       {moment(date).format('DD-MM-YYYY')}
                     </Text>
-                
                   </TouchableOpacity>
 
-             {
-                 !(new Date(date).getDate() - new Date().getDate()==0)?             
-               expandedList[date]&&             
-               expenses
-                    .filter(
-                      exp => exp.data.date == date)
-                    .map(i => {                     
-                      return <ExpenseListItem key={i.id} t={t} item={i} />;
-                    }
-                    )    
-                  : expenses
-                  .filter(
-                    exp => exp.data.date == date)
-                  .map(i => {                     
-                    return <ExpenseListItem key={i.id} t={t} item={i} />;
-                  }
-                  )            
-                  }
-                  
+                  {!(new Date(date).getDate() - new Date().getDate() == 0)
+                    ? expandedList[date] &&
+                      expenses
+                        .filter(exp => exp.data.date == date)
+                        .map(i => {
+                          return <ExpenseListItem key={i.id} t={t} item={i} />;
+                        })
+                    : expenses
+                        .filter(exp => exp.data.date == date)
+                        .map(i => {
+                          return <ExpenseListItem key={i.id} t={t} item={i} />;
+                        })}
                 </View>
-              )
-              )
+              ))
             ) : (
               <View
                 style={{
@@ -252,37 +240,37 @@ const ExpenseListItem = ({item, t}) => {
       activeOpacity={0.7}
       style={styles.expenseListItem}
       onPress={() => setExpanded(!expanded)}>
-      <View>    
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <View>
-              <Text
-                style={{
-                  color: colors.black,
-                  fontSize: 15,
-                  fontWeight: '700',
-                }}>
-                {t(item.data.expenseName)}
-              </Text>
-            </View>
-            <View style={{}}>
-              <Text style={{color: colors.red, fontWeight: '700'}}>
-                -{item.data.amount} {t('Birr')}
-              </Text>
-              <Text
-                style={{
-                  color: colors.faded_grey,
-                  fontWeight: '500',
-                }}>
-                {item.data.date}
-              </Text>
-            </View>
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View>
+            <Text
+              style={{
+                color: colors.black,
+                fontSize: 15,
+                fontWeight: '700',
+              }}>
+              {t(item.data.expenseName)}
+            </Text>
           </View>
-        
+          <View style={{}}>
+            <Text style={{color: colors.red, fontWeight: '700'}}>
+              -{item.data.amount} {t('Birr')}
+            </Text>
+            <Text
+              style={{
+                color: colors.faded_grey,
+                fontWeight: '500',
+              }}>
+              {item.data.date}
+            </Text>
+          </View>
+        </View>
+
         {expanded && item.data.note ? (
           <View style={{flexDirection: 'row', marginTop: 10}}>
             <Text
@@ -307,8 +295,7 @@ const ExpenseListItem = ({item, t}) => {
         ) : null}
       </View>
     </TouchableOpacity>
-    
-  )
+  );
 };
 
 const styles = StyleSheet.create({

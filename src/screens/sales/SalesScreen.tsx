@@ -164,14 +164,17 @@ export default function Items({navigation}) {
   };
 
   const getStockCount = () => {
-    firestore()
+    return firestore()
       .collection('inventory')
       .where('owner', '==', userInfo[0]?.doc?.companyId)
-      .get()
-      .then(snap => {
-        setStockCount(snap.size);
-      })
-      .catch(err => console.log(err));
+      .onSnapshot(
+        querySnapshot => {
+          setStockCount(querySnapshot.size);
+        },
+        error => {
+          console.error('Error fetching data: ', error);
+        },
+      );
   };
   const sendNotification = () => {
     const options = {
@@ -236,7 +239,7 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           const stockCounts = getStockCount();
-          const requiredCount = 3;
+          const requiredCount = 2;
           console.log(stockCount);
 
           if (stockCount < requiredCount) {

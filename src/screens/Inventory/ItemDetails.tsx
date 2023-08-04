@@ -76,15 +76,18 @@ const ItemDetails = ({route, navigation}) => {
         text: t('Yes'),
         onPress: async () => {
           if (data.picture) {
-            let pictureRef = storage().refFromURL(data.picture);
-            pictureRef.delete().catch(err => console.log(err));
+            const pictureRef = storage().refFromURL(data.picture);
+            // Check if data.picture is a valid URL before attempting to delete
+            if (pictureRef) {
+              try {
+                await pictureRef.delete();
+              } catch (err) {
+                console.log('Error deleting image from Firebase Storage:', err);
+              }
+            }
           }
+
           await firestore().collection('inventory').doc(itemId).delete();
-          const picture = storage().refFromURL(data.picture);
-          picture
-            .delete()
-            .then(res => {})
-            .catch(err => console.log(err));
           deleteStock();
           navigation.goBack();
         },

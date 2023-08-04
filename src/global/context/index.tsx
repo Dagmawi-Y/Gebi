@@ -39,9 +39,7 @@ const StateContextProvider = ({children}) => {
   const [curlang, setCurlang] = useState('');
   const [introDone, setIntroDone] = useState(false);
 
- 
-
-  const value:any = {
+  const value: any = {
     addNewModalVisible,
     bottomNavVisible,
     subcriptionPlan,
@@ -134,7 +132,7 @@ const StateContextProvider = ({children}) => {
         })
         .catch(err => {});
       await AsyncStorage.getItem('introDone')
-        .then((val:any) => setIntroDone(val.toString()))
+        .then((val: any) => setIntroDone(val.toString()))
         .catch(err => {});
     } catch (error) {
       console.log(error);

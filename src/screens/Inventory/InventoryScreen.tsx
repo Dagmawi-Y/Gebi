@@ -93,17 +93,11 @@ export default function Items({navigation}) {
             result.push(item);
 
             // Check stock level and send a notification if it's below the threshold
-<<<<<<< HEAD
-            // if (parseFloat(item.doc.currentCount) > threshold) {
-            //   notifee.cancelAllNotifications();
-            // } else if (parseFloat(item.doc.currentCount) < threshold) {
-            //   sendLowStockNotification(item);
-=======
-            // if (parseFloat(item.doc.currentCount) < threshold) {
-            //   sendLowStockNotification(item);
-            //   triggerLowInStock(item);
->>>>>>> parent of bedcc07 (notifications handling in the foreground fixed)
-            // }
+            if (parseFloat(item.doc.currentCount) > threshold) {
+              notifee.cancelAllNotifications();
+            } else if (parseFloat(item.doc.currentCount) < threshold) {
+              sendLowStockNotification(item);
+            }
           });
 
           if (mountedRef) {
@@ -172,9 +166,9 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           if (
-            (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
-            (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
-            (userInfo[0]?.doc?.isFree && supplierCount >= 10)
+            (userInfo[0]?.doc?.isFree && salesCount >= 1000) ||
+            (userInfo[0]?.doc?.isFree && customerCount >= 2500) ||
+            (userInfo[0]?.doc?.isFree && supplierCount >= 1000)
           ) {
             return setLimitReachedVisible(true);
           }
