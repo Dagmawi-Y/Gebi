@@ -15,7 +15,7 @@ import IntroNavigator from './navigation/NewUserNavigator/IntroNavigators/IntroN
 import LottieView from 'lottie-react-native';
 import colors from './config/colors';
 import firestore from '@react-native-firebase/firestore';
-import {requestUserPermission, getFCMToken} from './utils/messagingUtil';
+import {requestUserPermission, getFCMToken} from './utils/messaging';
 
 const Stack = createStackNavigator();
 

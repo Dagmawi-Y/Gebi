@@ -4,16 +4,27 @@ admin.initializeApp();
 
 exports.sendLowStockNotification = functions.firestore
   .document('inventory/{documentId}')
-  .onUpdate(async (change, context) => {
+  .onUpdate((change, context) => {
     const newValue = change.after.data();
-    console.log(newValue);
 
-    // Check if the 'name' field has changed
     if (newValue.currentCount < 10) {
       // Get the FCM token from the user's document (replace 'fcmToken' with the actual field name)
-      const fcmToken = await newValue.fcmToken;
+      const fcmToken = newValue.fcmToken;
 
       if (fcmToken) {
+        // Prepare the notification payload
+        // const payload = {
+        //   message: {
+        //     token: fcmToken,
+        //     notification: {
+        //       title: 'Low on stock',
+        //       body: 'New news story available.',
+        //     },
+        //     data: {
+        //       story_id: 'story_12345',
+        //     },
+        //   },
+        // };
         const message = {
           notification: {
             title: 'Low on stock.',
@@ -45,3 +56,8 @@ exports.sendLowStockNotification = functions.firestore
 
     return null; // Return null to indicate success (not needed, but won't return a warning)
   });
+
+// exports.sendLowStockNotification = functions.pubsub
+//   .schedule('0 */12 * * *')
+//   .onRun(async context => {
+// });

@@ -39,7 +39,7 @@ import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
 import {
   sendLowStockNotification,
   triggerLowInStock,
-} from '../../utils/messagingUtil';
+} from '../../utils/messaging';
 import notifee from '@notifee/react-native';
 
 export default function Items({navigation}) {
@@ -93,12 +93,17 @@ export default function Items({navigation}) {
             result.push(item);
 
             // Check stock level and send a notification if it's below the threshold
-            if (parseFloat(item.doc.currentCount) > threshold) {
-              notifee.cancelAllNotifications();
-            } else if (parseFloat(item.doc.currentCount) < threshold) {
-              sendLowStockNotification(item);
-              triggerLowInStock(item);
-            }
+<<<<<<< HEAD
+            // if (parseFloat(item.doc.currentCount) > threshold) {
+            //   notifee.cancelAllNotifications();
+            // } else if (parseFloat(item.doc.currentCount) < threshold) {
+            //   sendLowStockNotification(item);
+=======
+            // if (parseFloat(item.doc.currentCount) < threshold) {
+            //   sendLowStockNotification(item);
+            //   triggerLowInStock(item);
+>>>>>>> parent of bedcc07 (notifications handling in the foreground fixed)
+            // }
           });
 
           if (mountedRef) {
@@ -167,9 +172,9 @@ export default function Items({navigation}) {
       <FloatingButton
         action={() => {
           if (
-            (userInfo[0]?.doc?.isFree && salesCount >= 600) ||
-            (userInfo[0]?.doc?.isFree && customerCount >= 500) ||
-            (userInfo[0]?.doc?.isFree && supplierCount >= 100)
+            (userInfo[0]?.doc?.isFree && salesCount >= 100) ||
+            (userInfo[0]?.doc?.isFree && customerCount >= 25) ||
+            (userInfo[0]?.doc?.isFree && supplierCount >= 10)
           ) {
             return setLimitReachedVisible(true);
           }

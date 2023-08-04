@@ -8,18 +8,14 @@ import './i18n.config';
 import messaging from '@react-native-firebase/messaging';
 import {NavigationContainer} from '@react-navigation/native';
 import routes from './src/navigation/routes';
-import notifee, {
-  IntervalTrigger,
-  TriggerType,
-  TimeUnit,
-  AndroidColor,
-  EventType,
-} from '@notifee/react-native';
+import notifee, {EventType} from '@notifee/react-native';
 import Items from './src/screens/Inventory/InventoryScreen.tsx';
-import messagingUtil, {triggerLowInStock} from './src/utils/messagingUtil';
 
-// -----------------Notifee Local Notification Handling ----------------
-notifee.onBackgroundEvent(async ({type, detail}) => {
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
+
+notifee.onBackgroundEvent(async ({type, detail, navigation}) => {
   const {notification, pressAction} = detail;
   if (type === EventType.ACTION_PRESS && pressAction.id === 'low-stock') {
     // Handle the notification click event here
