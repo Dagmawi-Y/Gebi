@@ -45,7 +45,7 @@ exports.sendLowStockNotification = functions.firestore
   });
 
 exports.checkLowStock = functions.pubsub
-  .schedule('every 4 hours')
+  .schedule('every 2 hours')
   .onRun(async context => {
     const inventoryRef = admin.firestore().collection('inventory');
     const querySnapshot = await inventoryRef
@@ -54,6 +54,7 @@ exports.checkLowStock = functions.pubsub
 
     querySnapshot.forEach(doc => {
       const item = doc.data();
+      console.log(item);
       const fcmToken = item.fcmToken;
 
       if (fcmToken) {
