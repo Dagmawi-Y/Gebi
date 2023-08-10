@@ -11,10 +11,6 @@ import routes from './src/navigation/routes';
 import notifee, {EventType, AndroidColor} from '@notifee/react-native';
 import Items from './src/screens/Inventory/InventoryScreen.tsx';
 
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Message handled in the background!', remoteMessage);
-});
-
 notifee.onBackgroundEvent(async ({type, detail}) => {
   const {notification, pressAction} = detail;
   if (type === EventType.ACTION_PRESS && pressAction.id === 'low-stock') {

@@ -52,7 +52,7 @@ async function sendLowStockNotification(item: {id?: string; doc: any}) {
   const lastRunTimestamp = parseInt(lastRunTimestampString, 10) || 0;
 
   // Check if the last run was more than 10 minutes ago
-  if (Date.now() - lastRunTimestamp > 600000) {
+  if (Date.now() - lastRunTimestamp > 0) {
     // The last run was more than 10 minutes ago, so run the function
     // Request permissions (required for iOS)
     await notifee.requestPermission();

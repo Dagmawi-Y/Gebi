@@ -56,7 +56,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => SplashScreen.hide(), 1500);
+    setTimeout(() => SplashScreen.hide(), 1000);
     initialize();
     requestUserPermission();
     getFCMToken();

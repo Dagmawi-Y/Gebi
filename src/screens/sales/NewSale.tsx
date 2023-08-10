@@ -461,29 +461,29 @@ const NewSale = ({navigation}) => {
                       </View>
                     </View>
                     <View style={styles.RightContainer}>
-                      <Text style={styles.textLight}>
-                        <Text style={{}}>
-                          {formatNumber(item.unitSalePrice)}
-                          {t('Birr')}
+                      {item.unit ? (
+                        <Text style={styles.textLight}>
+                          <Text style={{}}>
+                            {formatNumber(item.unitSalePrice)}
+                            {t('Birr')}
+                          </Text>
+                          /
+                          {item.unit === 'Piece'
+                            ? 'pc'
+                            : item.unit === 'Litre'
+                            ? 'l'
+                            : item.unit === 'Metre'
+                            ? 'm'
+                            : item.unit.substring(0, 2)}
                         </Text>
-                        /
-                        {item.unit === 'Piece'
-                          ? 'pc'
-                          : item.unit === 'Litre'
-                          ? 'l'
-                          : item.unit === 'Metre'
-                          ? 'm'
-                          : item.unit.substring(0, 2)}
-                      </Text>
-                      <Text style={styles.textLight}>
-                        <Text style={styles.textBold}>
-                          {formatNumber(
-                            parseFloat(item.unitSalePrice) *
-                              parseFloat(item.quantity),
-                          )}
-                          {t('Birr')}
+                      ) : (
+                        <Text style={styles.textLight}>
+                          <Text style={{}}>
+                            {formatNumber(item.unitSalePrice)}
+                            {t('Birr')}
+                          </Text>
                         </Text>
-                      </Text>
+                      )}
                     </View>
                   </View>
                 );
