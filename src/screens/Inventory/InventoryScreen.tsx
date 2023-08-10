@@ -14,6 +14,7 @@ import {
   Alert,
   AppRegistry,
 } from 'react-native';
+import Categories from './Categories';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/themed';
 import firestore from '@react-native-firebase/firestore';

@@ -834,39 +834,85 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     return item;
                   }}
                 /> */}
-                <SelectDropdown
-                  data={categories.map(i => i.name)}
-                  defaultButtonText={t('Category')}
-                  renderDropdownIcon={() => (
-                    <View style={{marginRight: 5}}>
-                      <Icon
-                        name={itemId ? 'exclamationcircleo' : 'caretdown'}
-                        size={20}
-                        color={colors.black}
-                      />
-                    </View>
-                  )}
-                  onFocus={() => {
-                    setSearchResultVisible(false);
-                    setSearchVisible(false);
-                  }}
-                  buttonStyle={
-                    itemId ? styles.disabledDropDown : styles.dropDown
-                  }
-                  defaultValue={
-                    itemCategory && itemId ? itemCategory.toString() : null
-                  }
-                  onSelect={selectedItem => {
-                    setItemCategory(selectedItem);
-                  }}
-                  disabled={itemId ? true : false}
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem;
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    return item;
-                  }}
-                />
+                {categories.length > 0 ? (
+                  <>
+                    <SelectDropdown
+                      data={categories.map(i => i.name)}
+                      defaultButtonText={t('Category')}
+                      renderDropdownIcon={() => (
+                        <View style={{marginRight: 5}}>
+                          <Icon
+                            name={itemId ? 'exclamationcircleo' : 'caretdown'}
+                            size={20}
+                            color={colors.black}
+                          />
+                        </View>
+                      )}
+                      onFocus={() => {
+                        setSearchResultVisible(false);
+                        setSearchVisible(false);
+                      }}
+                      buttonStyle={
+                        itemId ? styles.disabledDropDown : styles.dropDown
+                      }
+                      defaultValue={
+                        itemCategory && itemId ? itemCategory.toString() : null
+                      }
+                      onSelect={selectedItem => {
+                        setItemCategory(selectedItem);
+                      }}
+                      disabled={itemId ? true : false}
+                      buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item, index) => {
+                        return item;
+                      }}
+                    />
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate(routes.addNewCategory)}
+                      style={{
+                        backgroundColor: colors.primary,
+                        borderRadius: 10,
+                        padding: 10,
+                        flexDirection: 'row',
+                        width: 150,
+                        justifyContent: 'space-evenly',
+                        alignItems: 'center',
+                        marginBottom: 10,
+                        marginRight: 10,
+                      }}>
+                      <Icon name="plus" color={colors.white} size={15} />
+                      <Text style={{color: colors.white, fontSize: 15}}>
+                        {t('Add_New_Category')}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <>
+                    <Text style={{color: 'red', marginBottom: 2}}>
+                      {t('No_Category_Found')}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate(routes.addNewCategory)}
+                      style={{
+                        backgroundColor: colors.primary,
+                        borderRadius: 10,
+                        padding: 10,
+                        flexDirection: 'row',
+                        width: 150,
+                        justifyContent: 'space-evenly',
+                        alignItems: 'center',
+                        marginBottom: 10,
+                        marginRight: 10,
+                      }}>
+                      <Icon name="plus" color={colors.white} size={15} />
+                      <Text style={{color: colors.white, fontSize: 15}}>
+                        {t('Add_New_Category')}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )}
               </View>
 
               <TouchableOpacity

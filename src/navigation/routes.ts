@@ -15,7 +15,7 @@ export default Object.freeze({
   salesNav: 'Sales',
   expensesNav: 'Expense',
   newSale: 'NewSale',
-  EditInventoryItem : 'Edit Inventory Item',
+  EditInventoryItem: 'Edit Inventory Item',
   expenses: 'Expenses',
   plan: 'Plan',
   introNav: 'Intro',
