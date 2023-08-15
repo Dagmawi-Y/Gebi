@@ -489,6 +489,12 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                   style={{alignSelf: 'flex-end'}}
                 />
               </TouchableOpacity> */}
+              {categories.length == 0 ? (
+                <Text style={{color: 'red', marginBottom: 5, marginTop: 0}}>
+                  {t('No_Category_Found')}
+                </Text>
+              ) : null}
+
               <Text
                 style={{
                   fontSize: 30,
