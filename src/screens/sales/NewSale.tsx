@@ -26,6 +26,7 @@ const NewSale = ({navigation}) => {
   const {userInfo} = useContext(StateContext);
 
   const [searchVisible, setSearchVisible] = useState(false);
+  const [itemCategory, setItemCategory] = useState('');
   const [error, setError] = useState('');
   const mountedRef = useRef(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -39,12 +40,13 @@ const NewSale = ({navigation}) => {
   const reset = () => {
     setIsModalVisible(false);
     setSearchVisible(false);
+    setItemCategory('');
     setAddedItems([]);
     setCustomer('');
     setPaymentMethod('');
     setIsTaxTabVisible(false);
   };
-
+  const [categories, setCategories]: Array<any> = useState([]);
   const [sum, setSum] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -187,8 +189,30 @@ const NewSale = ({navigation}) => {
       })
       .catch(err => console.log(err));
   };
+  const getCategories = () => {
+    firestore()
+      .collection('categories')
+      .where('owner', '==', userInfo[0]?.doc?.companyId)
+      .onSnapshot(qsn => {
+        let result: Array<any> = [];
+        if (qsn) {
+          qsn.forEach(sn => {
+            result.push({
+              
+              id: sn.id,
+              name:
+                sn.data().name.substring(0, 1).toUpperCase() +
+                sn.data().name.substring(1),
+            });
+          });
+          setCategories(result);
+        }
+      });
+  };
 
   const addNewSale = async () => {
+    const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
+    // const categoryId = categories.filter(i => i.name == categories)[0].id;
     if (checkEmpty()) {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
       setTimeout(() => {
@@ -220,23 +244,42 @@ const NewSale = ({navigation}) => {
                   .catch(err => console.log(err));
 
                 for (var i in addedItems) {
+                  console.log(addedItems[i].quantity);
                   await firestore()
                     .collection('inventory')
                     .doc(addedItems[i].id)
                     .get()
                     .then(async res => {
+                      const currentCount = parseFloat(res.data()?.currentCount);
+                      const quantity = parseFloat(addedItems[i].quantity);
+                      const updatedCount = currentCount - quantity;
+
+                      if (res.exists) {
+                        await firestore()
+                          .collection('inventory')
+                          .doc(addedItems[i].id)
+                          .update({
+                            currentCount: updatedCount,
+                          })
+                          .catch(err => {
+                            console.log(err);
+                          });
+                      } else {
+                        console.log(
+                          'Inventory document not found:',
+                          userInfo[0]?.doc?.companyId,
+                        );
+                      }
+                    })
+                    .then(async () => {
                       await firestore()
-                        .collection('inventory')
-                        .doc(addedItems[i].id)
+                        .collection('categories')
+                        .doc(categoryId)
                         .update({
-                          currentCount:
-                            parseFloat(res.data()!.currentCount) -
-                            parseFloat(addedItems[i].quantity),
-                        })
-                        .catch(err => {
-                          console.log(err);
+                          count: firestore.FieldValue.increment(parseFloat(addedItems[i].count)-parseFloat(addedItems[i].quantity)),
                         });
                     })
+
                     .catch(err => console.log(err));
                 }
               })
@@ -280,6 +323,7 @@ const NewSale = ({navigation}) => {
   useEffect(() => {
     calculate();
     getCustomers();
+    //getCategories()
     return () => {
       mountedRef.current = false;
     };
@@ -315,6 +359,7 @@ const NewSale = ({navigation}) => {
           setIsModalVisible={setIsModalVisible}
           addedItems={addedItems}
           setAddedItems={setAddedItems}
+          
         />
       ) : null}
       <ScrollView
@@ -442,6 +487,10 @@ const NewSale = ({navigation}) => {
                         style={{padding: 5}}
                         color={colors.black}
                         onPress={() => {
+                          setItemCategory(
+                            item.doc.category.substring(0, 1).toUpperCase() +
+                            item.doc.category.substring(1),
+                          );
                           setAddedItems(
                             addedItems.filter(i => {
                               return i.listId != item.listId;

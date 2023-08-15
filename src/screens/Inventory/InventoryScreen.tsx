@@ -129,8 +129,8 @@ export default function Items({navigation}) {
                   sn.data().name.substring(1),
               });
             });
-            // console.log(userInfo[0]?.doc?.companyId);
-            // console.log(result);
+            console.log(userInfo[0]?.doc?.companyId);
+            console.log(result);
             setCategories(result);
           }
         });
@@ -350,7 +350,8 @@ export default function Items({navigation}) {
                     cat.count > 0 ? (
                       <View key={cat.id}>
                         <Text style={{color: colors.black, fontSize: 15}}>
-                          {cat.name} {`(${cat.count})`}
+                          {cat.name}
+                           {/* {`(${cat.count})`} */}
                         </Text>
                         {data
                           .filter(dt =>

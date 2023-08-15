@@ -33,7 +33,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [suppliers, setSuppliers]: Array<any> = useState([]);
-
+   
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
   const [itemId, setItemId]: Array<any> = useState('');
@@ -98,7 +98,6 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
               doc: sn.data(),
             });
           });
-
           setAllItems(result);
         }
       });
@@ -131,7 +130,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
         let result: Array<any> = [];
         if (qsn) {
           qsn.forEach(sn => {
-            result.push({
+            result.push({            
               id: sn.id,
               name:
                 sn.data().name.substring(0, 1).toUpperCase() +
@@ -161,8 +160,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
   };
 
   const uploadImage = async () => {
-    if (!photo) return null;
     try {
+      if (!photo) return null;
       const reference = storage().ref(`image_${Date.now()}`);
       const pathToFile = photo;
       const task = reference.putFile(pathToFile);
@@ -172,7 +171,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
       return task.then(() => {
         return reference.getDownloadURL();
       });
-    } catch (err) {}
+    } catch (err) {
+
+    }
   };
 
   const addNewInventory = async () => {

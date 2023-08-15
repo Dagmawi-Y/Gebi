@@ -105,18 +105,6 @@ const SaleDetails = ({route, navigation}) => {
           .doc(items[i].id)
           .get()
           .then(async res => {
-            if (!res.data()) {
-              setLoading(false);
-              setError('Item does not exist in stock!');
-              Alert.alert(`Item does not exist in stock!`, ``, [
-                {
-                  text: t('Cancel'),
-                  onPress: () => {},
-                  style: 'default',
-                },
-              ]);
-              return;
-            }
             proceed = true;
             await firestore()
               .collection('inventory')

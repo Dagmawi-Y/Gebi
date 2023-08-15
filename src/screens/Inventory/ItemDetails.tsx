@@ -18,6 +18,7 @@ import colors from '../../config/colors';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
+import uploadImage from '../Inventory/AddNewItem'
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {useTranslation} from 'react-i18next';
@@ -101,38 +102,38 @@ const ItemDetails = ({route, navigation}) => {
     ]);
   };
 
+  
   const updateImage = async () => {
-    if (!photo) return null;
     setUpdating(true);
     try {
+      let link = null;
+      if (photo) {
+        const reference = storage().ref(`image_${Date.now()}`);
+        const pathToFile = photo;
+        const task = reference.putFile(pathToFile);
+        await task;
+        link = await reference.getDownloadURL();
+      }
+  
+      await firestore()
+        .collection('inventory')
+        .doc(itemId)
+        .update({
+          picture: link,
+        });
+  
       const oldPicture = storage().refFromURL(data.picture);
-      const reference = storage().ref(`image_${Date.now()}`);
-      const pathToFile = photo;
-      const task = reference.putFile(pathToFile);
-
-      task.then(async () => {
-        const link = await reference.getDownloadURL();
-        firestore()
-          .collection('inventory')
-          .doc(itemId)
-          .update({
-            picture: link,
-          })
-          .then(res => {
-            oldPicture
-              .delete()
-              .then(res => {})
-              .catch(err => console.log(err));
-            setUpdating(false);
-            setPickerVisible(false);
-          })
-          .catch(err => {
-            setUpdating(false);
-            setPickerVisible(false);
-            console.log(err);
-          });
-      });
-    } catch (err) {}
+      if (oldPicture) {
+        await oldPicture.delete();
+      }
+  
+      setUpdating(false);
+      setPickerVisible(false);
+    } catch (err) {
+      setUpdating(false);
+      setPickerVisible(false);
+      console.log(err);
+    }
   };
 
   const getItemInfo = async () => {
@@ -273,11 +274,18 @@ const ItemDetails = ({route, navigation}) => {
                   </View>
                   <View style={styles.boardContainer}>
                     <View style={styles.boardCol}>
-                      <Text style={styles.boardTopTitle}>{t('Price')}</Text>
+                      <Text style={styles.boardTopTitle}>{t('Purchase price')}</Text>
                       <Text style={styles.boardSubTitle}>
                         {formatNumber(data.unit_price)} {t('Birr')}
                       </Text>
                     </View>
+                    <View style={styles.boardCol}>
+                      <Text style={styles.boardTopTitle}>{t('Selling price')}</Text>
+                      <Text style={styles.boardSubTitle}>
+                        {formatNumber(data.unit_SalePrice)} {t('Birr')}
+                      </Text>
+                    </View>
+
                     <View style={styles.boardCol}>
                       <Text style={styles.boardTopTitle}>{t('Total')}</Text>
                       <Text

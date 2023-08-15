@@ -23,7 +23,7 @@ const Categories = ({navigation}) => {
         .collection('categories')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
-          console.log('Cateories Fetched');
+          console.log('Categories Fetched');
           let result: Array<any> = [];
           qsn.forEach(i => {
             result.push({id: i.id, data: i.data()});
@@ -89,7 +89,7 @@ const Categories = ({navigation}) => {
                 paddingHorizontal: 20,
                 marginBottom: 10,
               }}>
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
@@ -104,7 +104,7 @@ const Categories = ({navigation}) => {
                 <Text style={{fontSize: 20, color: colors.black}}>
                   {i.data.count} {t('Items')}
                 </Text>
-              </View>
+              </View> */}
               {i.data.description ? (
                 <Text
                   style={{
