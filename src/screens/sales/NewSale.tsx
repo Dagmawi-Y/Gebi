@@ -198,7 +198,6 @@ const NewSale = ({navigation}) => {
         if (qsn) {
           qsn.forEach(sn => {
             result.push({
-              
               id: sn.id,
               name:
                 sn.data().name.substring(0, 1).toUpperCase() +
@@ -211,7 +210,7 @@ const NewSale = ({navigation}) => {
   };
 
   const addNewSale = async () => {
-    const categoryId = categories.filter(i => i.name == itemCategory)[0].id;
+  
     // const categoryId = categories.filter(i => i.name == categories)[0].id;
     if (checkEmpty()) {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
@@ -271,14 +270,7 @@ const NewSale = ({navigation}) => {
                         );
                       }
                     })
-                    .then(async () => {
-                      await firestore()
-                        .collection('categories')
-                        .doc(categoryId)
-                        .update({
-                          count: firestore.FieldValue.increment(parseFloat(addedItems[i].count)-parseFloat(addedItems[i].quantity)),
-                        });
-                    })
+                  
 
                     .catch(err => console.log(err));
                 }
@@ -359,7 +351,6 @@ const NewSale = ({navigation}) => {
           setIsModalVisible={setIsModalVisible}
           addedItems={addedItems}
           setAddedItems={setAddedItems}
-          
         />
       ) : null}
       <ScrollView
@@ -489,7 +480,7 @@ const NewSale = ({navigation}) => {
                         onPress={() => {
                           setItemCategory(
                             item.doc.category.substring(0, 1).toUpperCase() +
-                            item.doc.category.substring(1),
+                              item.doc.category.substring(1),
                           );
                           setAddedItems(
                             addedItems.filter(i => {
@@ -772,12 +763,7 @@ const NewSale = ({navigation}) => {
           </View>
         </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            // paddingHorizontal: 10,
-          }}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
               Alert.alert(t('Are_You_Sure?'), ``, [
@@ -801,19 +787,20 @@ const NewSale = ({navigation}) => {
               marginBottom: 40,
               paddingHorizontal: 20,
               justifyContent: 'space-between',
-              width: 150,
+              width: 110,
               alignItems: 'center',
               borderRadius: 10,
               borderWidth: 0.3,
               borderColor: colors.primary,
               flexDirection: 'row',
+              marginRight: 5, // Add margin to create spacing between buttons
             }}>
             <Image
               resizeMethod="auto"
               source={require('../../assets/icons/arrow-leftb.png')}
               style={{
-                width: 20,
-                height: 20,
+                width: 15,
+                height: 15,
               }}
             />
             <Text
@@ -824,6 +811,37 @@ const NewSale = ({navigation}) => {
               {t('Cancel')}
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              addNewSale();
+            }}
+            style={{
+              backgroundColor: colors.primary,
+              height: 50,
+              marginBottom: 40,
+              paddingHorizontal: 15,
+              justifyContent: 'space-between',
+              width: 115,
+              alignItems: 'center',
+              borderRadius: 10,
+              flexDirection: 'row',
+              marginRight: 5, // Add margin to create spacing between buttons
+            }}>
+            <Text
+              style={[
+                styles.textBold,
+                {color: colors.white, textAlign: 'center'},
+              ]}>
+              {t('Submit print')}
+            </Text>
+            <Image
+              resizeMethod="auto"
+              source={require('../../assets/icons/arrow-right.png')}
+              style={{width: 12, height: 12}}
+            />
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => {
               addNewSale();
@@ -834,7 +852,7 @@ const NewSale = ({navigation}) => {
               marginBottom: 40,
               paddingHorizontal: 20,
               justifyContent: 'space-between',
-              width: 150,
+              width: 108,
               alignItems: 'center',
               borderRadius: 10,
               flexDirection: 'row',
@@ -849,7 +867,7 @@ const NewSale = ({navigation}) => {
             <Image
               resizeMethod="auto"
               source={require('../../assets/icons/arrow-right.png')}
-              style={{width: 20, height: 20}}
+              style={{width: 10, height: 10}}
             />
           </TouchableOpacity>
         </View>
