@@ -1,24 +1,29 @@
-
 module.exports = arg => {
-  const QRCodeGenerator = (value,) => {
+  const QRCodeGenerator = value => {
     return `
       <div style="display: flex; align-items: center;">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${value}" alt="QR Code" />
       </div>
     `;
   };
-  const {customerName, createdBy, date, paymentMethod, invoiceNumber, organization,} =
-    arg.data;
+  const {
+    customerName,
+    createdBy,
+    date,
+    paymentMethod,
+    invoiceNumber,
+    organization,
+  } = arg.data;
   const {sum, tax, total} = arg;
   const items = arg.data.items;
- 
+
   const data = [
-    { label: 'Name of the App', value: 'Gebi' },
-    { label: 'Name of the Business', value: organization },
-    { label: 'Invoice ID', value: invoiceNumber },
-    { label: 'Customer ID', value: customerName },
+    {label: 'Name of the App', value: 'Gebi'},
+    {label: 'Name of the Business', value: organization},
+    {label: 'Invoice ID', value: invoiceNumber},
+    {label: 'Customer ID', value: customerName},
   ];
-  console.log(data)
+  console.log(data);
   return ` 
 <style>
 h1,
@@ -170,7 +175,7 @@ p {
 
   <div class="qrCode">
   <h1>  
-      ${QRCodeGenerator(data)} 
+      ${QRCodeGenerator(data)}
     </h1>
   </div>
   <div class="details-container"> 

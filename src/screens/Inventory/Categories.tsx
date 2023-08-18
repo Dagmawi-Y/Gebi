@@ -1,5 +1,5 @@
 import {Alert, BackHandler, StyleSheet, Text, View} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+// import {useFocusEffect} from '@react-navigation/native';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
@@ -9,6 +9,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/AntDesign';
 import routes from '../../navigation/routes';
+import {NativeModules} from 'react-native';
+const {PrinterModule} = NativeModules;
 
 const Categories = ({navigation}) => {
   const {userInfo} = useContext(StateContext);
@@ -75,6 +77,24 @@ const Categories = ({navigation}) => {
         <Icon name="plus" color={colors.white} size={15} />
         <Text style={{color: colors.white, fontSize: 15}}>
           {t('Add_New_Category')}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={PrinterModule.paperOut}
+        style={{
+          backgroundColor: colors.primary,
+          borderRadius: 10,
+          padding: 10,
+          flexDirection: 'row',
+          width: 150,
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
+          marginVertical: 5,
+          marginRight: 10,
+        }}>
+        <Icon name="plus" color={colors.white} size={15} />
+        <Text style={{color: colors.white, fontSize: 15}}>
+          {t('Print Bar Code')}
         </Text>
       </TouchableOpacity>
       <View>
