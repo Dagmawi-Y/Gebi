@@ -1,5 +1,5 @@
 package com.meda.gebi;
-
+import cn.jystudio.bluetooth.RNBluetoothEscposPrinterPackage;
 import android.app.Application;
 import android.content.Context;
 

@@ -22,6 +22,10 @@ module.exports = arg => {
     {label: 'Name of the Business', value: organization},
     {label: 'Invoice ID', value: invoiceNumber},
     {label: 'Customer ID', value: customerName},
+    {label: 'Name of the App', value: 'Gebi'},
+    {label: 'Name of the Business', value: organization},
+    {label: 'Invoice ID', value: invoiceNumber},
+    {label: 'Customer Name', value: customerName},
   ];
   console.log(data);
   return ` 

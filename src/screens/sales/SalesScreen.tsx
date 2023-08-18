@@ -31,6 +31,7 @@ import SalesListItem from './SalesListItem';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
@@ -198,7 +199,6 @@ export default function Items({navigation}) {
       getSales();
       getStockCount();
     }
-
     return () => {
       setMounted(false);
     };
