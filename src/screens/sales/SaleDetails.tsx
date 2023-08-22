@@ -139,15 +139,17 @@ const SaleDetails = ({route, navigation}) => {
   };
 
   const print = async () => {
+    const options: any = {year: 'numeric', month: 'short', day: 'numeric'};
+    const formattedDate = new Date(data.date).toLocaleDateString(options);
     const printData = {
       data: {
         ...data,
         organization: userInfo[0]?.doc?.orgName,
-        date: new Date(data.date).toDateString(),
+        date: formattedDate,
       },
 
       sum: sum,
-      tax: parseFloat(sum) * 0.15,
+      tax: (parseFloat(sum) * 0.15).toFixed(2),
       total: total,
     };
 
@@ -453,7 +455,11 @@ const SaleDetails = ({route, navigation}) => {
                 },
               ]);
             }}
-            style={[styles.button, {backgroundColor: colors.red}]}>
+            style={
+              data.shouldDiscard
+                ? [styles.button, {backgroundColor: colors.grey}]
+                : [styles.button, {backgroundColor: colors.red}]
+            }>
             <Text
               style={[
                 styles.textBold,
@@ -465,7 +471,11 @@ const SaleDetails = ({route, navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.button, {backgroundColor: colors.primary}]}
+            style={
+              data.shouldDiscard
+                ? [styles.button, {backgroundColor: colors.grey}]
+                : [styles.button, {backgroundColor: colors.primary}]
+            }
             disabled={data.shouldDiscard}
             onPress={() => setMenuvisible(!menuvisible)}>
             <Text

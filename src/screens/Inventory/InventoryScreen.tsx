@@ -94,9 +94,9 @@ export default function Items({navigation}) {
             result.push(item);
 
             // Check stock level and send a notification if it's below the threshold
-            if (parseFloat(item.doc.currentCount) < threshold) {
-              sendLowStockNotification(item);
-            }
+            // if (parseFloat(item.doc.currentCount) < threshold) {
+            //   sendLowStockNotification(item);
+            // }
           });
 
           if (mountedRef) {
@@ -351,7 +351,7 @@ export default function Items({navigation}) {
                       <View key={cat.id}>
                         <Text style={{color: colors.black, fontSize: 15}}>
                           {cat.name}
-                           {/* {`(${cat.count})`} */}
+                          {/* {`(${cat.count})`} */}
                         </Text>
                         {data
                           .filter(dt =>

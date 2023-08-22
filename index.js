@@ -1,7 +1,7 @@
 /**
  * @format
  */
-import {AppRegistry} from 'react-native';
+import {AppRegistry, Settings} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import './i18n.config';
@@ -11,6 +11,13 @@ import routes from './src/navigation/routes';
 import notifee, {EventType, AndroidColor} from '@notifee/react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Items from './src/screens/Inventory/InventoryScreen.tsx';
+import {firebase} from '@react-native-firebase/firestore';
+
+const firestoreSettings = {
+  cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED, // setting offline chache size.
+};
+
+firebase.firestore().settings(firestoreSettings);
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
   const {notification, pressAction} = detail;
@@ -78,8 +85,5 @@ messaging().onMessage(async remoteMessage => {
 });
 
 // ------------FCM Notification Handling ---------------------
-
-
-
 
 AppRegistry.registerComponent(appName, () => App);

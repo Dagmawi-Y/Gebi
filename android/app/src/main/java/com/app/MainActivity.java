@@ -38,6 +38,10 @@ import java.util.concurrent.Executors;
 
 
 public class MainActivity extends ReactActivity {
+    private static final int RC_SCAN = 0x99;
+    public static String PRN_TEXT;
+
+
 
     private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler();
@@ -83,12 +87,72 @@ public class MainActivity extends ReactActivity {
         unbindService(connService);
     }
 
+
+    public final BroadcastReceiver qscReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.android.NYX_QSC_DATA".equals(intent.getAction())) {
+                String qsc = intent.getStringExtra("qsc");
+//                showLog("qsc scan result: %s", qsc);
+                printText("qsc-quick-scan-code\n" + qsc);
+            }
+        }
+    };
+
+    public void registerQscScanReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.android.NYX_QSC_DATA");
+        registerReceiver(qscReceiver, filter);
+    }
+
+    public void unregisterQscReceiver() {
+        unregisterReceiver(qscReceiver);
+    }
+
+    public void getVersion() {
+        singleThreadExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int ret = printerService.getPrinterVersion(version);
+//                    showLog("Version: " + msg(ret) + "  " + version[0]);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public void paperOut() {
         singleThreadExecutor.submit(new Runnable() {
             @Override
             public void run() {
                 try {
                     printerService.paperOut(80);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void printText() {
+        printText(PRN_TEXT);
+    }
+    public void printText(String text) {
+        singleThreadExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PrintTextFormat textFormat = new PrintTextFormat();
+                    // textFormat.setTextSize(32);
+                    // textFormat.setUnderline(true);
+                    int ret = printerService.printText(text, textFormat);
+//                    showLog("Print text: " + msg(ret));
+                    if (ret == 0) {
+                        paperOut();
+                    }
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -130,6 +194,115 @@ public class MainActivity extends ReactActivity {
         });
     }
 
+    public void printBitmap() {
+        singleThreadExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int ret = printerService.printBitmap(BitmapFactory.decodeStream(getAssets().open("bmp.png")), 1, 1);
+//                    showLog("Print bitmap: " + msg(ret));
+                    if (ret == 0) {
+                        paperOut();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void printLabel() {
+        singleThreadExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int ret = printerService.labelLocate(240, 0);
+                    if (ret == 0) {
+                        PrintTextFormat format = new PrintTextFormat();
+                        printerService.printText("\nModel:\t\tNB55", format);
+                        printerService.printBarcode("1234567890987654321", 320, 90, 2, 0);
+                        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                        printerService.printText("Time:\t\t" + date, format);
+                        ret = printerService.labelPrintEnd();
+                    }
+//                    showLog("Print label: " + msg(ret));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void printLabelLearning() {
+        if (version[0] != null && Float.parseFloat(version[0]) < 1.10) {
+//            showLog(getString(R.string.res_not_support));
+            return;
+        }
+        singleThreadExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                int ret = 0;
+                try {
+                    if (!printerService.hasLabelLearning()) {
+                        // label learning
+                        ret = printerService.labelDetectAuto();
+                    }
+                    if (ret == 0) {
+                        ret = printerService.labelLocateAuto();
+                        if (ret == 0) {
+                            PrintTextFormat format = new PrintTextFormat();
+                            printerService.printText("\nModel:\t\tNB55", format);
+                            printerService.printBarcode("1234567890987654321", 320, 90, 2, 0);
+                            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                            printerService.printText("Time:\t\t" + date, format);
+                            printerService.labelPrintEnd();
+                        }
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+//                showLog("Label learning print: " + msg(ret));
+            }
+        });
+    }
+
+    public void scan() {
+        if (!existApp("net.nyx.scanner")) {
+//            showLog("未安装scanner app");
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("net.nyx.scanner",
+                "net.nyx.scanner.ScannerActivity"));
+        // set the capture activity actionbar title
+        intent.putExtra("TITLE", "Scan");
+        // show album icon, default true
+        // intent.putExtra("SHOW_ALBUM", true);
+        // play beep sound when get the scan result, default true
+        // intent.putExtra("PLAY_SOUND", true);
+        // play vibrate when get the scan result, default true
+        // intent.putExtra("PLAY_VIBRATE", true);
+        startActivityForResult(intent, RC_SCAN);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == RC_SCAN && resultCode == RESULT_OK && data != null) {
+            String result = data.getStringExtra("SCAN_RESULT");
+//            showLog("Scanner result: " + result);
+        }
+    }
+
+    boolean existApp(String pkg) {
+        try {
+            return getPackageManager().getPackageInfo(pkg, 0) != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
    * rendering of the component.
@@ -151,6 +324,7 @@ public class MainActivity extends ReactActivity {
   public static class MainActivityDelegate extends ReactActivityDelegate {
     public MainActivityDelegate(ReactActivity activity, String mainComponentName) {
       super(activity, mainComponentName);
+
     }
 
     @Override
@@ -161,4 +335,12 @@ public class MainActivity extends ReactActivity {
       return reactRootView;
     }
   }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService();
+        unregisterQscReceiver();
+    }
 }
+

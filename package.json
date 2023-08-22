@@ -42,7 +42,6 @@
     "react-is": "^18.2.0",
     "react-native": "^0.68.2",
     "react-native-app-intro-slider": "^4.0.4",
-    "react-native-bluetooth-escpos-printer": "^0.0.5",
     "react-native-bouncy-checkbox": "^2.1.10",
     "react-native-bouncy-checkbox-group": "^0.1.0",
     "react-native-datepicker": "^1.7.2",

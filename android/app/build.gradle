@@ -277,7 +277,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
-    implementation project(':react-native-bluetooth-escpos-printer')
 
 
     // Add the dependencies for the Crashlytics and Analytics libraries
