@@ -110,6 +110,17 @@ public class MainActivity extends ReactActivity {
         unregisterReceiver(qscReceiver);
     }
 
+
+    public int getPrinterStatus() {
+        int ret = 0;
+        try {
+            ret = printerService.getPrinterStatus();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
     public void getVersion() {
         singleThreadExecutor.submit(new Runnable() {
             @Override

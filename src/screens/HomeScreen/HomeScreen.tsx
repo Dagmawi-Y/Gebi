@@ -10,7 +10,6 @@ import colors from '../../config/colors';
 import {useTranslation} from 'react-i18next';
 import routes from '../../navigation/routes';
 import firestore from '@react-native-firebase/firestore';
-
 import {
   InventoryIcon,
   SalesIcon,
@@ -21,6 +20,13 @@ import {StateContext} from '../../global/context';
 import Loading from '../../components/lotties/Loading';
 import TopScreen from '../../components/TopScreen/TopScreen';
 import {DataContext} from '../../global/context/DataContext';
+
+import {
+  TourGuideProvider, // Main provider
+  TourGuideZone, // Main wrapper of highlight component
+  TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
+  useTourGuideController, // hook to start, etc.
+} from 'rn-tourguide';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslation();
@@ -38,6 +44,41 @@ const HomeScreen = ({navigation}) => {
   const [mounted, setMounted] = useState(true);
 
   if (!userInfo || !user) return <Loading size={50} />;
+
+  const iconProps = {size: 40, color: '#888'};
+
+  // Use Hooks to control!
+  const {
+    canStart, // a boolean indicate if you can start tour guide
+    start, // a function to start the tourguide
+    stop, // a function  to stopping it
+    eventEmitter, // an object for listening some events
+  } = useTourGuideController();
+
+  // Can start at mount 🎉
+  // you need to wait until everything is registered 😁
+  useEffect(() => {
+    if (canStart) {
+      console.log(canStart);
+      start();
+    }
+  }, [canStart]);
+
+  const handleOnStart = () => console.log('start');
+  const handleOnStop = () => console.log('stop');
+  const handleOnStepChange = () => console.log(`stepChange`);
+
+  useEffect(() => {
+    eventEmitter?.on('start', handleOnStart);
+    eventEmitter?.on('stop', handleOnStop);
+    eventEmitter?.on('stepChange', handleOnStepChange);
+
+    return () => {
+      eventEmitter?.off('start', handleOnStart);
+      eventEmitter?.off('stop', handleOnStop);
+      eventEmitter?.off('stepChange', handleOnStepChange);
+    };
+  }, []);
 
   return (
     <View style={styles.screenContainer}>
@@ -96,46 +137,70 @@ const HomeScreen = ({navigation}) => {
         <ScrollView>
           <View style={styles.row}>
             {sales || isAdmin ? (
-              <Box
-                Icon={<SalesIcon color={colors.black} size={40} />}
-                onpress={() => navigation.navigate(t(routes.salesNav))}
-                title={t('Sales')}
-              />
+              <TourGuideZone
+                zone={1}
+                shape="rectangle"
+                text={'See previous sales and make a new sale.'}
+                style={styles.box}>
+                <Box
+                  Icon={<SalesIcon color={colors.black} size={40} />}
+                  onpress={() => navigation.navigate(t(routes.salesNav))}
+                  title={t('Sales')}
+                />
+              </TourGuideZone>
             ) : null}
             {inventory || isAdmin ? (
-              <Box
-                Icon={<InventoryIcon color={colors.black} size={40} />}
-                onpress={() =>
-                  navigation.navigate(routes.Gebi, {
-                    screen: t(routes.inventoryNav),
-                  })
-                }
-                title={t('Inventory')}
-              />
+              <TourGuideZone
+                zone={2}
+                shape="rectangle"
+                text={'See previous sales and make a new sale.'}
+                style={styles.box}>
+                <Box
+                  Icon={<InventoryIcon color={colors.black} size={40} />}
+                  onpress={() =>
+                    navigation.navigate(routes.Gebi, {
+                      screen: t(routes.inventoryNav),
+                    })
+                  }
+                  title={t('Inventory')}
+                />
+              </TourGuideZone>
             ) : null}
           </View>
           <View style={styles.row}>
             {expense || isAdmin ? (
-              <Box
-                Icon={<ExpensesIcon color={colors.black} size={40} />}
-                onpress={() =>
-                  navigation.navigate(routes.Gebi, {
-                    screen: t(routes.expensesNav),
-                  })
-                }
-                title={t('Expense')}
-              />
+              <TourGuideZone
+                zone={3}
+                shape="rectangle"
+                text={'See previous sales and make a new sale.'}
+                style={styles.box}>
+                <Box
+                  Icon={<ExpensesIcon color={colors.black} size={40} />}
+                  onpress={() =>
+                    navigation.navigate(routes.Gebi, {
+                      screen: t(routes.expensesNav),
+                    })
+                  }
+                  title={t('Expense')}
+                />
+              </TourGuideZone>
             ) : null}
             {plan || isAdmin ? (
-              <Box
-                Icon={<PlannerIcon color={colors.black} size={40} />}
-                onpress={() =>
-                  navigation.navigate(routes.Gebi, {
-                    screen: t(routes.plan),
-                  })
-                }
-                title={t('Plan')}
-              />
+              <TourGuideZone
+                zone={4}
+                shape="rectangle"
+                text={'See previous sales and make a new sale.'}
+                style={styles.box}>
+                <Box
+                  Icon={<PlannerIcon color={colors.black} size={40} />}
+                  onpress={() =>
+                    navigation.navigate(routes.Gebi, {
+                      screen: t(routes.plan),
+                    })
+                  }
+                  title={t('Plan')}
+                />
+              </TourGuideZone>
             ) : null}
           </View>
         </ScrollView>
@@ -146,7 +211,10 @@ const HomeScreen = ({navigation}) => {
 
 const Box = ({title, onpress, Icon}) => {
   return (
-    <TouchableOpacity onPress={onpress} activeOpacity={0.7} style={styles.box}>
+    <TouchableOpacity
+      onPress={onpress}
+      activeOpacity={0.7}
+      style={styles.centeredBox}>
       <Text style={styles.boxTitle}>{title}</Text>
       {Icon}
     </TouchableOpacity>
@@ -171,12 +239,22 @@ const styles = StyleSheet.create({
 
     textAlign: 'center',
   },
+  centeredBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    aspectRatio: 1,
+    backgroundColor: colors.white,
+    elevation: 1,
+    borderRadius: 10,
+  },
   box: {
     alignItems: 'center',
     justifyContent: 'center',
+    alignContent: 'center',
     width: '40%',
     aspectRatio: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: colors.white,
     elevation: 5,
     borderRadius: 10,

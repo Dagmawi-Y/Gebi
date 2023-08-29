@@ -115,6 +115,8 @@ export default function PlanerScreen({navigation}: any) {
     }
   };
   if (!userData.length) return null;
+  {
+  }
 
   return (
     <>
@@ -144,7 +146,7 @@ export default function PlanerScreen({navigation}: any) {
                   {t('Progress')} {'  '}
                 </Text>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                  {((totalProfit / userData[0].financial) * 100).toFixed(0)}
+                  {((totalProfit / userData[0].financial) * 100).toFixed(1)}
                   {'%'}
                 </Text>
               </View>

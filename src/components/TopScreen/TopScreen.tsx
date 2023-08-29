@@ -99,7 +99,7 @@ export default function TopScreen() {
         .onSnapshot(querySnapshot => {
           let result: Array<Object> = [];
           querySnapshot.forEach(sn => {
-            if(sn.data().shouldDiscard == false){
+            if (sn.data().shouldDiscard == false) {
               const item = {
                 id: sn.id,
                 date: sn.data().date,
@@ -112,7 +112,6 @@ export default function TopScreen() {
               };
               result.push(item);
             }
-
           });
           setData(result);
         });
