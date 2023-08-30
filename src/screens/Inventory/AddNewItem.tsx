@@ -33,17 +33,21 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
 
   const [searchVisible, setSearchVisible] = useState(false);
   const [suppliers, setSuppliers]: Array<any> = useState([]);
-   
+
   const [unit, setUnit] = useState('');
   const [photo, setPhoto] = useState('');
   const [itemId, setItemId]: Array<any> = useState('');
   const [itemCategory, setItemCategory] = useState('');
   const [itemName, setItemName] = useState('');
+  const [resultVisible, setResultVisible] = useState(false);
+  const [taxType, setTaxType] = useState('');
+
   const [quantity, setQuantity]: any = useState();
   const [unitPrice, setUnitPrice] = useState('');
   const [unitSalePrice, setUnitSalePrice] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [writtingData, setWrittingData] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [errorMessage, setErrorNessage] = useState('');
   const [failedAnimation, setFailedAnimation] = useState(false);
   const [successAnimation, setSuccessAnimation] = useState(false);
@@ -62,6 +66,15 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     t('Metre'),
     t('Quintal'),
   ];
+
+  const types = [
+    t('Sales Tax'),
+    t('Excise Tax'),
+    t('Luxury Tax'),
+    t('Corporate Tax'),
+    t('no Tax'),
+  ];
+
   const [categories, setCategories]: Array<any> = useState([]);
 
   const suplierSearch = key => {
@@ -130,7 +143,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
         let result: Array<any> = [];
         if (qsn) {
           qsn.forEach(sn => {
-            result.push({            
+            result.push({
               id: sn.id,
               name:
                 sn.data().name.substring(0, 1).toUpperCase() +
@@ -148,6 +161,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     if (!itemCategory) return true;
     if (!quantity) return true;
     if (!unit) return true;
+    if (!taxType) return true;
     if (!InvoiceNumber) return true;
     if (!unitPrice) return true;
     if (!unitSalePrice) return true;
@@ -171,10 +185,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
       return task.then(() => {
         return reference.getDownloadURL();
       });
-    } catch (err) {
-
-    }
+    } catch (err) {}
   };
+  const [taxRate, setTaxRate] = useState(0);
 
   const addNewInventory = async () => {
     if (checkEmpty()) return raiseError('Empty_Empty_Fields_Are_Not_Allowed');
@@ -207,6 +220,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
       return fcmtoken;
     }
     const fcmToken = await getFCMToken();
+    const types = [
+      t('Sales Tax'),
+      t('Excise Tax'),
+      t('Luxury Tax'),
+      t('Corporate Tax'),
+      t('no Tax'),
+    ];
 
     try {
       uploadImage()
@@ -267,6 +287,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 categoryId: categoryId,
                 createdBy: userInfo[0]?.doc?.name,
                 fcmToken: fcmToken,
+                taxType: taxType,
+                taxRate: taxRate,
               })
               .then(res => {
                 console.log('inventory added');
@@ -283,6 +305,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     owner: userInfo[0]?.doc?.companyId,
                     createdBy: userInfo[0]?.doc?.name,
                     date: new Date().toLocaleDateString(),
+                    taxType: taxType,
                   })
                   .then(() => {
                     console.log('stock added');
@@ -670,55 +693,22 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                 />
               </View>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  // backgroundColor: 'red',
-                  alignItems: 'flex-end',
-                }}>
-                <View
-                  style={{
-                    flex: 1,
-                    marginHorizontal: 5,
-                  }}>
-                  <Text
+              <View>
+                <View style={[styles.input, {alignItems: 'stretch'}]}>
+                  <View
                     style={{
-                      color: colors.black,
-                      fontSize: 15,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      paddingRight: 5,
                       marginBottom: 5,
+                      alignItems: 'baseline',
                     }}>
-                    {t('Amount')}
-                  </Text>
-                  <TextInput
-                    style={[styles.Input]}
-                    onChangeText={val => {
-                      setQuantity(
-                        val ? parseInt(val.replace(/[^0-9\.?]/g, '')) : null,
-                      );
-                    }}
-                    onFocus={() => {
-                      setSearchResultVisible(false);
-                      setSearchVisible(false);
-                    }}
-                    value={quantity ? quantity.toString() : ''}
-                    keyboardType="numeric"
-                    placeholderTextColor={colors.faded_grey}
-                  />
-                </View>
+                    <Text style={styles.inputLable}>{t('Tax Type')}</Text>
+                  </View>
 
-                <View style={{width: '50%', marginLeft: 5}}>
-                  <Text
-                    style={{
-                      color: colors.black,
-                      fontSize: 15,
-                      marginBottom: 5,
-                    }}>
-                    {t('Unit')}
-                  </Text>
                   <SelectDropdown
-                    data={quantifiers}
-                    defaultButtonText={t('Unit')}
+                    data={types}
+                    defaultButtonText={t('Taxable')}
                     renderDropdownIcon={() => (
                       <View>
                         <Icon name="caretdown" size={20} color={colors.black} />
@@ -726,7 +716,12 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     )}
                     buttonStyle={styles.dropDown}
                     onSelect={selectedItem => {
-                      setUnit(selectedItem);
+                      setTaxType(selectedItem);
+                      if (selectedItem == 'Corporate Tax') setTaxRate(0.15);
+                      if (selectedItem == 'Excise Tax') setTaxRate(0.2);
+                      if (selectedItem == 'Luxury Tax') setTaxRate(0.3);
+                      if (selectedItem == 'no Tax') setTaxRate(0.0);
+                      if (selectedItem == 'Sales Tax') setTaxRate(0.3);
                     }}
                     onFocus={() => {
                       setSearchResultVisible(false);
@@ -739,14 +734,172 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     }}
                   />
                 </View>
-              </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={[
+                      styles.textLight,
+                      {
+                        paddingHorizontal: 0,
+                      },
+                    ]}>
+                    {t('TAX')} ( {taxRate * 100}
+                    {t('%')})
+                  </Text>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                }}>
+                  <Text
+                    style={[
+                      styles.textBold,
+                      {textAlign: 'right', fontSize: 15, marginBottom: 15},
+                    ]}>
+                    {taxRate * 100}
+                    {t('%')}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    // backgroundColor: 'red',
+                    alignItems: 'flex-end',
+                  }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      marginHorizontal: 5,
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.black,
+                        fontSize: 15,
+                        marginBottom: 5,
+                      }}>
+                      {t('Amount')}
+                    </Text>
+                    <TextInput
+                      style={[styles.Input]}
+                      onChangeText={val => {
+                        setQuantity(
+                          val ? parseInt(val.replace(/[^0-9\.?]/g, '')) : null,
+                        );
+                      }}
+                      onFocus={() => {
+                        setSearchResultVisible(false);
+                        setSearchVisible(false);
+                      }}
+                      value={quantity ? quantity.toString() : ''}
+                      keyboardType="numeric"
+                      placeholderTextColor={colors.faded_grey}
+                    />
+                  </View>
+
+                  <View style={{width: '50%', marginLeft: 5}}>
+                    <Text
+                      style={{
+                        color: colors.black,
+                        fontSize: 15,
+                        marginBottom: 5,
+                      }}>
+                      {t('Unit')}
+                    </Text>
+                    <SelectDropdown
+                      data={quantifiers}
+                      defaultButtonText={t('Unit')}
+                      renderDropdownIcon={() => (
+                        <View>
+                          <Icon
+                            name="caretdown"
+                            size={20}
+                            color={colors.black}
+                          />
+                        </View>
+                      )}
+                      buttonStyle={styles.dropDown}
+                      onSelect={selectedItem => {
+                        setUnit(selectedItem);
+                      }}
+                      onFocus={() => {
+                        setSearchResultVisible(false);
+                      }}
+                      buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item, index) => {
+                        return item;
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                  }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      marginHorizontal: 5,
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.black,
+                        fontSize: 15,
+                        marginBottom: 5,
+                      }}>
+                      {t('Unit_Price')} {`(${t('Birr')})`}
+                    </Text>
+                    <TextInput
+                      style={[styles.Input]}
+                      onChangeText={val => {
+                        setUnitPrice(val.replace(/[^0-9\.?]/g, ''));
+                      }}
+                      onFocus={() => {
+                        setSearchResultVisible(false);
+                        setSearchVisible(false);
+                      }}
+                      value={unitPrice}
+                      keyboardType="numeric"
+                      placeholderTextColor={colors.faded_grey}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      marginHorizontal: 5,
+                      width: '50%',
+                      marginRight: 5,
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.black,
+                        fontSize: 15,
+
+                        marginBottom: 5,
+                      }}>
+                      {t('Unit_Sale_Price')} {`(${t('Birr')})`}
+                    </Text>
+                    <TextInput
+                      style={[styles.Input]}
+                      onChangeText={val => {
+                        setUnitSalePrice(val.replace(/[^0-9\.?]/g, ''));
+                      }}
+                      onFocus={() => {
+                        setSearchResultVisible(false);
+                        setSearchVisible(false);
+                      }}
+                      value={unitSalePrice}
+                      keyboardType="numeric"
+                      placeholderTextColor={colors.faded_grey}
+                    />
+                  </View>
+                </View>
                 <View
                   style={{
                     flex: 1,
@@ -758,67 +911,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       fontSize: 15,
                       marginBottom: 5,
                     }}>
-                    {t('Unit_Price')} {`(${t('Birr')})`}
+                    {t('Category')}
                   </Text>
-                  <TextInput
-                    style={[styles.Input]}
-                    onChangeText={val => {
-                      setUnitPrice(val.replace(/[^0-9\.?]/g, ''));
-                    }}
-                    onFocus={() => {
-                      setSearchResultVisible(false);
-                      setSearchVisible(false);
-                    }}
-                    value={unitPrice}
-                    keyboardType="numeric"
-                    placeholderTextColor={colors.faded_grey}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    marginHorizontal: 5,
-                    width: '50%',
-                    marginRight: 5,
-                  }}>
-                  <Text
-                    style={{
-                      color: colors.black,
-                      fontSize: 15,
-
-                      marginBottom: 5,
-                    }}>
-                    {t('Unit_Sale_Price')} {`(${t('Birr')})`}
-                  </Text>
-                  <TextInput
-                    style={[styles.Input]}
-                    onChangeText={val => {
-                      setUnitSalePrice(val.replace(/[^0-9\.?]/g, ''));
-                    }}
-                    onFocus={() => {
-                      setSearchResultVisible(false);
-                      setSearchVisible(false);
-                    }}
-                    value={unitSalePrice}
-                    keyboardType="numeric"
-                    placeholderTextColor={colors.faded_grey}
-                  />
-                </View>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  marginHorizontal: 5,
-                }}>
-                <Text
-                  style={{
-                    color: colors.black,
-                    fontSize: 15,
-                    marginBottom: 5,
-                  }}>
-                  {t('Category')}
-                </Text>
-                {/* <SelectDropdown
+                  {/* <SelectDropdown
                   data={categories.map(i => i.name)}
                   defaultButtonText={t('Category')}
                   renderDropdownIcon={() => (
@@ -841,102 +936,109 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     return item;
                   }}
                 /> */}
-                {categories.length > 0 ? (
-                  <>
-                    <SelectDropdown
-                      data={categories.map(i => i.name)}
-                      defaultButtonText={t('Category')}
-                      renderDropdownIcon={() => (
-                        <View style={{marginRight: 5}}>
-                          <Icon
-                            name={itemId ? 'exclamationcircleo' : 'caretdown'}
-                            size={20}
-                            color={colors.black}
-                          />
-                        </View>
-                      )}
-                      onFocus={() => {
-                        setSearchResultVisible(false);
-                        setSearchVisible(false);
-                      }}
-                      buttonStyle={
-                        itemId ? styles.disabledDropDown : styles.dropDown
-                      }
-                      defaultValue={
-                        itemCategory && itemId ? itemCategory.toString() : null
-                      }
-                      onSelect={selectedItem => {
-                        setItemCategory(selectedItem);
-                      }}
-                      disabled={itemId ? true : false}
-                      buttonTextAfterSelection={(selectedItem, index) => {
-                        return selectedItem;
-                      }}
-                      rowTextForSelection={(item, index) => {
-                        return item;
-                      }}
-                    />
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate(routes.addNewCategory)}
-                      style={{
-                        backgroundColor: colors.primary,
-                        borderRadius: 10,
-                        padding: 10,
-                        flexDirection: 'row',
-                        width: 150,
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        marginBottom: 10,
-                        marginRight: 10,
-                      }}>
-                      <Icon name="plus" color={colors.white} size={15} />
-                      <Text style={{color: colors.white, fontSize: 15}}>
-                        {t('Add_New_Category')}
+                  {categories.length > 0 ? (
+                    <>
+                      <SelectDropdown
+                        data={categories.map(i => i.name)}
+                        defaultButtonText={t('Category')}
+                        renderDropdownIcon={() => (
+                          <View style={{marginRight: 5}}>
+                            <Icon
+                              name={itemId ? 'exclamationcircleo' : 'caretdown'}
+                              size={20}
+                              color={colors.black}
+                            />
+                          </View>
+                        )}
+                        onFocus={() => {
+                          setSearchResultVisible(false);
+                          setSearchVisible(false);
+                        }}
+                        buttonStyle={
+                          itemId ? styles.disabledDropDown : styles.dropDown
+                        }
+                        defaultValue={
+                          itemCategory && itemId
+                            ? itemCategory.toString()
+                            : null
+                        }
+                        onSelect={selectedItem => {
+                          setItemCategory(selectedItem);
+                        }}
+                        disabled={itemId ? true : false}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                          return selectedItem;
+                        }}
+                        rowTextForSelection={(item, index) => {
+                          return item;
+                        }}
+                      />
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(routes.addNewCategory)
+                        }
+                        style={{
+                          backgroundColor: colors.primary,
+                          borderRadius: 10,
+                          padding: 10,
+                          flexDirection: 'row',
+                          width: 150,
+                          justifyContent: 'space-evenly',
+                          alignItems: 'center',
+                          marginBottom: 10,
+                          marginRight: 10,
+                        }}>
+                        <Icon name="plus" color={colors.white} size={15} />
+                        <Text style={{color: colors.white, fontSize: 15}}>
+                          {t('Add_New_Category')}
+                        </Text>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={{color: 'red', marginBottom: 2}}>
+                        {t('No_Category_Found')}
                       </Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <>
-                    <Text style={{color: 'red', marginBottom: 2}}>
-                      {t('No_Category_Found')}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate(routes.addNewCategory)}
-                      style={{
-                        backgroundColor: colors.primary,
-                        borderRadius: 10,
-                        padding: 10,
-                        flexDirection: 'row',
-                        width: 150,
-                        justifyContent: 'space-evenly',
-                        alignItems: 'center',
-                        marginBottom: 10,
-                        marginRight: 10,
-                      }}>
-                      <Icon name="plus" color={colors.white} size={15} />
-                      <Text style={{color: colors.white, fontSize: 15}}>
-                        {t('Add_New_Category')}
-                      </Text>
-                    </TouchableOpacity>
-                  </>
-                )}
-              </View>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate(routes.addNewCategory)
+                        }
+                        style={{
+                          backgroundColor: colors.primary,
+                          borderRadius: 10,
+                          padding: 10,
+                          flexDirection: 'row',
+                          width: 150,
+                          justifyContent: 'space-evenly',
+                          alignItems: 'center',
+                          marginBottom: 10,
+                          marginRight: 10,
+                        }}>
+                        <Icon name="plus" color={colors.white} size={15} />
+                        <Text style={{color: colors.white, fontSize: 15}}>
+                          {t('Add_New_Category')}
+                        </Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </View>
 
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={addNewInventory}
-                style={{
-                  width: '100%',
-                  height: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  backgroundColor: colors.primary,
-                }}>
-                <Text style={{color: colors.white, fontSize: 20}}>
-                  {t('Add')}
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  onPress={addNewInventory}
+                  style={{
+                    width: '100%',
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 10,
+                    backgroundColor: colors.primary,
+                  }}>
+                  <Text style={{color: colors.white, fontSize: 20}}>
+                    {t('Add')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
         </View>
@@ -950,10 +1052,27 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
   },
+  inputLable: {
+    color: colors.black,
+    fontSize: 15,
+    marginBottom: 5,
+  },
   contentContainer: {
     paddingHorizontal: 10,
     paddingVertical: 10,
     flex: 1,
+  },
+  textLight: {
+    paddingHorizontal: 10,
+    color: colors.faded_grey,
+    fontWeight: '300',
+    fontSize: 15,
+  },
+  textBold: {
+    color: colors.black,
+    fontWeight: '700',
+    fontSize: 15,
+    paddingHorizontal: 10,
   },
   boardContainer: {
     marginHorizontal: 5,
@@ -988,12 +1107,29 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 20,
   },
+  input: {
+    marginBottom: 10,
+    padding: 5,
+  },
   dropDown: {
     width: '100%',
     borderRadius: 10,
     borderWidth: 1,
     marginBottom: 20,
     backgroundColor: colors.white,
+  },
+  textInput: {
+    backgroundColor: colors.white,
+    borderRadius: 5,
+    color: colors.black,
+    padding: 5,
+    paddingHorizontal: 15,
+    fontSize: 15,
+    elevation: 5,
+    height: 55,
+    shadowColor: colors.transBlack,
+    borderColor: colors.faded_grey,
+    borderWidth: 0.4,
   },
   disabledDropDown: {
     width: '100%',

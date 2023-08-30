@@ -11,17 +11,21 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ListItem = (sale, navigation) => {
   const {t} = useTranslation();
-  const {invoiceNumber, customerName, date, items, paymentMethod, vat, tot, shouldDiscard} =
+  const {invoiceNumber, customerName, date, items,total, paymentMethod, vat, tot, shouldDiscard} =
     sale.sale;
   const itemsLength = Object.getOwnPropertyNames(items).length;
   const [totalPrice, setTotalPrice] = useState<any>('');
 
   const init = () => {
     let totalSum = 0;
+    let taxValue: String = '';
     setTotalPrice(0);
     Object.keys(items).map(key => {
       totalSum +=
         parseFloat(items[key].unitSalePrice) * parseFloat(items[key].quantity);
+      taxValue=items[key].taxType;
+       console.log(taxValue);
+      
     });
 
     if (vat && !tot) totalSum = totalSum * 0.15 + totalSum;
@@ -67,8 +71,8 @@ const ListItem = (sale, navigation) => {
         <View style={[styles.listRight]}>
           <View style={styles.listPriceContainer}>
             <Text style={[styles.listTextbold, {color: colors.black}]}>
-              {totalPrice}
-              {t('Birr')}{' '}
+              {formatNumber(total)}
+              {t(' Birr')}{' '}
               <Text
                 style={{
                   color:

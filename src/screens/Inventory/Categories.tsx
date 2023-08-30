@@ -17,6 +17,7 @@ const Categories = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories]: any = useState([]);
   const {t} = useTranslation();
+  console.log(PrinterModule.getPrinterStatus());
 
   const getCategories = async () => {
     try {

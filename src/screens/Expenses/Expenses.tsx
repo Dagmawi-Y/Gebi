@@ -19,6 +19,7 @@ import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import {StateContext} from '../../global/context';
 import {useTranslation} from 'react-i18next';
+
 import formatNumber from '../../utils/formatNumber';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
 import routes from '../../navigation/routes';
@@ -39,9 +40,45 @@ export default function Expenses({navigation}: any) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(true);
+  const [data, setData]: Array<any> = useState(false);
+  const [totalSaleExpense, setTotalSaleExpense] = useState(0);
+
   const [expandedList, setExpandedList] = useState(
     new Array(dates.length).fill(false),
   );
+  const totalCalc = data => {
+    let totalSaleIncome: number = 0;
+    let totalSaleProfit: number = 0;
+    let tsaleExp: number = 0;
+    if (data) {
+      data.forEach(i => {
+        Object.keys(i.items).map(key => {
+          totalSaleIncome =
+            totalSaleIncome +
+            parseFloat(i.items[key].unitSalePrice) *
+              parseFloat(i.items[key].quantity);
+
+          tsaleExp =
+            tsaleExp +
+            parseFloat(i.items[key].unitPrice) *
+              parseFloat(i.items[key].quantity);
+          totalSaleProfit =
+            totalSaleProfit + parseFloat(i.items[key].saleProfit);
+        });
+        if (i.vat && !i.tot) {
+          totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.15;
+        }
+        if (i.tot && !i.vat) {
+          totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.02;
+        }
+        if (i.tot && i.vat) {
+          totalSaleIncome =
+            totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
+        }
+      });
+      setTotalSaleExpense(tsaleExp);
+    }
+  };
 
   const getExpenses = async () => {
     setLoading(true);
@@ -64,8 +101,43 @@ export default function Expenses({navigation}: any) {
             });
             setDates(dates);
             setExpenses(result);
+            console.log(result);
           }
         });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const getSales = async () => {
+    setLoading(true);
+    if (!user) return;
+    try {
+      firestore()
+        .collection('sales')
+        .where('owner', '==', userInfo[0]?.doc?.companyId)
+        .onSnapshot(querySnapshot => {
+          let result: Array<Object> = [];
+          querySnapshot.forEach(sn => {
+            if (sn.data().shouldDiscard == false) {
+              const item = {
+                id: sn.id,
+                date: sn.data().date,
+                customerName: sn.data().customerName,
+                invoiceNumber: sn.data().invoiceNumber,
+                items: sn.data().items,
+                paymentMethod: sn.data().paymentMethod,
+                vat: sn.data().vat,
+                tot: sn.data().tot,
+              };
+              result.push(item);
+            }
+          });
+          setData(result);
+        });
+
+      totalCalc(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -98,6 +170,17 @@ export default function Expenses({navigation}: any) {
       setMounted(false);
     };
   }, []);
+  useEffect(() => {
+    if (mounted) {
+      if (data.length > 0) {
+        totalCalc(data);
+      }
+      getSales();
+    }
+    return () => {
+      setMounted(false);
+    };
+  }, [data]);
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [expandedDate, setExpandedDate] = useState(true);
 
@@ -141,6 +224,30 @@ export default function Expenses({navigation}: any) {
 
         <TopScreen />
         <View style={styles.contentContainer}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={[
+                styles.textLight,
+                {
+                  paddingHorizontal: 8,
+                },
+              ]}>
+              {t('Total Inventory Expenses')}
+            </Text>
+
+            <Text
+              style={[
+                styles.textBold,
+                {textAlign: 'right', fontSize: 15, marginBottom: 10},
+              ]}>
+              {formatNumber(totalSaleExpense)} {t('Birr')}
+            </Text>
+          </View>
           <View
             style={{
               width: '100%',
@@ -302,6 +409,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     display: 'flex',
+  },
+  textLight: {
+    paddingHorizontal: 10,
+    color: colors.faded_grey,
+    fontWeight: '300',
+    fontSize: 15,
+  },
+  textBold: {
+    color: colors.black,
+    fontWeight: '700',
+    fontSize: 15,
+    paddingHorizontal: 10,
   },
   statContainer: {
     marginTop: 10,

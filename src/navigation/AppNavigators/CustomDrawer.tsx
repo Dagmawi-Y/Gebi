@@ -141,6 +141,15 @@ const CustomDrawer = ({route, navigation}) => {
           rootRoute={true}
           icon="settings"
         />
+         <DrawerButton
+          active={active}
+          setActive={setActive}
+          navigation={navigation}
+          route={routes.SalesReports}
+          title={'Report'}
+          rootRoute={true}
+          icon="home-work"
+        />
         {isAdmin ? (
           <TouchableOpacity
             onPress={() => {
