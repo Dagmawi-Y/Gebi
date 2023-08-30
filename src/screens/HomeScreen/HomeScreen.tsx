@@ -20,12 +20,14 @@ import {StateContext} from '../../global/context';
 import Loading from '../../components/lotties/Loading';
 import TopScreen from '../../components/TopScreen/TopScreen';
 import {DataContext} from '../../global/context/DataContext';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 import {
   TourGuideProvider, // Main provider
   TourGuideZone, // Main wrapper of highlight component
   TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
   useTourGuideController, // hook to start, etc.
+  TourGuideContext,
 } from 'rn-tourguide';
 
 const HomeScreen = ({navigation}) => {
@@ -45,22 +47,18 @@ const HomeScreen = ({navigation}) => {
 
   if (!userInfo || !user) return <Loading size={50} />;
 
-  const iconProps = {size: 40, color: '#888'};
-
   // Use Hooks to control!
   const {
     canStart, // a boolean indicate if you can start tour guide
     start, // a function to start the tourguide
     stop, // a function  to stopping it
     eventEmitter, // an object for listening some events
-  } = useTourGuideController();
+    tourKey,
+  } = useTourGuideController('tour');
 
-  // Can start at mount 🎉
-  // you need to wait until everything is registered 😁
   useEffect(() => {
     if (canStart) {
       console.log(canStart);
-      start();
     }
   }, [canStart]);
 
@@ -141,7 +139,8 @@ const HomeScreen = ({navigation}) => {
                 zone={1}
                 shape="rectangle"
                 text={'See previous sales and make a new sale.'}
-                style={styles.box}>
+                style={styles.box}
+                borderRadius={10}>
                 <Box
                   Icon={<SalesIcon color={colors.black} size={40} />}
                   onpress={() => navigation.navigate(t(routes.salesNav))}
@@ -153,8 +152,11 @@ const HomeScreen = ({navigation}) => {
               <TourGuideZone
                 zone={2}
                 shape="rectangle"
-                text={'See previous sales and make a new sale.'}
-                style={styles.box}>
+                text={
+                  'See what is in your inventory and purchase a new product.'
+                }
+                style={styles.box}
+                borderRadius={10}>
                 <Box
                   Icon={<InventoryIcon color={colors.black} size={40} />}
                   onpress={() =>
@@ -172,8 +174,9 @@ const HomeScreen = ({navigation}) => {
               <TourGuideZone
                 zone={3}
                 shape="rectangle"
-                text={'See previous sales and make a new sale.'}
-                style={styles.box}>
+                text={'Register and manage your expenses.'}
+                style={styles.box}
+                borderRadius={10}>
                 <Box
                   Icon={<ExpensesIcon color={colors.black} size={40} />}
                   onpress={() =>
@@ -189,8 +192,9 @@ const HomeScreen = ({navigation}) => {
               <TourGuideZone
                 zone={4}
                 shape="rectangle"
-                text={'See previous sales and make a new sale.'}
-                style={styles.box}>
+                text={'Plan your profit.'}
+                style={styles.box}
+                borderRadius={10}>
                 <Box
                   Icon={<PlannerIcon color={colors.black} size={40} />}
                   onpress={() =>
@@ -258,6 +262,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     elevation: 5,
     borderRadius: 10,
+    color: 'black',
   },
   row: {
     flexDirection: 'row',

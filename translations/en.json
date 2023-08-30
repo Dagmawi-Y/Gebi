@@ -224,5 +224,6 @@
   "Accounts":"Accounts",
   "Your_stock_product_is_less_than required": "Your stock product is less than required",
   "Please_Add_Stock": "Please add items to the stock",
-  "No_Category_Found": "No Category Found. Please add one."
+  "No_Category_Found": "No Category Found. Please add one.",
+  "Help": "Help"
 }

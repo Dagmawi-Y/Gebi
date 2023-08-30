@@ -1,5 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Pressable, StatusBar} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
 import {StateContext, StateContextProvider} from './global/context';
 import {DataContext, DataContextProvider} from './global/context/DataContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -99,7 +106,12 @@ const App = () => {
       <DataContextProvider>
         <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
         <NavigationContainer>
-          <TourGuideProvider>
+          <TourGuideProvider
+            verticalOffset={24}
+            animationDuration={0}
+            preventOutsideInteraction={true}
+            {...{tooltipStyle: style}}
+            {...{backdropColor: 'rgba(0, 0, 0, 0.65)'}}>
             <Stack.Navigator
               initialRouteName={lang && intro ? 'app' : 'intro'}
               screenOptions={{headerShown: false}}>
@@ -111,6 +123,13 @@ const App = () => {
       </DataContextProvider>
     </StateContextProvider>
   );
+};
+
+const style = {
+  borderRadius: 10,
+  padding: 0,
+  margin: 0,
+  colors: 'black',
 };
 
 export default App;

@@ -21,6 +21,13 @@ import HomeScreen from '../../../screens/HomeScreen/HomeScreen';
 import {StateContext} from '../../../global/context';
 import {View, Text} from 'react-native';
 import LottieView from 'lottie-react-native';
+import {
+  TourGuideProvider, // Main provider
+  TourGuideZone, // Main wrapper of highlight component
+  TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
+  useTourGuideController, // hook to start, etc.
+  TourGuideContext,
+} from 'rn-tourguide';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,6 +46,14 @@ const AppTabNavigator = ({navigation}) => {
     inventory,
     setInventory,
   } = useContext(StateContext);
+
+  const {
+    canStart, // a boolean indicate if you can start tour guide
+    start, // a function to start the tourguide
+    stop, // a function  to stopping it
+    eventEmitter, // an object for listening some events
+    tourKey,
+  } = useTourGuideController('tour');
 
   const setPrivileges = () => {
     const roles = userInfo[0]?.doc?.roles;
@@ -84,7 +99,6 @@ const AppTabNavigator = ({navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-       
         <LottieView
           style={{
             height: 100,
