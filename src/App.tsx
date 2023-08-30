@@ -1,5 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Pressable, StatusBar} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
 import {StateContext, StateContextProvider} from './global/context';
 import {DataContext, DataContextProvider} from './global/context/DataContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,6 +23,12 @@ import LottieView from 'lottie-react-native';
 import colors from './config/colors';
 import firestore from '@react-native-firebase/firestore';
 import {requestUserPermission, getFCMToken} from './utils/messaging';
+import {
+  TourGuideProvider, // Main provider
+  TourGuideZone, // Main wrapper of highlight component
+  TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
+  useTourGuideController, // hook to start, etc.
+} from 'rn-tourguide';
 
 const Stack = createStackNavigator();
 
@@ -93,16 +106,30 @@ const App = () => {
       <DataContextProvider>
         <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
         <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={lang && intro ? 'app' : 'intro'}
-            screenOptions={{headerShown: false}}>
-            <Stack.Screen name="intro" component={IntroNavigator} />
-            <Stack.Screen name="app" component={EntryApp} />
-          </Stack.Navigator>
+          <TourGuideProvider
+            verticalOffset={24}
+            animationDuration={0}
+            preventOutsideInteraction={true}
+            {...{tooltipStyle: style}}
+            {...{backdropColor: 'rgba(0, 0, 0, 0.65)'}}>
+            <Stack.Navigator
+              initialRouteName={lang && intro ? 'app' : 'intro'}
+              screenOptions={{headerShown: false}}>
+              <Stack.Screen name="intro" component={IntroNavigator} />
+              <Stack.Screen name="app" component={EntryApp} />
+            </Stack.Navigator>
+          </TourGuideProvider>
         </NavigationContainer>
       </DataContextProvider>
     </StateContextProvider>
   );
+};
+
+const style = {
+  borderRadius: 10,
+  padding: 0,
+  margin: 0,
+  colors: 'black',
 };
 
 export default App;

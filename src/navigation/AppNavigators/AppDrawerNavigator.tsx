@@ -20,7 +20,7 @@ import HomeScreen from '../../screens/HomeScreen/HomeScreen';
 import NewSale from '../../screens/sales/NewSale';
 import AddItem from '../../screens/sales/AddItem';
 import SaleDetails from '../../screens/sales/SaleDetails';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import AddNewExpense from '../../screens/Expenses/AddNewExpense';
 import ItemDetails from '../../screens/Inventory/ItemDetails';
 import AddNewItem from '../../screens/Inventory/AddNewItem';
@@ -31,6 +31,16 @@ import Subscriptions from '../../screens/subscriptions/Subscriptions';
 import EditInventoryItem from '../../screens/Inventory/EditInventoryItem';
 import AddNewCategory from '../../screens/Inventory/AddNewCategory';
 import SalesReports from '../../screens/Reports/genralSaleReports';
+import HelpIcon from 'react-native-vector-icons/dist/FontAwesome';
+
+import {
+  TourGuideProvider, // Main provider
+  TourGuideZone, // Main wrapper of highlight component
+  TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
+  useTourGuideController, // hook to start, etc.
+  TourGuideContext,
+} from 'rn-tourguide';
+
 const Drawer = createDrawerNavigator();
 
 function headerBackKey(navigation) {
@@ -45,6 +55,14 @@ function headerBackKey(navigation) {
 }
 
 function AppDrawerNavigator({}) {
+  // Use Hooks to control!
+  const {
+    canStart, // a boolean indicate if you can start tour guide
+    start, // a function to start the tourguide
+    stop, // a function  to stopping it
+    eventEmitter, // an object for listening some events
+  } = useTourGuideController();
+
   const {t} = useTranslation();
   const navigation = useNavigation();
 
@@ -81,6 +99,21 @@ function AppDrawerNavigator({}) {
           headerRight: () => (
             <TouchableOpacity activeOpacity={0.5}>
               {/* <Icon name="bell" color={colors.white} size={25} /> */}
+              {getFocusedRouteNameFromRoute(route) == 'Home' ||
+              getFocusedRouteNameFromRoute(route) == 'ገቢ' ? (
+                <TouchableOpacity
+                  style={{
+                    display: 'flex',
+                    alignSelf: 'flex-end',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => start()}>
+                  <HelpIcon name="info-circle" size={17} color={colors.green} />
+                  <Text style={{marginLeft: 5}}>{t('Help')}</Text>
+                </TouchableOpacity>
+              ) : null}
             </TouchableOpacity>
           ),
         })}>

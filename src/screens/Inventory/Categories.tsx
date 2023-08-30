@@ -12,6 +12,8 @@ import routes from '../../navigation/routes';
 import {NativeModules} from 'react-native';
 const {PrinterModule} = NativeModules;
 
+const paperOut = () => PrinterModule.paperOut();
+
 const Categories = ({navigation}) => {
   const {userInfo} = useContext(StateContext);
   const [loading, setLoading] = useState(false);
@@ -81,7 +83,7 @@ const Categories = ({navigation}) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={PrinterModule.paperOut}
+        onPress={paperOut}
         style={{
           backgroundColor: colors.primary,
           borderRadius: 10,
