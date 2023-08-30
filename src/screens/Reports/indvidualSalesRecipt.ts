@@ -231,12 +231,10 @@ module.exports = arg => {
                   <p>${total} ብር</p>
               </div>
           </div>
-      </div>
-
-
-      
+      </div>     
   </div>
   </div>
   `;
   };
+  
   
