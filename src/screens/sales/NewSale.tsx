@@ -48,7 +48,9 @@ const NewSale = ({navigation}) => {
   };
   const [categories, setCategories]: Array<any> = useState([]);
   const [sum, setSum] = useState(0);
+  const [totalTaxValue, setTotalTaxValue] = useState(0);
   const [total, setTotal] = useState(0);
+  const [taxRate, setTaxRate] = useState(0);
 
   const paymentTypes = [
     {
@@ -169,6 +171,9 @@ const NewSale = ({navigation}) => {
     vat: taxType == 'VAT' ? true : false,
     tot: taxType == 'TOT' ? true : false,
     createdBy: userInfo[0]?.doc?.name,
+    totalPrice:total,
+    sumPrice:sum,
+    totalTax:totalTaxValue,
     shouldDiscard: false,
   };
 
@@ -210,7 +215,6 @@ const NewSale = ({navigation}) => {
   };
 
   const addNewSale = async () => {
-  
     // const categoryId = categories.filter(i => i.name == categories)[0].id;
     if (checkEmpty()) {
       setError('Empty_Empty_Fields_Are_Not_Allowed');
@@ -252,7 +256,8 @@ const NewSale = ({navigation}) => {
                       const currentCount = parseFloat(res.data()?.currentCount);
                       const quantity = parseFloat(addedItems[i].quantity);
                       const updatedCount = currentCount - quantity;
-
+                      const x = addedItems[i].taxType;
+                      console.log(x);
                       if (res.exists) {
                         await firestore()
                           .collection('inventory')
@@ -270,7 +275,6 @@ const NewSale = ({navigation}) => {
                         );
                       }
                     })
-                  
 
                     .catch(err => console.log(err));
                 }
@@ -298,18 +302,25 @@ const NewSale = ({navigation}) => {
     if (!mountedRef) return;
     let sum: number = 0;
     let total: number = 0;
+    let TotalTax: number = 0;
+    let totalTaxValues: number = 0;
+    let taxRate: number = 0;
+    let taxValue: String = '';
     addedItems.map(i => {
       sum = sum + i.quantity * i.unitSalePrice;
+      console.log(sum);
+      totalTaxValues =totalTaxValues+ i.quantity*i.unitSalePrice*i.taxRate;
+      total=sum+totalTaxValues;
+      console.log(total)
     });
-    total = sum;
-    if (taxType == 'VAT') {
-      total = sum + sum * 0.15;
-    }
-    if (taxType == 'TOT') {
-      total = sum + sum * 0.02;
-    }
+  
+
+    console.log(taxValue);
     setSum(sum);
+    setTotalTaxValue(totalTaxValues)
     setTotal(total);
+  
+    setTaxRate(taxRate);
   };
 
   useEffect(() => {
@@ -497,8 +508,22 @@ const NewSale = ({navigation}) => {
                             {formatNumber(item.quantity)}
                             <Text style={styles.textLight}> {t('(qty)')}</Text>
                           </Text>
+                          
                         </View>
                       </View>
+                      <View style={{}}>
+                        <Text style={styles.textBold}>{'Tax Rate'}</Text>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
+                            style={[styles.textBold, {fontWeight: 'normal'}]}>
+                            {formatNumber(item.taxRate*100)}
+                            <Text style={styles.textLight}> {t('%')}</Text>
+                          </Text>
+                          
+                        </View>
+                      </View>
+                      
+                      
                     </View>
                     <View style={styles.RightContainer}>
                       {item.unit ? (
@@ -590,8 +615,33 @@ const NewSale = ({navigation}) => {
                 {formatNumber(sum)} {t('Birr')}
               </Text>
             </View>
-            {taxType == 'VAT' ? (
-              <View
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={[
+                  styles.textLight,
+                  {
+                    paddingHorizontal: 10,
+                  },
+                ]}>
+                {t('TAX')} 
+               
+              </Text>
+
+              <Text
+                style={[
+                  styles.textBold,
+                  {textAlign: 'right', fontSize: 15, marginBottom: 15},
+                ]}>
+                {formatNumber(totalTaxValue)} {t('Birr')}
+              </Text>
+            </View>
+
+            {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
@@ -614,58 +664,10 @@ const NewSale = ({navigation}) => {
                     ]}>
                     {t('TAX')} (15% {t('VAT')})
                   </Text>
+                  
                 </View>
 
-                <Text
-                  style={[
-                    styles.textBold,
-                    {
-                      textAlign: 'right',
-                      fontSize: 15,
-                    },
-                  ]}>
-                  {formatNumber(sum * 0.15)} {t('Birr')}
-                </Text>
-              </View>
-            ) : null}
-            {taxType == 'TOT' ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 10,
-                  marginLeft: 10,
-                }}>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={[
-                      styles.textLight,
-                      {
-                        paddingHorizontal: 0,
-                      },
-                    ]}>
-                    {t('TOT')} (2% {t('TOT')})
-                  </Text>
-                </View>
-
-                <Text
-                  style={[
-                    styles.textBold,
-                    {
-                      textAlign: 'right',
-                      fontSize: 15,
-                    },
-                  ]}>
-                  {formatNumber(sum * 0.02)} {t('Birr')}
-                </Text>
-              </View>
-            ) : null}
+            </View>    */}
           </View>
           <View style={styles.summaryBottom}>
             <View
@@ -692,23 +694,6 @@ const NewSale = ({navigation}) => {
               </Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => setIsTaxTabVisible(true)}>
-            <Text
-              style={[
-                styles.textBold,
-                {
-                  marginBottom: 5,
-                  backgroundColor: colors.primary,
-                  color: colors.white,
-                  width: 120,
-                  textAlign: 'center',
-                  borderRadius: 10,
-                  paddingVertical: 3,
-                },
-              ]}>
-              {t('Include_Tax')}
-            </Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.paymentTypeContainer}>

@@ -12,6 +12,7 @@ import Edit from '../../../screens/Inventory/Edit';
 import AddNewItem from '../../../screens/Inventory/AddNewItem';
 import CategoryNav from './InventoryNavigation/CategoriesNav';
 import EditInventoryItem from '../../../screens/Inventory/EditInventoryItem';
+import AddNewCategory from '../../../screens/Inventory/AddNewCategory';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,12 @@ const InventoryNavigator = ({navigation}) => {
           options={{headerShown: false}}
           component={EditInventoryItem}
         />
+          <Stack.Screen
+          name={routes.EditInventoryItem}
+          options={{headerShown: false}}
+          component={AddNewCategory}
+        />
+
         <Stack.Screen
           name={routes.addNewItem}
           options={{headerShown: false}}

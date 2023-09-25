@@ -40,6 +40,7 @@ const AddNew = ({
   const [suppliers, setSuppliers]: Array<any> = useState([]);
 
   const [unit, setUnit] = useState('');
+  const [taxType, setTaxType] = useState('');
   const [photo, setPhoto] = useState('');
   const [itemId, setItemId]: Array<any> = useState('');
   const [itemCategory, setItemCategory] = useState('');
@@ -69,7 +70,13 @@ const AddNew = ({
       );
     }
   };
-
+  const types = [
+    t('Sales Tax'),
+    t('Excise Tax'),   
+    t('Luxury Tax'),
+    t('Corporate Tax'),
+    t('no Tax')
+  ];
   const getItems = () => {
     firestore()
       .collection('inventory')
@@ -83,7 +90,8 @@ const AddNew = ({
               doc: sn.data(),
             });
           });
-          console.log(result['data']);
+          // console.log(result['data']);
+          // console.log('am jona')
 
           setAllItems(result);
         }
@@ -134,6 +142,7 @@ const AddNew = ({
     if (!itemName) return true;
     if (!itemCategory) return true;
     if (!quantity) return true;
+    if(!taxType) return true;
     if (!unit) return true;
     if (!unitPrice) return true;
     if (!unitSalePrice) return true;
@@ -221,6 +230,7 @@ const AddNew = ({
                 picture: fileUrl,
                 category: itemCategory.toLowerCase(),
                 categoryId: categoryId,
+                taxType:taxType
               })
               .then(res => {
                 const item_id = res['_documentPath']['_parts'][1];
@@ -266,6 +276,7 @@ const AddNew = ({
     setItemName('');
     setItemCategory('');
     setQuantity('');
+    setTaxType('')
     setUnit('');
     setUnitPrice('');
     setUnitSalePrice('');
@@ -275,13 +286,13 @@ const AddNew = ({
   useEffect(() => {
     let mounted = true;
     if (mounted && userInfo) {
-      getItems();
-      getSuppliers();
-      getCategories();
+      //getItems();
+      //getSuppliers();
+      //getCategories();
       reset();
     }
     return () => {
-      console.log('hello');
+      console.log('hello guys');
       mounted = false;
     };
   }, []);
@@ -468,6 +479,7 @@ const AddNew = ({
                 onFocus={() => {
                   setSearchResultVisible(false);
                 }}
+                placeholder={supplierName}
                 value={supplierName}
                 keyboardType="default"
                 placeholderTextColor={colors.faded_grey}
@@ -586,6 +598,40 @@ const AddNew = ({
                   </View>
                 ) : null}
               </View>
+              <View>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontSize: 15,
+                    marginBottom: 5,
+                  }}>
+                  {t('Tax Type')}
+                </Text>
+                <SelectDropdown
+                    data={types}
+                    defaultButtonText={t('Unit')}
+                    renderDropdownIcon={() => (
+                      <View>
+                        <Icon name="caretdown" size={20} color={colors.black} />
+                      </View>
+                    )}
+                    buttonStyle={styles.dropDown}
+                    onSelect={selectedItem => {
+                      setTaxType(selectedItem);
+                    }}
+                    onFocus={() => {
+                      setSearchResultVisible(false);
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                      return selectedItem;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                      return item;
+                    }}
+                  />
+              </View>
+  
+
               <View
                 style={{
                   flexDirection: 'row',

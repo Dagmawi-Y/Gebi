@@ -81,7 +81,7 @@ const Categories = ({navigation}) => {
           {t('Add_New_Category')}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={paperOut}
         style={{
           backgroundColor: colors.primary,
@@ -98,7 +98,7 @@ const Categories = ({navigation}) => {
         <Text style={{color: colors.white, fontSize: 15}}>
           {t('Print Bar Code')}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View>
         {categories.length > 0 ? (
           categories.map(i => (

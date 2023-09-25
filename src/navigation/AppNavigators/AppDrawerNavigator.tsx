@@ -29,6 +29,8 @@ import Edit from '../../screens/Inventory/Edit';
 import AddEmployee from '../../screens/Settings/SubSettings/AddEmployee';
 import Subscriptions from '../../screens/subscriptions/Subscriptions';
 import EditInventoryItem from '../../screens/Inventory/EditInventoryItem';
+import AddNewCategory from '../../screens/Inventory/AddNewCategory';
+import SalesReports from '../../screens/Reports/genralSaleReports';
 import HelpIcon from 'react-native-vector-icons/dist/FontAwesome';
 
 import {
@@ -199,6 +201,22 @@ function AppDrawerNavigator({}) {
             headerLeft: () => headerBackKey(navigation),
           }}
         />
+        <Drawer.Screen
+          name={routes.addNewCategory}
+          component={AddNewCategory}
+          options={{
+            headerTitle: t(routes.addNewCategory),
+            headerLeft: () => headerBackKey(navigation),
+          }}
+        />
+         <Drawer.Screen
+          name={routes.SalesReports}
+          component={SalesReports}
+          options={{
+            headerTitle: t('Sales Report'),
+            headerLeft: () => headerBackKey(navigation),
+          }}
+          />
         {/* Inventory subscreens END */}
 
         <Drawer.Screen

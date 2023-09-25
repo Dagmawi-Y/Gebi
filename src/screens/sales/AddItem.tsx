@@ -42,7 +42,7 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
     let q = parseFloat(selectedItem[0].quantity);
     let p = parseFloat(selectedItem[0].unitSalePrice);
     let op = parseFloat(selectedItem[0].unitPrice);
-
+   
     let totalItems = quantity ? parseFloat(quantity) : q;
     let unitSalePrice = price ? parseFloat(price) : p;
     let saleProfit = totalItems * unitSalePrice - totalItems * op;
@@ -57,6 +57,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
       unit: selectedItem[0].unit,
       unitSalePrice: unitSalePrice,
       quantity: totalItems,
+      taxType:selectedItem[0].taxType,
+      taxRate:selectedItem[0].taxRate
     };
     setAddedItems([...addedItems, newItem]);
     setIsModalVisible(false);
@@ -64,6 +66,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
   };
 
   const getItems = async () => {
+
+    // console.log(detailsItem.taxType)
     setLoading(true);
     try {
       firestore()
@@ -79,6 +83,8 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
               unitPrice: sn.data().unit_price,
               unit: sn.data().unit,
               unitSalePrice: sn.data().unit_SalePrice,
+              taxType: sn.data().taxType,
+              taxRate:sn.data().taxRate
             };
             if (addedItems.length) {
               addedItems.map(i => {
@@ -158,10 +164,24 @@ const AddNewItem = ({setIsModalVisible, setAddedItems, addedItems}) => {
                     marginTop: 10,
                     fontSize: 15,
                   }}>
+                  {t('Tax-Type :')}
+                  {detailsItem!.taxType}
+                 
+                </Text>
+                <Text
+                  style={{
+                    color: colors.black,
+                    fontWeight: '600',
+                    marginHorizontal: 5,
+                    marginTop: 10,
+                    fontSize: 15,
+                  }}>
                   {t('Quantity')} {`(${t('In_stock')}: `}
                   {detailsItem!.quantity}
                   {')'}
                 </Text>
+               
+
                 <TextInput
                   style={styles.textInput}
                   onChangeText={val => {

@@ -45,7 +45,7 @@ export default function Items({navigation}) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const [data, setData]: Array<any> = useState([]);
-  const {salesCount, setSalesCount, planExpired, customerCount, supplierCount} =
+  const {salesCount, setSalesCount,totalPriceValue,setTotalPriceValue, planExpired, customerCount, supplierCount} =
     useContext(DataContext);
   const [stockCount, setStockCount]: any = useState();
   const [expandedDate, setExpandedDate] = useState(false);
@@ -62,12 +62,14 @@ export default function Items({navigation}) {
   const [searchKey, setSearchKey] = useState('');
   const [filterValue, setFilterValue] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
+  const [filterTaxVisible, setFilterTaxVisible] = useState(false);
   const [selectedDateIndex, setSelectedDateIndex] = useState(null);
 
   const progress = useRef(new Animated.Value(0)).current;
 
   const animate = val => {
-    let to = !filterVisible ? 1 : 0;
+    let to = !filterVisible || !filterTaxVisible ? 1 : 0;
+
     Animated.spring(progress, {
       toValue: to,
       useNativeDriver: true,
@@ -116,6 +118,7 @@ export default function Items({navigation}) {
   };
 
   const getSales = async () => {
+    let totalP = 0;
     setLoading(true);
     firestore()
       .collection('sales')
@@ -124,6 +127,7 @@ export default function Items({navigation}) {
         let result: any = [];
         if (querySnapshot)
           querySnapshot.docs.forEach(sn => {
+          //console.log(querySnapshot.docs.length)
             const item = {
               id: sn.id,
               date: sn.data().date,
@@ -133,8 +137,13 @@ export default function Items({navigation}) {
               paymentMethod: sn.data().paymentMethod,
               saleProfit: sn.data().saleProfit,
               createdBy: sn.data().createdBy,
+              taxType:sn.data().taxType,
               vat: sn.data().vat,
               tot: sn.data().tot,
+              total:sn.data().totalPrice,
+              sumPrice:sn.data().sumPrice,
+              totalTax:sn.data().totalTax,
+
               shouldDiscard: sn.data().shouldDiscard,
             };
             result.push(item);
@@ -147,7 +156,16 @@ export default function Items({navigation}) {
           }
           return bDate.getTime() - aDate.getTime();
         });
+        //console.log(result[0].total);
         setSalesCount(result.length);
+       
+        // for(let i=0;i<=4;i++){
+        //   totalP=totalP+result[i].total;
+        // }
+        // setTotalPriceValue(totalP);
+        // console.log('totalPrice',totalPriceValue);
+        
+     
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
@@ -419,12 +437,70 @@ export default function Items({navigation}) {
 
                   <Icon name="caretdown" color={colors.black} size={15} />
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setFilterTaxVisible(!filterTaxVisible);
+                    animate(!filterTaxVisible);
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginLeft: 30,
+                  }}>
+                  <Text
+                    style={{
+                      color: colors.black,
+                      fontSize: 15,
+                      marginRight: 10,
+                    }}>
+                    {t('Filter Tax')}
+                  </Text>
+
+                  <Icon name="caretdown" color={colors.black} size={15} />
+                </TouchableOpacity>
               </View>
             </View>
+
             {loading ? (
               <Loading size={100} />
             ) : (
               <>
+                {filterTaxVisible ? (
+                  <View
+                    style={{
+                      width: '30%',
+                      justifyContent: 'space-between',
+                      marginLeft: 'auto',
+                    }}>
+                    {['Taxable', 'non-Tax'].map(i => {
+                      return (
+                        <TouchableOpacity
+                          key={i}
+                          onPress={() => {
+                            setFilterValue(i);
+                            setFilterTaxVisible(!filterTaxVisible);
+                          }}>
+                          <Text
+                            style={[
+                              filterValue == i
+                                ? {backgroundColor: colors.faded_dark}
+                                : {backgroundColor: colors.primary},
+                              {
+                                textAlign: 'center',
+                                color: colors.white,
+                                marginVertical: 5,
+                                borderRadius: 10,
+                                fontSize: 15,
+                                marginRight: 10,
+                              },
+                            ]}>
+                            {t(i)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                ) : null}
                 {filterVisible ? (
                   <View
                     style={{
@@ -432,7 +508,7 @@ export default function Items({navigation}) {
                       justifyContent: 'space-between',
                       marginLeft: 'auto',
                     }}>
-                    {['Cash', 'Debt', 'Check'].map(i => {
+                    {['Cash', 'Debt', 'Check', 'void'].map(i => {
                       return (
                         <TouchableOpacity
                           key={i}
@@ -489,6 +565,26 @@ export default function Items({navigation}) {
                         {expandedList[dateString] &&
                           data[dateString]
                             .filter(saleItem => {
+                              // console.log(filterValue);
+                              // console.log(saleItem);
+                              if (filterValue == 'Taxable') {
+                                console.log(saleItem.items[0].taxType);
+                                // Assuming saleItem.items contains the list of data you provided
+                                return saleItem.items[0].taxType!='no Tax';
+                              }
+                              if (filterValue == 'non-Tax') {
+                                console.log(saleItem.items[0].taxType);
+                                // Assuming saleItem.items contains the list of data you provided
+                                return saleItem.items[0].taxType=='no Tax';
+                              }
+
+                              // Return JSX representing each item
+
+                              // Render the list of items
+
+                              if (filterValue == 'void') {
+                                return saleItem.shouldDiscard == true;
+                              }
                               if (!filterValue) return saleItem;
                               return (
                                 saleItem.paymentMethod.toLowerCase() ===
@@ -496,6 +592,8 @@ export default function Items({navigation}) {
                               );
                             })
                             .map(sale => {
+                             console.log(sale)
+                              
                               return (
                                 <TouchableOpacity
                                   activeOpacity={0.5}
@@ -532,6 +630,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     backgroundColor: colors.white,
   },
+  
   contentContainer: {
     paddingHorizontal: 10,
     flex: 1,

@@ -41,6 +41,10 @@ const EditInventoryItem = ({route, navigation}) => {
     t('Quintal'),
   ];
   const [invoiceNumber, setInvoiceNumber] = useState('');
+  const [taxType, setTaxType] = useState('');
+ 
+
+
 
   useEffect(() => {
     setTotal(data.doc.initialCount);
@@ -49,6 +53,8 @@ const EditInventoryItem = ({route, navigation}) => {
     setCreatedDate(data.doc.date);
     setSupplier(data.doc.supplier_name);
     setInvoiceNumber(data.doc.invoiceNumber);
+    setTaxType(data.doc.taxType)
+    
   }, [route]);
 
   function ValidateForm(): boolean {
@@ -121,11 +127,11 @@ const EditInventoryItem = ({route, navigation}) => {
   };
 
   const handleEdit = async () => {
-    // console.log("unit : " + unit);
-    // console.log("total : " + total);
-    // console.log("Supplier : " + supplier);
-    // console.log("Unit price : " + unit_price);
-    // console.log("created date :" + createdDate);
+    console.log("unit : " + unit);
+    console.log("total : " + total);
+    console.log("Supplier : " + supplier);
+    console.log("Unit price : " + unit_price);
+    console.log("created date :" + createdDate);
     if (ValidateForm()) {
       const newTotalItems: number = total - data.doc.initialCount;
       Alert.alert(t('Are_You_Sure?'), ``, [

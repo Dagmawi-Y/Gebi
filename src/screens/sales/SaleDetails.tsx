@@ -58,28 +58,11 @@ const SaleDetails = ({route, navigation}) => {
       sum = sum + data.items[i].quantity * data.items[i].unitSalePrice;
     });
 
-    if (data.vat && !data.tot) {
-      total = sum * 0.15 + sum;
-      setVATVal(formatNumber(sum * 0.15));
-    }
-    if (!data.vat && data.tot) {
-      setTOTVal(formatNumber(sum * 0.02));
-      total = sum * 0.02 + sum;
-    }
-    if (data.vat && data.tot) {
-      setVATVal(formatNumber(sum * 0.15));
-      total = sum * 0.15 + sum * 0.02 + sum;
-      setVATVal(formatNumber(sum * 0.15));
-      setTOTVal(formatNumber(sum * 0.02));
-    }
-    if (!data.vat && !data.tot) {
-      total = sum;
-    }
+    
     if (mountedRef.current) {
       setSum(formatNumber(sum));
       setTotal(formatNumber(total));
     }
-
     setSum(formatNumber(sum));
     setTotal(formatNumber(total));
   };
@@ -148,9 +131,9 @@ const SaleDetails = ({route, navigation}) => {
         date: formattedDate,
       },
 
-      sum: sum,
-      tax: (parseFloat(sum) * 0.15).toFixed(2),
-      total: total,
+      sum: data.sumPrice,
+      tax: data.totalTax,
+      total: data.total,
     };
 
     await RNPrint.print({
@@ -328,49 +311,11 @@ const SaleDetails = ({route, navigation}) => {
                       styles.textBold,
                       {textAlign: 'right', fontSize: 15},
                     ]}>
-                    {sum} {t('Birr')}
+                    {formatNumber(data.sumPrice)} {t('Birr')}
                   </Text>
                 </View>
 
-                {data.vat ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={styles.textLight}>
-                      {t('TAX')} (15% {t('VAT')})
-                    </Text>
-                    <Text
-                      style={[
-                        styles.textBold,
-                        {textAlign: 'right', fontSize: 15},
-                      ]}>
-                      {VATVal} {t('Birr')}
-                    </Text>
-                  </View>
-                ) : null}
-                {data.tot ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginBottom: 10,
-                    }}>
-                    <Text style={styles.textLight}>
-                      {t('TOT')} (0.02% {t('TOT')})
-                    </Text>
-                    <Text
-                      style={[
-                        styles.textBold,
-                        {textAlign: 'right', fontSize: 15},
-                      ]}>
-                      {TOTVal} {t('Birr')}
-                    </Text>
-                  </View>
-                ) : null}
+              
               </View>
               <View style={styles.summaryBottom}>
                 <View
@@ -396,7 +341,7 @@ const SaleDetails = ({route, navigation}) => {
                         textDecorationLine: 'underline',
                       },
                     ]}>
-                    {total} {t('Birr')}
+                    {formatNumber(data.total)} {t('Birr')}
                   </Text>
                 </View>
               </View>

@@ -9,7 +9,7 @@ type Props = {
   label: string;
   value: string;
   labelStyle?: TextStyle;
-  trend?: 'positive' | 'negative';
+  trend?: 'positive' | 'negative'|'none';
 };
 
 export default function StatCard({
@@ -22,6 +22,7 @@ export default function StatCard({
   const {t} = useTranslation();
 
   const positive = trend == 'positive';
+  const negative= trend=='negative';
   return (
     <View
       style={{
@@ -45,20 +46,20 @@ export default function StatCard({
           style={{
             width: 19,
             height: 19,
-            backgroundColor: positive ? colors.green : colors.red,
+            backgroundColor: positive ? colors.green :negative? colors.red:'',
             borderRadius: 5,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
           <Icon
-            name={positive ? 'long-arrow-up' : 'long-arrow-down'}
+            name={positive ? 'long-arrow-up' : negative ?'long-arrow-down':''}
             size={15}
             color={colors.white}
           />
         </View>
         <Text
           style={{
-            color: trend == 'positive' ? colors.green : colors.red,
+            color: trend == 'positive' ? colors.green :trend == 'negative'? colors.red:colors.black,
             marginLeft: 5,
             fontSize: 15,
             fontWeight: '500',
@@ -81,7 +82,7 @@ export default function StatCard({
             fontWeight: '500',
             fontSize: 15,
             textAlign: 'center',
-            color: trend == 'positive' ? colors.green : colors.red,
+            color: trend == 'positive' ? colors.green :trend == 'negative'? colors.red:colors.green,
           }}>
           {formatNumber(value)} {`${t('Birr')}`}
         </Text>
