@@ -77,7 +77,6 @@ const EntryApp = ({navigation}) => {
           .collection('subscriptions')
           .where('owner', '==', userInfo[0]?.doc?.companyId)
           .onSnapshot(qsn => {
-            
             let result: Array<any> = [];
             qsn.forEach(sn => {
               result.push(sn.data());
@@ -87,7 +86,6 @@ const EntryApp = ({navigation}) => {
             });
 
             if (latestPlan.length) {
-
               setSubscriptionPlan(latestPlan);
               return setPlanExpired(false);
             }
@@ -106,7 +104,8 @@ const EntryApp = ({navigation}) => {
         firestore()
           .collection('users')
           .where('phone', '==', user.phoneNumber)
-          .get().then(querySnapshot => {
+          .get()
+          .then(querySnapshot => {
             let result: Array<any> = [];
             querySnapshot.forEach(documentSnapshot => {
               result.push({

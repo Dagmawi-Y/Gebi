@@ -129,7 +129,6 @@ const style = {
   borderRadius: 10,
   padding: 0,
   margin: 0,
-  colors: 'black',
 };
 
 export default App;

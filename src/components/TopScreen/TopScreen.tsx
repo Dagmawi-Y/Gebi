@@ -26,16 +26,15 @@ export default function TopScreen() {
     setExpenses,
   } = useContext(StateContext);
 
-  const [data, setData]: Array<any> = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalSaleExpense, setTotalSaleExpense] = useState(0);
-  // const [expenses, setExpenses] = useState(0);
   const [mounted, setMounted] = useState(true);
 
   const totalCalc = data => {
-    let totalSaleIncome: number = 0;
-    let totalSaleProfit: number = 0;
-    let tsaleExp: number = 0;
+    let totalSaleIncome = 0;
+    let totalSaleProfit = 0;
+    let tsaleExp = 0;
     if (data) {
       data.forEach(i => {
         Object.keys(i.items).map(key => {
@@ -69,57 +68,54 @@ export default function TopScreen() {
   };
 
   const getExpenses = async () => {
-    setLoading(true);
     try {
-      firestore()
+      const querySnapshot = await firestore()
         .collection('expenses')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
-        .onSnapshot(qsn => {
-          let expAmount = 0;
-          if (qsn) {
-            qsn.forEach(i => (expAmount += parseFloat(i.data().amount)));
-          }
-          setExpenses(expAmount);
-        });
+        .get();
 
-      setLoading(false);
+      let expAmount = 0;
+      querySnapshot.forEach(doc => {
+        expAmount += parseFloat(doc.data().amount);
+      });
+
+      setExpenses(expAmount);
     } catch (error) {
       console.log(error);
+    } finally {
       setLoading(false);
     }
   };
 
   const getSales = async () => {
-    setLoading(true);
     if (!user) return;
     try {
-      firestore()
+      const querySnapshot = await firestore()
         .collection('sales')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
-        .onSnapshot(querySnapshot => {
-          let result: Array<Object> = [];
-          querySnapshot.forEach(sn => {
-            if (sn.data().shouldDiscard == false) {
-              const item = {
-                id: sn.id,
-                date: sn.data().date,
-                customerName: sn.data().customerName,
-                invoiceNumber: sn.data().invoiceNumber,
-                items: sn.data().items,
-                paymentMethod: sn.data().paymentMethod,
-                vat: sn.data().vat,
-                tot: sn.data().tot,
-              };
-              result.push(item);
-            }
-          });
-          setData(result);
-        });
+        .get();
 
-      totalCalc(data);
-      setLoading(false);
+      let result: any = [];
+      querySnapshot.forEach(doc => {
+        if (doc.data().shouldDiscard === false) {
+          const item = {
+            id: doc.id,
+            date: doc.data().date,
+            customerName: doc.data().customerName,
+            invoiceNumber: doc.data().invoiceNumber,
+            items: doc.data().items,
+            paymentMethod: doc.data().paymentMethod,
+            vat: doc.data().vat,
+            tot: doc.data().tot,
+          };
+          result.push(item);
+        }
+      });
+      setData(result);
+      totalCalc(result);
     } catch (error) {
       console.log(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -144,6 +140,18 @@ export default function TopScreen() {
       setMounted(false);
     };
   }, [data]);
+
+  // Periodically refresh data
+  useEffect(() => {
+    const refreshInterval = setInterval(() => {
+      getExpenses();
+      getSales();
+    }, 1000);
+
+    return () => {
+      clearInterval(refreshInterval);
+    };
+  }, []);
 
   if (loading) return null;
 

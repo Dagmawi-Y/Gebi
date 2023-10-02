@@ -209,14 +209,14 @@ function AppDrawerNavigator({}) {
             headerLeft: () => headerBackKey(navigation),
           }}
         />
-         <Drawer.Screen
+        <Drawer.Screen
           name={routes.SalesReports}
           component={SalesReports}
           options={{
             headerTitle: t('Sales Report'),
             headerLeft: () => headerBackKey(navigation),
           }}
-          />
+        />
         {/* Inventory subscreens END */}
 
         <Drawer.Screen

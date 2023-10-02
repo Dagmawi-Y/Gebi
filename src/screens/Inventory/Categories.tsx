@@ -5,14 +5,10 @@ import firestore from '@react-native-firebase/firestore';
 import {StateContext} from '../../global/context';
 import StatusBox from '../../components/misc/StatusBox';
 import colors from '../../config/colors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/AntDesign';
 import routes from '../../navigation/routes';
-import {NativeModules} from 'react-native';
-const {PrinterModule} = NativeModules;
-
-const paperOut = () => PrinterModule.paperOut();
 
 const Categories = ({navigation}) => {
   const {userInfo} = useContext(StateContext);
@@ -23,7 +19,7 @@ const Categories = ({navigation}) => {
   const getCategories = async () => {
     try {
       setLoading(true);
-      await firestore()
+      firestore()
         .collection('categories')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
         .onSnapshot(qsn => {
@@ -81,110 +77,94 @@ const Categories = ({navigation}) => {
           {t('Add_New_Category')}
         </Text>
       </TouchableOpacity>
-      {/* <TouchableOpacity
-        onPress={paperOut}
-        style={{
-          backgroundColor: colors.primary,
-          borderRadius: 10,
-          padding: 10,
-          flexDirection: 'row',
-          width: 150,
-          justifyContent: 'space-evenly',
-          alignItems: 'center',
-          marginVertical: 5,
-          marginRight: 10,
-        }}>
-        <Icon name="plus" color={colors.white} size={15} />
-        <Text style={{color: colors.white, fontSize: 15}}>
-          {t('Print Bar Code')}
-        </Text>
-      </TouchableOpacity> */}
-      <View>
-        {categories.length > 0 ? (
-          categories.map(i => (
+      <ScrollView style={{marginTop: 7}}>
+        <View>
+          {categories.length > 0 ? (
+            categories.map(i => (
+              <View
+                key={i.id}
+                style={{
+                  padding: 10,
+                  backgroundColor: colors.white,
+                  borderRadius: 10,
+                  paddingHorizontal: 20,
+                  marginBottom: 10,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: colors.black,
+                    }}>
+                    {i.data.name}
+                  </Text>
+                  <Text style={{fontSize: 20, color: colors.black}}>
+                    {i.data.count} {t('Items')}
+                  </Text>
+                </View>
+                {i.data.description ? (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      marginTop: 5,
+                      color: colors.faded_grey,
+                    }}>
+                    {i.data.description.length > 50
+                      ? i.data.description.substring(0, 50) + '...'
+                      : i.data.description}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      marginTop: 5,
+                      color: colors.faded_grey,
+                    }}>
+                    {t('No-Description')}
+                  </Text>
+                )}
+              </View>
+            ))
+          ) : (
             <View
-              key={i.id}
               style={{
                 padding: 10,
                 backgroundColor: colors.white,
                 borderRadius: 10,
                 paddingHorizontal: 20,
                 marginBottom: 10,
+                alignItems: 'center',
               }}>
-              {/* <View
+              <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
                 <Text
                   style={{
                     fontSize: 20,
                     color: colors.black,
                   }}>
-                  {i.data.name}
+                  {t('No_Categories_Yet')}
                 </Text>
-                <Text style={{fontSize: 20, color: colors.black}}>
-                  {i.data.count} {t('Items')}
-                </Text>
-              </View> */}
-              {i.data.description ? (
-                <Text
-                  style={{
-                    fontSize: 15,
-                    marginTop: 5,
-                    color: colors.faded_grey,
-                  }}>
-                  {i.data.description.length > 50
-                    ? i.data.description.substring(0, 50) + '...'
-                    : i.data.description}
-                </Text>
-              ) : (
-                <Text
-                  style={{
-                    fontSize: 15,
-                    marginTop: 5,
-                    color: colors.faded_grey,
-                  }}>
-                  {t('No-Description')}
-                </Text>
-              )}
-            </View>
-          ))
-        ) : (
-          <View
-            style={{
-              padding: 10,
-              backgroundColor: colors.white,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              marginBottom: 10,
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: colors.black,
-                }}>
-                {t('No_Categories_Yet')}
-              </Text>
 
-              <Text
-                style={{
-                  fontSize: 15,
-                  marginTop: 5,
-                  color: colors.faded_grey,
-                }}>
-                {t('Add_One_First')}
-              </Text>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    marginTop: 5,
+                    color: colors.faded_grey,
+                  }}>
+                  {t('Add_One_First')}
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
-      </View>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 };

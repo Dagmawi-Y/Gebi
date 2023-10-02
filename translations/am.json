@@ -222,6 +222,8 @@
   "Please_Add_Stock": "እባክዎ ሽያጭዎትን ለማየት እቃ ይጨምሩ",
   "Low Stock Alert": "እያለቀ ያለ እቃ",
   "No_Category_Found": "ምንም ምድብ አልተገኘም። እባክዎትን ምድብ ይጨምሩ።",
-  "Help": "መግለጫ"
+  "Help": "መግለጫ",
+  "Tax Type": "የታክስ አይነት",
+  "Choose tax type": "ታክስ ይምረጡ"
 
 }

@@ -52,7 +52,9 @@ const AddNewCategory = ({navigation}) => {
               .collection('categories')
               .add(category)
               .then(res => {
-                navigation.pop();
+                navigation.navigate(routes.categoryNav, {
+                  screen: routes.categories,
+                });
               });
           } catch (error) {
             setWrittingData(false);

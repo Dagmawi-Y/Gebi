@@ -71,8 +71,8 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
     t('Sales Tax'),
     t('Excise Tax'),
     t('Luxury Tax'),
-    t('Corporate Tax'),
-    t('no Tax'),
+    t('VAT'),
+    t('None'),
   ];
 
   const [categories, setCategories]: Array<any> = useState([]);
@@ -220,13 +220,13 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
       return fcmtoken;
     }
     const fcmToken = await getFCMToken();
-    const types = [
-      t('Sales Tax'),
-      t('Excise Tax'),
-      t('Luxury Tax'),
-      t('Corporate Tax'),
-      t('no Tax'),
-    ];
+    // const types = [
+    //   t('Sales Tax'),
+    //   t('Excise Tax'),
+    //   t('Luxury Tax'),
+    //   t('Corporate Tax'),
+    //   t('None'),
+    // ];
 
     try {
       uploadImage()
@@ -708,7 +708,7 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
 
                   <SelectDropdown
                     data={types}
-                    defaultButtonText={t('Taxable')}
+                    defaultButtonText={t('Choose tax type')}
                     renderDropdownIcon={() => (
                       <View>
                         <Icon name="caretdown" size={20} color={colors.black} />
@@ -717,10 +717,10 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                     buttonStyle={styles.dropDown}
                     onSelect={selectedItem => {
                       setTaxType(selectedItem);
-                      if (selectedItem == 'Corporate Tax') setTaxRate(0.15);
+                      if (selectedItem == 'VAT') setTaxRate(0.15);
                       if (selectedItem == 'Excise Tax') setTaxRate(0.2);
                       if (selectedItem == 'Luxury Tax') setTaxRate(0.3);
-                      if (selectedItem == 'no Tax') setTaxRate(0.0);
+                      if (selectedItem == 'None') setTaxRate(0.0);
                       if (selectedItem == 'Sales Tax') setTaxRate(0.3);
                     }}
                     onFocus={() => {
@@ -975,7 +975,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       />
                       <TouchableOpacity
                         onPress={() =>
-                          navigation.navigate(routes.addNewCategory)
+                          navigation.navigate(routes.categoryNav, {
+                            screen: routes.categories,
+                          })
                         }
                         style={{
                           backgroundColor: colors.primary,
@@ -1001,7 +1003,9 @@ const AddNew = ({addNewModalVisible, setAddNewModalVisible, navigation}) => {
                       </Text>
                       <TouchableOpacity
                         onPress={() =>
-                          navigation.navigate(routes.addNewCategory)
+                          navigation.navigate(routes.categoryNav, {
+                            screen: routes.categories,
+                          })
                         }
                         style={{
                           backgroundColor: colors.primary,

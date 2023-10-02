@@ -9,7 +9,7 @@ import messaging from '@react-native-firebase/messaging';
 import {NavigationContainer} from '@react-navigation/native';
 import routes from './src/navigation/routes';
 import notifee, {EventType, AndroidColor} from '@notifee/react-native';
-import crashlytics from '@react-native-firebase/crashlytics';
+// import crashlytics from '@react-native-firebase/crashlytics';
 import Items from './src/screens/Inventory/InventoryScreen.tsx';
 import {firebase} from '@react-native-firebase/firestore';
 
@@ -35,7 +35,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
 
-crashlytics().crash();
+// crashlytics().crash();
 
 // Handle when the app is opened from the notifications
 messaging().onNotificationOpenedApp(remoteMessage => {

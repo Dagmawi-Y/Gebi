@@ -100,6 +100,7 @@ export default function Expenses({navigation}: any) {
               !dates.includes(sn.data().date) && dates.push(sn.data().date);
             });
             setDates(dates);
+            setData(result);
             setExpenses(result);
             console.log(result);
           }
@@ -170,6 +171,9 @@ export default function Expenses({navigation}: any) {
       setMounted(false);
     };
   }, []);
+  useEffect(() => {
+    totalCalc(data);
+  }, [data]);
   useEffect(() => {
     if (mounted) {
       if (data.length > 0) {

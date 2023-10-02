@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-apply plugin:'com.google.firebase.crashlytics'
+// apply plugin:'com.google.firebase.crashlytics'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -141,7 +141,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName '2.0.0.4 '
+        versionName '3.0.0.2 '
         buildConfigField 'boolean', 'IS_NEW_ARCHITECTURE_ENABLED', isNewArchitectureEnabled().toString()
         vectorDrawables.useSupportLibrary = true
 
@@ -281,7 +281,7 @@ dependencies {
 
     // Add the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-crashlytics")
+    // implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics")
 
     //noinspection GradleDynamicVersion

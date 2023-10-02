@@ -1,7 +1,7 @@
 package com.meda.gebi;
 import android.app.Application;
 import android.content.Context;
-import com.app.PrinterPackage;
+// import com.app.PrinterPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -40,7 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
           new ReactNativeFirebaseStoragePackage();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-            packages.add(new PrinterPackage());
+            // packages.add(new PrinterPackage());
           return packages;
         }
 
