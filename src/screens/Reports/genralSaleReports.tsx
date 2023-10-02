@@ -36,13 +36,13 @@ import routes from '../../navigation/routes';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
-import crashlytics from '@react-native-firebase/crashlytics';
+// import crashlytics from '@react-native-firebase/crashlytics';
 
 import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
-import {log} from 'react-native-reanimated';
+import log from 'react-native-reanimated';
 import SalesListItem from '../sales/SalesListItem';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -189,7 +189,7 @@ export default function SalesReports({navigation}) {
         });
 
         // console.log(result[0].date);
-         console.log(totalTax);
+        console.log(totalTax);
         setTotalPriceValue(grandTotal);
         setTotalTaxValue(totalTax);
         setTotalSumValue(totalSum);
@@ -243,7 +243,7 @@ export default function SalesReports({navigation}) {
       tax: totalTaxValue,
       total: totalPriceValue,
     };
-   
+
     await RNPrint.print({
       html: receipt(printData),
     });
@@ -445,7 +445,7 @@ export default function SalesReports({navigation}) {
                   </View>
                 </View>
               </View>
-              <View style={styles.statContainer}>
+              {/* <View style={styles.statContainer}>
                 <View
                   style={{
                     flexDirection: 'column',
@@ -472,7 +472,7 @@ export default function SalesReports({navigation}) {
                     </View>
                   </View>
                 </View>
-              </View>
+              </View> */}
             </View>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -482,7 +482,7 @@ export default function SalesReports({navigation}) {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                   }}>
-                  <View style={styles.repContainer}>
+                  {/* <View style={styles.repContainer}>
                     <View style={styles.repcontainerContent}>
                       <View
                         style={{
@@ -505,8 +505,8 @@ export default function SalesReports({navigation}) {
                         }}>
                         {formatNumber(totalSumValue)} {`${t('Birr')}`}
                       </Text>
-                    </View> */}
-                  </View>
+                    </View>
+                  </View> */}
                 </View>
               </View>
             </View>

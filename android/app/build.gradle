@@ -140,7 +140,7 @@ android {
         applicationId 'com.meda.gebi'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
+        versionCode 9
         versionName '3.0.0.2 '
         buildConfigField 'boolean', 'IS_NEW_ARCHITECTURE_ENABLED', isNewArchitectureEnabled().toString()
         vectorDrawables.useSupportLibrary = true
