@@ -67,34 +67,37 @@ export default function TopScreen() {
     }
   };
 
-  const getExpenses = async () => {
+  const getExpenses = () => {
     try {
-      const querySnapshot = await firestore()
+      // Create a reference to the expenses collection
+      const expensesRef = firestore()
         .collection('expenses')
-        .where('owner', '==', userInfo[0]?.doc?.companyId)
-        .get();
+        .where('owner', '==', userInfo[0]?.doc?.companyId);
 
-      let expAmount = 0;
-      querySnapshot.forEach(doc => {
-        expAmount += parseFloat(doc.data().amount);
+      // Use onSnapshot to listen for real-time updates
+      expensesRef.onSnapshot(querySnapshot => {
+        let expAmount = 0;
+        querySnapshot.forEach(doc => {
+          expAmount += parseFloat(doc.data().amount);
+        });
+        setExpenses(expAmount);
+        setLoading(false); // You can set loading to false after updating expenses
       });
-
-      setExpenses(expAmount);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
-  const getSales = async () => {
+  const getSales = () => {
     if (!user) return;
-    try {
-      const querySnapshot = await firestore()
-        .collection('sales')
-        .where('owner', '==', userInfo[0]?.doc?.companyId)
-        .get();
 
+    // Create a reference to the sales collection
+    const salesRef = firestore()
+      .collection('sales')
+      .where('owner', '==', userInfo[0]?.doc?.companyId);
+
+    // Use onSnapshot to listen for real-time updates
+    salesRef.onSnapshot(querySnapshot => {
       let result: any = [];
       querySnapshot.forEach(doc => {
         if (doc.data().shouldDiscard === false) {
@@ -113,11 +116,7 @@ export default function TopScreen() {
       });
       setData(result);
       totalCalc(result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
   useEffect(() => {
@@ -140,18 +139,6 @@ export default function TopScreen() {
       setMounted(false);
     };
   }, [data]);
-
-  // Periodically refresh data
-  useEffect(() => {
-    const refreshInterval = setInterval(() => {
-      getExpenses();
-      getSales();
-    }, 1000);
-
-    return () => {
-      clearInterval(refreshInterval);
-    };
-  }, []);
 
   if (loading) return null;
 

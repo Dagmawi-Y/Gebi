@@ -31,13 +31,13 @@ import SalesListItem from './SalesListItem';
 import StatCard from '../../components/statCards/StatCard';
 import StatCardFullWidth from '../../components/statCards/StatCardFullWidth';
 import FloatingButton from '../../components/FloatingButton/FloatingButton';
-import crashlytics from '@react-native-firebase/crashlytics';
+// import crashlytics from '@react-native-firebase/crashlytics';
 
 import useFirebase from '../../utils/useFirebase';
 import formatNumber from '../../utils/formatNumber';
 import {DataContext} from '../../global/context/DataContext';
 import {ExpiredModal, FreeLimitReached} from './LimitReached';
-import {log} from 'react-native-reanimated';
+import log from 'react-native-reanimated';
 
 export default function Items({navigation}) {
   const {user, userInfo} = useContext(StateContext);
@@ -45,8 +45,15 @@ export default function Items({navigation}) {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const [data, setData]: Array<any> = useState([]);
-  const {salesCount, setSalesCount,totalPriceValue,setTotalPriceValue, planExpired, customerCount, supplierCount} =
-    useContext(DataContext);
+  const {
+    salesCount,
+    setSalesCount,
+    totalPriceValue,
+    setTotalPriceValue,
+    planExpired,
+    customerCount,
+    supplierCount,
+  } = useContext(DataContext);
   const [stockCount, setStockCount]: any = useState();
   const [expandedDate, setExpandedDate] = useState(false);
 
@@ -127,7 +134,7 @@ export default function Items({navigation}) {
         let result: any = [];
         if (querySnapshot)
           querySnapshot.docs.forEach(sn => {
-          //console.log(querySnapshot.docs.length)
+            //console.log(querySnapshot.docs.length)
             const item = {
               id: sn.id,
               date: sn.data().date,
@@ -137,12 +144,12 @@ export default function Items({navigation}) {
               paymentMethod: sn.data().paymentMethod,
               saleProfit: sn.data().saleProfit,
               createdBy: sn.data().createdBy,
-              taxType:sn.data().taxType,
+              taxType: sn.data().taxType,
               vat: sn.data().vat,
               tot: sn.data().tot,
-              total:sn.data().totalPrice,
-              sumPrice:sn.data().sumPrice,
-              totalTax:sn.data().totalTax,
+              total: sn.data().totalPrice,
+              sumPrice: sn.data().sumPrice,
+              totalTax: sn.data().totalTax,
 
               shouldDiscard: sn.data().shouldDiscard,
             };
@@ -158,14 +165,13 @@ export default function Items({navigation}) {
         });
         //console.log(result[0].total);
         setSalesCount(result.length);
-       
+
         // for(let i=0;i<=4;i++){
         //   totalP=totalP+result[i].total;
         // }
         // setTotalPriceValue(totalP);
         // console.log('totalPrice',totalPriceValue);
-        
-     
+
         const grouped = result.reduce(function (r, a) {
           r[a.date] = r[a.date] || [];
           r[a.date].push(a);
@@ -570,12 +576,12 @@ export default function Items({navigation}) {
                               if (filterValue == 'Taxable') {
                                 console.log(saleItem.items[0].taxType);
                                 // Assuming saleItem.items contains the list of data you provided
-                                return saleItem.items[0].taxType!='no Tax';
+                                return saleItem.items[0].taxType != 'no Tax';
                               }
                               if (filterValue == 'non-Tax') {
                                 console.log(saleItem.items[0].taxType);
                                 // Assuming saleItem.items contains the list of data you provided
-                                return saleItem.items[0].taxType=='no Tax';
+                                return saleItem.items[0].taxType == 'no Tax';
                               }
 
                               // Return JSX representing each item
@@ -592,8 +598,8 @@ export default function Items({navigation}) {
                               );
                             })
                             .map(sale => {
-                             console.log(sale)
-                              
+                              console.log(sale);
+
                               return (
                                 <TouchableOpacity
                                   activeOpacity={0.5}
@@ -630,7 +636,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     backgroundColor: colors.white,
   },
-  
+
   contentContainer: {
     paddingHorizontal: 10,
     flex: 1,

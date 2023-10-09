@@ -30,6 +30,7 @@
     "@rneui/base": "^4.0.0-rc.4",
     "@rneui/themed": "^4.0.0-rc.4",
     "dayjs": "^1.11.9",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "expo-updates": "^0.18.10",
     "firebase-admin": "^11.10.1",
     "firebase-functions": "^4.4.1",

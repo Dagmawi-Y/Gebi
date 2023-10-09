@@ -171,9 +171,9 @@ const NewSale = ({navigation}) => {
     vat: taxType == 'VAT' ? true : false,
     tot: taxType == 'TOT' ? true : false,
     createdBy: userInfo[0]?.doc?.name,
-    totalPrice:total,
-    sumPrice:sum,
-    totalTax:totalTaxValue,
+    totalPrice: total,
+    sumPrice: sum,
+    totalTax: totalTaxValue,
     shouldDiscard: false,
   };
 
@@ -309,17 +309,17 @@ const NewSale = ({navigation}) => {
     addedItems.map(i => {
       sum = sum + i.quantity * i.unitSalePrice;
       console.log(sum);
-      totalTaxValues =totalTaxValues+ i.quantity*i.unitSalePrice*i.taxRate;
-      total=sum+totalTaxValues;
-      console.log(total)
+      totalTaxValues =
+        totalTaxValues + i.quantity * i.unitSalePrice * i.taxRate;
+      total = sum + totalTaxValues;
+      console.log(total);
     });
-  
 
     console.log(taxValue);
     setSum(sum);
-    setTotalTaxValue(totalTaxValues)
+    setTotalTaxValue(totalTaxValues);
     setTotal(total);
-  
+
     setTaxRate(taxRate);
   };
 
@@ -508,7 +508,6 @@ const NewSale = ({navigation}) => {
                             {formatNumber(item.quantity)}
                             <Text style={styles.textLight}> {t('(qty)')}</Text>
                           </Text>
-                          
                         </View>
                       </View>
                       <View style={{}}>
@@ -516,14 +515,11 @@ const NewSale = ({navigation}) => {
                         <View style={{flexDirection: 'row'}}>
                           <Text
                             style={[styles.textBold, {fontWeight: 'normal'}]}>
-                            {formatNumber(item.taxRate*100)}
+                            {formatNumber(item.taxRate * 100)}
                             <Text style={styles.textLight}> {t('%')}</Text>
                           </Text>
-                          
                         </View>
                       </View>
-                      
-                      
                     </View>
                     <View style={styles.RightContainer}>
                       {item.unit ? (
@@ -628,8 +624,7 @@ const NewSale = ({navigation}) => {
                     paddingHorizontal: 10,
                   },
                 ]}>
-                {t('TAX')} 
-               
+                {t('TAX')}
               </Text>
 
               <Text

@@ -47,33 +47,36 @@ export default function Expenses({navigation}: any) {
     new Array(dates.length).fill(false),
   );
   const totalCalc = data => {
-    let totalSaleIncome: number = 0;
-    let totalSaleProfit: number = 0;
-    let tsaleExp: number = 0;
+    let totalSaleIncome = 0;
+    let totalSaleProfit = 0;
+    let tsaleExp = 0;
     if (data) {
       data.forEach(i => {
-        Object.keys(i.items).map(key => {
-          totalSaleIncome =
-            totalSaleIncome +
-            parseFloat(i.items[key].unitSalePrice) *
-              parseFloat(i.items[key].quantity);
+        if (i.items) {
+          // Check if 'items' property exists
+          Object.keys(i.items).map(key => {
+            totalSaleIncome =
+              totalSaleIncome +
+              parseFloat(i.items[key].unitSalePrice) *
+                parseFloat(i.items[key].quantity);
 
-          tsaleExp =
-            tsaleExp +
-            parseFloat(i.items[key].unitPrice) *
-              parseFloat(i.items[key].quantity);
-          totalSaleProfit =
-            totalSaleProfit + parseFloat(i.items[key].saleProfit);
-        });
-        if (i.vat && !i.tot) {
-          totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.15;
-        }
-        if (i.tot && !i.vat) {
-          totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.02;
-        }
-        if (i.tot && i.vat) {
-          totalSaleIncome =
-            totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
+            tsaleExp =
+              tsaleExp +
+              parseFloat(i.items[key].unitPrice) *
+                parseFloat(i.items[key].quantity);
+            totalSaleProfit =
+              totalSaleProfit + parseFloat(i.items[key].saleProfit);
+          });
+          if (i.vat && !i.tot) {
+            totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.15;
+          }
+          if (i.tot && !i.vat) {
+            totalSaleIncome = totalSaleIncome + totalSaleIncome * 0.02;
+          }
+          if (i.tot && i.vat) {
+            totalSaleIncome =
+              totalSaleIncome + totalSaleIncome * 0.02 + totalSaleIncome * 0.15;
+          }
         }
       });
       setTotalSaleExpense(tsaleExp);
@@ -170,10 +173,8 @@ export default function Expenses({navigation}: any) {
     return () => {
       setMounted(false);
     };
-  }, []);
-  useEffect(() => {
-    totalCalc(data);
-  }, [data]);
+  }, [expenses]);
+
   useEffect(() => {
     if (mounted) {
       if (data.length > 0) {
@@ -274,9 +275,9 @@ export default function Expenses({navigation}: any) {
 
           <ScrollView
             style={{}}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={getExpenses} />
-            }
+            // refreshControl={
+            //   <RefreshControl refreshing={refreshing} onRefresh={getExpenses} />
+            // }
             contentContainerStyle={{
               marginBottom: 10,
               justifyContent: 'flex-end',
@@ -289,7 +290,6 @@ export default function Expenses({navigation}: any) {
                       const newList = [...expandedList];
                       newList[date] = !newList[date];
                       setExpandedList(newList);
-
                       setExpandedDate(!expandedDate);
                     }}>
                     <Text
@@ -298,7 +298,7 @@ export default function Expenses({navigation}: any) {
                         fontSize: 15,
                         padding: 10,
                       }}>
-                      {moment(date).format('DD-MM-YYYY')}
+                      {moment(date, 'DD-MM-YYYY').format('DD-MM-YYYY')}
                     </Text>
                   </TouchableOpacity>
 

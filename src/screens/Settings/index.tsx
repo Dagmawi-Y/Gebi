@@ -124,7 +124,7 @@ const Settings = ({navigation}) => {
           ];
 
           const userId = userInfo[0]?.doc?.companyId;
-          userCollections.map(coll => {
+          userCollections.map(async coll => {
             firestore()
               .collection(coll)
               .get()
@@ -154,7 +154,7 @@ const Settings = ({navigation}) => {
                 });
               });
             if (user) {
-              auth().signOut();
+              await auth().signOut();
             }
             setDeleting(false);
           });
@@ -171,9 +171,8 @@ const Settings = ({navigation}) => {
 
   useEffect(() => {
     fetchEmployes();
-  }, [userInfo]);
+  }, [userInfo, user]);
   if (userInfo.length == 0 || !user) return <Loading size={50} />;
-
   if (deleting) return <Loading size={40} />;
 
   return (

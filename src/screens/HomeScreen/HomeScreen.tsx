@@ -56,6 +56,7 @@ const HomeScreen = ({navigation}) => {
     tourKey,
   } = useTourGuideController('tour');
 
+  // for rn-tour guide
   useEffect(() => {
     if (canStart) {
       console.log(canStart);

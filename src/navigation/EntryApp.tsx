@@ -101,7 +101,7 @@ const EntryApp = ({navigation}) => {
     try {
       if (user) {
         setLoading(true);
-        firestore()
+        await firestore()
           .collection('users')
           .where('phone', '==', user.phoneNumber)
           .get()

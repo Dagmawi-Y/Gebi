@@ -35,6 +35,11 @@ const AddNewExpense = ({navigation}) => {
   const [expenseName, setExpenseName] = useState('');
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
+  const [expenses, setExpenses]: Array<any> = useState([]);
+
+  const updateExpenseList = newExpense => {
+    setExpenses([...expenses, newExpense]);
+  };
 
   const populateTypes = () => {
     const types = [
@@ -261,7 +266,7 @@ const AddNewExpense = ({navigation}) => {
               borderRadius: 5,
               position: 'absolute',
               // zIndex: 5,
-              padding: 5,
+              paddingHorizontal: 25,
             }}>
             <Text style={styles.pageLabel}>{t('New_Expense_Type')}</Text>
             <View style={styles.input}>
