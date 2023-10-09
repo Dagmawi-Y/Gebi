@@ -143,7 +143,7 @@ export default function PlanerScreen({navigation}: any) {
                     fontSize: 15,
                     fontWeight: 'bold',
                   }}>
-                  {t('Progress')} {'  '}
+                  {t('Profit Progress')} {'  '}
                 </Text>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>
                   {((totalProfit / userData[0].financial) * 100).toFixed(1)}
