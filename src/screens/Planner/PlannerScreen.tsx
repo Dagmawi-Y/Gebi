@@ -195,7 +195,11 @@ export default function PlanerScreen({navigation}: any) {
                   <PlanStatCard
                     label={t('Current')}
                     value={formatNumber(totalIncome)}
-                    trend="negative"
+                    trend={
+                      totalIncome > userData[0].financial
+                        ? 'positive'
+                        : 'negative'
+                    }
                     labelStyle={{color: 'black'}}
                   />
                 </View>

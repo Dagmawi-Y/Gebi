@@ -490,13 +490,15 @@ const NewSale = ({navigation}) => {
                         color={colors.black}
                         onPress={() => {
                           setItemCategory(
-                            item.doc.category.substring(0, 1).toUpperCase() +
-                              item.doc.category.substring(1),
+                            item.doc
+                              ? item.doc.category
+                                  .substring(0, 1)
+                                  .toUpperCase() +
+                                  item.doc.category.substring(1)
+                              : '',
                           );
                           setAddedItems(
-                            addedItems.filter(i => {
-                              return i.listId != item.listId;
-                            }),
+                            addedItems.filter(i => i.listId !== item.listId),
                           );
                         }}
                       />
@@ -743,7 +745,7 @@ const NewSale = ({navigation}) => {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <TouchableOpacity
             onPress={() => {
               Alert.alert(t('Are_You_Sure?'), ``, [
@@ -792,7 +794,7 @@ const NewSale = ({navigation}) => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               addNewSale();
             }}
@@ -820,7 +822,7 @@ const NewSale = ({navigation}) => {
               source={require('../../assets/icons/arrow-right.png')}
               style={{width: 12, height: 12}}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             onPress={() => {

@@ -63,6 +63,8 @@ export default function TopScreen() {
       });
       setTotalSaleExpense(tsaleExp);
       SetTotalProfit(totalSaleProfit - expenses);
+      console.log('------------profit', totalSaleProfit);
+      console.log('------------expenses', expenses);
       SetTotalIncome(totalSaleIncome);
     }
   };
@@ -81,6 +83,7 @@ export default function TopScreen() {
           expAmount += parseFloat(doc.data().amount);
         });
         setExpenses(expAmount);
+        console.log('-------expAmount', expAmount);
         setLoading(false); // You can set loading to false after updating expenses
       });
     } catch (error) {
@@ -121,20 +124,13 @@ export default function TopScreen() {
 
   useEffect(() => {
     if (mounted) {
-      getExpenses();
-    }
-    return () => {
-      setMounted(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
       if (data.length > 0) {
         totalCalc(data);
       }
+      getExpenses();
       getSales();
     }
+
     return () => {
       setMounted(false);
     };
@@ -162,7 +158,7 @@ export default function TopScreen() {
           <View style={{marginVertical: 10}}>
             <StatCardFullWidth
               label={t('Profit')}
-              value={parseFloat(totalProfit) - parseFloat(expenses)}
+              value={parseFloat(totalProfit)}
               trend={
                 totalProfit > 0
                   ? 'positive'

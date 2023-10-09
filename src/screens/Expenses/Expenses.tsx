@@ -27,6 +27,7 @@ import firestore from '@react-native-firebase/firestore';
 import StatusBox from '../../components/misc/StatusBox';
 import {ExpiredModal, FreeLimitReached} from '../sales/LimitReached';
 import {DataContext} from '../../global/context/DataContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Expenses({navigation}: any) {
   const mountedRef = useRef(true);
@@ -46,6 +47,28 @@ export default function Expenses({navigation}: any) {
   const [expandedList, setExpandedList] = useState(
     new Array(dates.length).fill(false),
   );
+
+  const loadTotalSaleExpense = async () => {
+    try {
+      const savedTotalSaleExpense = await AsyncStorage.getItem(
+        'totalSaleExpense',
+      );
+      if (savedTotalSaleExpense !== null) {
+        setTotalSaleExpense(parseFloat(savedTotalSaleExpense));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveTotalSaleExpense = async value => {
+    try {
+      await AsyncStorage.setItem('totalSaleExpense', value.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const totalCalc = data => {
     let totalSaleIncome = 0;
     let totalSaleProfit = 0;
@@ -86,34 +109,38 @@ export default function Expenses({navigation}: any) {
   const getExpenses = async () => {
     setLoading(true);
     try {
-      firestore()
+      const expensesRef = firestore()
         .collection('expenses')
         .where('owner', '==', userInfo[0]?.doc?.companyId)
-        .orderBy('date', 'desc')
-        .onSnapshot(querySnapshot => {
-          let result: Array<Object> = [];
-          let dates: Array<Object> = [];
-          if (querySnapshot) {
-            querySnapshot.forEach(sn => {
-              result.push({
-                id: sn.id,
-                data: sn.data(),
-              });
+        .orderBy('date', 'desc');
 
-              !dates.includes(sn.data().date) && dates.push(sn.data().date);
+      // Subscribe to real-time updates
+      const unsubscribe = expensesRef.onSnapshot(querySnapshot => {
+        let result: Array<Object> = [];
+        let dates: Array<Object> = [];
+        if (querySnapshot) {
+          querySnapshot.forEach(sn => {
+            result.push({
+              id: sn.id,
+              data: sn.data(),
             });
-            setDates(dates);
-            setData(result);
-            setExpenses(result);
-            console.log(result);
-          }
-        });
-      setLoading(false);
+
+            !dates.includes(sn.data().date) && dates.push(sn.data().date);
+          });
+          setDates(dates);
+          setData(result);
+          setExpenses(result);
+          console.log(result);
+        }
+      });
+
+      return unsubscribe; // Return the unsubscribe function
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
+
   const getSales = async () => {
     setLoading(true);
     if (!user) return;
@@ -166,26 +193,48 @@ export default function Expenses({navigation}: any) {
   };
 
   useEffect(() => {
-    if (mounted && user) {
-      getExpenses();
-      calExpenses();
+    loadTotalSaleExpense();
+  }, []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      totalCalc(data);
+      saveTotalSaleExpense(totalSaleExpense); // Save the updated value
     }
-    return () => {
-      setMounted(false);
-    };
-  }, [expenses]);
+  }, [data]);
 
   useEffect(() => {
     if (mounted) {
+      if (user) {
+        getExpenses();
+        calExpenses();
+      }
+
       if (data.length > 0) {
         totalCalc(data);
       }
+
       getSales();
     }
+
     return () => {
       setMounted(false);
     };
-  }, [data]);
+  }, [mounted, user, data]);
+
+  // useEffect(() => {
+  //   if (mounted && user) {
+  //     // Call getExpenses to initially fetch the expenses
+  //     const unsubscribe = getExpenses();
+
+  //     // Clean up the snapshot listener when the component unmounts
+  //     return () => {
+  //       setMounted(false);
+  //       unsubscribe(); // Call the unsubscribe function to remove the listener
+  //     };
+  //   }
+  // }, [expenses]);
+
   const [limitReachedVisible, setLimitReachedVisible] = useState(false);
   const [expandedDate, setExpandedDate] = useState(true);
 
