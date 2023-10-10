@@ -18,7 +18,7 @@ import colors from '../../config/colors';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import routes from '../../navigation/routes';
-import uploadImage from '../Inventory/AddNewItem'
+import uploadImage from '../Inventory/AddNewItem';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {useTranslation} from 'react-i18next';
@@ -102,11 +102,10 @@ const ItemDetails = ({route, navigation}) => {
     ]);
   };
 
-  
   const updateImage = async () => {
     setUpdating(true);
     try {
-      let link = null;
+      let link: any = null;
       if (photo) {
         const reference = storage().ref(`image_${Date.now()}`);
         const pathToFile = photo;
@@ -114,19 +113,16 @@ const ItemDetails = ({route, navigation}) => {
         await task;
         link = await reference.getDownloadURL();
       }
-  
-      await firestore()
-        .collection('inventory')
-        .doc(itemId)
-        .update({
-          picture: link,
-        });
-  
+
+      await firestore().collection('inventory').doc(itemId).update({
+        picture: link,
+      });
+
       const oldPicture = storage().refFromURL(data.picture);
       if (oldPicture) {
         await oldPicture.delete();
       }
-  
+
       setUpdating(false);
       setPickerVisible(false);
     } catch (err) {
@@ -274,13 +270,17 @@ const ItemDetails = ({route, navigation}) => {
                   </View>
                   <View style={styles.boardContainer}>
                     <View style={styles.boardCol}>
-                      <Text style={styles.boardTopTitle}>{t('Purchase price')}</Text>
+                      <Text style={styles.boardTopTitle}>
+                        {t('Purchase price')}
+                      </Text>
                       <Text style={styles.boardSubTitle}>
                         {formatNumber(data.unit_price)} {t('Birr')}
                       </Text>
                     </View>
                     <View style={styles.boardCol}>
-                      <Text style={styles.boardTopTitle}>{t('Selling price')}</Text>
+                      <Text style={styles.boardTopTitle}>
+                        {t('Selling price')}
+                      </Text>
                       <Text style={styles.boardSubTitle}>
                         {formatNumber(data.unit_SalePrice)} {t('Birr')}
                       </Text>

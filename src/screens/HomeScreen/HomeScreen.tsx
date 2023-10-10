@@ -45,8 +45,6 @@ const HomeScreen = ({navigation}) => {
   } = useContext(StateContext);
   const [mounted, setMounted] = useState(true);
 
-  if (!userInfo || !user) return <Loading size={50} />;
-
   // Use Hooks to control!
   const {
     canStart, // a boolean indicate if you can start tour guide
@@ -78,6 +76,7 @@ const HomeScreen = ({navigation}) => {
       eventEmitter?.off('stepChange', handleOnStepChange);
     };
   }, []);
+  if (!userInfo || !user) return <Loading size={50} />;
 
   return (
     <View style={styles.screenContainer}>

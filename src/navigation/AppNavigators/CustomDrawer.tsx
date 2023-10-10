@@ -141,7 +141,7 @@ const CustomDrawer = ({route, navigation}) => {
           rootRoute={true}
           icon="settings"
         />
-         <DrawerButton
+        <DrawerButton
           active={active}
           setActive={setActive}
           navigation={navigation}
