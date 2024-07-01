@@ -291,7 +291,7 @@ export default function Expenses({navigation}: any) {
                   paddingHorizontal: 8,
                 },
               ]}>
-              {t('Total Inventory Expenses')}
+              {t('Inventory Expenses')}
             </Text>
 
             <Text
